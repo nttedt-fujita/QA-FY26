@@ -1,33 +1,56 @@
 ---
 marp: true
 theme: default
+size: 16:9
 paginate: true
 header: "品質G FY2026 — 品質活動の全体像"
 footer: "ふじた"
 style: |
   section {
-    font-family: 'Noto Sans JP', 'Meiryo', sans-serif;
-    font-size: 24px;
+    font-family: 'Yu Gothic', 'Hiragino Sans', 'Noto Sans JP', 'Meiryo', sans-serif;
+    font-size: 22px;
+    line-height: 1.4;
+    padding: 40px;
   }
   h1 {
+    font-size: 28px;
     color: #1a5276;
     border-bottom: 3px solid #2980b9;
     padding-bottom: 8px;
+    text-align: center;
   }
   h2 {
+    font-size: 22px;
     color: #2c3e50;
   }
   table {
-    font-size: 20px;
-  }
-  .highlight {
-    background-color: #d5f5e3;
-    padding: 2px 6px;
-    border-radius: 4px;
+    font-size: 18px;
   }
   .me {
     color: #e74c3c;
     font-weight: bold;
+  }
+  .highlight {
+    background: #fef3c7;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #f59e0b;
+  }
+  .decision-box {
+    background: #dbeafe;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 5px solid #2563eb;
+  }
+  .two-column {
+    display: flex;
+    gap: 20px;
+  }
+  .content-box {
+    flex: 1;
+    background: #f8fafc;
+    padding: 15px;
+    border-radius: 8px;
   }
 ---
 
@@ -66,16 +89,7 @@ FY2026 活動方針の共有
 
 部品購入型メーカーとしての品質管理は **4段階**。
 
-```
-┌──────┐    ┌──────┐    ┌──────┐    ┌──────┐
-│ SQM  │ →  │ IQC  │ →  │ IPQC │ →  │ OQC  │
-│      │    │      │    │      │    │      │
-│サプラ │    │受入   │    │工程   │    │出荷   │
-│イヤ   │    │検査   │    │検査   │    │検査   │
-│品質   │    │      │    │      │    │      │
-│管理   │    │      │    │      │    │      │
-└──────┘    └──────┘    └──────┘    └──────┘
-```
+<img src="/home/fuji0130/workspace/QA-FY26/docs/images/quality-flow.svg" width="850" alt="品質管理フロー: SQM→IQC→IPQC→OQC"/>
 
 ---
 
@@ -124,23 +138,9 @@ FY2026 活動方針の共有
 
 # フロー上の位置付け（図解）
 
-```
-           【QA = 仕組みを作る】
-    ┌─────────────────────────────────┐
-    │ M1: センサー評価手法（ふじた）     │
-    │ M2: 点群検証方法（ふじた）         │
-    │ FMEA（いしかわ）                  │
-    └─────────────────────────────────┘
-              ↓ 手法・基準を提供
+<img src="/home/fuji0130/workspace/QA-FY26/docs/images/quality-flow.svg" width="850" alt="品質管理フロー上の活動マッピング"/>
 
- SQM  →→→  IQC  →→→  IPQC  →→→  OQC
- サプライヤ   受入検査    工程検査    出荷検査
- 品質管理
-
- いしかわ    ふじた     ふじた      品質G
- EVPEAK等    M3:DB化    M4:DB化     全体
- 継続評価
-```
+> 赤枠 = ふじたの担当ミッション（M1〜M4）
 
 ---
 

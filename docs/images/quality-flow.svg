@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="'Noto Sans JP', 'Yu Gothic', 'Hiragino Sans', 'Meiryo', sans-serif">
+  <!-- マーカー定義 -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#b85450"/>
+    </marker>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="960" height="600" fill="#fafbfc" rx="8"/>
+
+  <!-- ===== タイトル ===== -->
+  <text x="480" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1a5276">品質管理の全体フローと品質Gの活動</text>
+
+  <!-- ===== QA層（上段）: 全製品共通の仕組み ===== -->
+  <rect x="50" y="50" width="860" height="110" rx="10" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <text x="480" y="72" text-anchor="middle" font-size="14" font-weight="bold" fill="#276e36">QA（品質保証）— 全製品共通の仕組みを作る</text>
+
+  <!-- M1 -->
+  <rect x="70" y="84" width="245" height="60" rx="8" fill="#fff" stroke="#82b366" stroke-width="1.5"/>
+  <text x="192" y="106" text-anchor="middle" font-size="12" font-weight="bold" fill="#c0392b">M1: センサー評価手法策定</text>
+  <text x="192" y="124" text-anchor="middle" font-size="11" fill="#c0392b">Lidar / GNSS ─ ふじた</text>
+
+  <!-- M2 -->
+  <rect x="335" y="84" width="255" height="60" rx="8" fill="#fff" stroke="#82b366" stroke-width="1.5"/>
+  <text x="462" y="106" text-anchor="middle" font-size="12" font-weight="bold" fill="#c0392b">M2: 点群データ検証方法策定</text>
+  <text x="462" y="124" text-anchor="middle" font-size="11" fill="#c0392b">ふじた</text>
+
+  <!-- FMEA -->
+  <rect x="610" y="84" width="280" height="60" rx="8" fill="#fff" stroke="#82b366" stroke-width="1.5"/>
+  <text x="750" y="106" text-anchor="middle" font-size="12" font-weight="bold" fill="#222">FMEA（設計 / 工程）</text>
+  <text x="750" y="124" text-anchor="middle" font-size="11" fill="#555">いしかわ</text>
+
+  <!-- QA → フローへのラベル -->
+  <text x="480" y="180" text-anchor="middle" font-size="11" fill="#777" font-style="italic">▼ 手法・基準を全製品に適用 ▼</text>
+
+  <!-- ===== フロー層（中段）: 製品ごとのフロー ===== -->
+  <!-- フロー背景 -->
+  <rect x="30" y="190" width="900" height="165" rx="10" fill="#eef4fb" stroke="#b0c4de" stroke-width="1" stroke-dasharray="6,3"/>
+
+  <!-- フロー層ラベル -->
+  <text x="480" y="209" text-anchor="middle" font-size="13" font-weight="bold" fill="#2c5282">各製品ごとにこのフローを実施</text>
+
+  <!-- === 製品フロー（前面 = 主要表示） === -->
+  <!-- SQM -->
+  <!-- 背面の影（複数製品を示す） -->
+  <rect x="52" y="222" width="170" height="65" rx="8" fill="#c8d9ef" stroke="#8fafc8" stroke-width="1" opacity="0.5"/>
+  <rect x="46" y="218" width="170" height="65" rx="8" fill="#d3e2f2" stroke="#9bbad4" stroke-width="1" opacity="0.7"/>
+  <!-- 前面 -->
+  <rect x="40" y="214" width="170" height="65" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="125" y="240" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">SQM</text>
+  <text x="125" y="258" text-anchor="middle" font-size="10" fill="#555">サプライヤ品質管理</text>
+  <text x="125" y="272" text-anchor="middle" font-size="9" fill="#777">選定・評価・監査</text>
+
+  <!-- 矢印 SQM → IQC -->
+  <line x1="210" y1="247" x2="255" y2="247" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- IQC -->
+  <rect x="267" y="222" width="170" height="65" rx="8" fill="#c8d9ef" stroke="#8fafc8" stroke-width="1" opacity="0.5"/>
+  <rect x="261" y="218" width="170" height="65" rx="8" fill="#d3e2f2" stroke="#9bbad4" stroke-width="1" opacity="0.7"/>
+  <rect x="255" y="214" width="170" height="65" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="340" y="240" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">IQC</text>
+  <text x="340" y="258" text-anchor="middle" font-size="10" fill="#555">受入品質管理</text>
+  <text x="340" y="272" text-anchor="middle" font-size="9" fill="#777">入荷部品の検査</text>
+
+  <!-- 矢印 IQC → IPQC -->
+  <line x1="425" y1="247" x2="470" y2="247" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- IPQC -->
+  <rect x="482" y="222" width="170" height="65" rx="8" fill="#c8d9ef" stroke="#8fafc8" stroke-width="1" opacity="0.5"/>
+  <rect x="476" y="218" width="170" height="65" rx="8" fill="#d3e2f2" stroke="#9bbad4" stroke-width="1" opacity="0.7"/>
+  <rect x="470" y="214" width="170" height="65" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="555" y="240" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">IPQC</text>
+  <text x="555" y="258" text-anchor="middle" font-size="10" fill="#555">工程品質管理</text>
+  <text x="555" y="272" text-anchor="middle" font-size="9" fill="#777">組立工程中の検査</text>
+
+  <!-- 矢印 IPQC → OQC -->
+  <line x1="640" y1="247" x2="685" y2="247" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- OQC -->
+  <rect x="697" y="222" width="170" height="65" rx="8" fill="#c8d9ef" stroke="#8fafc8" stroke-width="1" opacity="0.5"/>
+  <rect x="691" y="218" width="170" height="65" rx="8" fill="#d3e2f2" stroke="#9bbad4" stroke-width="1" opacity="0.7"/>
+  <rect x="685" y="214" width="170" height="65" rx="8" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="770" y="240" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c3e50">OQC</text>
+  <text x="770" y="258" text-anchor="middle" font-size="10" fill="#555">出荷品質管理</text>
+  <text x="770" y="272" text-anchor="middle" font-size="9" fill="#777">最終検査・飛行テスト</text>
+
+  <!-- 製品例ラベル（右端に縦書き風） -->
+  <text x="940" y="230" text-anchor="end" font-size="10" fill="#7a9ec4">例: AirGrow</text>
+  <text x="940" y="245" text-anchor="end" font-size="10" fill="#7a9ec4">例: H12G</text>
+  <text x="940" y="260" text-anchor="end" font-size="10" fill="#7a9ec4">例: ...</text>
+
+  <!-- 各工程の担当（フローの下） -->
+  <text x="125" y="298" text-anchor="middle" font-size="10" fill="#666">いしかわ</text>
+  <text x="125" y="312" text-anchor="middle" font-size="9" fill="#888">EVPEAK / GREPOW等</text>
+  <text x="555" y="312" text-anchor="middle" font-size="9" fill="#888">こいたばし: 帯電散布</text>
+  <text x="770" y="298" text-anchor="middle" font-size="10" fill="#666">こいたばし</text>
+  <text x="770" y="312" text-anchor="middle" font-size="9" fill="#888">H12G EVT/DVT</text>
+
+  <!-- ===== データフロー矢印（フロー → DB） ===== -->
+  <text x="480" y="370" text-anchor="middle" font-size="12" fill="#b85450" font-weight="bold">▼ 全製品の検査データを集約 ▼</text>
+
+  <!-- IQC → M3 矢印 -->
+  <line x1="340" y1="330" x2="340" y2="385" stroke="#b85450" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-red)"/>
+  <!-- IPQC → M4 矢印 -->
+  <line x1="555" y1="330" x2="555" y2="385" stroke="#b85450" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-red)"/>
+  <!-- OQC → M4 矢印 -->
+  <line x1="770" y1="330" x2="680" y2="385" stroke="#b85450" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-red)"/>
+
+  <!-- ===== DB層（下段）: 全製品横断のデータ基盤 ===== -->
+  <rect x="130" y="390" width="700" height="105" rx="10" fill="#fdf0ef" stroke="#b85450" stroke-width="2"/>
+  <text x="480" y="412" text-anchor="middle" font-size="13" font-weight="bold" fill="#c0392b">QC基盤 — ふじたが構築するデータプラットフォーム</text>
+
+  <!-- M3 -->
+  <rect x="155" y="420" width="300" height="60" rx="8" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+  <text x="305" y="442" text-anchor="middle" font-size="13" font-weight="bold" fill="#c0392b">M3: 受入検査データベース</text>
+  <text x="305" y="460" text-anchor="middle" font-size="11" fill="#555">IQCの検査データを製品別に記録</text>
+  <text x="305" y="475" text-anchor="middle" font-size="10" fill="#777">Excel → DB + アプリ化</text>
+
+  <!-- M4 -->
+  <rect x="505" y="420" width="300" height="60" rx="8" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+  <text x="655" y="442" text-anchor="middle" font-size="13" font-weight="bold" fill="#c0392b">M4: 工程不良データベース</text>
+  <text x="655" y="460" text-anchor="middle" font-size="11" fill="#555">IPQC/OQCの不良データを製品別に記録</text>
+  <text x="655" y="475" text-anchor="middle" font-size="10" fill="#777">パレート分析・傾向管理</text>
+
+  <!-- DB注記 -->
+  <text x="480" y="510" text-anchor="middle" font-size="11" fill="#888" font-style="italic">任意の製品・期間・項目でデータを参照可能にする</text>
+
+  <!-- ===== 凡例 ===== -->
+  <rect x="110" y="530" width="740" height="48" rx="8" fill="#f0f0f0" stroke="#ccc" stroke-width="1"/>
+  <text x="480" y="546" text-anchor="middle" font-size="10" fill="#999">凡例</text>
+
+  <rect x="145" y="555" width="16" height="13" rx="3" fill="#d5e8d4" stroke="#82b366" stroke-width="1"/>
+  <text x="167" y="566" font-size="10" fill="#333">QA（全製品共通の仕組み）</text>
+
+  <rect x="335" y="555" width="16" height="13" rx="3" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1"/>
+  <text x="357" y="566" font-size="10" fill="#333">品質管理フロー（製品ごと）</text>
+
+  <rect x="535" y="555" width="16" height="13" rx="3" fill="#f8cecc" stroke="#b85450" stroke-width="1.5"/>
+  <text x="557" y="566" font-size="10" fill="#c0392b" font-weight="bold">ふじたの担当</text>
+
+  <rect x="670" y="555" width="16" height="13" rx="3" fill="#fff2cc" stroke="#d6b656" stroke-width="1"/>
+  <text x="692" y="566" font-size="10" fill="#333">他メンバー担当</text>
+</svg>
