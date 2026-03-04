@@ -85,3 +85,8 @@
 | [sessions/session5/maintenance-strategy.md](sessions/session5/maintenance-strategy.md) | 保守戦略（保守範囲・外注スコープ・合意項目） |
 | [sessions/session5/hearing-plan.md](sessions/session5/hearing-plan.md) | 現行Excel運用ヒアリング計画（質問リスト21問） |
 | [sessions/session5/domain-modeling-guide.md](sessions/session5/domain-modeling-guide.md) | ドメインモデリング学習・準備ガイド |
+
+### Session 6（2026-03-04）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session6/excel-review.md](sessions/session6/excel-review.md) | 現行Excel（受入検査作業集計）全8シートの客観的レビュー・課題抽出 |
