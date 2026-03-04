@@ -75,3 +75,13 @@
 |------|------|
 | [docs/fujita-mission-slide.md](docs/fujita-mission-slide.md) | ミッション特化スライド（Need+M1〜M4、石川さん向け） |
 | [docs/missions/m3m4-development-approach.md](docs/missions/m3m4-development-approach.md) | M3/M4の進め方（開発サイクル・ドメインモデリング・保守戦略） |
+
+### Session 5（2026-03-04）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session5/aws-cost-estimation.md](sessions/session5/aws-cost-estimation.md) | AWS構成案・コスト試算（3パターン比較） |
+| [sessions/session5/kintone-evaluation.md](sessions/session5/kintone-evaluation.md) | kintone調査・評価レポート |
+| [sessions/session5/platform-comparison.md](sessions/session5/platform-comparison.md) | プラットフォーム比較表（3案比較+推奨） |
+| [sessions/session5/maintenance-strategy.md](sessions/session5/maintenance-strategy.md) | 保守戦略（保守範囲・外注スコープ・合意項目） |
+| [sessions/session5/hearing-plan.md](sessions/session5/hearing-plan.md) | 現行Excel運用ヒアリング計画（質問リスト21問） |
+| [sessions/session5/domain-modeling-guide.md](sessions/session5/domain-modeling-guide.md) | ドメインモデリング学習・準備ガイド |

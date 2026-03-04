@@ -89,3 +89,32 @@
 - DB設計の前にドメインモデリング（ユビキタス言語→モデル→DB設計）が必要
 - AWS使用希望、コスト試算が必要
 - 保守問題: 設計段階で保守計画・範囲を合意すべき（「作った人が一生保守」を回避）
+
+## Session 5 (2026-03-04)
+
+**概要**: M3/M4のアーキテクチャ検討。AWS構成・コスト試算、kintone調査・評価、プラットフォーム比較表、保守戦略、ヒアリング計画、ドメインモデリング準備を実施。
+
+**背景**: Session 4でNeedと開発の進め方が定まったため、技術選定の判断材料を揃える必要があった。kintone vs AWS自前開発の比較、保守体制の設計、現場ヒアリングの準備が主な課題。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session5/aws-cost-estimation.md](../session5/aws-cost-estimation.md) | AWS構成案・コスト試算（3パターン比較） |
+| [session5/kintone-evaluation.md](../session5/kintone-evaluation.md) | kintone調査・評価レポート |
+| [session5/platform-comparison.md](../session5/platform-comparison.md) | プラットフォーム比較表（3案比較+推奨） |
+| [session5/maintenance-strategy.md](../session5/maintenance-strategy.md) | 保守戦略（保守範囲・外注スコープ・合意項目） |
+| [session5/hearing-plan.md](../session5/hearing-plan.md) | 現行Excel運用ヒアリング計画（質問リスト21問） |
+| [session5/domain-modeling-guide.md](../session5/domain-modeling-guide.md) | ドメインモデリング学習・準備ガイド |
+| [session5/session-summary.md](../session5/session-summary.md) | セッションサマリー |
+
+**重要な発見**:
+- **推奨: kintone+外部分析(Python)の段階的アプローチ**
+  - Phase 1: kintoneで記録・閲覧（数日で稼働）
+  - Phase 2: Python分析追加（SPC・パレート）
+  - Phase 3: 必要に応じて自前開発に移行
+- AWS自前開発: サーバレス構成で月額~$25(~3,750円)、Lightsailなら~$5(~750円)
+- kintone: スタンダード1,800円/ユーザー/月、SPC/管理図は不可→Python連携必須
+- 保守工数: kintone+外部分析で年20-40時間、自前開発で年100-200時間
+- 石川さんと合意すべき保守計画7項目を整理
+- ヒアリングがドメインモデリングの入力になる → ヒアリング→モデリング→DB設計の順
+- **藤田さんの所感**: 一人運用前提がそもそもおかしい、kintoneでも保守は実質無理、自前開発はクラウド経験として価値あり、保守をきちんと設計したい
