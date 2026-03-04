@@ -1,0 +1,91 @@
+<mxfile host="VSCode" modified="2026-03-04T04:00:00.000Z" agent="Claude" version="21.0.0">
+  <diagram name="品質管理フロー" id="quality-flow-diagram">
+    <mxGraphModel dx="1200" dy="680" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- QA層の背景 -->
+        <mxCell id="qa-bg" value="QA（品質保証）— 品質を保証する仕組みを作る" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1;verticalAlign=top;spacingTop=8;arcSize=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="880" height="130" as="geometry"/>
+        </mxCell>
+
+        <!-- M1: センサー評価 -->
+        <mxCell id="m1" value="&lt;b style='color:#c0392b'&gt;M1: センサー評価手法策定&lt;/b&gt;&lt;br&gt;&lt;span style='color:#c0392b'&gt;Lidar / GNSS ─ ふじた&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="250" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- M2: 点群データ検証 -->
+        <mxCell id="m2" value="&lt;b style='color:#c0392b'&gt;M2: 点群データ検証方法策定&lt;/b&gt;&lt;br&gt;&lt;span style='color:#c0392b'&gt;ふじた&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="330" y="80" width="260" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- FMEA -->
+        <mxCell id="fmea" value="&lt;b&gt;FMEA（設計FMEA・工程FMEA）&lt;/b&gt;&lt;br&gt;いしかわ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="610" y="80" width="290" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- 矢印テキスト QA→フロー -->
+        <mxCell id="qa-arrow-label" value="▼ 手法・基準を提供 ▼" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#777777;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="400" y="175" width="160" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- SQM -->
+        <mxCell id="sqm" value="&lt;b style='font-size:16px'&gt;SQM&lt;/b&gt;&lt;br&gt;サプライヤ品質管理&lt;br&gt;&lt;span style='font-size:10px;color:#777'&gt;サプライヤの選定・評価・監査&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="190" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- IQC -->
+        <mxCell id="iqc" value="&lt;b style='font-size:16px'&gt;IQC&lt;/b&gt;&lt;br&gt;受入品質管理&lt;br&gt;&lt;span style='font-size:10px;color:#777'&gt;入荷部品の検査（AQL抜取等）&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="280" y="210" width="190" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- IPQC -->
+        <mxCell id="ipqc" value="&lt;b style='font-size:16px'&gt;IPQC&lt;/b&gt;&lt;br&gt;工程品質管理&lt;br&gt;&lt;span style='font-size:10px;color:#777'&gt;組立工程中の検査&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="520" y="210" width="190" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- OQC -->
+        <mxCell id="oqc" value="&lt;b style='font-size:16px'&gt;OQC&lt;/b&gt;&lt;br&gt;出荷品質管理&lt;br&gt;&lt;span style='font-size:10px;color:#777'&gt;完成機の最終検査・飛行テスト&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="760" y="210" width="190" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- フロー矢印 -->
+        <mxCell id="arrow1" style="endArrow=block;endFill=1;strokeWidth=2;strokeColor=#555555;" edge="1" source="sqm" target="iqc" parent="1"/>
+        <mxCell id="arrow2" style="endArrow=block;endFill=1;strokeWidth=2;strokeColor=#555555;" edge="1" source="iqc" target="ipqc" parent="1"/>
+        <mxCell id="arrow3" style="endArrow=block;endFill=1;strokeWidth=2;strokeColor=#555555;" edge="1" source="ipqc" target="oqc" parent="1"/>
+
+        <!-- SQM活動 -->
+        <mxCell id="act-sqm" value="&lt;b&gt;いしかわ&lt;/b&gt;&lt;br&gt;EVPEAK / GREPOW&lt;br&gt;SKYDROID 継続評価" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="330" width="190" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- IQC活動（ふじた） -->
+        <mxCell id="act-iqc" value="&lt;b style='color:#c0392b'&gt;ふじた（M3）&lt;/b&gt;&lt;br&gt;受入検査データベース化&lt;br&gt;Excel → DB + アプリ" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="280" y="330" width="190" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- IPQC活動（ふじた + こいたばし） -->
+        <mxCell id="act-ipqc" value="&lt;b style='color:#c0392b'&gt;ふじた（M4）&lt;/b&gt;&lt;br&gt;工程不良データベース化&lt;hr style='margin:2px 0'&gt;&lt;span style='font-size:10px;color:#666'&gt;こいたばし: 帯電散布検証&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="520" y="330" width="190" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- OQC活動 -->
+        <mxCell id="act-oqc" value="&lt;b&gt;こいたばし&lt;/b&gt;&lt;br&gt;H12G EVT/DVT&lt;br&gt;量産評価" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="760" y="330" width="190" height="75" as="geometry"/>
+        </mxCell>
+
+        <!-- フロー→活動の点線 -->
+        <mxCell id="dash1" style="endArrow=none;dashed=1;strokeColor=#aaaaaa;" edge="1" source="sqm" target="act-sqm" parent="1"/>
+        <mxCell id="dash2" style="endArrow=none;dashed=1;strokeColor=#aaaaaa;" edge="1" source="iqc" target="act-iqc" parent="1"/>
+        <mxCell id="dash3" style="endArrow=none;dashed=1;strokeColor=#aaaaaa;" edge="1" source="ipqc" target="act-ipqc" parent="1"/>
+        <mxCell id="dash4" style="endArrow=none;dashed=1;strokeColor=#aaaaaa;" edge="1" source="oqc" target="act-oqc" parent="1"/>
+
+        <!-- QCラベル -->
+        <mxCell id="qc-label" value="QC（品質管理）— 各工程で品質問題を検出・防止" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#777777;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="340" y="415" width="300" height="30" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -45,3 +45,26 @@
 - 現状はExcel管理 → タブレットアプリ化を検討
 - チーム構成: 小笠原さん(課長)、石川さん(上司)、小板橋さん(先輩)、宇枝さん(部長)
 - marp-slidesスキルを追加
+
+## Session 3 (2026-03-04)
+
+**概要**: 品質管理フロー図（SVG）を作成し、スライドに画像として埋め込み。M3/M4の要件初期ヒアリングを実施。
+
+**背景**: Session 2で作成したスライドのASCIIアートフロー図を、本格的なSVG画像に置き換える必要があった。会話の中でフローが製品ごとに存在すること、M3/M4の方針が明らかになった。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [docs/images/quality-flow.svg](../../docs/images/quality-flow.svg) | 品質管理フロー図（製品別フロー + DB横断構造） |
+| [docs/images/quality-flow.drawio](../../docs/images/quality-flow.drawio) | フロー図の編集用ソース |
+| [session3/m3m4-requirements-memo.md](../session3/m3m4-requirements-memo.md) | M3/M4要件の初期メモ |
+| [session3/session-summary.md](../session3/session-summary.md) | セッションサマリー |
+| [session4/session-plan.md](../session4/session-plan.md) | Session 4計画 |
+
+**重要な発見**:
+- 品質管理フローは**製品ごと**に存在する（AirGrow、H12G等）
+- QA手法（M1/M2）は全製品共通、DB（M3/M4）は全製品データを集約
+- M3/M4: kintone（社内導入済み）vs 自前開発（AI活用）の比較検討が必要
+- M3/M4: 「プロトタイプ → 外注」が現実的なアプローチ
+- 製品追加時にテーブルを増やさない設計が求められる
+- 作業者は藤田さん一人 → シンプルさ・メンテ最小化が最優先

@@ -45,7 +45,8 @@
 ## 現状の業務環境
 
 - **受入検査・工程不良の記録**: 現在はExcel管理
-- **M3/M4の方向性**: タブレット操作可能なアプリ化を検討
+- **M3/M4の方向性**: タブレット操作可能なアプリ化を検討、kintone vs 自前開発を比較検討中
+- **画像ディレクトリ**: `docs/images/` — スライド用の図表を格納
 
 ## 過去セッションで確認した資料の索引
 
@@ -61,3 +62,10 @@
 | [sessions/session2/company-qa-qc-report.md](sessions/session2/company-qa-qc-report.md) | 自社文脈でのQA/QC活動整理レポート |
 | [sessions/session2/mission-priority-analysis.md](sessions/session2/mission-priority-analysis.md) | ミッション優先順位分析 |
 | [docs/index.md](docs/index.md) | ドキュメントインデックス（ミッション別に整理） |
+
+### Session 3（2026-03-04）
+| 資料 | 内容 |
+|------|------|
+| [docs/images/quality-flow.svg](docs/images/quality-flow.svg) | 品質管理フロー図（製品別フロー + DB横断構造） |
+| [sessions/session3/m3m4-requirements-memo.md](sessions/session3/m3m4-requirements-memo.md) | M3/M4要件の初期メモ |
+| [docs/qa-overview-slide.md](docs/qa-overview-slide.md) | スライド（SVG画像埋め込み済み） |
