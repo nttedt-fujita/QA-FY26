@@ -31,6 +31,21 @@
 - `powerpoint-orgn/` — 元のPowerPointファイル（原本、編集しない）
 - `slides.md` — PPTXの中間Markdownファイル（位置情報付き）
 - `sessions/` — セッション管理ディレクトリ
+- `docs/` — 整理済みドキュメント（ミッション別・QA知識）
+
+## ドキュメント構成（docs/）
+
+- **[docs/index.md](docs/index.md)** — 全体インデックス
+- `docs/missions/m1-sensor-evaluation/` — M1: センサー評価手法策定
+- `docs/missions/m2-pointcloud-verification/` — M2: 点群データ検証方法策定
+- `docs/missions/m3-incoming-inspection-db/` — M3: 受入検査DB化
+- `docs/missions/m4-defect-db/` — M4: 工程不良DB化
+- `docs/qa-knowledge/` — QA基礎知識・自社QA/QC整理
+
+## 現状の業務環境
+
+- **受入検査・工程不良の記録**: 現在はExcel管理
+- **M3/M4の方向性**: タブレット操作可能なアプリ化を検討
 
 ## 過去セッションで確認した資料の索引
 
@@ -39,3 +54,10 @@
 |------|------|
 | [sessions/session1/qa-fundamentals-report.md](sessions/session1/qa-fundamentals-report.md) | QA基礎知識調査レポート |
 | [sessions/session1/mission-approach-report.md](sessions/session1/mission-approach-report.md) | ミッション別アプローチ調査レポート |
+
+### Session 2（2026-03-04）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session2/company-qa-qc-report.md](sessions/session2/company-qa-qc-report.md) | 自社文脈でのQA/QC活動整理レポート |
+| [sessions/session2/mission-priority-analysis.md](sessions/session2/mission-priority-analysis.md) | ミッション優先順位分析 |
+| [docs/index.md](docs/index.md) | ドキュメントインデックス（ミッション別に整理） |
