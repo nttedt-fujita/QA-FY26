@@ -90,3 +90,8 @@
 | 資料 | 内容 |
 |------|------|
 | [sessions/session6/excel-review.md](sessions/session6/excel-review.md) | 現行Excel（受入検査作業集計）全8シートの客観的レビュー・課題抽出 |
+
+### Session 7（2026-03-04）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session7/ears-requirements-hypotheses.md](sessions/session7/ears-requirements-hypotheses.md) | EARS形式 要求仮説19個（途中・次セッションで継続） |
