@@ -196,3 +196,30 @@
 - モジュラーモノリスの定義を明確化
 - QuickSightでできることの整理
 - 石川さん向けスライドのドラフト作成
+
+## Session 9 (2026-03-05)
+
+**概要**: 技術調査（TypeScript vs Go、kintone vs AWS、QuickSight）とSPC・管理図の解説。調査結果をドキュメント化。
+
+**背景**: Session 8で計画した「懸念点の調査」を実施。調査の中で「kintoneの具体的な機能がわからないと判断できない」「SPCとは何か理解していない」等の課題が判明し、追加調査を実施。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session9/typescript-vs-go-report.md](../session9/typescript-vs-go-report.md) | TypeScript vs Go 比較レポート（エビデンス・原文抜粋付き） |
+| [session9/kintone-vs-aws-report.md](../session9/kintone-vs-aws-report.md) | kintone vs AWS自前開発 比較レポート |
+| [session9/spc-control-chart-guide.md](../session9/spc-control-chart-guide.md) | SPC・管理図・パレート図 解説 |
+| [session9/quicksight-report.md](../session9/quicksight-report.md) | AWS QuickSight 調査レポート |
+| [session9/session-summary.md](../session9/session-summary.md) | セッションサマリー |
+
+**重要な発見**:
+- **TypeScript 7.0のGoコンパイラ**: コンパイラがGoで書き直されただけ。実行時性能は変わらない
+- **kintoneの限界**: SPC・管理図・パレート図は標準では不可能
+- **分析が肝なら自前開発**: kintoneは記録・閲覧は得意だが分析は弱い
+- **QuickSight**: 計算フィールド + 参照線で管理図も実装可能。有効な選択肢
+- **最終判断は保留**: プロトタイプ + ヒアリングで決める
+
+**次セッション（Session 10）でやること**:
+- モジュラーモノリスの定義を明確化
+- 石川さん向けスライドのドラフト作成（Marp形式）
+- ヒアリング準備（時間があれば）
