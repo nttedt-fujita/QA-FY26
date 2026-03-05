@@ -102,3 +102,33 @@
 **次セッション（Session 15）でやること**:
 - sessions/配下の資料をdocs/に集約
 - 全体レビュー（資料の構成・整合性チェック）
+
+## Session 15 (2026-03-05)
+
+**概要**: 資料集約、GNSSヒアリング対応（割り込み）。
+
+**背景**: 計画通り資料集約を開始したところ、小板橋さんが捕まったため急遽GNSSヒアリングを実施。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session14/closed-questions-m3m4.csv](../session14/closed-questions-m3m4.csv) | M3/M4クローズドクエスチョンCSV版 |
+| [session12/gnss-hearing-items.csv](../session12/gnss-hearing-items.csv) | GNSSヒアリングCSV版 |
+| docs/missions/ 配下に多数 | 資料集約（M1, M3/M4） |
+| docs/technical-research/ 配下に多数 | 技術調査集約 |
+
+**重要な発見**:
+- **GNSSはLidarより要求が明確** → 先に取り組む価値あり
+- u-centerというツールが既にある
+- 小板橋さんの期待: ツール作成 + 標準化
+- Xmindにメモあり（次回読み取り）
+
+**未完了タスク**:
+- docs/index.md 更新（途中）
+- CLAUDE.md 索引更新（未着手）
+
+**次セッション（Session 16）でやること**:
+- Xmindメモの読み取り
+- GNSSヒアリング結果整理
+- M1-B（GNSS）優先着手の判断
+- Session 15残タスク完了
