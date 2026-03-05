@@ -76,3 +76,29 @@
 - 小板橋さんヒアリング結果の整理（実施後）
 - HORIBA・OECへの問い合わせ結果の整理（回答後）
 - スライド更新の確認
+
+## Session 14 (2026-03-05)
+
+**概要**: ヒアリング前準備。クローズドクエスチョン整理、モックアップ構成案、分析観点の整理。
+
+**背景**: ヒアリング（小笠原さん・小板橋さん）がまだ実施できていない中、明日のSCM/品質保証DX打ち合わせに向けて準備を進めた。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session14/closed-questions-m3m4.md](../session14/closed-questions-m3m4.md) | クローズドクエスチョン（A〜K、28問） |
+| [session14/mockup-concepts.md](../session14/mockup-concepts.md) | モックアップ構成案（テキスト版） |
+| [session14/analysis-what-to-build.md](../session14/analysis-what-to-build.md) | 自作 vs QuickSightの仕分け |
+| [session14/ears-prevention-hypotheses.md](../session14/ears-prevention-hypotheses.md) | EARS要求（予防・監視追加版） |
+| [session14/analysis-to-input-mapping.md](../session14/analysis-to-input-mapping.md) | 分析要求→入力項目の逆算 |
+| [session14/session-summary.md](../session14/session-summary.md) | セッションサマリー |
+
+**重要な発見**:
+- **分析フレームワーク**: 時間軸（過去/現在/未来）× 4M（Man/Machine/Material/Method）で整理
+- **Session 7のEARS要求の不足**: 「現在監視」「未来予測」の観点がなかった → 追加
+- **自作 vs QuickSight**: 入力は自作、分析はQuickSightに任せる
+- **逆算の重要性**: 「何を分析したいか」→「何を記録すべきか」→「入力項目」
+
+**次セッション（Session 15）でやること**:
+- sessions/配下の資料をdocs/に集約
+- 全体レビュー（資料の構成・整合性チェック）
