@@ -24,3 +24,28 @@
 - 小板橋さん向けGNSSヒアリング項目の作成
 - Lidar評価環境のWeb調査（規格・設備・外注可能性）
 - 1次調査の実施準備
+
+## Session 12 (2026-03-05)
+
+**概要**: M1/M2の1次調査準備。GNSSヒアリング項目作成、Lidar評価環境Web調査、ドキュメント整備。
+
+**背景**: Session 11で判明した「M1/M2は1次調査ができていない」問題に対応。スライド完成に必要な情報を揃えるため、ヒアリング準備と外部調査を実施。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session12/gnss-hearing-items.md](../session12/gnss-hearing-items.md) | 小板橋さん向けGNSSヒアリング項目（16問） |
+| [session12/lidar-evaluation-research.md](../session12/lidar-evaluation-research.md) | Lidar評価環境Web調査結果 |
+| [session12/schedule-and-m1m2-summary-v2.md](../session12/schedule-and-m1m2-summary-v2.md) | スケジュール・M1/M2進め方（v2、最新） |
+| [session12/session-summary.md](../session12/session-summary.md) | セッションサマリー |
+
+**重要な発見**:
+- **Lidar評価環境構築**: 3つの選択肢（外部委託/自社構築/ハイブリッド）
+- **国内サービス候補**: HORIBA Techno Service、OEC、北陽電機等
+- **スライド作成に渡す資料**: schedule-and-m1m2-summary-v2.md を渡せばOK
+- **古いスライド削除**: fujita-mission-slide.md、qa-overview-slide.md を削除
+
+**次セッション（Session 13）でやること**:
+- 小板橋さんヒアリング結果の整理（実施後）
+- HORIBA・OECへの問い合わせ結果の整理（回答後）
+- スライド更新の確認
