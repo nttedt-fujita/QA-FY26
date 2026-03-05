@@ -162,3 +162,37 @@
 - 仮説 → 誰に聞くかマッピング（今回の続き）
 - ヒアリング質問リストの更新
 - Excelデータの詳細分析・図表化
+
+## Session 8 (2026-03-05)
+
+**概要**: 別セッションで作成した資料（AWS自前開発の詳細検討）と過去セッションの内容を統合。方針決定とヒアリング項目の統合を実施。
+
+**背景**: 別セッションでAWS自前開発を前提とした詳細設計が進んでいたが、過去セッション（S5-S7）では「技術選定はヒアリング後」「kintone+外部分析を推奨」という結論だった。この矛盾を解消し、整合性を取る必要があった。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session8/session8-integration-policy.md](../session8/session8-integration-policy.md) | 統合方針の文書化（方針C採用） |
+| [session8/hearing-items-integrated.md](../session8/hearing-items-integrated.md) | ヒアリング項目統合版（約40項目、P0〜P3優先度付き） |
+| [session8/resource-index.md](../session8/resource-index.md) | 今回確認した資料のインデックス |
+| [session8/session-summary.md](../session8/session-summary.md) | セッションサマリー |
+
+**別セッション資料（リネーム済み）**:
+| ファイル | 内容 |
+|----------|------|
+| 01_architecture_discussion.md | アーキテクチャ議論（PWA, モジュラーモノリス等） |
+| 02_data_growth_analysis.md | データ膨張予測（3シナリオ） |
+| 03_discussion_log.md | 議論ログ |
+| 04_domain_model_prep.md | ドメインモデル準備 |
+| 05_techstack_plan.md | 技術スタック・開発計画 |
+
+**重要な発見**:
+- **統合方針C**: 「技術選定はヒアリング後」の原則維持 + 別セッション資料は「AWS自前開発を選んだ場合の参考」として保存
+- 過去セッションと別セッションでは技術選定のステージが違っていた（別セッションは先走り検討）
+- ヒアリング項目を両方から統合し、P0（大枠の認識合わせ）を最優先に設定
+
+**次セッション（Session 9）でやること**:
+- TypeScript vs Go言語の比較を深掘り調査
+- モジュラーモノリスの定義を明確化
+- QuickSightでできることの整理
+- 石川さん向けスライドのドラフト作成

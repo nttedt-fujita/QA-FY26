@@ -95,3 +95,11 @@
 | 資料 | 内容 |
 |------|------|
 | [sessions/session7/ears-requirements-hypotheses.md](sessions/session7/ears-requirements-hypotheses.md) | EARS形式 要求仮説19個（途中・次セッションで継続） |
+
+### Session 8（2026-03-05）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session8/session8-integration-policy.md](sessions/session8/session8-integration-policy.md) | 統合方針（過去セッション + 別セッション資料の扱い） |
+| [sessions/session8/hearing-items-integrated.md](sessions/session8/hearing-items-integrated.md) | ヒアリング項目統合版（約40項目、P0〜P3優先度付き） |
+| [sessions/session8/resource-index.md](sessions/session8/resource-index.md) | 確認した資料のインデックス（逆引き含む） |
+| [sessions/session8/another-session-Need-requirements-files/](sessions/session8/another-session-Need-requirements-files/) | 別セッション資料（AWS自前開発の詳細検討、5ファイル） |
