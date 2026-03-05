@@ -103,3 +103,10 @@
 | [sessions/session8/hearing-items-integrated.md](sessions/session8/hearing-items-integrated.md) | ヒアリング項目統合版（約40項目、P0〜P3優先度付き） |
 | [sessions/session8/resource-index.md](sessions/session8/resource-index.md) | 確認した資料のインデックス（逆引き含む） |
 | [sessions/session8/another-session-Need-requirements-files/](sessions/session8/another-session-Need-requirements-files/) | 別セッション資料（AWS自前開発の詳細検討、5ファイル） |
+
+### Session 13（2026-03-05）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session13/hearing-notes-ishikawa-02.md](sessions/session13/hearing-notes-ishikawa-02.md) | 石川さんヒアリングメモ #02（スケジュール・M1〜M4方針の更新） |
+| [sessions/session13/project-status-reorg.md](sessions/session13/project-status-reorg.md) | プロジェクト状況 再整理（Session 13時点の全ミッション状況） |
+| [sessions/session13/【藤田】品質G　2026取り組み.pdf](sessions/session13/【藤田】品質G　2026取り組み.pdf) | スライドPDF最終版（FY26取り組み全体＋M3/M4ヒアリング資料） |
