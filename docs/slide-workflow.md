@@ -57,6 +57,36 @@ marp slide.md --pptx-editable
 
 ---
 
+## 藤田さんの実際のワークフロー
+
+```
+[Ubuntu PC]
+    │
+    │  ① Marp形式.mdを作成（VSCode + Marp拡張でプレビュー）
+    │
+    │  ② git push
+    ↓
+[Windows PC]
+    │
+    │  ③ git pull
+    │
+    │  ④ .mdファイルをパワポ内のClaudeに渡す
+    │
+    │  ⑤ PPTX生成
+    ↓
+[完成] 石川さんに共有
+```
+
+### 手順詳細
+
+1. **Ubuntu PC**: `sessions/session10/ishikawa-slide-draft.md` などを作成
+2. **git push**: 変更をリポジトリにプッシュ
+3. **Windows PC**: `git pull` で最新を取得
+4. **パワポ内Claude**: mdファイルの内容を渡してPPTX生成を依頼
+5. **微調整**: 必要に応じてPowerPointで編集
+
+---
+
 ## 参考
 
 - [Marp CLI GitHub](https://github.com/marp-team/marp-cli)
