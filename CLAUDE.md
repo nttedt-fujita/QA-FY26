@@ -110,3 +110,10 @@
 | [sessions/session13/hearing-notes-ishikawa-02.md](sessions/session13/hearing-notes-ishikawa-02.md) | 石川さんヒアリングメモ #02（スケジュール・M1〜M4方針の更新） |
 | [sessions/session13/project-status-reorg.md](sessions/session13/project-status-reorg.md) | プロジェクト状況 再整理（Session 13時点の全ミッション状況） |
 | [sessions/session13/【藤田】品質G　2026取り組み.pdf](sessions/session13/【藤田】品質G　2026取り組み.pdf) | スライドPDF最終版（FY26取り組み全体＋M3/M4ヒアリング資料） |
+
+### Session 17（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session17/pdf-excel-analysis.md](sessions/session17/pdf-excel-analysis.md) | PDF（UBX仕様書）・Excel（小峰無線GPS確認）全シート詳細分析・未確認項目リスト |
+| [sessions/session17/files-reviewed.md](sessions/session17/files-reviewed.md) | 今セッションで確認したファイル一覧（PDF読み込み範囲・Excel未読画像一覧） |
+| [sessions/session17/session-summary.md](sessions/session17/session-summary.md) | セッションサマリー（発見事項・次セッション計画） |
