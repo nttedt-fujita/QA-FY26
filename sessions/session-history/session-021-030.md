@@ -105,3 +105,33 @@
 - 矢印記号（↓↑）の集計修正
 - 小笠原さん報告資料（パワポ）作成
 - （余裕があれば）ドメインモデリング継続
+
+## Session 25 (2026-03-06)
+
+**概要**: 品質管理フレームワーク調査、M3/M4プロトタイプ方針策定、ヒアリング項目統合。
+
+**背景**: 午前の打ち合わせで宇枝さんから「良くなったか見たい」「原因確認したい」等の要望。また「品質協定書が未締結」という課題が判明。世間一般の品質管理フレームワークを調査してからプロトタイプ方針を立てることにした。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session25/meeting-notes-am.md](../session25/meeting-notes-am.md) | 午前打ち合わせメモ |
+| [session25/quality-framework-research.md](../session25/quality-framework-research.md) | 品質管理フレームワーク調査レポート（エビデンス付き） |
+| [session25/prototype-approach.md](../session25/prototype-approach.md) | M3/M4プロトタイプ方針 |
+| [docs/missions/m3-incoming-inspection-db/hearing-items.md](../../docs/missions/m3-incoming-inspection-db/hearing-items.md) | ヒアリング項目統合版（更新） |
+| [session25/session-summary.md](../session25/session-summary.md) | セッションサマリー |
+
+**重要な発見**:
+- **IQC/PQC/OQC**: M3=IQC、M4=IPQC/PQC、両者は「部品」で紐づく
+- **ロット/トレーサビリティ**: 現行Excelにはロット概念がない（To-Beで導入必要）
+- **8Dレポート**: 宇枝さんの「原因確認」「効果確認」要望と一致
+- **品質協定書**: 協定書なしではM4ツール導入が困難
+
+**プロトタイプ方針**:
+- Phase 1: 分析・可視化（今できる）
+- Phase 2: 入力のデジタル化（ヒアリング後）
+- Phase 3: M3/M4統合 + トレーサビリティ（協定書締結後）
+
+**次セッション（Session 26）でやること**:
+- Phase 1プロトタイプ（分析ダッシュボード）の設計・検討
+- （余裕があれば）M1-B GNSS関連
