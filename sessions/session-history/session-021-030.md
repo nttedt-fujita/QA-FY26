@@ -181,3 +181,31 @@
 - 新スキル「qa-design-review」の作成
 - CLAUDE.mdに誘導記述を追加
 - As-Is図の改修（品質管理視点を追加）
+
+## Session 28 (2026-03-06)
+
+**概要**: 品質管理視点を自動反映する仕組みの整備（スキル作成 + ギャップ分析図）。
+
+**背景**: Session 27で発覚した「調査結果が自動的に作業に反映されない」問題を解決するため、スキルとCLAUDE.mdの誘導記述を作成した。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [.claude/skills/qa-design-review/SKILL.md](../../.claude/skills/qa-design-review/SKILL.md) | **品質管理設計レビュースキル** |
+| [session28/qa-gap-analysis.drawio](../session28/qa-gap-analysis.drawio) | 品質管理視点のギャップ分析図 |
+| [session28/session-summary.md](../session28/session-summary.md) | セッションサマリー |
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [CLAUDE.md](../../CLAUDE.md) | 「品質管理設計ルール」セクション追加、Session 28索引追加 |
+
+**成果**:
+- **スキル作成**: M3/M4設計時に品質管理視点（IQC/PQC/OQC、ロット、AQL、8D、M3/M4紐づき）を自動チェック
+- **CLAUDE.md誘導**: 設計作業時にスキルを参照するよう誘導
+- **ギャップ分析図**: 現行Excel vs 理想的IQC の比較図（欠けている概念を明示）
+
+**次セッション（Session 29）でやること**:
+- 矢印記号（↓↑）の集計処理追加（Session 24で発見、未実装）
+- ギャップ分析図をスライド用MDに変換
+- 小笠原さん報告資料の最終確認
