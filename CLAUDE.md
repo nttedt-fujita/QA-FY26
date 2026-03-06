@@ -48,6 +48,20 @@
 - **M3/M4の方向性**: タブレット操作可能なアプリ化を検討、kintone vs 自前開発を比較検討中
 - **画像ディレクトリ**: `docs/images/` — スライド用の図表を格納
 
+## 品質管理設計ルール
+
+**IMPORTANT**: M3/M4関連の設計・図作成時は、必ず以下を参照すること。
+
+- **スキル**: [.claude/skills/qa-design-review/SKILL.md](.claude/skills/qa-design-review/SKILL.md)
+- **調査資料**: [sessions/session25/quality-framework-research.md](sessions/session25/quality-framework-research.md)
+
+チェックすべき観点:
+1. IQC/PQC/OQCの位置づけ
+2. ロット/トレーサビリティの考慮
+3. AQL/抜取検査の基準
+4. 8Dフレームワーク（問題→原因→対策→効果確認）
+5. M3/M4の紐づき（共通の「部品」で連携）
+
 ## 過去セッションで確認した資料の索引
 
 ### Session 1（2026-03-04）
@@ -186,3 +200,9 @@
 |------|------|
 | [sessions/session27/as-is-model.drawio](sessions/session27/as-is-model.drawio) | As-Isモデル概念図（現行Excel構造）— 品質管理視点の追加が必要 |
 | [sessions/session27/session-summary.md](sessions/session27/session-summary.md) | セッションサマリー（品質管理視点欠落の発見、qa-design-reviewスキル作成方針） |
+
+### Session 28（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [.claude/skills/qa-design-review/SKILL.md](.claude/skills/qa-design-review/SKILL.md) | **品質管理設計レビュースキル** — M3/M4設計時の品質管理視点チェックリスト |
+| [sessions/session28/qa-gap-analysis.drawio](sessions/session28/qa-gap-analysis.drawio) | 品質管理視点のギャップ分析図（現行Excel vs 理想的IQC） |
