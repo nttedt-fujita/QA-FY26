@@ -135,3 +135,24 @@
 **次セッション（Session 26）でやること**:
 - Phase 1プロトタイプ（分析ダッシュボード）の設計・検討
 - （余裕があれば）M1-B GNSS関連
+
+## Session 26 (2026-03-06)
+
+**概要**: 小笠原さん報告資料の確認・更新。
+
+**背景**: Session 24で小笠原さん報告用のMarkdown（excel-analysis-summary.md）を作成していたが、Session 22-23で実施した前処理（名寄せ・クレンジング）が未記載だった。報告前にヌケモレを確認し、追記した。
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md](../../docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md) | 前処理の記載追加、データ品質問題の拡充 |
+| [session26/session-summary.md](../session26/session-summary.md) | セッションサマリー |
+
+**主な追加内容**:
+- 「1. 分析の前処理」セクション新設（名寄せ・日付修正・入荷日補完）
+- 「2. データ品質の問題」に未来日付10件・入荷日空欄34件を追記
+- 各問題に「対応」列を追加
+
+**次セッション（Session 27）でやること**:
+- 小笠原さんへの報告（パワポが必要か確認）
+- Phase 1プロトタイプの検討
