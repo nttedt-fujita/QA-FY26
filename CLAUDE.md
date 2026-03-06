@@ -257,3 +257,10 @@
 | 資料 | 内容 |
 |------|------|
 | [docs/missions/m3-incoming-inspection-db/to-be/to-be-model.drawio](docs/missions/m3-incoming-inspection-db/to-be/to-be-model.drawio) | **To-Beドメインモデル**（品質管理フレームワーク反映、IQC/PQC/OQC、ロット、8D対応） |
+
+### Session 34（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session34/session-summary.md](sessions/session34/session-summary.md) | **技術選定変更**（バックエンド: TypeScript → Go） |
+
+**重要な決定**: バックエンドをGoに変更（パフォーマンス・依存関係・脆弱性リスクで有利）

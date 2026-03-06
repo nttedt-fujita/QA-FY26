@@ -53,7 +53,7 @@ def main():
     total_records = monthly["件数"].sum()
     total_hours = monthly["総工数(時間)"].sum()
     avg_hours_per_month = monthly_valid["総工数(時間)"].mean()
-    unique_products = product["品名_正規化"].nunique()
+    unique_products = product["品名"].nunique()
 
     col1.metric("総レコード数", f"{total_records:,}件")
     col2.metric("総工数", f"{total_hours:.1f}時間")
@@ -134,7 +134,7 @@ def main():
     st.header("📦 品名別パレート分析")
 
     # 品名別集計
-    product_summary = product.groupby("品名_正規化").agg({
+    product_summary = product.groupby("品名").agg({
         "件数": "sum",
         "工数(時間)": "sum"
     }).reset_index()
@@ -151,13 +151,13 @@ def main():
 
     fig_pareto = go.Figure()
     fig_pareto.add_trace(go.Bar(
-        x=top_products["品名_正規化"],
+        x=top_products["品名"],
         y=top_products["工数(時間)"],
         name="工数(時間)",
         marker_color="steelblue"
     ))
     fig_pareto.add_trace(go.Scatter(
-        x=top_products["品名_正規化"],
+        x=top_products["品名"],
         y=top_products["累積比率(%)"],
         name="累積比率(%)",
         yaxis="y2",
@@ -183,7 +183,7 @@ def main():
     # --- 検査内容別 ---
     st.header("🔍 検査内容別分析")
 
-    inspection_summary = inspection.groupby("検査内容_正規化").agg({
+    inspection_summary = inspection.groupby("検査内容").agg({
         "件数": "sum",
         "工数(時間)": "sum"
     }).reset_index()
@@ -197,7 +197,7 @@ def main():
     with col_insp1:
         fig_insp = px.bar(
             inspection_summary.head(10),
-            x="検査内容_正規化",
+            x="検査内容",
             y="工数(時間)",
             title="検査内容別 工数（上位10件）",
             color="工数(時間)",
@@ -214,7 +214,7 @@ def main():
         # 平均工数の比較
         fig_avg = px.bar(
             inspection_summary.head(10),
-            x="検査内容_正規化",
+            x="検査内容",
             y="平均工数(分)",
             title="検査内容別 平均工数（上位10件）",
             color="平均工数(分)",
