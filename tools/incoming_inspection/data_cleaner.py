@@ -7,7 +7,47 @@
 - 入荷日が空欄の場合、検査完了日を入荷日として使用（フォールバック）
   方針決定: Session 23（2026-03-06）
   根拠: 入荷日→検査完了日の差は中央値5日、70%が7日以内のため月別集計に影響小
+- 矢印記号（↓↑）を参照先の数値に変換
+  方針決定: Session 29（2026-03-06）
+  ↓ = 下（次の行）を参照、↑ = 上（前の行）を参照
 """
+
+
+class ArrowResolver:
+    """矢印記号（↓↑）の解決クラス
+
+    検査工数(分)カラムの矢印記号を、参照先の数値に変換する。
+    """
+
+    ARROW_DOWN = "↓"
+    ARROW_UP = "↑"
+
+    def resolve(self, values):
+        """矢印記号を参照先の数値に変換する
+
+        Args:
+            values: 工数値のリスト（矢印記号または数値文字列）
+
+        Returns:
+            変換後のリスト
+        """
+        result = values.copy()
+
+        # ↓を解決（前から後ろへ走査）
+        for i in range(len(result) - 1, -1, -1):
+            if result[i] == self.ARROW_DOWN:
+                # 次の行（i+1）の値を参照
+                if i + 1 < len(result):
+                    result[i] = result[i + 1]
+
+        # ↑を解決（後ろから前へ走査）
+        for i in range(len(result)):
+            if result[i] == self.ARROW_UP:
+                # 前の行（i-1）の値を参照
+                if i - 1 >= 0:
+                    result[i] = result[i - 1]
+
+        return result
 
 
 class DateCleaner:

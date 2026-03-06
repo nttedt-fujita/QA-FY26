@@ -209,3 +209,29 @@
 - 矢印記号（↓↑）の集計処理追加（Session 24で発見、未実装）
 - ギャップ分析図をスライド用MDに変換
 - 小笠原さん報告資料の最終確認
+
+## Session 29 (2026-03-06)
+
+**概要**: 矢印記号（↓↑）の集計処理追加（TDD）。
+
+**背景**: Session 24で発見した矢印記号（15件）が集計されていない問題を解決するため、ArrowResolverクラスを実装した。TDDスキルに基づき、Phase 0から丁寧に進めた。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session29/session-summary.md](../session29/session-summary.md) | セッションサマリー |
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [tools/incoming_inspection/data_cleaner.py](../../tools/incoming_inspection/data_cleaner.py) | ArrowResolverクラス追加 |
+| [tools/tests/incoming_inspection/test_data_cleaner.py](../../tools/tests/incoming_inspection/test_data_cleaner.py) | TestArrowResolverクラス追加（7テスト） |
+
+**成果**:
+- **ArrowResolver実装**: ↓=下（次の行）参照、↑=上（前の行）参照
+- **テスト**: 7テスト全パス + 実データ整合性確認OK（5パターン）
+- **対象データ**: Api 9件 + メカ 6件 = 計15件
+
+**次セッション（Session 30）でやること**:
+- ギャップ分析図をスライド用MDに変換
+- 小笠原さん報告資料の最終確認

@@ -162,3 +162,45 @@ class TestArrivalDateFallback:
 
         if should_succeed:
             assert cleaned['入荷日'] == expected_arrival
+
+
+class TestArrowResolver:
+    """矢印記号（↓↑）の解決テスト
+
+    検査工数(分)カラムの矢印記号を、参照先の数値に変換する。
+    ↓ = 下（次の行）を参照
+    ↑ = 上（前の行）を参照
+    """
+
+    @pytest.mark.parametrize(
+        "input_values,expected,should_succeed",
+        [
+            # 正常系: ↓が1つ、次の行に数値
+            (["↓", "70"], ["70", "70"], True),
+            # 正常系: ↑が1つ、前の行に数値
+            (["70", "↑"], ["70", "70"], True),
+            # 正常系: ↓↑が数値を挟む
+            (["↓", "70", "↑"], ["70", "70", "70"], True),
+            # 正常系: 連続↑↑↑、先頭に数値
+            (["300", "↑", "↑", "↑"], ["300", "300", "300", "300"], True),
+            # 正常系: 連続↓↓↓、末尾に数値
+            (["↓", "↓", "↓", "80"], ["80", "80", "80", "80"], True),
+            # 正常系: 数値のみ（変換なし）
+            (["70", "150", "240"], ["70", "150", "240"], True),
+            # 正常系: 実データパターン（メカ102-108相当）
+            (
+                ["↓", "↓", "↓", "80", "↑", "↑", "↑"],
+                ["80", "80", "80", "80", "80", "80", "80"],
+                True,
+            ),
+        ],
+    )
+    def test_resolve_arrows(self, input_values, expected, should_succeed):
+        """矢印記号を参照先の数値に変換する"""
+        from tools.incoming_inspection.data_cleaner import ArrowResolver
+
+        resolver = ArrowResolver()
+        result = resolver.resolve(input_values)
+
+        if should_succeed:
+            assert result == expected
