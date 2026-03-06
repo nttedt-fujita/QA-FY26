@@ -1,0 +1,9 @@
+# ビルド成果物
+bin/
+
+# 依存関係
+vendor/
+
+# IDE
+.idea/
+*.swp
