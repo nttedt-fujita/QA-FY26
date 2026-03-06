@@ -252,3 +252,8 @@
 |------|------|
 | [tools/incoming_inspection/dashboard.py](tools/incoming_inspection/dashboard.py) | **分析ダッシュボード**（Streamlit、Phase 1プロトタイプ） |
 | [docs/missions/m3-incoming-inspection-db/to-be/ears-requirements-hypotheses.md](docs/missions/m3-incoming-inspection-db/to-be/ears-requirements-hypotheses.md) | EARS要求 **更新**（Excel分析結果を反映、Phase 1検証可能な要求を明確化） |
+
+### Session 33（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [docs/missions/m3-incoming-inspection-db/to-be/to-be-model.drawio](docs/missions/m3-incoming-inspection-db/to-be/to-be-model.drawio) | **To-Beドメインモデル**（品質管理フレームワーク反映、IQC/PQC/OQC、ロット、8D対応） |
