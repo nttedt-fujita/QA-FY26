@@ -51,3 +51,29 @@
 - Excel原本のデータ修正依頼（未来日付10件）
 - 入荷日不明レコードの分類方針決定
 - M1-B GNSS関連（合格基準のエビデンス収集）
+
+## Session 23 (2026-03-06)
+
+**概要**: データクレンジング機能の実装（TDD）。
+
+**背景**: Session 22でデータ異常（未来日付10件、入荷日不明34件）を特定。分析精度向上のため、ロジックで自動修正する方針に決定。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [tools/incoming_inspection/data_cleaner.py](../../tools/incoming_inspection/data_cleaner.py) | データクレンジングモジュール |
+| [tools/tests/incoming_inspection/test_data_cleaner.py](../../tools/tests/incoming_inspection/test_data_cleaner.py) | テストコード（26テスト） |
+| [session23/session-summary.md](../session23/session-summary.md) | セッションサマリー |
+
+**重要な決定**:
+- **未来日付修正**: 2026-11/12 → 2025-11/12 に自動変換
+- **入荷日フォールバック**: 入荷日が空欄なら検査完了日を使用
+  - 根拠: 入荷日→検査完了日の差は中央値5日、70%が7日以内
+
+**クレンジング効果**:
+- 「不明」34件 → 8件に減少
+- 日付修正: 17件
+
+**次セッション（Session 24）でやること**:
+- 分析結果のレビュー・議論
+- M1-B GNSS関連
