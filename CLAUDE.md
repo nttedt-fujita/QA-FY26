@@ -206,3 +206,9 @@
 |------|------|
 | [.claude/skills/qa-design-review/SKILL.md](.claude/skills/qa-design-review/SKILL.md) | **品質管理設計レビュースキル** — M3/M4設計時の品質管理視点チェックリスト |
 | [sessions/session28/qa-gap-analysis.drawio](sessions/session28/qa-gap-analysis.drawio) | 品質管理視点のギャップ分析図（現行Excel vs 理想的IQC） |
+
+### Session 29（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [tools/incoming_inspection/data_cleaner.py](tools/incoming_inspection/data_cleaner.py) | **ArrowResolverクラス追加** — 矢印記号（↓↑）を参照先の数値に変換 |
+| [tools/tests/incoming_inspection/test_data_cleaner.py](tools/tests/incoming_inspection/test_data_cleaner.py) | テストコード（33テスト、ArrowResolver 7テスト追加） |
