@@ -1,0 +1,8 @@
+# バイナリファイル（大容量・git管理不向き）
+# 分析結果はmarkdownに書き出し済みなのでgit管理外とする
+*.xlsx
+*.xls
+
+# PDFは参照用に手元に保持するがpushしない
+# ただし目次用の小サイズPDF（1-14-app-note-ublox.pdf）も除外
+*.pdf
