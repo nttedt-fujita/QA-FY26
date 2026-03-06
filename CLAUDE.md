@@ -132,3 +132,17 @@
 | [sessions/session19/test_csv_integrity.py](sessions/session19/test_csv_integrity.py) | 整合性テスト（62テスト、TDDレビュー済み） |
 | [sessions/session19/analysis-plan.md](sessions/session19/analysis-plan.md) | 月別分析方針（パレート+4M、出力ファイル構成） |
 | [sessions/session19/csv-output/summary/品名別_検査工数集計.csv](sessions/session19/csv-output/summary/品名別_検査工数集計.csv) | 品名別検査工数集計（222品名、合計530.5時間） |
+
+### Session 20（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session20/monthly_analysis.py](sessions/session20/monthly_analysis.py) | 月別分析スクリプト（39テスト全パス） |
+| [sessions/session20/naming-normalization-policy.md](sessions/session20/naming-normalization-policy.md) | 名寄せルール方針 |
+| [sessions/session20/csv-output/月別サマリー.csv](sessions/session20/csv-output/月別サマリー.csv) | 月別サマリー（2024-09〜2026-03） |
+
+### Session 21（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session21/name_normalizer.py](sessions/session21/name_normalizer.py) | 名寄せモジュール（NameNormalizerクラス、17テスト） |
+| [sessions/session21/monthly_analysis_v2.py](sessions/session21/monthly_analysis_v2.py) | 月別分析スクリプトv2（名寄せ対応、変換率39%） |
+| [sessions/session21/mapping/検査内容_名寄せルール.csv](sessions/session21/mapping/検査内容_名寄せルール.csv) | 検査内容の名寄せルール（39件） |
