@@ -265,3 +265,29 @@ Phase 4: 標準化
 - 月別分析の実装（パレート+4M、サマリーCSV+詳細CSV）
 - 表記揺れの名寄せ検討
 - M1-B GNSS関連の継続タスク（合格基準エビデンス収集、末永さんヒアリング準備）
+
+## Session 20 (2026-03-06)
+
+**概要**: 月別分析スクリプト作成（TDD）、名寄せ方針整理。
+
+**背景**: Session 19で策定した分析方針に基づき、月別分析スクリプトをTDDで実装。表記揺れの名寄せについては方針のみ整理。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session20/monthly_analysis.py](../session20/monthly_analysis.py) | 月別分析スクリプト |
+| [session20/test_monthly_analysis.py](../session20/test_monthly_analysis.py) | テストコード（39テスト全パス） |
+| [session20/naming-normalization-policy.md](../session20/naming-normalization-policy.md) | 名寄せルール方針 |
+| [session20/csv-output/月別サマリー.csv](../session20/csv-output/月別サマリー.csv) | 月別サマリー |
+| [session20/csv-output/detail/](../session20/csv-output/detail/) | 詳細CSV（4ファイル） |
+
+**重要な発見**:
+- **対象期間**: 2024-09 〜 2026-03（+ 不明35件）
+- **データ異常**: 2026-11, 2026-12 の日付あり（2025年の誤り?）
+- **工数が多い月**: 2026-01（65.42h）、2024-12（52.92h）
+- **パレート**: 多くの月で上位20%品名が40-70%の工数を占める
+
+**次セッション（Session 21）でやること**:
+- 名寄せ機能の実装（検査内容）
+- データ異常の確認（2026-11/12、入荷日不明35件）
+- （余裕があれば）M1-B GNSS関連
