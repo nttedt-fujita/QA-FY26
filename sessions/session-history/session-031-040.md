@@ -78,3 +78,41 @@
 - To-Beドメインモデルの作成
 - as-is-model.drawioの配置修正
 - ダッシュボードの動作確認
+
+---
+
+## Session 33 (2026-03-06)
+
+**概要**: To-Beドメインモデル作成（品質管理フレームワーク反映）。
+
+**背景**: Session 32で計画したTo-Beモデルを作成。qa-design-reviewスキルとdiagram-designスキルを参照し、品質管理の視点（IQC/PQC/OQC、ロット、8D）を反映。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [to-be-model.drawio](../../docs/missions/m3-incoming-inspection-db/to-be/to-be-model.drawio) | **To-Beドメインモデル**（品質管理フレームワーク反映） |
+| [session33/session-summary.md](../session33/session-summary.md) | セッションサマリー |
+| [session34/session-plan.md](../session34/session-plan.md) | 次セッション計画 |
+
+**To-Beモデルに含めた要素**:
+| 分類 | 内容 |
+|------|------|
+| 品質管理フロー | サプライヤ→IQC(M3)→製造→IPQC(M4)→FQC→OQC→顧客 |
+| マスタデータ | サプライヤ、部品、検査項目、作業者 |
+| トランザクション | ロット、検査記録、不良レポート、不問判定 |
+| To-Beで追加 | ロットID、発注番号、FW/HWバージョン、サンプル数、AQL |
+| 8D対応 | 原因分析、対策、ステータス |
+| M4連携 | lot_idで工程不良DBと紐づけ |
+
+**使用したスキル**:
+- qa-design-review: 品質管理視点のチェック
+- diagram-design: Draw.ioデザイン原則
+
+**確認事項**:
+- as-is-model.drawio: XML構造は正しい、VS Code拡張の問題
+- ダッシュボード: 正常起動確認（localhost:8501）
+
+**次セッション（Session 34）でやること**:
+- To-Beモデルのレビュー（Draw.ioで配置確認）
+- 小笠原さん報告の準備
+- ヒアリング項目の優先度整理
