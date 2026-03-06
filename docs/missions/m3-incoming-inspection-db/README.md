@@ -1,161 +1,149 @@
 # M3: 受入検査データベース化
 
 **担当**: ふじた
-**難易度**: 中
-**依存関係**: 独立（M4と共通設計推奨）
+**ステータス**: Phase 1（分析・可視化）進行中
 
 ---
 
 ## 概要
 
 現在Excel管理されている受入検査データをデータベース化する。
-将来的にはタブレット操作可能なアプリ化も視野に入れる。
+品質管理フレームワーク（IQC/PQC/OQC）においては**IQC（受入品質管理）**に位置づけられる。
 
 ---
 
-## 現状と目標
+## 品質管理における位置づけ
 
-| 項目 | 現状 | 目標 |
-|------|------|------|
-| **記録方法** | Excel管理 | DB + アプリ（タブレット対応） |
-| **検索性** | ファイルを開いて検索 | SQLクエリ / ダッシュボード |
-| **分析** | 手作業集計 | 自動パレート分析、傾向管理 |
-| **サイレントチェンジ検出** | PO発行時のバージョン確認（手動） | FW/HWバージョン変更の自動検出 |
-| **トレーサビリティ** | 限定的 | lot_idで工程不良DB（M4）と紐付け |
+```
+[サプライヤ] → [IQC: 受入検査] → [製造工程] → [IPQC/OQC: 工程検査]
+                     ↓                              ↓
+                M3: 受入検査DB               M4: 工程不良DB
+                     ↓                              ↓
+                「この部品に問題」 ←────────→ 「この部品起因？」
+```
+
+### M3/M4の紐づけ
+
+| 紐づきの軸 | M3での役割 | M4での役割 |
+|-----------|-----------|-----------|
+| **部品（品名）** | 検査対象 | 不良発生箇所 or 原因部品 |
+| **ロット番号** | 入荷ロット | 使用部品のロット（トレース用） |
+| **時系列** | 入荷日・検査日 | 不良発生日 |
 
 ---
 
-## データベースの構成
+## 技術方針
 
-```
-受入検査DB
-├── マスタデータ
-│   ├── 部品マスタ (parts_master)
-│   ├── サプライヤマスタ (supplier_master)
-│   ├── 検査項目マスタ (inspection_items)
-│   └── 検査基準マスタ (acceptance_criteria)
-├── トランザクションデータ
-│   ├── 入荷ロット情報 (incoming_lots)
-│   ├── 検査結果 (inspection_results)
-│   └── 不適合処理 (non_conformance)
-└── 分析ビュー
-    ├── サプライヤ品質スコアカード
-    ├── ロット合格率推移
-    └── サイレントチェンジ検出
-```
+**kintone + 外部分析** を推奨
 
-### 主要テーブル設計
+詳細: [to-be/platform-comparison.md](to-be/platform-comparison.md)
 
-> **ISO 9001:2015, Clause 8.6** "Release of products and services":
-> "The organization shall retain documented information on the release of products and services."
-
-#### incoming_lots（入荷ロット）
-
-| カラム | 型 | 説明 |
-|--------|-----|------|
-| lot_id | VARCHAR(30) PK | ロットID |
-| part_id | VARCHAR(20) FK | 部品番号 |
-| supplier_id | VARCHAR(20) FK | サプライヤID |
-| po_number | VARCHAR(20) | 発注番号 |
-| received_date | DATE | 入荷日 |
-| lot_qty | INT | ロット数量 |
-| sample_qty | INT | サンプル数 |
-| **fw_version** | VARCHAR(20) | **FWバージョン（サイレントチェンジ監視用）** |
-| **hw_version** | VARCHAR(20) | **HWバージョン** |
-| lot_judgment | ENUM | ACCEPT / REJECT / CONDITIONAL |
-
-#### inspection_results（検査結果）
-
-| カラム | 型 | 説明 |
-|--------|-----|------|
-| inspection_id | BIGINT PK | 検査ID |
-| lot_id | VARCHAR(30) FK | ロットID |
-| item_code | VARCHAR(20) FK | 検査項目コード |
-| measured_value | DECIMAL(12,4) | 測定値 |
-| lower_spec_limit | DECIMAL(12,4) | 下限規格値 (LSL) |
-| upper_spec_limit | DECIMAL(12,4) | 上限規格値 (USL) |
-| judgment | ENUM | PASS / FAIL |
-| equipment_id | VARCHAR(20) | 使用測定器ID |
-
-### サイレントチェンジ検出クエリ例
-
-```sql
--- FW/HWバージョン変更時の品質変動を検出
-SELECT
-    il.part_id,
-    il.fw_version,
-    MIN(il.received_date) AS first_received,
-    COUNT(*) AS lot_count,
-    AVG(CASE WHEN il.lot_judgment = 'REJECT' THEN 1.0 ELSE 0.0 END) AS reject_rate
-FROM incoming_lots il
-GROUP BY il.part_id, il.fw_version
-ORDER BY il.part_id, first_received;
-```
+> **更新ルール**: 技術方針の変更はこのファイルを更新すること（sessions/は記録のみ）
 
 ---
 
-## M4との連携設計
+## Phase分け
 
-受入検査DBと工程不良DBは**lot_idで紐付け**する。
+詳細: [to-be/prototype-approach.md](to-be/prototype-approach.md)
 
-```
-受入検査DB                    工程不良DB
-incoming_lots ──── lot_id ────→ defect_records.lot_id
-  │                               │
-  ├── supplier_id                 ├── defect_code
-  ├── fw_version                  ├── cause_code
-  └── lot_judgment                └── severity
-```
+| Phase | 内容 | 状態 |
+|-------|------|------|
+| **Phase 1** | 分析・可視化（現行Excelデータ） | **進行中** |
+| Phase 2 | 入力のデジタル化（ヒアリング後） | 未着手 |
+| Phase 3 | M3/M4統合 + トレーサビリティ | 品質協定書締結後 |
 
-これにより:
-- 受入時に合格したロットの部品が工程で不良を起こした場合にトレースできる
-- サプライヤ品質と工程不良の相関分析が可能
+### 制約
 
----
-
-## 推奨段取り
-
-```
-Step 1: 要件定義・スキーマ設計
-  ├── 現行のExcel運用フロー調査
-  ├── 管理項目の洗い出し（特にサイレントチェンジ監視要件）
-  ├── DBスキーマ設計（ER図作成）
-  ├── アプリ化の要件整理（タブレット対応）
-  └── 【成果物】要件定義書、ERダイアグラム
-
-Step 2: DB構築・データ移行
-  ├── RDBMS選定（PostgreSQL推奨 / SQLiteで小規模開始もあり）
-  ├── テーブル作成・マスタデータ投入
-  ├── 過去データ移行（Excelからのインポート）
-  └── 【成果物】稼働DB
-
-Step 3: アプリ・分析機能・運用開始
-  ├── タブレット対応の入力アプリ構築
-  ├── 分析クエリ・ダッシュボードの構築
-  └── 【成果物】アプリ、運用マニュアル
-```
+| 項目 | 課題 |
+|------|------|
+| **品質協定書** | ナカヨ、渡辺製作所と未締結 |
+| **M4の実効性** | 協定書なしでは委託先にツール使用を強制できない |
+| **ロット概念** | 現行Excelにはロット概念がない（To-Beで導入必要） |
 
 ---
 
-## アプリ化の技術選択肢（今後検討）
+## 現行Excelの課題
 
-| 選択肢 | 特徴 | 適合度 |
-|--------|------|--------|
-| **Streamlit** | Python製、高速プロトタイピング | 社内ツールとして◎ |
-| **Django + DRF** | 本格Webアプリ、REST API | 拡張性◎ |
-| **Power Apps** | ノーコード、Microsoft連携 | 非開発者も保守可能 |
-| **React + FastAPI** | モダンSPA | 開発コスト高だが自由度◎ |
+Session 6, 24, 30で発見した主な問題:
 
----
+| カテゴリ | 問題 |
+|---------|------|
+| **データ品質** | 未来日付10件、入荷日不明34件、矢印記号15件 |
+| **構造的問題** | 検査基準書不足、判定基準が属人的、不良数量の記録不完全 |
+| **設計上の欠落** | ロット概念なし、サプライヤID/検査員IDなし |
 
-## 参考文献
-
-| トピック | ソース |
-|---------|--------|
-| ISO 9001:2015 Clause 8.6 | 製品・サービスのリリース管理 |
-| AQL抜取検査 | [QTEC](https://www.qtec.or.jp/knowledge/inspection/aql/) |
-| JIS Z 9015-1 | 計数値検査に対する抜取検査手順 |
+詳細: [as-is/excel-analysis-summary.md](as-is/excel-analysis-summary.md)
 
 ---
 
-*元データ: [session1/mission-approach-report.md](../../sessions/session1/mission-approach-report.md)*
+## ドキュメント一覧
+
+### as-is/（現状分析）
+
+| ファイル | 内容 |
+|----------|------|
+| [excel-review.md](as-is/excel-review.md) | Session 6: Excelレビュー（8シート構成の分析） |
+| [excel-analysis-summary.md](as-is/excel-analysis-summary.md) | 分析結果サマリー（報告用、問題一覧） |
+| [domain-modeling-approach.md](as-is/domain-modeling-approach.md) | As-Is/To-Be分離方針 |
+| [as-is-model.drawio](as-is/as-is-model.drawio) | As-Is概念図（現行Excel構造） |
+| [qa-gap-analysis.drawio](as-is/qa-gap-analysis.drawio) | 品質管理視点のギャップ分析図 |
+| [qa-gap-analysis.svg](as-is/qa-gap-analysis.svg) | ギャップ分析図（SVG） |
+| [qa-gap-analysis-slide.md](as-is/qa-gap-analysis-slide.md) | ギャップ分析スライド（Marp形式） |
+
+### to-be/（あるべき姿・設計）
+
+| ファイル | 内容 |
+|----------|------|
+| [platform-comparison.md](to-be/platform-comparison.md) | **技術方針**（kintone vs 自前開発） |
+| [prototype-approach.md](to-be/prototype-approach.md) | **Phase分け方針**（M3/M4の進め方） |
+| [analysis-what-to-build.md](to-be/analysis-what-to-build.md) | 何を作るか分析 |
+| [analysis-to-input-mapping.md](to-be/analysis-to-input-mapping.md) | 分析→入力マッピング |
+| [mockup-concepts.md](to-be/mockup-concepts.md) | モックアップコンセプト |
+| [ears-requirements-hypotheses.md](to-be/ears-requirements-hypotheses.md) | EARS形式要求仮説 |
+| [ears-prevention-hypotheses.md](to-be/ears-prevention-hypotheses.md) | EARS形式予防仮説 |
+
+### hearing/（ヒアリング関連）
+
+| ファイル | 内容 |
+|----------|------|
+| [hearing-items.md](hearing/hearing-items.md) | ヒアリング項目（P0〜P3優先度付き、統合版） |
+| [closed-questions-m3m4.md](hearing/closed-questions-m3m4.md) | クローズド質問（M3/M4共通） |
+| [closed-questions-m3m4.csv](hearing/closed-questions-m3m4.csv) | クローズド質問（CSV） |
+
+---
+
+## 関連リソース
+
+### スキル
+
+- [qa-design-review](.claude/skills/qa-design-review/SKILL.md) — M3/M4設計時の品質管理視点チェック
+
+### 調査資料
+
+- [Session 25: 品質フレームワーク調査](../../sessions/session25/quality-framework-research.md)
+- [Session 25: プロトタイプ方針](../../sessions/session25/prototype-approach.md)
+
+### ツール
+
+- [tools/incoming_inspection/](../../tools/incoming_inspection/) — 分析ツール群
+- [tools/README.md](../../tools/README.md) — ツール使用ガイド
+
+---
+
+## 品質管理フレームワーク参照
+
+M3/M4に関連する品質管理の概念:
+
+| 概念 | 説明 | M3/M4での適用 |
+|------|------|--------------|
+| **IQC/PQC/OQC** | 受入/工程/出荷の品質管理 | M3=IQC、M4=IPQC |
+| **ロット管理** | 同条件で製造された単位 | To-Beで導入必要 |
+| **AQL** | 抜取検査の合格判定基準 | 検査基準策定時に参照 |
+| **8Dレポート** | 問題解決の8ステップ | M4の原因分析に適用 |
+| **トレーサビリティ** | 製品の追跡可能性 | M3→M4の紐づけで実現 |
+
+詳細: [Session 25: 品質フレームワーク調査](../../sessions/session25/quality-framework-research.md)
+
+---
+
+*更新日: 2026-03-06 (Session 31)*
