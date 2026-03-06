@@ -180,3 +180,9 @@
 | 資料 | 内容 |
 |------|------|
 | [docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md](docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md) | 分析結果サマリー **更新**（前処理の記載追加、データ品質問題拡充） |
+
+### Session 27（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session27/as-is-model.drawio](sessions/session27/as-is-model.drawio) | As-Isモデル概念図（現行Excel構造）— 品質管理視点の追加が必要 |
+| [sessions/session27/session-summary.md](sessions/session27/session-summary.md) | セッションサマリー（品質管理視点欠落の発見、qa-design-reviewスキル作成方針） |
