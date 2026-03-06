@@ -198,17 +198,24 @@
 ### Session 27（2026-03-06）
 | 資料 | 内容 |
 |------|------|
-| [sessions/session27/as-is-model.drawio](sessions/session27/as-is-model.drawio) | As-Isモデル概念図（現行Excel構造）— 品質管理視点の追加が必要 |
+| [docs/missions/m3-incoming-inspection-db/as-is-model.drawio](docs/missions/m3-incoming-inspection-db/as-is-model.drawio) | As-Isモデル概念図（現行Excel構造）— 品質管理視点の追加が必要 |
 | [sessions/session27/session-summary.md](sessions/session27/session-summary.md) | セッションサマリー（品質管理視点欠落の発見、qa-design-reviewスキル作成方針） |
 
 ### Session 28（2026-03-06）
 | 資料 | 内容 |
 |------|------|
 | [.claude/skills/qa-design-review/SKILL.md](.claude/skills/qa-design-review/SKILL.md) | **品質管理設計レビュースキル** — M3/M4設計時の品質管理視点チェックリスト |
-| [sessions/session28/qa-gap-analysis.drawio](sessions/session28/qa-gap-analysis.drawio) | 品質管理視点のギャップ分析図（現行Excel vs 理想的IQC） |
+| [docs/missions/m3-incoming-inspection-db/qa-gap-analysis.drawio](docs/missions/m3-incoming-inspection-db/qa-gap-analysis.drawio) | 品質管理視点のギャップ分析図（現行Excel vs 理想的IQC） |
 
 ### Session 29（2026-03-06）
 | 資料 | 内容 |
 |------|------|
 | [tools/incoming_inspection/data_cleaner.py](tools/incoming_inspection/data_cleaner.py) | **ArrowResolverクラス追加** — 矢印記号（↓↑）を参照先の数値に変換 |
 | [tools/tests/incoming_inspection/test_data_cleaner.py](tools/tests/incoming_inspection/test_data_cleaner.py) | テストコード（33テスト、ArrowResolver 7テスト追加） |
+
+### Session 30（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [docs/missions/m3-incoming-inspection-db/qa-gap-analysis-slide.md](docs/missions/m3-incoming-inspection-db/qa-gap-analysis-slide.md) | ギャップ分析スライド（Marp形式） |
+| [docs/missions/m3-incoming-inspection-db/qa-gap-analysis.svg](docs/missions/m3-incoming-inspection-db/qa-gap-analysis.svg) | ギャップ分析図（SVGエクスポート） |
+| [docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md](docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md) | 分析サマリー **更新**（構造的な問題8項目を追記） |
