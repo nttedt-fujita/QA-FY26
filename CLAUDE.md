@@ -283,3 +283,13 @@
 | [prototype/db/init.sql](prototype/db/init.sql) | PostgreSQL初期化スクリプト |
 
 **重要な決定**: To-Beモデルで先に実装（ヒアリング後の変更コストは受け入れる）。TDDテストシナリオ（ロットCRUD 5件）承認済み
+
+### Session 37（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [prototype/backend/internal/handler/lot_handler_test.go](prototype/backend/internal/handler/lot_handler_test.go) | **ロットCRUD統合テスト**（10ケース、全Green） |
+| [prototype/backend/internal/handler/lot_handler.go](prototype/backend/internal/handler/lot_handler.go) | ロットAPIハンドラー |
+| [prototype/backend/internal/repository/lot.go](prototype/backend/internal/repository/lot.go) | ロットリポジトリ |
+| [prototype/docs/architecture-concerns.md](prototype/docs/architecture-concerns.md) | **DDD/CA懸念点**（将来対応計画） |
+
+**重要な確認**: To-BeモデルはM3のみ設計済み、M4は連携ポイントのみ。DDD戦術的パターンはプロトタイプ段階では意図的に未適用
