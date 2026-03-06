@@ -6,3 +6,6 @@
 # PDFは参照用に手元に保持するがpushしない
 # ただし目次用の小サイズPDF（1-14-app-note-ublox.pdf）も除外
 *.pdf
+
+# スクリーンショット画像（分析結果はmarkdownに書き出し済み）
+sessions/*/screenshot/

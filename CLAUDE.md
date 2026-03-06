@@ -117,3 +117,10 @@
 | [sessions/session17/pdf-excel-analysis.md](sessions/session17/pdf-excel-analysis.md) | PDF（UBX仕様書）・Excel（小峰無線GPS確認）全シート詳細分析・未確認項目リスト |
 | [sessions/session17/files-reviewed.md](sessions/session17/files-reviewed.md) | 今セッションで確認したファイル一覧（PDF読み込み範囲・Excel未読画像一覧） |
 | [sessions/session17/session-summary.md](sessions/session17/session-summary.md) | セッションサマリー（発見事項・次セッション計画） |
+
+### Session 18（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [docs/missions/m1-sensor-evaluation/gnss/](docs/missions/m1-sensor-evaluation/gnss/) | **GNSS評価統合ドキュメント（8ファイル+README）** — Session 17テキスト+Session 18画像を統合 |
+| [docs/missions/m1-sensor-evaluation/gnss/07-cross-sheet-findings.md](docs/missions/m1-sensor-evaluation/gnss/07-cross-sheet-findings.md) | 横断発見事項・合格基準叩き台・末永さんヒアリング項目10問 |
+| [sessions/session18/session-summary.md](sessions/session18/session-summary.md) | セッションサマリー |
