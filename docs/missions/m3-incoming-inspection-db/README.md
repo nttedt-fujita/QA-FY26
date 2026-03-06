@@ -96,11 +96,8 @@ Session 6, 24, 30で発見した主な問題:
 |----------|------|
 | [platform-comparison.md](to-be/platform-comparison.md) | **技術方針**（kintone vs 自前開発） |
 | [prototype-approach.md](to-be/prototype-approach.md) | **Phase分け方針**（M3/M4の進め方） |
-| [analysis-what-to-build.md](to-be/analysis-what-to-build.md) | 何を作るか分析 |
-| [analysis-to-input-mapping.md](to-be/analysis-to-input-mapping.md) | 分析→入力マッピング |
-| [mockup-concepts.md](to-be/mockup-concepts.md) | モックアップコンセプト |
-| [ears-requirements-hypotheses.md](to-be/ears-requirements-hypotheses.md) | EARS形式要求仮説 |
-| [ears-prevention-hypotheses.md](to-be/ears-prevention-hypotheses.md) | EARS形式予防仮説 |
+| [ears-requirements-hypotheses.md](to-be/ears-requirements-hypotheses.md) | EARS形式要求仮説（Excel分析から導出） |
+| [mockup-concepts.md](to-be/mockup-concepts.md) | 入力画面ワイヤーフレーム（**Phase 2用**） |
 
 ### hearing/（ヒアリング関連）
 
@@ -146,4 +143,4 @@ M3/M4に関連する品質管理の概念:
 
 ---
 
-*更新日: 2026-03-06 (Session 31)*
+*更新日: 2026-03-06 (Session 32)*
