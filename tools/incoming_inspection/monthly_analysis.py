@@ -1,7 +1,8 @@
-"""月別分析スクリプト v2（名寄せ機能付き）
+"""月別分析スクリプト v3（名寄せ + クレンジング機能付き）
 
 受入検査工数の月別分析（パレート + 4M分解）を行う。
-名寄せルールCSVが存在する場合、検査内容の表記揺れを正規化する。
+- 名寄せルールCSVが存在する場合、検査内容の表記揺れを正規化する
+- クレンジング処理で日付異常を修正する
 """
 
 import csv
@@ -11,6 +12,7 @@ from pathlib import Path
 from collections import defaultdict
 
 from name_normalizer import NameNormalizer
+from data_cleaner import DataCleaner
 
 # パス設定
 # プロジェクトルート (tools/incoming_inspection/ から2階層上)
@@ -262,7 +264,7 @@ def main():
     detail_dir.mkdir(exist_ok=True)
 
     print("=" * 60)
-    print("月別分析スクリプト v2（名寄せ機能付き）")
+    print("月別分析スクリプト v3（名寄せ + クレンジング機能付き）")
     print("=" * 60)
 
     # 名寄せルール読み込み
@@ -277,6 +279,12 @@ def main():
     # データ読み込み
     records = load_all_raw_csv()
     print(f"読み込みレコード数: {len(records)}件")
+
+    # クレンジング処理
+    data_cleaner = DataCleaner()
+    records = data_cleaner.clean_records(records)
+    cleaner_stats = data_cleaner.get_stats()
+    print(f"クレンジング: 日付修正 {cleaner_stats['total_fixed']}件")
 
     analyzer = MonthlyAnalyzer(records, inspection_normalizer)
     months = analyzer.get_months()

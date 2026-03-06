@@ -154,3 +154,10 @@
 | [tools/README.md](tools/README.md) | ツール使用ガイド（使い方・モジュール説明） |
 | [tools/incoming_inspection/mapping/品名_名寄せルール.csv](tools/incoming_inspection/mapping/品名_名寄せルール.csv) | 品名の名寄せルール（18件） |
 | [sessions/session22/data-anomaly-report.md](sessions/session22/data-anomaly-report.md) | データ異常レポート（未来日付10件、入荷日不明34件） |
+
+### Session 23（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [tools/incoming_inspection/data_cleaner.py](tools/incoming_inspection/data_cleaner.py) | データクレンジングモジュール（未来日付修正 + 入荷日フォールバック） |
+| [tools/tests/incoming_inspection/test_data_cleaner.py](tools/tests/incoming_inspection/test_data_cleaner.py) | テストコード（26テスト） |
+| [tools/incoming_inspection/monthly_analysis.py](tools/incoming_inspection/monthly_analysis.py) | 月別分析スクリプトv3（名寄せ + クレンジング統合） |
