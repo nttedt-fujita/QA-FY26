@@ -167,3 +167,35 @@ Phase 4: 標準化
 - アプリケーションノートPDF確認
 - 小板橋さんのExcel確認
 - UBXプロトコル仕様書調査（余裕があれば）
+
+## Session 17 (2026-03-06)
+
+**概要**: PDF（UBX Interface Description）確認・Excel（小峰無線GPS確認）全シート詳細分析。
+
+**背景**: Phase 1（検証項目の妥当性検証）の準備として、技術資料と現状データを読み込んだ。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session17/pdf-excel-analysis.md](../session17/pdf-excel-analysis.md) | PDF・Excel全シート詳細分析（未確認項目リスト付き） |
+| [session17/session-summary.md](../session17/session-summary.md) | セッションサマリー |
+| [.gitignore](../../.gitignore) | Excel/PDFをgit管理外に設定 |
+
+**重要な発見**:
+- **No.5のRTK FIX不可の原因仮説**: Q2（QZSS）L1 = 13dBHz（他機体は30〜48）→ 受信感度の低さが直結
+- **全項目で合格基準なし**: 受信感度・RTK FIX時間・水平精度・衛星数すべて未定
+- **内部設定の仕様合意が未完了**: 小峰無線との取り交わし必要とのコメントあり
+- **QZSS L2は全機体で受信不可**: 設定か仕様か不明
+- **Spectrum Analyzeは2社比較**: 自社Ultralight vs HORIBA参考品
+
+**未確認項目（次セッションで補完）**:
+- 画像88枚（スペアナ波形・飛行ログ・MAGずれ量等）→ スクリーンショット共有して補完予定
+
+**PDFの性格確認**:
+- UBX Interface Description = チップの通信プロトコル仕様書（u-centerのAPI仕様書）
+- Phase 1では不要。Phase 2（ツール設計）で使う
+
+**次セッション（Session 18）でやること**:
+- 画像88枚の内容補完（スクリーンショット共有）
+- 合格基準の検討（Phase 1の核心）
+- 末永さんヒアリング準備
