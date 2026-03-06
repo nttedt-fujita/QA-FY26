@@ -241,3 +241,14 @@
 | [docs/missions/m3-incoming-inspection-db/qa-gap-analysis-slide.md](docs/missions/m3-incoming-inspection-db/qa-gap-analysis-slide.md) | ギャップ分析スライド（Marp形式） |
 | [docs/missions/m3-incoming-inspection-db/qa-gap-analysis.svg](docs/missions/m3-incoming-inspection-db/qa-gap-analysis.svg) | ギャップ分析図（SVGエクスポート） |
 | [docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md](docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md) | 分析サマリー **更新**（構造的な問題8項目を追記） |
+
+### Session 31（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [docs/missions/m3-incoming-inspection-db/README.md](docs/missions/m3-incoming-inspection-db/README.md) | **M3新README**（インデックス + 概要、サブディレクトリ整理後） |
+
+### Session 32（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [tools/incoming_inspection/dashboard.py](tools/incoming_inspection/dashboard.py) | **分析ダッシュボード**（Streamlit、Phase 1プロトタイプ） |
+| [docs/missions/m3-incoming-inspection-db/to-be/ears-requirements-hypotheses.md](docs/missions/m3-incoming-inspection-db/to-be/ears-requirements-hypotheses.md) | EARS要求 **更新**（Excel分析結果を反映、Phase 1検証可能な要求を明確化） |
