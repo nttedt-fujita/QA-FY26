@@ -161,3 +161,9 @@
 | [tools/incoming_inspection/data_cleaner.py](tools/incoming_inspection/data_cleaner.py) | データクレンジングモジュール（未来日付修正 + 入荷日フォールバック） |
 | [tools/tests/incoming_inspection/test_data_cleaner.py](tools/tests/incoming_inspection/test_data_cleaner.py) | テストコード（26テスト） |
 | [tools/incoming_inspection/monthly_analysis.py](tools/incoming_inspection/monthly_analysis.py) | 月別分析スクリプトv3（名寄せ + クレンジング統合） |
+
+### Session 24（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [docs/missions/m3-incoming-inspection-db/domain-modeling-approach.md](docs/missions/m3-incoming-inspection-db/domain-modeling-approach.md) | ドメインモデリング方針（As-Is/To-Be分離、プロトタイプ判断基準） |
+| [docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md](docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md) | 分析結果サマリー（小笠原さん報告用、データ限界・品質問題含む） |

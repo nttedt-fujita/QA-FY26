@@ -77,3 +77,31 @@
 **次セッション（Session 24）でやること**:
 - 分析結果のレビュー・議論
 - M1-B GNSS関連
+
+## Session 24 (2026-03-06)
+
+**概要**: 分析結果レビュー、ドメインモデリング方針整理、データ品質問題の発見。
+
+**背景**: Session 19-23で分析基盤を構築。分析結果の解釈と、プロトタイプ作成に向けたドメインモデリングの方針を整理。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [docs/missions/m3-incoming-inspection-db/domain-modeling-approach.md](../../docs/missions/m3-incoming-inspection-db/domain-modeling-approach.md) | ドメインモデリング方針（As-Is/To-Be分離） |
+| [docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md](../../docs/missions/m3-incoming-inspection-db/excel-analysis-summary.md) | 分析結果サマリー（報告用） |
+| [session24/analysis-review-report.md](../session24/analysis-review-report.md) | 分析レビュー詳細 |
+| [session24/session-summary.md](../session24/session-summary.md) | セッションサマリー |
+
+**重要な発見**:
+- **データの限界**: このExcelは杉山さんの記録のみ（他は紙記録）
+- **概算との乖離**: 月300時間と聞いていたが、最大67時間/月（一部の記録だから）
+- **データ品質問題**:
+  - 矢印記号（↓↑）15件が集計されていない
+  - 工数未記入約80件（検査対象外、記入漏れ等）
+  - 記録が適切にできていない、確認体制も未整備
+- **ドメインモデリング**: README.mdの設計（lot_id等）は「あるべき姿」、現行Excelと大きく異なる
+
+**次セッション（Session 25）でやること**:
+- 矢印記号（↓↑）の集計修正
+- 小笠原さん報告資料（パワポ）作成
+- （余裕があれば）ドメインモデリング継続
