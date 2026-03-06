@@ -160,3 +160,29 @@
 - プロジェクト構成の確定（prototype/ディレクトリ）
 - 環境構築（Goバックエンド + Next.jsフロントエンド）
 - DB設計の叩き台（To-Beモデルベース）
+
+---
+
+## Session 35 (2026-03-06)
+
+**概要**: プロトタイプ環境構築（Go + Next.js + DB設計）。
+
+**背景**: Session 34で決定した技術スタック（Go + Next.js）でプロトタイプ環境を構築。TDDでの実装は次セッションへ。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/db/schema.sql](../../prototype/db/schema.sql) | **DB設計**（To-Beモデル準拠、8テーブル） |
+| [prototype/backend/cmd/api/main.go](../../prototype/backend/cmd/api/main.go) | 最小HTTPサーバー |
+| [prototype/frontend/](../../prototype/frontend/) | Next.jsプロジェクト（TypeScript, Tailwind） |
+| [session35/session-summary.md](../session35/session-summary.md) | セッションサマリー |
+| [session36/session-plan.md](../session36/session-plan.md) | 次セッション計画 |
+
+**確認事項**:
+- AWSコスト試算: プロトタイプはLightsail $5/月、本番はサーバレス ~$25/月
+- スライドの「工数3倍」記述: 分析不十分、ユーザー側で削除対応
+
+**次セッション（Session 36）でやること**:
+- TDD Phase 0-2: テストシナリオ設計（ロットCRUD）
+- TDD Phase 3-4: テスト → 実装（Red → Green）
+- SQLite接続実装
