@@ -1,0 +1,22 @@
+# M3 受入検査DB プロトタイプ - テスト環境
+# Session 36で作成
+# 使い方: docker compose -f docker-compose.test.yml up -d
+
+services:
+  db-test:
+    image: postgres:16-alpine
+    container_name: qa-inspection-db-test
+    environment:
+      POSTGRES_USER: qa_user
+      POSTGRES_PASSWORD: qa_pass
+      POSTGRES_DB: qa_inspection_test
+    ports:
+      - "5433:5432"  # 開発用と分離
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qa_user -d qa_inspection_test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # テスト用はデータ永続化しない（毎回クリーン）

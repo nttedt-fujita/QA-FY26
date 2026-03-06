@@ -1,0 +1,42 @@
+# M3 受入検査DB プロトタイプ - 開発環境
+# Session 36で作成
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: qa-inspection-db
+    environment:
+      POSTGRES_USER: qa_user
+      POSTGRES_PASSWORD: qa_pass
+      POSTGRES_DB: qa_inspection
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qa_user -d qa_inspection"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: qa-inspection-api
+    environment:
+      DATABASE_URL: postgres://qa_user:qa_pass@db:5432/qa_inspection?sslmode=disable
+      PORT: "8080"
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    # 開発時はホットリロード用にソースをマウント + airを使用
+    # volumes:
+    #   - ./backend:/app/src
+    # command: air
+
+volumes:
+  db_data:

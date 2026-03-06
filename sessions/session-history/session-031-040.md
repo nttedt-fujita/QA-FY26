@@ -186,3 +186,44 @@
 - TDD Phase 0-2: テストシナリオ設計（ロットCRUD）
 - TDD Phase 3-4: テスト → 実装（Red → Green）
 - SQLite接続実装
+
+---
+
+## Session 36 (2026-03-06)
+
+**概要**: Docker環境構築 + TDDテストシナリオ設計。
+
+**背景**: Session 35で作成したプロトタイプ環境をDocker化し、TDDでロットCRUD APIを実装する準備。TDD作業時のスキル参照を強制するルールも追加。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/docker-compose.yml](../../prototype/docker-compose.yml) | 開発環境（Go + PostgreSQL） |
+| [prototype/docker-compose.test.yml](../../prototype/docker-compose.test.yml) | テスト環境（ポート5433） |
+| [prototype/backend/Dockerfile](../../prototype/backend/Dockerfile) | Goバックエンド |
+| [prototype/db/init.sql](../../prototype/db/init.sql) | PostgreSQL初期化スクリプト |
+| [session36/session-summary.md](../session36/session-summary.md) | セッションサマリー |
+| [session37/session-plan.md](../session37/session-plan.md) | 次セッション計画 |
+
+**ルール追加**:
+| ファイル | 内容 |
+|----------|------|
+| ~/.claude/rules/09-tdd-skill-reference.md | TDD作業時のスキル参照を強制 |
+
+**重要な決定**:
+- **To-Beモデルで先に実装** — ヒアリング後の変更コストは受け入れる
+- **テスト戦略**: 統合テスト中心（シンプルなCRUDのため）
+
+**テストシナリオ（承認済み）**:
+| # | シナリオ | 期待結果 |
+|---|---------|---------|
+| 1 | ロット登録_正常 | 201 |
+| 2 | ロット一覧取得_正常 | 200 |
+| 3 | ロット詳細取得_正常 | 200 |
+| 4 | ロット詳細取得_存在しない | 404 |
+| 5 | ロット登録_必須項目欠落 | 400 |
+
+**次セッション（Session 37）でやること**:
+- TDD Phase 3: テストコード作成
+- TDD Phase 4: 実装（Red → Green）
+- PostgreSQL接続実装

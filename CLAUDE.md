@@ -273,3 +273,13 @@
 | [prototype/frontend/](prototype/frontend/) | Next.jsフロントエンド（TypeScript, Tailwind） |
 
 **重要な決定**: プロトタイプ環境構築完了。次セッションでDocker化 + TDD実装
+
+### Session 36（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [prototype/docker-compose.yml](prototype/docker-compose.yml) | **Docker開発環境**（Go + PostgreSQL） |
+| [prototype/docker-compose.test.yml](prototype/docker-compose.test.yml) | テスト環境（ポート5433） |
+| [prototype/backend/Dockerfile](prototype/backend/Dockerfile) | Goバックエンド（マルチステージビルド） |
+| [prototype/db/init.sql](prototype/db/init.sql) | PostgreSQL初期化スクリプト |
+
+**重要な決定**: To-Beモデルで先に実装（ヒアリング後の変更コストは受け入れる）。TDDテストシナリオ（ロットCRUD 5件）承認済み
