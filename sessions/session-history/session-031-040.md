@@ -227,3 +227,43 @@
 - TDD Phase 3: テストコード作成
 - TDD Phase 4: 実装（Red → Green）
 - PostgreSQL接続実装
+
+---
+
+## Session 37 (2026-03-06)
+
+**概要**: TDDでロットCRUD API実装（10テスト全Green）+ DDD/CA懸念点ドキュメント化。
+
+**背景**: Session 36で承認されたテストシナリオをGoのテーブルテスト形式で実装。プロトタイプ段階ではDDD戦術的パターンは意図的に未適用とし、懸念点を文書化。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [lot_handler_test.go](../../prototype/backend/internal/handler/lot_handler_test.go) | ロットCRUD統合テスト（10ケース） |
+| [lot_handler.go](../../prototype/backend/internal/handler/lot_handler.go) | ロットAPIハンドラー |
+| [lot.go](../../prototype/backend/internal/repository/lot.go) | ロットリポジトリ |
+| [db.go](../../prototype/backend/internal/repository/db.go) | PostgreSQL接続ラッパー |
+| [architecture-concerns.md](../../prototype/docs/architecture-concerns.md) | DDD/CA懸念点・将来対応 |
+| [session37/session-summary.md](../session37/session-summary.md) | セッションサマリー |
+| [session38/session-plan.md](../session38/session-plan.md) | 次セッション計画 |
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [main.go](../../prototype/backend/cmd/api/main.go) | APIルーティング追加 |
+| [go.mod](../../prototype/backend/go.mod) | pgx, uuid依存追加 |
+
+**重要な確認**:
+- **To-Beモデル**: M3は設計済み、M4は連携ポイントのみ（詳細設計なし）
+- **DDD/CA**: プロトタイプ段階では意図的に簡素化、ヒアリング後にリファクタリング
+
+**プロトタイプ完成度**:
+| コンポーネント | 状態 |
+|---------------|------|
+| DB設計 | ✅ 完成 |
+| バックエンドAPI | ✅ ロットCRUD完成 |
+| フロントエンド | ❌ 未着手 |
+
+**次セッション（Session 38）でやること**:
+- フロントエンド開発（ロット登録画面）
+- または: テストデータ充実 / マイグレーションツール導入
