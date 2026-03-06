@@ -132,3 +132,38 @@
 - GNSSヒアリング結果整理
 - M1-B（GNSS）優先着手の判断
 - Session 15残タスク完了
+
+## Session 16 (2026-03-06)
+
+**概要**: 小板橋さんGNSSヒアリング結果整理、u-center調査、M1-B作業フロー整理。
+
+**背景**: Session 15で小板橋さんにヒアリングした内容（Xmindメモ）を読み取り、整理。ツール設計の前に確認すべきことを明確化。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session16/gnss-hearing-koitabashi-01.md](../session16/gnss-hearing-koitabashi-01.md) | ヒアリング結果（Xmind + CSV統合） |
+| [session16/u-center-research.md](../session16/u-center-research.md) | u-center調査結果 |
+| [session16/m1b-gnss-roadmap.md](../session16/m1b-gnss-roadmap.md) | 全体の作業フロー・確認事項 |
+| [session16/session-summary.md](../session16/session-summary.md) | セッションサマリー |
+
+**重要な発見**:
+- **小板橋さん指摘**: ツール作成の前に検証項目を固めるのが重要
+- **合格基準**: 現状は曖昧
+- **評価手順書**: ない
+- **相談できる人**: 末永さん
+- **u-center**: UBXプロトコル仕様書が公開されている（逆コンパイル不要）
+
+**作業フロー確定**:
+```
+Phase 0: 現状把握      ← 完了
+Phase 1: 検証項目の妥当性検証  ← 次はここ
+Phase 2: ツール設計
+Phase 3: ツール実装
+Phase 4: 標準化
+```
+
+**次セッション（Session 17）でやること**:
+- アプリケーションノートPDF確認
+- 小板橋さんのExcel確認
+- UBXプロトコル仕様書調査（余裕があれば）
