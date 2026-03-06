@@ -146,3 +146,11 @@
 | [sessions/session21/name_normalizer.py](sessions/session21/name_normalizer.py) | 名寄せモジュール（NameNormalizerクラス、17テスト） |
 | [sessions/session21/monthly_analysis_v2.py](sessions/session21/monthly_analysis_v2.py) | 月別分析スクリプトv2（名寄せ対応、変換率39%） |
 | [sessions/session21/mapping/検査内容_名寄せルール.csv](sessions/session21/mapping/検査内容_名寄せルール.csv) | 検査内容の名寄せルール（39件） |
+
+### Session 22（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [tools/](tools/) | **統合ツールディレクトリ** — Session 19-21のスクリプトを集約 |
+| [tools/README.md](tools/README.md) | ツール使用ガイド（使い方・モジュール説明） |
+| [tools/incoming_inspection/mapping/品名_名寄せルール.csv](tools/incoming_inspection/mapping/品名_名寄せルール.csv) | 品名の名寄せルール（18件） |
+| [sessions/session22/data-anomaly-report.md](sessions/session22/data-anomaly-report.md) | データ異常レポート（未来日付10件、入荷日不明34件） |

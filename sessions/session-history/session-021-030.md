@@ -24,3 +24,30 @@
 - 品名の名寄せルール作成
 - データ異常レポート作成
 - （余裕があれば）M1-B GNSS関連
+
+## Session 22 (2026-03-06)
+
+**概要**: 品名の名寄せルール作成、データ異常レポート、コード配置整理。
+
+**背景**: Session 21で検査内容の名寄せを完成。品名の表記揺れも対処が必要だった。また、各sessionに散らばっていたスクリプトの整理を実施。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [tools/](../../tools/) | **統合ツールディレクトリ** |
+| [tools/README.md](../../tools/README.md) | ツール使用ガイド |
+| [tools/incoming_inspection/mapping/品名_名寄せルール.csv](../../tools/incoming_inspection/mapping/品名_名寄せルール.csv) | 品名名寄せルール（18件） |
+| [session22/data-anomaly-report.md](../session22/data-anomaly-report.md) | データ異常レポート |
+| [session22/session-summary.md](../session22/session-summary.md) | セッションサマリー |
+
+**重要な変更**:
+- **tools/ディレクトリ新設**: Session 19-21で作成したスクリプトを集約
+  - `extract_csv.py`, `name_normalizer.py`, `monthly_analysis.py`
+  - テストコードも `tools/tests/` に移動
+- **品名の名寄せ**: 18パターンの表記揺れを特定・ルール化
+- **データ異常レポート**: 未来日付10件、入荷日不明34件の詳細分析
+
+**次セッション（Session 23）でやること**:
+- Excel原本のデータ修正依頼（未来日付10件）
+- 入荷日不明レコードの分類方針決定
+- M1-B GNSS関連（合格基準のエビデンス収集）
