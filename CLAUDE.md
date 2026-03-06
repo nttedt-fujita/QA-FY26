@@ -124,3 +124,11 @@
 | [docs/missions/m1-sensor-evaluation/gnss/](docs/missions/m1-sensor-evaluation/gnss/) | **GNSS評価統合ドキュメント（8ファイル+README）** — Session 17テキスト+Session 18画像を統合 |
 | [docs/missions/m1-sensor-evaluation/gnss/07-cross-sheet-findings.md](docs/missions/m1-sensor-evaluation/gnss/07-cross-sheet-findings.md) | 横断発見事項・合格基準叩き台・末永さんヒアリング項目10問 |
 | [sessions/session18/session-summary.md](sessions/session18/session-summary.md) | セッションサマリー |
+
+### Session 19（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session19/extract_csv.py](sessions/session19/extract_csv.py) | 受入検査Excel→CSV変換スクリプト（6シート、574件） |
+| [sessions/session19/test_csv_integrity.py](sessions/session19/test_csv_integrity.py) | 整合性テスト（62テスト、TDDレビュー済み） |
+| [sessions/session19/analysis-plan.md](sessions/session19/analysis-plan.md) | 月別分析方針（パレート+4M、出力ファイル構成） |
+| [sessions/session19/csv-output/summary/品名別_検査工数集計.csv](sessions/session19/csv-output/summary/品名別_検査工数集計.csv) | 品名別検査工数集計（222品名、合計530.5時間） |
