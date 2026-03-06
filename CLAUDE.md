@@ -264,3 +264,12 @@
 | [sessions/session34/session-summary.md](sessions/session34/session-summary.md) | **技術選定変更**（バックエンド: TypeScript → Go） |
 
 **重要な決定**: バックエンドをGoに変更（パフォーマンス・依存関係・脆弱性リスクで有利）
+
+### Session 35（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [prototype/db/schema.sql](prototype/db/schema.sql) | **DB設計**（To-Beモデル準拠、8テーブル） |
+| [prototype/backend/](prototype/backend/) | Goバックエンド初期化（最小HTTPサーバー） |
+| [prototype/frontend/](prototype/frontend/) | Next.jsフロントエンド（TypeScript, Tailwind） |
+
+**重要な決定**: プロトタイプ環境構築完了。次セッションでDocker化 + TDD実装
