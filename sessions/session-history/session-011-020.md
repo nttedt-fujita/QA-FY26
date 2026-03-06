@@ -199,3 +199,43 @@ Phase 4: 標準化
 - 画像88枚の内容補完（スクリーンショット共有）
 - 合格基準の検討（Phase 1の核心）
 - 末永さんヒアリング準備
+
+## Session 18 (2026-03-06)
+
+**概要**: Excel画像29枚の読み取り・分析。Session 17テキスト分析と統合し、シートごとの詳細ドキュメントを `docs/missions/m1-sensor-evaluation/gnss/` に作成。
+
+**背景**: Session 17でExcelのテキストデータは分析済みだったが、画像88枚が未読だった。スクリーンショットを共有してもらい、受信感度・スペアナ・飛行ログ・MAG確認の4シート分（29枚）を読み取り。電池確認・No.02シートは意味が薄いと判断しスキップ。
+
+**作成ファイル**:
+
+統合ドキュメント（`docs/missions/m1-sensor-evaluation/gnss/`）:
+| ファイル | 内容 |
+|----------|------|
+| [gnss/README.md](../../docs/missions/m1-sensor-evaluation/gnss/README.md) | インデックス（全8ドキュメントの一覧、Phase位置づけ） |
+| [gnss/01-internal-settings.md](../../docs/missions/m1-sensor-evaluation/gnss/01-internal-settings.md) | 内部設定（FW/PROTVER/パラメータ、小峰無線との合意未完了） |
+| [gnss/02-reception-sensitivity.md](../../docs/missions/m1-sensor-evaluation/gnss/02-reception-sensitivity.md) | 受信感度 全3回測定データ + u-center画像 + 仰角別整理 |
+| [gnss/03-spectrum-analyze.md](../../docs/missions/m1-sensor-evaluation/gnss/03-spectrum-analyze.md) | スペアナ波形（PGA値・波形形状、No.5 L2帯異常） |
+| [gnss/04-flight-test.md](../../docs/missions/m1-sensor-evaluation/gnss/04-flight-test.md) | 飛行試験テーブル + 飛行中ログ7項目の時系列分析 |
+| [gnss/05-mag-check.md](../../docs/missions/m1-sensor-evaluation/gnss/05-mag-check.md) | MAG確認（No.02の45度ずれ→キャリブ解消） |
+| [gnss/06-battery-check.md](../../docs/missions/m1-sensor-evaluation/gnss/06-battery-check.md) | バックアップ電池確認（テキストのみ） |
+| [gnss/07-cross-sheet-findings.md](../../docs/missions/m1-sensor-evaluation/gnss/07-cross-sheet-findings.md) | 横断発見事項・合格基準叩き台・末永さんヒアリング項目10問 |
+| [gnss/08-ubx-protocol-index.md](../../docs/missions/m1-sensor-evaluation/gnss/08-ubx-protocol-index.md) | UBX仕様書索引（Phase 2用、主要メッセージ7件） |
+
+セッション作業ファイル（`sessions/session18/`）:
+| ファイル | 内容 |
+|----------|------|
+| [session18/reception-sensitivity-analysis.md](../session18/reception-sensitivity-analysis.md) | 受信感度画像分析（作業用） |
+| [session18/spectrum-analyze-analysis.md](../session18/spectrum-analyze-analysis.md) | スペアナ画像分析（作業用） |
+| [session18/flight-log-20260218-analysis.md](../session18/flight-log-20260218-analysis.md) | 飛行ログ画像分析（作業用） |
+| [session18/mag-check-analysis.md](../session18/mag-check-analysis.md) | MAG確認画像分析（作業用） |
+
+**重要な発見**:
+- **No.5の異常が4つのデータソースで裏付けられた**: 受信感度（Q2 L1=13dBHz）、スペアナ（RF2 PGA=38dB、波形異常）、飛行試験（RTK FIX NG、衛星19）、L2帯に限定された問題
+- **根本原因の仮説**: L2帯の受信不良 → RTK FIXにはL1+L2の二周波が必要
+- **No.02のMAG 45度ずれ**: 2/8にキャリブで解消済み
+- **合格基準の叩き台を作成**: ただしエビデンス（業界標準・メーカー推奨値）がまだない
+
+**次セッション（Session 19）でやること**:
+- PDF（UBX仕様書）の詳細分析（未読部分の確認）
+- Web調査で合格基準のエビデンス収集（論文・メーカー資料・業界標準）
+- 末永さんヒアリング準備（エビデンスを踏まえた質問構成）
