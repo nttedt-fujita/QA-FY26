@@ -1,0 +1,22 @@
+# GNSS評価ツール開発用Dockerfile
+FROM rust:1.76-slim-bookworm
+
+# 必要なパッケージをインストール
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libudev-dev \
+    git \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# rust-analyzer等の開発ツール
+RUN rustup component add rustfmt clippy rust-analyzer
+
+# 作業ディレクトリ
+WORKDIR /workspace
+
+# cargo watchをインストール（ホットリロード用）
+RUN cargo install cargo-watch
+
+# ポート公開（Webサーバー用）
+EXPOSE 8080

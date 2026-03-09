@@ -94,6 +94,7 @@
 | [ADR-002](docs/adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 | 型定義・API設計 | 承認済み |
 | [ADR-003](docs/adr/ADR-003-lot-list-view.md) | ロット一覧画面の設計判断 | FE画面・ナビ | 承認済み |
 | [ADR-004](docs/adr/ADR-004-gnss-tool-approach.md) | GNSS評価ツールのアプローチ選択 | M1-B GNSS評価 | 承認済み |
+| [ADR-005](docs/adr/ADR-005-gnss-tool-tech-stack.md) | GNSS評価ツール技術スタック選定 | M1-B GNSS評価 | 承認済み |
 
 **ADR詳細ファイル配置先**: `docs/adr/`
 
