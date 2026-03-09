@@ -6,6 +6,29 @@
 
 ---
 
+## 重要: 評価の文脈
+
+**IMPORTANT**: この評価は**受入検査ではない**。
+
+| 項目 | 内容 |
+|------|------|
+| **対象製品** | HORIBAウルトラライトの国内機能コピー製品 |
+| **フェーズ** | **原理試作に対する設計検証**（3回目の試作） |
+| **目的** | 検証項目が適切かどうかの検証 |
+| **現状の合格基準** | **曖昧**（明確な基準がない） |
+| **評価手順書** | **ない** |
+
+### 小板橋さんからの重要コメント（Session 16）
+
+> **ツール作成の前に、検証項目が適切かどうかの検証をして、その部分を固めるのが重要**
+> これを、**今年中にやるのが望ましい**
+
+> 今は原理試作に対しての設計検証をしているが、**受入検査でも何をするかを整理しておいたほうが良い**かも
+
+詳細: [sessions/session16/gnss-hearing-koitabashi-01.md](../../../../sessions/session16/gnss-hearing-koitabashi-01.md)
+
+---
+
 ## ドキュメント一覧
 
 | ファイル | 内容 | 元シート |
@@ -18,6 +41,7 @@
 | [06-battery-check.md](06-battery-check.md) | バックアップ電池確認 | 電池確認 |
 | [07-cross-sheet-findings.md](07-cross-sheet-findings.md) | 全シート横断の発見事項・合格基準検討・Phase 1の問い | — |
 | [08-ubx-protocol-index.md](08-ubx-protocol-index.md) | UBXプロトコル仕様書の索引（Phase 2用） | PDF |
+| [09-design-verification-criteria.md](09-design-verification-criteria.md) | 設計検証基準の業界標準調査（Session 53） | — |
 
 ---
 

@@ -63,3 +63,36 @@
 - M2確認リストの回答収集
 
 ---
+
+## Session 53 (2026-03-09)
+
+**概要**: M1-B GNSS設計検証基準の業界標準調査
+
+**実施内容**:
+1. **GNSS設計検証基準の業界標準調査** — C/N0、RTK FIX時間、TTFF等の閾値を調査
+2. **文脈の整理** — 「受入検査」ではなく「原理試作に対する設計検証」であることを明確化
+3. **ドキュメント整理** — READMEに文脈追記、調査資料を正式配置
+
+**重要な発見**:
+- L1受信感度: 業界標準は≥30 dBHz（叩き台の25 dBHzは甘すぎる）
+- RTK FIX時間: 業界標準は≤30秒（叩き台の3分は緩すぎる）
+- 叩き台に含まれていない項目: TTFF、PDOP、再捕捉時間、ジャミング耐性
+
+**重要な学び**:
+- 評価の文脈（何のための評価か）はREADMEに最初に書いておくべき
+
+**作成・更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [docs/missions/m1-sensor-evaluation/gnss/README.md](../../docs/missions/m1-sensor-evaluation/gnss/README.md) | 評価の文脈を追記 |
+| [docs/missions/m1-sensor-evaluation/gnss/07-cross-sheet-findings.md](../../docs/missions/m1-sensor-evaluation/gnss/07-cross-sheet-findings.md) | 業界標準調査結果で更新 |
+| [docs/missions/m1-sensor-evaluation/gnss/09-design-verification-criteria.md](../../docs/missions/m1-sensor-evaluation/gnss/09-design-verification-criteria.md) | **新規** 設計検証基準調査レポート |
+| [session53/session-summary.md](../session53/session-summary.md) | セッションサマリー |
+| [session54/session-plan.md](../session54/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 54）でやること**:
+- 小板橋さんへの認識確認
+- 末永さんへの相談内容精査
+- M4工程不良Excel入手（継続）
+
+---
