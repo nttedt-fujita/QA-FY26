@@ -197,3 +197,36 @@
 - プロトタイプ設計・作成開始
 
 ---
+
+## Session 57 (2026-03-09)
+
+**概要**: PX4ソースコード調査 + ADR-004作成 + リポジトリ整理
+
+**実施内容**:
+1. **PX4ソースコード調査** — GitHub経由でPX4-GPSDriversを確認
+   - UBX-NAV-SIG: 未実装（L1/L2別C/N0取得不可）
+   - TTFF: 未実装（構造体にはあるが抽出していない）
+2. **ADR-004作成** — 直接UBX通信ツールを採用（PX4改造は将来の選択肢）
+3. **エビデンスドキュメント作成** — URL+原文抜粋
+4. **リポジトリ整理** — `tools/gnss-eval/` 作成
+
+**重要な決定**:
+- GNSS評価ツールは `tools/gnss-eval/` に配置（M3プロトタイプと分離）
+- PX4改造は将来の選択肢として保留
+- 直接UBX通信ツールを先に作る
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/docs/adr/ADR-004-gnss-tool-approach.md](../../prototype/docs/adr/ADR-004-gnss-tool-approach.md) | 方針決定ADR |
+| [docs/missions/m1-sensor-evaluation/gnss/12-px4-source-evidence.md](../../docs/missions/m1-sensor-evaluation/gnss/12-px4-source-evidence.md) | PX4調査エビデンス |
+| [tools/gnss-eval/README.md](../../tools/gnss-eval/README.md) | GNSS評価ツール設計メモ |
+| [session57/session-summary.md](../session57/session-summary.md) | セッションサマリー |
+| [session58/session-plan.md](../session58/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 58）でやること**:
+- 技術選定（Python + pyserial）
+- 環境構築
+- プロトタイプ設計・実装開始
+
+---

@@ -43,7 +43,8 @@
 | [08-ubx-protocol-index.md](08-ubx-protocol-index.md) | UBXプロトコル仕様書の索引（Phase 2用） | PDF |
 | [09-design-verification-criteria.md](09-design-verification-criteria.md) | 設計検証基準の業界標準調査（Session 53） | — |
 | [10-tool-design-notes.md](10-tool-design-notes.md) | ツール設計メモ（Session 56） | Session 16-17統合 |
-| [11-px4-uorb-mapping.md](11-px4-uorb-mapping.md) | PX4 uORBとUBXメッセージの対応（Session 56） | 要調査項目あり |
+| [11-px4-uorb-mapping.md](11-px4-uorb-mapping.md) | PX4 uORBとUBXメッセージの対応（Session 57更新） | 調査完了 |
+| [12-px4-source-evidence.md](12-px4-source-evidence.md) | PX4ソースコード調査エビデンス（Session 57） | URL+原文抜粋 |
 
 ---
 
