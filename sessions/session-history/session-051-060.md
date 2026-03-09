@@ -282,3 +282,35 @@ docs/
 - プロトタイプ設計・実装開始
 
 ---
+
+## Session 59 (2026-03-09)
+
+**概要**: GNSS評価ツールの技術選定比較
+
+**実施内容**:
+1. **GNSSView API調査結果の確認** — 以前の調査レポートを確認
+2. **技術選定の比較検討** — 言語、Webフレームワーク、UBXパース方式を網羅的に比較
+3. **ADR判断根拠ドキュメント作成** — 全選択肢のメリット・デメリットを整理
+
+**重要な決定**:
+- **アプローチ**: Webサーバー型（ブラウザでアクセス）
+- **パフォーマンス最重視**: Rust + Actix-web（19-20k req/s）
+- **UBXパース**: 自前実装（仕様書ベース、5-6メッセージのみ）or ubxlib（公式）
+- **衛星位置計算**: F9PのNAV-SATから直接取得（計算ライブラリ信頼性問題を回避）
+- **推奨案**: 案A（Rust + Actix-web + 自前UBXパース）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session59/gnss-tool-tech-comparison.md](../session59/gnss-tool-tech-comparison.md) | 技術選定比較ドキュメント（ADR判断根拠） |
+| [session59/GNSS_View_WebAPI_調査レポート.md](../session59/GNSS_View_WebAPI_調査レポート.md) | GNSSView API調査レポート |
+| [session59/session-summary.md](../session59/session-summary.md) | セッションサマリー |
+| [session60/session-plan.md](../session60/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 60）でやること**:
+- 技術選定の最終決定（ADR-005作成）
+- Rust + Actix-web環境構築
+- UBXパース設計
+- モック実装開始
+
+---
