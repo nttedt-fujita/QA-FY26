@@ -52,11 +52,21 @@ func NewInspectionSession(lotID, itemID, workerID string) *InspectionSession {
 
 // AddCount はカウントを追加する
 func (s *InspectionSession) AddCount(result string) error {
-	// resultの検証
-	if result != "pass" && result != "fail" && result != "waiver" {
+	// resultの正規化（フロントエンドは ok/ng/skip を送信）
+	normalized := result
+	switch result {
+	case "ok":
+		normalized = "pass"
+	case "ng":
+		normalized = "fail"
+	case "skip":
+		normalized = "waiver"
+	case "pass", "fail", "waiver":
+		// そのまま使用
+	default:
 		return errors.New("無効な結果種別: " + result)
 	}
-	s.history = append(s.history, result)
+	s.history = append(s.history, normalized)
 	return nil
 }
 

@@ -10,6 +10,24 @@ import (
 	"github.com/nttedt/qa-inspection-api/internal/repository"
 )
 
+// CORSミドルウェア
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// CORS ヘッダー設定
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		// プリフライトリクエストへの応答
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	// DB接続
 	dsn := os.Getenv("DATABASE_URL")
@@ -65,7 +83,7 @@ func main() {
 	}
 
 	log.Printf("Server starting on :%s", port)
-	if err := http.ListenAndServe(":"+port, mux); err != nil {
+	if err := http.ListenAndServe(":"+port, corsMiddleware(mux)); err != nil {
 		log.Fatal(err)
 	}
 }
