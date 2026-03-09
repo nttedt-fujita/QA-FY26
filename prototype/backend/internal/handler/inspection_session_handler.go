@@ -102,11 +102,9 @@ func (h *InspectionSessionHandler) AddCount(w http.ResponseWriter, r *http.Reque
 
 	counts := s.GetCounts()
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"counts": map[string]int{
-			"pass":   counts.Pass,
-			"fail":   counts.Fail,
-			"waiver": counts.Waiver,
-		},
+		"ok_count":   counts.Pass,
+		"ng_count":   counts.Fail,
+		"skip_count": counts.Waiver,
 	})
 }
 
@@ -131,11 +129,9 @@ func (h *InspectionSessionHandler) Undo(w http.ResponseWriter, r *http.Request) 
 
 	counts := s.GetCounts()
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"counts": map[string]int{
-			"pass":   counts.Pass,
-			"fail":   counts.Fail,
-			"waiver": counts.Waiver,
-		},
+		"ok_count":   counts.Pass,
+		"ng_count":   counts.Fail,
+		"skip_count": counts.Waiver,
 	})
 }
 
@@ -201,11 +197,12 @@ func (h *InspectionSessionHandler) Finish(w http.ResponseWriter, r *http.Request
 	}
 
 	respondJSON(w, http.StatusOK, map[string]interface{}{
-		"record_id":     record.RecordID,
-		"result":        inspResult,
-		"pass_count":    result.PassCount,
-		"fail_count":    result.FailCount,
-		"waiver_count":  result.WaiverCount,
-		"work_time_min": result.WorkTimeMin,
+		"message":              "検査完了",
+		"inspection_record_id": record.RecordID,
+		"man_hours":            result.WorkTimeMin,
+		"result":               inspResult,
+		"ok_count":             result.PassCount,
+		"ng_count":             result.FailCount,
+		"skip_count":           result.WaiverCount,
 	})
 }
