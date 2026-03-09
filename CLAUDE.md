@@ -293,3 +293,10 @@
 | [prototype/docs/architecture-concerns.md](prototype/docs/architecture-concerns.md) | **DDD/CA懸念点**（将来対応計画） |
 
 **重要な確認**: To-BeモデルはM3のみ設計済み、M4は連携ポイントのみ。DDD戦術的パターンはプロトタイプ段階では意図的に未適用
+
+### Session 38（2026-03-06）
+| 資料 | 内容 |
+|------|------|
+| [prototype/docs/prototype-implementation-plan.md](prototype/docs/prototype-implementation-plan.md) | **プロトタイプ実装計画書**（Phase A-C、タスク詳細、TDDシナリオ） |
+
+**重要な決定**: プロトタイプ方向性変更。ロットCRUDだけでなく「検査記録入力→ダッシュボード連携」の全体フローを実装
