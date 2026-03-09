@@ -32,6 +32,9 @@ func main() {
 	workerRepo := repository.NewWorkerRepository(db)
 	masterHandler := handler.NewMasterHandler(partRepo, inspectionItemRepo, workerRepo)
 
+	inspectionRecordRepo := repository.NewInspectionRecordRepository(db)
+	inspectionSessionHandler := handler.NewInspectionSessionHandler(inspectionRecordRepo, lotRepo)
+
 	mux := http.NewServeMux()
 
 	// ヘルスチェック
@@ -49,6 +52,12 @@ func main() {
 	mux.HandleFunc("GET /api/v1/parts", masterHandler.ListParts)
 	mux.HandleFunc("GET /api/v1/inspection-items", masterHandler.ListInspectionItems)
 	mux.HandleFunc("GET /api/v1/workers", masterHandler.ListWorkers)
+
+	// 検査セッションAPI（カウンター方式）
+	mux.HandleFunc("POST /api/v1/inspection-sessions", inspectionSessionHandler.Start)
+	mux.HandleFunc("POST /api/v1/inspection-sessions/{id}/count", inspectionSessionHandler.AddCount)
+	mux.HandleFunc("DELETE /api/v1/inspection-sessions/{id}/count", inspectionSessionHandler.Undo)
+	mux.HandleFunc("POST /api/v1/inspection-sessions/{id}/finish", inspectionSessionHandler.Finish)
 
 	port := os.Getenv("PORT")
 	if port == "" {
