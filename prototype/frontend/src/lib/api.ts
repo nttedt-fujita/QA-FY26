@@ -14,7 +14,10 @@ import {
   FinishSessionResponse,
 } from "@/types/inspection";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+// 別PCからのアクセス対応: ブラウザのホスト名を使ってAPIのURLを動的に決定
+const API_BASE = typeof window !== 'undefined'
+  ? `http://${window.location.hostname}:8080`
+  : "http://localhost:8080";
 
 // ロット一覧を取得
 export async function getLots(): Promise<Lot[]> {
