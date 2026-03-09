@@ -345,3 +345,14 @@
 | [prototype/backend/internal/handler/inspection_session_handler.go](prototype/backend/internal/handler/inspection_session_handler.go) | 検査セッションAPIハンドラー |
 
 **実施内容**: 検査セッションAPI（カウンター方式）TDD実装。単体8件+統合7件テスト
+
+### Session 44（2026-03-09）
+| 資料 | 内容 |
+|------|------|
+| [prototype/frontend/src/app/inspection/page.tsx](prototype/frontend/src/app/inspection/page.tsx) | **カウンター画面**（検査記録入力、モックアップ準拠） |
+| [prototype/frontend/src/types/inspection.ts](prototype/frontend/src/types/inspection.ts) | 検査関連の型定義 |
+| [sessions/session44/session-summary.md](sessions/session44/session-summary.md) | セッションサマリー |
+
+**実施内容**: カウンター画面（フロントエンド）実装、CORS対応、API用語統一（ok/ng/skip）
+
+**残課題**: 工数表示の修正（小数点以下が長すぎる）、ロット登録画面改善
