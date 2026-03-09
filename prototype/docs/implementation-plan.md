@@ -157,6 +157,5 @@
 
 ## 参照
 
-- [all-screens-mockup.drawio](./all-screens-mockup.drawio) — 全画面モックアップ
-- [input-ui-patterns.drawio](./input-ui-patterns.drawio) — 入力UIパターン比較
-- [prototype-implementation-plan.md](../../prototype/docs/prototype-implementation-plan.md) — 元の実装計画（Session 38）
+- [all-screens-mockup.drawio](../../sessions/session41/all-screens-mockup.drawio) — 全画面モックアップ
+- [input-ui-patterns.drawio](../../sessions/session41/input-ui-patterns.drawio) — 入力UIパターン比較

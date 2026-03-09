@@ -305,11 +305,10 @@
 **重要な確認**: To-BeモデルはM3のみ設計済み、M4は連携ポイントのみ。DDD戦術的パターンはプロトタイプ段階では意図的に未適用
 
 ### Session 38（2026-03-06）
-| 資料 | 内容 |
-|------|------|
-| [prototype/docs/prototype-implementation-plan.md](prototype/docs/prototype-implementation-plan.md) | **プロトタイプ実装計画書**（Phase A-C、タスク詳細、TDDシナリオ） |
 
 **重要な決定**: プロトタイプ方向性変更。ロットCRUDだけでなく「検査記録入力→ダッシュボード連携」の全体フローを実装
+
+※ Session 38の実装計画はSession 41で更新・統合済み
 
 ### Session 39（2026-03-09）
 | 資料 | 内容 |
@@ -320,3 +319,20 @@
 | [sessions/session39/quality-management-glossary.md](sessions/session39/quality-management-glossary.md) | 品質管理用語集（QM/QA/QC階層、著名人リスト） |
 
 **重要な発見**: 暗黙の前提「記録ツールを作れば改善できる」は不十分。正しくは「問題を解決するプロセスの中で、記録基盤としてのツールが必要になる」。プロトタイプの位置づけを「Phase 2（記録基盤構築）のための最小限のツール」に再定義
+
+### Session 41（2026-03-09）
+| 資料 | 内容 |
+|------|------|
+| [prototype/docs/implementation-plan.md](prototype/docs/implementation-plan.md) | **プロトタイプ実装計画**（セッション別、Session 42-47） |
+| [sessions/session41/all-screens-mockup.drawio](sessions/session41/all-screens-mockup.drawio) | 全画面モックアップ |
+| [sessions/session41/input-ui-patterns.drawio](sessions/session41/input-ui-patterns.drawio) | 入力UIパターン比較（A/B/C） |
+
+**重要な決定**: 入力UI方式はパターンB（カウンター方式）を採用。現場の「合格、合格、合格...」という作業実態に合致
+
+### Session 42（2026-03-09）
+| 資料 | 内容 |
+|------|------|
+| [prototype/db/seed.sql](prototype/db/seed.sql) | シードデータ |
+| [prototype/docs/adr/ADR-001-error-handling.md](prototype/docs/adr/ADR-001-error-handling.md) | エラーハンドリング方針ADR |
+
+**実施内容**: バックエンド準備完了（シードデータ、マスタAPI）、ADRルール策定
