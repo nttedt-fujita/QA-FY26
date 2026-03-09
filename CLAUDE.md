@@ -300,3 +300,13 @@
 | [prototype/docs/prototype-implementation-plan.md](prototype/docs/prototype-implementation-plan.md) | **プロトタイプ実装計画書**（Phase A-C、タスク詳細、TDDシナリオ） |
 
 **重要な決定**: プロトタイプ方向性変更。ロットCRUDだけでなく「検査記録入力→ダッシュボード連携」の全体フローを実装
+
+### Session 39（2026-03-09）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session39/review-direction.md](sessions/session39/review-direction.md) | **方針整理**（見直しの方向性・アプローチ、3つの仮説、プロトタイプの位置づけ再定義） |
+| [sessions/session39/m3-research-key-points.md](sessions/session39/m3-research-key-points.md) | **重要ポイント抽出**（m3-research-files 9ファイルの核心的内容、著名人の視点整理） |
+| [sessions/session39/m3-research-files/](sessions/session39/m3-research-files/) | **DMAICアプローチ改善調査資料**（9ファイル、別セッションで作成） |
+| [sessions/session39/quality-management-glossary.md](sessions/session39/quality-management-glossary.md) | 品質管理用語集（QM/QA/QC階層、著名人リスト） |
+
+**重要な発見**: 暗黙の前提「記録ツールを作れば改善できる」は不十分。正しくは「問題を解決するプロセスの中で、記録基盤としてのツールが必要になる」。プロトタイプの位置づけを「Phase 2（記録基盤構築）のための最小限のツール」に再定義

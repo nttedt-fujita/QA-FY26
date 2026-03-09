@@ -293,3 +293,40 @@
 - シードデータ（seed.sql）作成
 - マスタデータAPI実装
 - 検査記録API実装
+
+---
+
+## Session 39 (2026-03-09)
+
+**概要**: m3-research-filesを踏まえた方針見直し・整理。
+
+**背景**: 別セッションで作成されたDMAICアプローチでの改善調査資料（9ファイル）がsession39に配置された。これを踏まえ、Session 1-38で進めてきた内容を見直す方針を整理。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [review-direction.md](../session39/review-direction.md) | **方針整理**（見直しの方向性・アプローチ、3つの仮説、プロトタイプの位置づけ再定義） |
+| [m3-research-key-points.md](../session39/m3-research-key-points.md) | **重要ポイント抽出**（m3-research-files 9ファイルの核心的内容） |
+| [session-summary.md](../session39/session-summary.md) | セッションサマリー |
+| [session40/session-plan.md](../session40/session-plan.md) | 次セッション計画 |
+
+**配置済みファイル（別セッションで作成）**:
+| ファイル | 内容 |
+|----------|------|
+| [m3-research-files/](../session39/m3-research-files/) | DMAICアプローチでの改善調査資料（9ファイル） |
+| [quality-management-glossary.md](../session39/quality-management-glossary.md) | 品質管理用語集（QM/QA/QC階層、著名人リスト） |
+
+**重要な発見**:
+- これまでの暗黙の前提「記録ツールを作れば改善できる」は不十分
+- 正しくは「問題を解決するプロセスの中で、記録基盤としてのツールが必要になる」
+- プロトタイプの位置づけを「Phase 2（記録基盤構築）のための最小限のツール」に再定義
+
+**見直すべき3つの仮説**:
+1. EARS要求仮説は「ツールの機能」に偏っていないか
+2. 現場ヒアリングなしでTo-Beモデルを設計していないか
+3. プロトタイプの目的が明確か
+
+**次セッション（Session 40）でやること**:
+- 特性要因図の作成（「なぜ300hかかるのか」を4Mで構造化）
+- 一次調査の準備（チェックリストを現場用に整理）
+- プロトタイプの設計見直し（07のMust/Should/Could反映）
