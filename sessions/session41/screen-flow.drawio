@@ -1,0 +1,202 @@
+<mxfile host="app.diagrams.net" modified="2026-03-09T10:30:00.000Z" agent="Claude" version="21.0.0">
+  <diagram name="画面遷移" id="screen-flow">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- タイトル -->
+        <mxCell id="title" value="一気通貫デモ: 画面遷移図" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="400" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- デモシナリオ説明 -->
+        <mxCell id="scenario" value="デモシナリオ: 「部品が入荷 → 検査を実施 → 記録を入力 → ダッシュボードで確認」" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;fontColor=#333333" vertex="1" parent="1">
+          <mxGeometry x="250" y="70" width="700" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- 画面遷移フロー -->
+        <mxCell id="flow-title" value="■ 画面遷移フロー" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ロット登録画面 -->
+        <mxCell id="screen-lot" value="①ロット登録&#xa;/lots/new" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="80" y="170" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 検査記録入力画面 -->
+        <mxCell id="screen-inspection" value="②検査記録入力&#xa;/inspection/new&#xa;（メイン画面）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="280" y="170" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ダッシュボード画面 -->
+        <mxCell id="screen-dashboard" value="③ダッシュボード&#xa;/dashboard&#xa;（集計確認）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="500" y="170" width="140" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- トップ/一覧画面 -->
+        <mxCell id="screen-top" value="トップ/一覧&#xa;/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="720" y="170" width="100" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 矢印 -->
+        <mxCell id="arrow1" value="入荷登録" style="endArrow=classic;html=1;strokeWidth=2;fontSize=10" edge="1" parent="1" source="screen-lot" target="screen-inspection">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" value="記録入力" style="endArrow=classic;html=1;strokeWidth=2;fontSize=10" edge="1" parent="1" source="screen-inspection" target="screen-dashboard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" value="確認" style="endArrow=classic;html=1;strokeWidth=2;fontSize=10" edge="1" parent="1" source="screen-dashboard" target="screen-top">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ワイヤーフレーム: ロット登録 -->
+        <mxCell id="wire-lot-title" value="① ロット登録画面" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="270" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-lot-frame" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333" vertex="1" parent="1">
+          <mxGeometry x="40" y="295" width="250" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-lot-header" value="ロット登録" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#4a90d9;strokeColor=none;fontColor=#ffffff;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="295" width="250" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-lot-f1" value="部品名 ▼" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;align=left;spacingLeft=10;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="50" y="340" width="230" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-lot-f2" value="サプライヤー ▼" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;align=left;spacingLeft=10;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="50" y="375" width="230" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-lot-f3" value="入荷数量: [    100    ]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;align=left;spacingLeft=10;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="50" y="410" width="230" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-lot-btn" value="登録" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4a90d9;strokeColor=none;fontColor=#ffffff;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="180" y="455" width="100" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ワイヤーフレーム: 検査記録入力 -->
+        <mxCell id="wire-insp-title" value="② 検査記録入力画面（メイン）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="320" y="270" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-insp-frame" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333" vertex="1" parent="1">
+          <mxGeometry x="320" y="295" width="280" height="300" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-insp-header" value="検査記録入力" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#6aa84f;strokeColor=none;fontColor=#ffffff;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="320" y="295" width="280" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-insp-f1" value="ロット選択 ▼  LOT-20260309-001 (バッテリー)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;align=left;spacingLeft=10;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="330" y="340" width="260" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-insp-f2" value="検査項目 ▼  外観検査" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;align=left;spacingLeft=10;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="330" y="375" width="260" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-insp-f3" value="作業者 ▼  杉山" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;align=left;spacingLeft=10;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="330" y="410" width="160" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-insp-f4" value="工数: [30] 分" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;align=left;spacingLeft=10;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="500" y="410" width="90" height="25" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-insp-result" value="結果:  ◉合格  ○不合格  ○不問" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#cccccc;align=left;spacingLeft=10;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="330" y="450" width="260" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-insp-note" value="備考: [________________]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#cccccc;align=left;spacingLeft=10;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="330" y="490" width="260" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-insp-btn" value="記録を登録" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6aa84f;strokeColor=none;fontColor=#ffffff;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="470" y="550" width="120" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- ワイヤーフレーム: ダッシュボード -->
+        <mxCell id="wire-dash-title" value="③ ダッシュボード画面" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="640" y="270" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-dash-frame" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#333333" vertex="1" parent="1">
+          <mxGeometry x="640" y="295" width="320" height="300" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-dash-header" value="ダッシュボード" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e69138;strokeColor=none;fontColor=#ffffff;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="640" y="295" width="320" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- KPIカード -->
+        <mxCell id="wire-dash-kpi1" value="今月の検査件数&#xa;45件" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="655" y="340" width="85" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-dash-kpi2" value="今月の工数&#xa;12.5h" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="755" y="340" width="85" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-dash-kpi3" value="不合格件数&#xa;3件" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="855" y="340" width="85" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- グラフエリア -->
+        <mxCell id="wire-dash-chart1" value="月別推移グラフ&#xa;📊" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1e1e1;strokeColor=#999999;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="655" y="405" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-dash-chart2" value="カテゴリ別&#xa;🥧" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1e1e1;strokeColor=#999999;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="805" y="405" width="140" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="wire-dash-chart3" value="品名別パレート図&#xa;📈" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1e1e1;strokeColor=#999999;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="655" y="500" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- 凡例 -->
+        <mxCell id="legend-title" value="■ 凡例" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf" vertex="1" parent="1">
+          <mxGeometry x="40" y="650" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend1-text" value="ロット関連" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="65" y="647" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="150" y="650" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend2-text" value="検査記録（メイン）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="175" y="647" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1">
+          <mxGeometry x="290" y="650" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend3-text" value="ダッシュボード" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="315" y="647" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- 注意事項 -->
+        <mxCell id="note-box" value="【修正前提のポイント】&#xa;・ドロップダウンの選択肢（部品名、検査項目）はヒアリング後に調整&#xa;・入力項目の過不足はフィードバックを受けて追加・削除&#xa;・ダッシュボードの指標も現場ニーズに応じて変更" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3cd;strokeColor=#ffc107;align=left;spacingLeft=10;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="40" y="690" width="450" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- デモ時の説明 -->
+        <mxCell id="demo-box" value="【デモで見せたいこと】&#xa;1. ロットを登録すると、検査記録で選択できる&#xa;2. 検査結果を入力すると、即座にDBに保存&#xa;3. ダッシュボードで集計結果がリアルタイム更新&#xa;→ 「入力したらすぐ見える」を体験してもらう" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;align=left;spacingLeft=10;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="510" y="690" width="450" height="80" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
