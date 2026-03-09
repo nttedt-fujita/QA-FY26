@@ -336,3 +336,12 @@
 | [prototype/docs/adr/ADR-001-error-handling.md](prototype/docs/adr/ADR-001-error-handling.md) | エラーハンドリング方針ADR |
 
 **実施内容**: バックエンド準備完了（シードデータ、マスタAPI）、ADRルール策定
+
+### Session 43（2026-03-09）
+| 資料 | 内容 |
+|------|------|
+| [sessions/session43/test-scenarios.md](sessions/session43/test-scenarios.md) | **テストシナリオ**（TDD Phase 2成果物） |
+| [prototype/backend/internal/session/](prototype/backend/internal/session/) | セッション状態管理（インメモリ） |
+| [prototype/backend/internal/handler/inspection_session_handler.go](prototype/backend/internal/handler/inspection_session_handler.go) | 検査セッションAPIハンドラー |
+
+**実施内容**: 検査セッションAPI（カウンター方式）TDD実装。単体8件+統合7件テスト
