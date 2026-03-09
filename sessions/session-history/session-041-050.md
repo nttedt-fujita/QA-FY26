@@ -92,3 +92,36 @@
 - TDDスキル更新: Phase 2成果物ドキュメント化の推奨追加
 
 ---
+
+## Session 44 (2026-03-09)
+
+**概要**: カウンター画面（フロントエンド）実装。
+
+**実施内容**:
+1. **カウンター画面実装** — モックアップ通りの検査記録入力画面
+2. **CORS対応** — corsMiddleware追加
+3. **API修正** — フロントエンドとの用語不一致を解消（ok/ng/skip対応）
+4. **共通ナビゲーション** — layout.tsxにヘッダー追加
+
+**発見した問題と対処**:
+- CORS未設定 → corsMiddleware追加
+- APIレスポンスキー不一致 → `inspection_items` に修正
+- 用語不一致（ok vs pass） → バックエンドで正規化
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/frontend/src/app/inspection/page.tsx](../../prototype/frontend/src/app/inspection/page.tsx) | カウンター画面 |
+| [prototype/frontend/src/types/inspection.ts](../../prototype/frontend/src/types/inspection.ts) | 検査関連の型定義 |
+| [sessions/session44/session-summary.md](../session44/session-summary.md) | セッションサマリー |
+
+**残課題**:
+- 工数表示の修正（小数点以下が長すぎる → 整数に丸める）
+- ロット登録画面の改善（部品選択をドロップダウンに）
+- ロットID命名規則のADR作成
+
+**次セッション（Session 45）でやること**:
+- 工数表示の修正（優先）
+- ロット登録画面の実装
+
+---
