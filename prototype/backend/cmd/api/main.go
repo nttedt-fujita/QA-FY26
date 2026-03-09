@@ -52,6 +52,10 @@ func main() {
 
 	inspectionRecordRepo := repository.NewInspectionRecordRepository(db)
 	inspectionSessionHandler := handler.NewInspectionSessionHandler(inspectionRecordRepo, lotRepo)
+	inspectionRecordHandler := handler.NewInspectionRecordHandler(inspectionRecordRepo)
+
+	dashboardRepo := repository.NewDashboardRepository(db)
+	dashboardHandler := handler.NewDashboardHandler(dashboardRepo)
 
 	mux := http.NewServeMux()
 
@@ -76,6 +80,17 @@ func main() {
 	mux.HandleFunc("POST /api/v1/inspection-sessions/{id}/count", inspectionSessionHandler.AddCount)
 	mux.HandleFunc("DELETE /api/v1/inspection-sessions/{id}/count", inspectionSessionHandler.Undo)
 	mux.HandleFunc("POST /api/v1/inspection-sessions/{id}/finish", inspectionSessionHandler.Finish)
+
+	// 検査記録一覧API
+	mux.HandleFunc("GET /api/v1/inspection-records", inspectionRecordHandler.List)
+
+	// ダッシュボードAPI
+	mux.HandleFunc("GET /api/v1/dashboard/summary", dashboardHandler.GetSummary)
+	mux.HandleFunc("GET /api/v1/dashboard/monthly", dashboardHandler.GetMonthlyStats)
+	mux.HandleFunc("GET /api/v1/dashboard/top-defects", dashboardHandler.GetTopDefects)
+	mux.HandleFunc("GET /api/v1/dashboard/items", dashboardHandler.GetItemStats)
+	mux.HandleFunc("GET /api/v1/dashboard/recent", dashboardHandler.GetRecentRecords)
+	mux.HandleFunc("GET /api/v1/dashboard/suppliers", dashboardHandler.GetSupplierDefects)
 
 	port := os.Getenv("PORT")
 	if port == "" {
