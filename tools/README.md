@@ -1,12 +1,21 @@
 # tools/ ディレクトリ
 
-受入検査データ分析ツールを集約したディレクトリ。
+品質管理関連ツールを集約したディレクトリ。
+
+## ツール一覧
+
+| ツール | 用途 | ステータス |
+|--------|------|----------|
+| [incoming_inspection/](incoming_inspection/) | 受入検査データ分析 | 運用中 |
+| [gnss-eval/](gnss-eval/) | GNSS評価ツール（F9P直接通信） | 設計中 |
 
 ## ディレクトリ構成
 
 ```
 tools/
 ├── README.md                       # このファイル
+├── gnss-eval/                      # GNSS評価ツール（M1-B）
+│   └── README.md                   # 設計メモ
 ├── incoming_inspection/            # 受入検査分析モジュール
 │   ├── __init__.py
 │   ├── extract_csv.py              # Excel→CSV変換
