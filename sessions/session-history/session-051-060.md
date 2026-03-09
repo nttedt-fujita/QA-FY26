@@ -230,3 +230,55 @@
 - プロトタイプ設計・実装開始
 
 ---
+
+## Session 58 (2026-03-09)
+
+**概要**: リポジトリ整理（prototype/の命名問題解決）
+
+**実施内容**:
+1. **ADRをプロジェクトルートに移動** — `prototype/docs/adr/` → `docs/adr/`
+2. **M3コードをprototype/m3/に移動** — prototype/直下 → prototype/m3/
+3. **参照パスの修正** — CLAUDE.md、docs/index.md、各README等
+4. **動作確認** — Goビルド、docker-compose config
+
+**重要な変更**:
+- ADRはM3固有ではなく、プロジェクト全体の設計判断記録として `docs/adr/` に配置
+- M3プロトタイプは `prototype/m3/` に移動（今後他のプロトタイプが追加される可能性を考慮）
+
+**新しいディレクトリ構成**:
+```
+prototype/
+└── m3/               ← M3受入検査DBプロトタイプ
+
+tools/
+└── gnss-eval/        ← GNSS評価ツール（これから実装）
+
+docs/
+└── adr/              ← 設計判断記録（全ミッション共通）
+```
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [CLAUDE.md](../../CLAUDE.md) | ADRパス、implementation-plan.mdパス |
+| [docs/index.md](../../docs/index.md) | prototype/m3/への参照、ADRへの参照、ディレクトリ構成 |
+| [docs/adr/ADR-003-lot-list-view.md](../../docs/adr/ADR-003-lot-list-view.md) | 相対パス修正 |
+| [docs/adr/ADR-004-gnss-tool-approach.md](../../docs/adr/ADR-004-gnss-tool-approach.md) | 相対パス修正 |
+| [docs/missions/m3-incoming-inspection-db/README.md](../../docs/missions/m3-incoming-inspection-db/README.md) | prototype/m3/への参照 |
+| [tools/gnss-eval/README.md](../../tools/gnss-eval/README.md) | ADRへの参照 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session58/session-summary.md](../session58/session-summary.md) | セッションサマリー |
+| [session59/session-plan.md](../session59/session-plan.md) | 次セッション計画 |
+
+**未実施（Session 59へ持ち越し）**:
+- GNSS評価ツールのプロトタイプ作成（技術選定、環境構築、実装開始）
+
+**次セッション（Session 59）でやること**:
+- 技術選定（Python + pyserial）
+- 環境構築
+- プロトタイプ設計・実装開始
+
+---
