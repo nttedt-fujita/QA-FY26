@@ -126,3 +126,35 @@
 - M4工程不良Excel入手（継続）
 
 ---
+
+## Session 55 (2026-03-09)
+
+**概要**: M3ネットワークアクセス対応 + GNSS調査資料の再発見
+
+**実施内容**:
+1. **M3プロトタイプ：別PCからのアクセス対応** — api.ts, package.json変更
+2. **GNSSツール調査** — 新規調査は進まず、過去資料（Session 17）を再発見
+
+**問題点**:
+- GNSS関連の調査資料が散在しており、見つけにくい
+- 適切な場所に整理されていない → 次セッションで整理作業を実施
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/frontend/src/lib/api.ts](../../prototype/frontend/src/lib/api.ts) | API URLを動的に決定（別PCアクセス対応） |
+| [prototype/frontend/package.json](../../prototype/frontend/package.json) | `--hostname 0.0.0.0` 追加 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session55/session-summary.md](../session55/session-summary.md) | セッションサマリー |
+| [session56/session-plan.md](../session56/session-plan.md) | 次セッション計画（GNSS資料整理方針） |
+
+**次セッション（Session 56）でやること**:
+- GNSS調査資料の整理・統合（`docs/missions/m1-sensor-evaluation/gnss/`へ）
+- 小板橋さんへ確認（継続）
+- 末永さんへ相談（継続）
+- M4工程不良Excel入手（継続）
+
+---
