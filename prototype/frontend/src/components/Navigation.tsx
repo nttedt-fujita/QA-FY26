@@ -4,9 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "/", label: "ロット" },
+  { href: "/", label: "ロット登録" },
+  { href: "/lots", label: "ロット一覧" },
   { href: "/inspection", label: "検査入力" },
-  { href: "/records", label: "一覧" },
+  { href: "/records", label: "検査記録" },
   { href: "/dashboard", label: "ダッシュボード" },
 ];
 

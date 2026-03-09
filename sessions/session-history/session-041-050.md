@@ -260,3 +260,37 @@ make demo-flow     # デモフロー表示
 - アーキテクチャドキュメント作成（ARCHITECTURE.md）
 
 ---
+
+## Session 49 (2026-03-09)
+
+**概要**: ロット一覧画面追加 + ADRルール拡張。
+
+**実施内容**:
+1. **ロット一覧画面追加** — `/lots` ページ、部品フィルター、CSVエクスポート
+2. **ナビゲーション更新** — ラベル明確化（ロット登録/ロット一覧/検査記録）
+3. **ADR-003作成** — ロット一覧画面の設計判断を記録
+4. **ADRルール拡張** — 軽微な設計判断でもADRを書くルールを追加
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/frontend/src/app/lots/page.tsx](../../prototype/frontend/src/app/lots/page.tsx) | ロット一覧画面 |
+| [prototype/docs/adr/ADR-003-lot-list-view.md](../../prototype/docs/adr/ADR-003-lot-list-view.md) | ロット一覧画面の設計判断 |
+| [session49/session-summary.md](../session49/session-summary.md) | セッションサマリー |
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/frontend/src/components/Navigation.tsx](../../prototype/frontend/src/components/Navigation.tsx) | ナビゲーション更新 |
+| [~/.claude/rules/10-adr-enforcement.md](~/.claude/rules/10-adr-enforcement.md) | ADRルール拡張 |
+| [CLAUDE.md](../../CLAUDE.md) | ADR-003追加 |
+
+**残課題**:
+- アーキテクチャドキュメント作成（ARCHITECTURE.md）
+- インターフェース設計の解説
+- demo-guide.md のリンク修正
+
+**次セッション（Session 50）でやること**:
+- 上記残課題を実施
+
+---
