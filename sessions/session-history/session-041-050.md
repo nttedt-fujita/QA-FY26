@@ -294,3 +294,37 @@ make demo-flow     # デモフロー表示
 - 上記残課題を実施
 
 ---
+
+## Session 50 (2026-03-09)
+
+**概要**: アーキテクチャドキュメント作成 + Draw.io図作成。
+
+**実施内容**:
+1. **ARCHITECTURE.md作成** — 全体アーキテクチャドキュメント（技術スタック、レイヤー構成、インターフェース解説）
+2. **architecture-diagrams.drawio作成** — 3ページの図（コンポーネント構成、ER図、データフロー）
+3. **demo-guide.md修正** — hearing-items.mdのパス修正
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/docs/ARCHITECTURE.md](../../prototype/docs/ARCHITECTURE.md) | 全体アーキテクチャドキュメント |
+| [prototype/docs/architecture-diagrams.drawio](../../prototype/docs/architecture-diagrams.drawio) | アーキテクチャ図（3ページ） |
+| [session50/session-summary.md](../session50/session-summary.md) | セッションサマリー |
+| [session51/session-plan.md](../session51/session-plan.md) | 次セッション計画 |
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/docs/demo-guide.md](../../prototype/docs/demo-guide.md) | hearing-items.mdのパス修正 |
+
+**インターフェース設計の回答**:
+- 現状: 具象型に直接依存（インターフェースなし）
+- 理由: プロトタイプ段階でモック不要、後から追加可能
+- 本番化時: インターフェースを定義しhandler側で宣言
+
+**次セッション（Session 51）でやること**:
+- M1-M4の進捗整理
+- M4ヒアリング項目の整理
+- 過去セッション資料のメンテナンス
+
+---
