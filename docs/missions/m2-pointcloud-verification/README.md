@@ -3,10 +3,51 @@
 **担当**: ふじた
 **難易度**: 中〜高
 **依存関係**: M1と並行可能
+**ステータス**: 方針転換中（Session 52）
 
 ---
 
-## 概要
+## ⚠️ 方針転換（Session 52）
+
+**問題**: 本README.mdに記載の評価方法（ASPRS精度基準、GCP設置等）は**測量・マッピング用途向け**。
+
+**AirGrowの実際の用途**: **リアルタイム障害物検知**（みかん畑の上を飛行し、木を検知して避ける）
+
+**結論**: 「点群データ検証」ではなく**「障害物検知システムの評価」**として再定義が必要。
+
+### 障害物検知評価（新アプローチ）
+
+詳細は [obstacle-detection/](obstacle-detection/) を参照。
+
+| ファイル | 内容 |
+|----------|------|
+| [obstacle-detection/m2-obstacle-detection-report.md](obstacle-detection/m2-obstacle-detection-report.md) | 調査レポート（業界規格・指標、ソース併記） |
+| [obstacle-detection/m2-confirmation-checklist.md](obstacle-detection/m2-confirmation-checklist.md) | FA率評価方法の確認リスト |
+
+### 障害物検知の評価指標（調査結果）
+
+| 指標 | 定義 | 参考値 |
+|------|------|--------|
+| **False Alarm率** | 存在しない障害物を検知する割合 | ← AirGrowの現在の課題 |
+| **検知距離** | 障害物を検知できる最大距離 | Vision系: 15-30m |
+| **反応時間** | 検知から回避動作開始までの遅延 | Vision系: 50-200ms |
+| **見逃し率** | 存在する障害物を見逃す割合 | - |
+
+### 関連規格
+
+- **EUROCAE ED-267**: 欧州の低高度UAS向けDAA（Detect and Avoid）運用要件
+
+### 次のアクション
+
+1. 開発側にFA率評価方法を確認（確認リスト参照）
+2. 評価方法の具体化
+3. 本README.mdの再構成
+
+---
+
+## 概要（従来）
+
+> **注意**: 以下の内容は測量・マッピング用途向け。AirGrowには適用しない可能性が高い。
 
 AirGrowが取得する点群データの品質を検証するための方法を策定する。
 
