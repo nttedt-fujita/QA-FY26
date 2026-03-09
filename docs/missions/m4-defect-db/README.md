@@ -118,4 +118,21 @@ Step 3: 運用・改善サイクル確立
 
 ---
 
+## ドキュメント一覧
+
+| ファイル | 内容 |
+|----------|------|
+| [hearing-items-m4.md](hearing-items-m4.md) | M4固有のヒアリング項目 |
+
+---
+
+## 次のアクション
+
+1. **工程不良Excelの入手**（最優先）
+2. Excel分析（M3と同様のAs-Is分析）
+3. M3プロトタイプへのM4機能追加設計
+
+---
+
 *元データ: [session1/mission-approach-report.md](../../sessions/session1/mission-approach-report.md)*
+*更新日: 2026-03-09 (Session 52)*
