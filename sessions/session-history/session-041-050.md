@@ -149,3 +149,34 @@
 - ダッシュボード画面の実装
 
 ---
+
+## Session 46 (2026-03-09)
+
+**概要**: 検査一覧・ダッシュボード画面の実装。プロトタイプ一通り完成。
+
+**実施内容**:
+1. **検査一覧API/画面** — フィルター、ページネーション、CSVエクスポート
+2. **ダッシュボードAPI/画面** — KPI、月別グラフ、検査項目別、直近記録、不良トップ、サプライヤー別
+3. **ナビゲーション改善** — 現在ページをアクティブ表示
+
+**方針**:
+- 「作っておいて見せる方がクローズドクエスチョンになる」→ ダッシュボード情報を追加
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [inspection_record_handler.go](../../prototype/backend/internal/handler/inspection_record_handler.go) | 検査一覧ハンドラー |
+| [dashboard.go](../../prototype/backend/internal/repository/dashboard.go) | ダッシュボードリポジトリ |
+| [dashboard_handler.go](../../prototype/backend/internal/handler/dashboard_handler.go) | ダッシュボードハンドラー |
+| [records/page.tsx](../../prototype/frontend/src/app/records/page.tsx) | 検査一覧画面 |
+| [dashboard/page.tsx](../../prototype/frontend/src/app/dashboard/page.tsx) | ダッシュボード画面 |
+| [Navigation.tsx](../../prototype/frontend/src/components/Navigation.tsx) | ナビゲーション |
+| [session-summary.md](../session46/session-summary.md) | セッションサマリー |
+
+**次セッション（Session 47）でやること**:
+- 過去資料の整理
+- ヒアリング準備
+- 進め方のまとめ
+- 一気通貫デモ（時間があれば）
+
+---

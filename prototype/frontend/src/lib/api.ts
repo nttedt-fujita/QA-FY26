@@ -174,3 +174,176 @@ export async function finishInspectionSession(
   }
   return res.json();
 }
+
+// === 検査記録一覧API ===
+
+export interface InspectionRecordWithDetails {
+  record_id: string;
+  lot_id: string;
+  part_name: string;
+  item_name: string;
+  worker_name?: string;
+  inspection_date: string;
+  sample_qty?: number;
+  result: string;
+  defect_qty: number;
+  work_time_min?: number;
+  note?: string;
+  created_at: string;
+}
+
+export interface InspectionRecordsResponse {
+  records: InspectionRecordWithDetails[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+export interface ListFilter {
+  date_from?: string;
+  date_to?: string;
+  lot_id?: string;
+  part_id?: string;
+  result?: string;
+  limit?: number;
+  offset?: number;
+}
+
+// 検査記録一覧を取得
+export async function getInspectionRecords(
+  filter?: ListFilter
+): Promise<InspectionRecordsResponse> {
+  const params = new URLSearchParams();
+  if (filter?.date_from) params.set("date_from", filter.date_from);
+  if (filter?.date_to) params.set("date_to", filter.date_to);
+  if (filter?.lot_id) params.set("lot_id", filter.lot_id);
+  if (filter?.part_id) params.set("part_id", filter.part_id);
+  if (filter?.result) params.set("result", filter.result);
+  if (filter?.limit) params.set("limit", String(filter.limit));
+  if (filter?.offset) params.set("offset", String(filter.offset));
+
+  const url = `${API_BASE}/api/v1/inspection-records?${params.toString()}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error("検査記録一覧の取得に失敗しました");
+  }
+  return res.json();
+}
+
+// === ダッシュボードAPI ===
+
+export interface SummaryStats {
+  total_inspections: number;
+  total_lots: number;
+  pass_rate: number;
+  avg_work_time: number;
+}
+
+export interface MonthlyStats {
+  month: string;
+  total: number;
+  pass_qty: number;
+  fail_qty: number;
+  skip_qty: number;
+  pass_rate: number;
+}
+
+export interface PartDefectRate {
+  part_id: string;
+  part_name: string;
+  total_qty: number;
+  defect_qty: number;
+  defect_rate: number;
+}
+
+// サマリー情報を取得
+export async function getDashboardSummary(): Promise<SummaryStats> {
+  const res = await fetch(`${API_BASE}/api/v1/dashboard/summary`);
+  if (!res.ok) {
+    throw new Error("サマリー情報の取得に失敗しました");
+  }
+  return res.json();
+}
+
+// 月別統計を取得
+export async function getDashboardMonthly(
+  months: number = 6
+): Promise<MonthlyStats[]> {
+  const res = await fetch(`${API_BASE}/api/v1/dashboard/monthly?months=${months}`);
+  if (!res.ok) {
+    throw new Error("月別統計の取得に失敗しました");
+  }
+  const data = await res.json();
+  return data.monthly_stats ?? [];
+}
+
+// 不良トップ部品を取得
+export async function getDashboardTopDefects(
+  limit: number = 5,
+  months: number = 3
+): Promise<PartDefectRate[]> {
+  const res = await fetch(
+    `${API_BASE}/api/v1/dashboard/top-defects?limit=${limit}&months=${months}`
+  );
+  if (!res.ok) {
+    throw new Error("不良トップ部品の取得に失敗しました");
+  }
+  const data = await res.json();
+  return data.top_defects ?? [];
+}
+
+// 検査項目別統計
+export interface ItemStats {
+  item_id: string;
+  item_name: string;
+  total: number;
+  pass_qty: number;
+  fail_qty: number;
+  pass_rate: number;
+}
+
+export async function getDashboardItemStats(): Promise<ItemStats[]> {
+  const res = await fetch(`${API_BASE}/api/v1/dashboard/items`);
+  if (!res.ok) {
+    throw new Error("検査項目別統計の取得に失敗しました");
+  }
+  const data = await res.json();
+  return data.item_stats ?? [];
+}
+
+// 直近の検査記録
+export interface RecentRecord {
+  record_id: string;
+  lot_id: string;
+  part_name: string;
+  item_name: string;
+  result: string;
+  inspection_date: string;
+}
+
+export async function getDashboardRecent(limit: number = 5): Promise<RecentRecord[]> {
+  const res = await fetch(`${API_BASE}/api/v1/dashboard/recent?limit=${limit}`);
+  if (!res.ok) {
+    throw new Error("直近の検査記録の取得に失敗しました");
+  }
+  const data = await res.json();
+  return data.recent_records ?? [];
+}
+
+// サプライヤー別不良率
+export interface SupplierDefectRate {
+  supplier_id: string;
+  supplier_name: string;
+  total_qty: number;
+  defect_qty: number;
+  defect_rate: number;
+}
+
+export async function getDashboardSuppliers(): Promise<SupplierDefectRate[]> {
+  const res = await fetch(`${API_BASE}/api/v1/dashboard/suppliers`);
+  if (!res.ok) {
+    throw new Error("サプライヤー別不良率の取得に失敗しました");
+  }
+  const data = await res.json();
+  return data.supplier_defects ?? [];
+}
