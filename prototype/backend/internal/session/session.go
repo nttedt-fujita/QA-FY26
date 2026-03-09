@@ -4,6 +4,7 @@ package session
 
 import (
 	"errors"
+	"math"
 	"time"
 
 	"github.com/google/uuid"
@@ -99,7 +100,8 @@ func (s *InspectionSession) GetCounts() Counts {
 func (s *InspectionSession) Finish(note string) (*FinishResult, error) {
 	counts := s.GetCounts()
 	duration := time.Since(s.StartedAt)
-	workTimeMin := duration.Minutes()
+	// 小数点1桁に丸める（例: 0.24025... → 0.2）
+	workTimeMin := math.Round(duration.Minutes()*10) / 10
 
 	return &FinishResult{
 		LotID:       s.LotID,

@@ -125,3 +125,27 @@
 - ロット登録画面の実装
 
 ---
+
+## Session 45 (2026-03-09)
+
+**概要**: 工数表示修正、ロット登録画面改善、CLAUDE.md整理、ADR-002作成。
+
+**実施内容**:
+1. **CLAUDE.md整理** — 索引セクション簡素化（重要な決定のみ残す）
+2. **工数表示修正** — `math.Round(duration.Minutes()*10)/10` で小数点1桁に
+3. **session-managementスキル更新** — CLAUDE.md整理ルール追加
+4. **テスト修正** — API仕様に合わせてレスポンスキー修正
+5. **ロット登録画面改善** — 部品ドロップダウン、サプライヤー自動表示、検査画面遷移
+6. **ADR-002作成** — API契約とFE/BE整合性ルール
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/docs/adr/ADR-002-api-contract.md](../../prototype/docs/adr/ADR-002-api-contract.md) | API契約ADR |
+| [sessions/session45/session-summary.md](../session45/session-summary.md) | セッションサマリー |
+
+**次セッション（Session 46）でやること**:
+- 検査一覧画面の実装
+- ダッシュボード画面の実装
+
+---
