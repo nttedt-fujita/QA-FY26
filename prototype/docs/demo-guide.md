@@ -84,7 +84,7 @@ make frontend-dev
 
 ## ヒアリングポイント
 
-デモ後に確認したい事項（[hearing-items.md](../../docs/missions/m3-incoming-inspection-db/hearing-items.md) 参照）:
+デモ後に確認したい事項（[hearing-items.md](../../docs/missions/m3-incoming-inspection-db/hearing/hearing-items.md) 参照）:
 
 ### P0: 最重要
 - 現在の検査フローとの違いは？

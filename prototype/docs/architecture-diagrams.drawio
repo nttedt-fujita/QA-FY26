@@ -1,0 +1,677 @@
+<mxfile host="65bd71144e">
+    <diagram id="component-diagram" name="コンポーネント構成">
+        <mxGraphModel dx="194" dy="647" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="M3 受入検査DB プロトタイプ - コンポーネント構成" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="284" y="20" width="600" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="fe-layer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="70" width="1000" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="fe-label" value="Frontend (Next.js 15 + TypeScript)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#1a56db;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="80" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="page-lot" value="ロット登録&#xa;page.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="120" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="page-lots" value="ロット一覧&#xa;lots/page.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="120" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="page-inspection" value="カウンター画面&#xa;inspection/page.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="380" y="120" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="page-records" value="検査一覧&#xa;records/page.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="540" y="120" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="page-dashboard" value="ダッシュボード&#xa;dashboard/page.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="680" y="120" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="fe-nav" value="Navigation.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="120" width="100" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="fe-api" value="api.ts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="170" width="100" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="fe-types" value="types/" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="970" y="145" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="http-arrow" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="580" y="270" as="sourcePoint"/>
+                        <mxPoint x="580" y="300" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="http-label" value="HTTP (JSON)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="590" y="270" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="be-layer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="310" width="1000" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="be-label" value="Backend (Go 1.22 標準ライブラリ)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#2d6a4f;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="320" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="router" value="main.go&#xa;(http.ServeMux + CORS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="440" y="350" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="handler-lot" value="LotHandler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="430" width="100" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="handler-master" value="MasterHandler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="430" width="110" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="handler-session" value="InspectionSession&#xa;Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="430" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="handler-record" value="InspectionRecord&#xa;Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="490" y="430" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="handler-dashboard" value="DashboardHandler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="430" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="session-mgr" value="session.Manager&#xa;(インメモリ)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="800" y="430" width="110" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="repo-lot" value="LotRepository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="500" width="100" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="repo-master" value="Part/Item/Worker&#xa;Repository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="500" width="110" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="repo-record" value="InspectionRecord&#xa;Repository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="500" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="repo-dashboard" value="DashboardRepository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="500" width="130" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-h1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;entryX=0.15;entryY=1;" parent="1" source="handler-lot" target="router" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-h2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;entryX=0.3;entryY=1;" parent="1" source="handler-master" target="router" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-h3" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" parent="1" source="handler-session" target="router" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-h4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;entryX=0.7;entryY=1;" parent="1" source="handler-record" target="router" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-h5" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;entryX=0.85;entryY=1;" parent="1" source="handler-dashboard" target="router" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-r1" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;" parent="1" source="handler-lot" target="repo-lot" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-r2" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;" parent="1" source="handler-master" target="repo-master" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-r3" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;" parent="1" source="handler-record" target="repo-record" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-r4" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;" parent="1" source="handler-dashboard" target="repo-dashboard" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-s1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;dashed=1;strokeColor=#d79b00;" parent="1" source="handler-session" target="session-mgr" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-arrow" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="400" y="560" as="sourcePoint"/>
+                        <mxPoint x="400" y="590" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="db-label" value="pgx/v5" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="560" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-layer" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="600" width="600" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-label2" value="Database (PostgreSQL 15)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="610" width="250" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-icon" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="630" width="60" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="db-tables" value="suppliers | parts | inspection_items | workers&#xa;lots | inspection_records | defect_reports | waivers" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="635" width="450" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="600" width="360" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-title" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="730" y="605" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-page" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="730" y="630" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-page-text" value="Page / Handler" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="755" y="625" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-comp" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="630" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-comp-text" value="共通/Repository" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="875" y="625" width="90" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-state" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="980" y="630" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-state-text" value="状態管理" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="1005" y="625" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-arrow1" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="730" y="660" as="sourcePoint"/>
+                        <mxPoint x="750" y="660" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="legend-arrow1-text" value="依存" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="755" y="652" width="40" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-arrow2" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=1;dashed=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="850" y="660" as="sourcePoint"/>
+                        <mxPoint x="870" y="660" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="legend-arrow2-text" value="呼び出し" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="875" y="652" width="50" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="er-diagram" name="ER図">
+        <mxGraphModel dx="873" dy="647" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="er-title" value="M3 受入検査DB - ER図" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="434" y="20" width="300" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="master-area" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;strokeDasharray=3;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="60" width="520" height="280" as="geometry"/>
+                </mxCell>
+                <mxCell id="master-label" value="マスタデータ" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="65" width="100" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-suppliers" value="suppliers&#xa;サプライヤ" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="100" width="160" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-suppliers-pk" value="PK supplier_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" parent="t-suppliers" vertex="1">
+                    <mxGeometry y="40" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-suppliers-c1" value="    name" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-suppliers" vertex="1">
+                    <mxGeometry y="60" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-suppliers-c2" value="    contact" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-suppliers" vertex="1">
+                    <mxGeometry y="80" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-suppliers-c3" value="    default_aql" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-suppliers" vertex="1">
+                    <mxGeometry y="100" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-parts" value="parts&#xa;部品" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="100" width="160" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-parts-pk" value="PK part_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" parent="t-parts" vertex="1">
+                    <mxGeometry y="40" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-parts-fk" value="FK supplier_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;" parent="t-parts" vertex="1">
+                    <mxGeometry y="60" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-parts-c1" value="    name, category" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-parts" vertex="1">
+                    <mxGeometry y="80" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-parts-c2" value="    spec_doc_url" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-parts" vertex="1">
+                    <mxGeometry y="100" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-parts-c3" value="    latest_fw_version" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-parts" vertex="1">
+                    <mxGeometry y="120" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-items" value="inspection_items&#xa;検査項目" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="250" width="160" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-items-pk" value="PK item_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" parent="t-items" vertex="1">
+                    <mxGeometry y="40" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-items-c1" value="    name, type, std_time" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-items" vertex="1">
+                    <mxGeometry y="60" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-workers" value="workers&#xa;作業者" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="260" width="160" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-workers-pk" value="PK worker_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" parent="t-workers" vertex="1">
+                    <mxGeometry y="40" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-workers-c1" value="    name, role" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-workers" vertex="1">
+                    <mxGeometry y="60" width="160" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="tx-area" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=1;strokeDasharray=3;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="60" width="560" height="700" as="geometry"/>
+                </mxCell>
+                <mxCell id="tx-label" value="トランザクションデータ" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#b45309;" parent="1" vertex="1">
+                    <mxGeometry x="590" y="65" width="150" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-lots" value="lots&#xa;ロット（入荷単位）" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="100" width="180" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-lots-pk" value="PK lot_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" parent="t-lots" vertex="1">
+                    <mxGeometry y="40" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-lots-fk" value="FK part_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;" parent="t-lots" vertex="1">
+                    <mxGeometry y="60" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-lots-c1" value="    po_number" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-lots" vertex="1">
+                    <mxGeometry y="80" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-lots-c2" value="    arrival_date, quantity" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-lots" vertex="1">
+                    <mxGeometry y="100" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-lots-c3" value="    fw_version, hw_version" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-lots" vertex="1">
+                    <mxGeometry y="120" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-lots-c4" value="    created_at, updated_at" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-lots" vertex="1">
+                    <mxGeometry y="140" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-records" value="inspection_records&#xa;検査記録" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="320" width="180" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-records-pk" value="PK record_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" parent="t-records" vertex="1">
+                    <mxGeometry y="40" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-records-fk1" value="FK lot_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;" parent="t-records" vertex="1">
+                    <mxGeometry y="60" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-records-fk2" value="FK item_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;" parent="t-records" vertex="1">
+                    <mxGeometry y="80" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-records-fk3" value="FK worker_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;" parent="t-records" vertex="1">
+                    <mxGeometry y="100" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-records-c1" value="    inspection_date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-records" vertex="1">
+                    <mxGeometry y="120" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-records-c2" value="    result, defect_qty" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-records" vertex="1">
+                    <mxGeometry y="140" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-records-c3" value="    sample_qty, work_time" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-records" vertex="1">
+                    <mxGeometry y="160" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-records-c4" value="    note" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-records" vertex="1">
+                    <mxGeometry y="180" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-defects" value="defect_reports&#xa;不良レポート（8D対応）" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="320" width="180" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-defects-pk" value="PK report_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" parent="t-defects" vertex="1">
+                    <mxGeometry y="40" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-defects-fk" value="FK record_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;" parent="t-defects" vertex="1">
+                    <mxGeometry y="60" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-defects-c1" value="    defect_type, detail" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-defects" vertex="1">
+                    <mxGeometry y="80" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-defects-c2" value="    root_cause (8D: D4-D5)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-defects" vertex="1">
+                    <mxGeometry y="100" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-defects-c3" value="    corrective_action (8D: D6-D7)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-defects" vertex="1">
+                    <mxGeometry y="120" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-defects-c4" value="    status, closed_date" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-defects" vertex="1">
+                    <mxGeometry y="140" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-waivers" value="waivers&#xa;不問判定" style="swimlane;fontStyle=1;childLayout=stackLayout;horizontal=1;startSize=40;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="520" width="180" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-waivers-pk" value="PK waiver_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=1;" parent="t-waivers" vertex="1">
+                    <mxGeometry y="40" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-waivers-fk" value="FK record_id" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=2;" parent="t-waivers" vertex="1">
+                    <mxGeometry y="60" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-waivers-c1" value="    reason" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-waivers" vertex="1">
+                    <mxGeometry y="80" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="t-waivers-c2" value="    approver, approved_at" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="t-waivers" vertex="1">
+                    <mxGeometry y="100" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="rel-sup-part" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;" parent="1" source="t-suppliers-c1" target="t-parts-fk" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rel-part-lot" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;" parent="1" source="t-parts-c1" target="t-lots-fk" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rel-lot-rec" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeWidth=2;" parent="1" source="t-lots" target="t-records" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rel-item-rec" value="N:1" style="endArrow=ERone;startArrow=ERmany;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="t-items-c1" target="t-records-fk2" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="520" y="320"/>
+                            <mxPoint x="520" y="420"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="rel-worker-rec" value="N:1" style="endArrow=ERone;startArrow=ERmany;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="t-workers-c1" target="t-records-fk3" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="550" y="330"/>
+                            <mxPoint x="550" y="440"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="rel-rec-def" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;" parent="1" source="t-records-c1" target="t-defects-fk" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rel-rec-waiv" value="1:N" style="endArrow=ERmany;startArrow=ERone;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=2;edgeStyle=orthogonalEdgeStyle;" parent="1" source="t-records-c3" target="t-waivers-fk" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="810" y="500"/>
+                            <mxPoint x="810" y="600"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="er-legend" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="380" width="520" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-title" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="385" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-master" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="410" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-master-text" value="マスタ" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="75" y="405" width="50" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-tx" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="410" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-tx-text" value="コアTX" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="165" y="405" width="50" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-def" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="410" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-def-text" value="不良管理" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="255" y="405" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-waiv" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="410" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-waiv-text" value="不問判定" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="355" y="405" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-pk" value="PK" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="430" width="25" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-pk-text" value="= Primary Key" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="75" y="430" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-fk" value="FK" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="430" width="25" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="er-legend-fk-text" value="= Foreign Key" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="195" y="430" width="80" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="dataflow-diagram" name="データフロー">
+        <mxGraphModel dx="873" dy="647" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="df-title" value="検査記録の登録フロー（カウンター方式）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="334" y="20" width="500" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="step1-num" value="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1a73e8;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=14;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="70" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="step2-num" value="2" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1a73e8;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=14;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="190" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="step3-num" value="3" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1a73e8;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=14;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="310" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="step4-num" value="4" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1a73e8;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=14;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="430" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="step5-num" value="5" style="ellipse;whiteSpace=wrap;html=1;fillColor=#1a73e8;strokeColor=none;fontColor=#ffffff;fontStyle=1;fontSize=14;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="550" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="step1-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="60" width="1000" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="step1-title" value="ロット登録" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="65" width="100" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1-fe" value="ロット登録画面&#xa;page.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="95" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1-arrow1" value="POST /api/v1/lots" style="endArrow=classic;html=1;rounded=0;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="270" y="120" as="sourcePoint"/>
+                        <mxPoint x="400" y="120" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s1-handler" value="LotHandler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="95" width="100" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1-arrow2" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="520" y="120" as="sourcePoint"/>
+                        <mxPoint x="620" y="120" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s1-repo" value="LotRepository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="95" width="100" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1-arrow3" value="INSERT" style="endArrow=classic;html=1;rounded=0;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="740" y="120" as="sourcePoint"/>
+                        <mxPoint x="870" y="120" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s1-db" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="95" width="60" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1-db-label" value="lots" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="115" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="step2-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="180" width="1000" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="step2-title" value="検査セッション開始" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="185" width="150" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2-fe" value="カウンター画面&#xa;inspection/page.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="215" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2-arrow1" value="POST /api/v1/inspection-sessions" style="endArrow=classic;html=1;rounded=0;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="270" y="240" as="sourcePoint"/>
+                        <mxPoint x="400" y="240" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s2-handler" value="InspectionSession&#xa;Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="215" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2-arrow2" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;strokeColor=#d79b00;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="540" y="240" as="sourcePoint"/>
+                        <mxPoint x="680" y="240" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s2-session" value="session.Manager&#xa;(インメモリ)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="690" y="215" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2-note" value="セッション作成&#xa;(session_id発行)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="820" y="225" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="step3-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="300" width="1000" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="step3-title" value="カウント追加（繰り返し）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="305" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3-fe" value="OK / NG / SKIP&#xa;ボタン押下" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="335" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3-arrow1" value="POST .../count" style="endArrow=classic;html=1;rounded=0;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="270" y="360" as="sourcePoint"/>
+                        <mxPoint x="400" y="360" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s3-handler" value="InspectionSession&#xa;Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="335" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3-arrow2" value="AddCount()" style="endArrow=classic;html=1;rounded=0;dashed=1;strokeColor=#d79b00;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="540" y="360" as="sourcePoint"/>
+                        <mxPoint x="680" y="360" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s3-session" value="session.Manager&#xa;(インメモリ更新)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="690" y="335" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3-note" value="ok_count++&#xa;ng_count++&#xa;skip_count++" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="820" y="335" width="80" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3-loop" value="" style="curved=1;endArrow=classic;html=1;strokeColor=#1a73e8;strokeWidth=2;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="750" y="395" as="sourcePoint"/>
+                        <mxPoint x="200" y="395" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="500" y="420"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s3-loop-label" value="繰り返し（各検査項目×数量分）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#1a73e8;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="415" width="180" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="step4-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="420" width="1000" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="step4-title" value="セッション終了（DB保存）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="425" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4-fe" value="「検査完了」&#xa;ボタン押下" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="455" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4-arrow1" value="POST .../finish" style="endArrow=classic;html=1;rounded=0;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="270" y="480" as="sourcePoint"/>
+                        <mxPoint x="400" y="480" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s4-handler" value="InspectionSession&#xa;Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="410" y="455" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4-arrow2" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="540" y="480" as="sourcePoint"/>
+                        <mxPoint x="620" y="480" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s4-repo" value="InspectionRecord&#xa;Repository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="455" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4-arrow3" value="INSERT" style="endArrow=classic;html=1;rounded=0;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="760" y="480" as="sourcePoint"/>
+                        <mxPoint x="870" y="480" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s4-db" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="455" width="60" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4-db-label" value="inspection&#xa;_records" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="870" y="460" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="s4-note" value="工数自動計算&#xa;(開始〜終了)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="465" width="80" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="step5-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="540" width="1000" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="step5-title" value="ダッシュボード表示" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="545" width="150" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5-fe" value="ダッシュボード画面&#xa;dashboard/page.tsx" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="575" width="130" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5-arrow1" value="GET /api/v1/dashboard/*" style="endArrow=classic;html=1;rounded=0;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="280" y="600" as="sourcePoint"/>
+                        <mxPoint x="410" y="600" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s5-handler" value="Dashboard&#xa;Handler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="575" width="100" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5-arrow2" value="" style="endArrow=classic;html=1;rounded=0;dashed=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="530" y="600" as="sourcePoint"/>
+                        <mxPoint x="620" y="600" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s5-repo" value="Dashboard&#xa;Repository" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="575" width="100" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5-arrow3" value="SELECT (集計)" style="endArrow=classic;html=1;rounded=0;fontSize=10;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="740" y="600" as="sourcePoint"/>
+                        <mxPoint x="870" y="600" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="s5-db" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="575" width="60" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5-db-label" value="inspection&#xa;_records" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="870" y="580" width="80" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="s5-note" value="KPI, 月別グラフ,&#xa;サプライヤー別 etc." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="960" y="585" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#999999;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="660" width="600" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-title" value="凡例:" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="130" y="675" width="40" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-fe" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="180" y="678" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-fe-text" value="Frontend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="205" y="673" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-handler" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="280" y="678" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-handler-text" value="Handler" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="305" y="673" width="50" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-repo" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="678" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-repo-text" value="Repository" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="395" y="673" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-session" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
+                    <mxGeometry x="470" y="678" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-session-text" value="Session (インメモリ)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="495" y="673" width="110" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-db" value="" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="673" width="25" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="df-legend-db-text" value="DB" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="650" y="673" width="30" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
