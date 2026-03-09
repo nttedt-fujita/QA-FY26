@@ -267,3 +267,29 @@
 **次セッション（Session 38）でやること**:
 - フロントエンド開発（ロット登録画面）
 - または: テストデータ充実 / マイグレーションツール導入
+
+---
+
+## Session 38 (2026-03-06)
+
+**概要**: プロトタイプ方針見直し + 実装計画書作成。
+
+**背景**: フロントエンド実装を開始したが、ユーザーから「ロットだけ登録の画面では、関係ない人が見ても何のシステムかわからない」と指摘。プロトタイプの目的（デモ・ヒアリング叩き台）を再確認し、「入力→ダッシュボード連携」の全体フローを実装する方針に変更。
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/docs/prototype-implementation-plan.md](../../prototype/docs/prototype-implementation-plan.md) | **実装計画書**（Phase A-C、タスク詳細、TDDシナリオ） |
+| [prototype/frontend/src/types/lot.ts](../../prototype/frontend/src/types/lot.ts) | ロット型定義 |
+| [prototype/frontend/src/lib/api.ts](../../prototype/frontend/src/lib/api.ts) | API呼び出し関数 |
+| [session38/session-summary.md](../session38/session-summary.md) | セッションサマリー |
+| [session39/session-plan.md](../session39/session-plan.md) | 次セッション計画 |
+
+**重要な決定**:
+- **プロトタイプの方向性変更**: ロットCRUDだけでなく、検査記録入力→ダッシュボード連携まで実装
+- **実装順序**: シードデータ → マスタAPI → 検査記録API → 入力画面 → ダッシュボード
+
+**次セッション（Session 39）でやること**:
+- シードデータ（seed.sql）作成
+- マスタデータAPI実装
+- 検査記録API実装
