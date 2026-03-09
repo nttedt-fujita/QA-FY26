@@ -212,6 +212,6 @@ case UBX_MSG_NAV_STATUS:
 
 ## 5. 参照
 
-- [ADR-004](../../../prototype/docs/adr/ADR-004-gnss-tool-approach.md) — この調査に基づく方針決定
+- [ADR-004](../../../adr/ADR-004-gnss-tool-approach.md) — この調査に基づく方針決定
 - [11-px4-uorb-mapping.md](11-px4-uorb-mapping.md) — PX4 uORBマッピング（更新済み）
 - [08-ubx-protocol-index.md](08-ubx-protocol-index.md) — UBXプロトコル仕様（NAV-SIG: p.152-153）

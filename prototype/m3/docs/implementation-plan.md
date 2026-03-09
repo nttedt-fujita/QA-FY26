@@ -157,5 +157,5 @@
 
 ## 参照
 
-- [all-screens-mockup.drawio](../../sessions/session41/all-screens-mockup.drawio) — 全画面モックアップ
-- [input-ui-patterns.drawio](../../sessions/session41/input-ui-patterns.drawio) — 入力UIパターン比較
+- [all-screens-mockup.drawio](../../../sessions/session41/all-screens-mockup.drawio) — 全画面モックアップ
+- [input-ui-patterns.drawio](../../../sessions/session41/input-ui-patterns.drawio) — 入力UIパターン比較

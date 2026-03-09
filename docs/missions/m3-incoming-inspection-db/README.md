@@ -20,12 +20,12 @@
 
 ## プロトタイプ（Session 41-46で実装）
 
-**ディレクトリ**: [prototype/](../../../prototype/)
+**ディレクトリ**: [prototype/m3/](../../../prototype/m3/)
 
 ### クイックスタート
 
 ```bash
-cd prototype
+cd prototype/m3
 make up              # DB + Backend起動
 make frontend-dev    # Frontend起動（別ターミナル）
 # http://localhost:3000 を開く
@@ -44,11 +44,11 @@ make frontend-dev    # Frontend起動（別ターミナル）
 
 | ファイル | 内容 |
 |----------|------|
-| [quickstart.md](../../../prototype/docs/quickstart.md) | 起動手順 |
-| [demo-guide.md](../../../prototype/docs/demo-guide.md) | デモ手順・ヒアリングポイント |
-| [implementation-plan.md](../../../prototype/docs/implementation-plan.md) | 実装計画（Session別） |
-| [ADR-001](../../../prototype/docs/adr/ADR-001-error-handling.md) | エラーハンドリング方針 |
-| [ADR-002](../../../prototype/docs/adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 |
+| [quickstart.md](../../../prototype/m3/docs/quickstart.md) | 起動手順 |
+| [demo-guide.md](../../../prototype/m3/docs/demo-guide.md) | デモ手順・ヒアリングポイント |
+| [implementation-plan.md](../../../prototype/m3/docs/implementation-plan.md) | 実装計画（Session別） |
+| [ADR-001](../../adr/ADR-001-error-handling.md) | エラーハンドリング方針 |
+| [ADR-002](../../adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 |
 
 ### 技術スタック
 

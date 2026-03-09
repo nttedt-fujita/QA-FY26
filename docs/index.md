@@ -6,14 +6,14 @@
 
 ## M3 プロトタイプ（Session 41-46で実装）
 
-**ディレクトリ**: [prototype/](../prototype/)
+**ディレクトリ**: [prototype/m3/](../prototype/m3/)
 
 受入検査DBのプロトタイプ。カウンター方式の検査入力、ダッシュボード等を実装。
 
 ### クイックスタート
 
 ```bash
-cd prototype
+cd prototype/m3
 make up              # DB + Backend起動
 make frontend-dev    # Frontend起動（別ターミナル）
 # http://localhost:3000 を開く
@@ -23,16 +23,16 @@ make frontend-dev    # Frontend起動（別ターミナル）
 
 | ファイル | 内容 |
 |----------|------|
-| [quickstart.md](../prototype/docs/quickstart.md) | 起動手順 |
-| [demo-guide.md](../prototype/docs/demo-guide.md) | デモ手順・ヒアリングポイント |
-| [implementation-plan.md](../prototype/docs/implementation-plan.md) | 実装計画（Session別） |
+| [quickstart.md](../prototype/m3/docs/quickstart.md) | 起動手順 |
+| [demo-guide.md](../prototype/m3/docs/demo-guide.md) | デモ手順・ヒアリングポイント |
+| [implementation-plan.md](../prototype/m3/docs/implementation-plan.md) | 実装計画（Session別） |
 
 ### 設計判断（ADR）
 
 | ADR | 内容 |
 |-----|------|
-| [ADR-001](../prototype/docs/adr/ADR-001-error-handling.md) | エラーハンドリング方針 |
-| [ADR-002](../prototype/docs/adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 |
+| [ADR-001](adr/ADR-001-error-handling.md) | エラーハンドリング方針 |
+| [ADR-002](adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 |
 
 ---
 
@@ -163,16 +163,21 @@ make frontend-dev    # Frontend起動（別ターミナル）
 ## ディレクトリ構成
 
 ```
-prototype/                        ← M3プロトタイプ（Session 41-46）
-├── Makefile                      ← 操作コマンド（make help）
-├── makefiles/                    ← .mkファイル群
-├── backend/                      ← Go API
-├── frontend/                     ← Next.js
-├── db/                           ← PostgreSQL初期化
-└── docs/                         ← プロトタイプ関連ドキュメント
+prototype/
+└── m3/                           ← M3プロトタイプ（Session 41-46）
+    ├── Makefile                  ← 操作コマンド（make help）
+    ├── makefiles/                ← .mkファイル群
+    ├── backend/                  ← Go API
+    ├── frontend/                 ← Next.js
+    ├── db/                       ← PostgreSQL初期化
+    └── docs/                     ← プロトタイプ関連ドキュメント
+
+tools/
+└── gnss-eval/                    ← GNSS評価ツール（M1-B）
 
 docs/
 ├── index.md                      ← このファイル
+├── adr/                          ← 設計判断記録（ADR）
 ├── missions/
 │   ├── m1-sensor-evaluation/     ← M1: センサー評価
 │   ├── m2-pointcloud-verification/ ← M2: 点群検証
@@ -183,7 +188,7 @@ docs/
 
 sessions/
 ├── session-history/              ← セッション履歴（10件ごと）
-└── session1/ 〜 session47/       ← 各セッション資料
+└── session1/ 〜 session57/       ← 各セッション資料
 ```
 
 ---

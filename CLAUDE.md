@@ -90,12 +90,12 @@
 
 | ADR | タイトル | 影響範囲 | 状態 |
 |-----|---------|---------|------|
-| [ADR-001](prototype/docs/adr/ADR-001-error-handling.md) | エラーハンドリング方針 | 全API | 承認済み |
-| [ADR-002](prototype/docs/adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 | 型定義・API設計 | 承認済み |
-| [ADR-003](prototype/docs/adr/ADR-003-lot-list-view.md) | ロット一覧画面の設計判断 | FE画面・ナビ | 承認済み |
-| [ADR-004](prototype/docs/adr/ADR-004-gnss-tool-approach.md) | GNSS評価ツールのアプローチ選択 | M1-B GNSS評価 | 承認済み |
+| [ADR-001](docs/adr/ADR-001-error-handling.md) | エラーハンドリング方針 | 全API | 承認済み |
+| [ADR-002](docs/adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 | 型定義・API設計 | 承認済み |
+| [ADR-003](docs/adr/ADR-003-lot-list-view.md) | ロット一覧画面の設計判断 | FE画面・ナビ | 承認済み |
+| [ADR-004](docs/adr/ADR-004-gnss-tool-approach.md) | GNSS評価ツールのアプローチ選択 | M1-B GNSS評価 | 承認済み |
 
-**ADR詳細ファイル配置先**: `prototype/docs/adr/`
+**ADR詳細ファイル配置先**: `docs/adr/`
 
 ## 過去セッションの重要な決定
 
@@ -116,5 +116,5 @@
 |------|------|
 | [sessions/session25/quality-framework-research.md](sessions/session25/quality-framework-research.md) | 品質管理フレームワーク調査（IQC/PQC/OQC、8D等） |
 | [docs/missions/m3-incoming-inspection-db/hearing-items.md](docs/missions/m3-incoming-inspection-db/hearing-items.md) | ヒアリング項目統合版（P0〜P3優先度付き） |
-| [prototype/docs/implementation-plan.md](prototype/docs/implementation-plan.md) | プロトタイプ実装計画（Session 42-47） |
+| [prototype/m3/docs/implementation-plan.md](prototype/m3/docs/implementation-plan.md) | プロトタイプ実装計画（Session 42-47） |
 | [sessions/session41/all-screens-mockup.drawio](sessions/session41/all-screens-mockup.drawio) | 全画面モックアップ |
