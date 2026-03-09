@@ -42,6 +42,8 @@
 | [07-cross-sheet-findings.md](07-cross-sheet-findings.md) | 全シート横断の発見事項・合格基準検討・Phase 1の問い | — |
 | [08-ubx-protocol-index.md](08-ubx-protocol-index.md) | UBXプロトコル仕様書の索引（Phase 2用） | PDF |
 | [09-design-verification-criteria.md](09-design-verification-criteria.md) | 設計検証基準の業界標準調査（Session 53） | — |
+| [10-tool-design-notes.md](10-tool-design-notes.md) | ツール設計メモ（Session 56） | Session 16-17統合 |
+| [11-px4-uorb-mapping.md](11-px4-uorb-mapping.md) | PX4 uORBとUBXメッセージの対応（Session 56） | 要調査項目あり |
 
 ---
 

@@ -158,3 +158,42 @@
 - M4工程不良Excel入手（継続）
 
 ---
+
+## Session 56 (2026-03-09)
+
+**概要**: GNSS関連調査資料の整理・統合
+
+**実施内容**:
+1. **ツール設計メモ作成** — Session 16-17の内容を統合
+2. **PX4 uORBマッピング作成** — ULogから取得可能なデータを明確化
+3. **既存資料のステータス更新** — session16の調査タスクステータス
+
+**重要な発見**:
+- L1/L2別C/N0、スペアナデータはフライトログ経由では取得できない可能性
+- 直接UBX通信が必要な項目と、フライトログで十分な項目を明確化
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [docs/missions/m1-sensor-evaluation/gnss/10-tool-design-notes.md](../../docs/missions/m1-sensor-evaluation/gnss/10-tool-design-notes.md) | ツール設計メモ |
+| [docs/missions/m1-sensor-evaluation/gnss/11-px4-uorb-mapping.md](../../docs/missions/m1-sensor-evaluation/gnss/11-px4-uorb-mapping.md) | PX4 uORBとUBXの対応 |
+| [session56/session-summary.md](../session56/session-summary.md) | セッションサマリー |
+| [session57/session-plan.md](../session57/session-plan.md) | 次セッション計画 |
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [docs/missions/m1-sensor-evaluation/gnss/README.md](../../docs/missions/m1-sensor-evaluation/gnss/README.md) | 新規ファイル追加 |
+| [sessions/session16/gnss-hearing-koitabashi-01.md](../session16/gnss-hearing-koitabashi-01.md) | 調査タスクステータス更新 |
+
+**方針転換**:
+- 確認待ちではなく、**先にプロトタイプを作る**方向に転換
+- PX4ソースコード調査 → リポジトリ整理 → 技術選定 → プロトタイプ作成
+
+**次セッション（Session 57）でやること**:
+- PX4ソースコード調査（事前調査）
+- リポジトリ整理（prototype/の命名問題）
+- 技術選定・環境構築（C++? Linux/Windows両対応）
+- プロトタイプ設計・作成開始
+
+---
