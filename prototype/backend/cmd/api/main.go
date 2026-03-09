@@ -27,6 +27,11 @@ func main() {
 	lotRepo := repository.NewLotRepository(db)
 	lotHandler := handler.NewLotHandler(lotRepo)
 
+	partRepo := repository.NewPartRepository(db)
+	inspectionItemRepo := repository.NewInspectionItemRepository(db)
+	workerRepo := repository.NewWorkerRepository(db)
+	masterHandler := handler.NewMasterHandler(partRepo, inspectionItemRepo, workerRepo)
+
 	mux := http.NewServeMux()
 
 	// ヘルスチェック
@@ -39,6 +44,11 @@ func main() {
 	mux.HandleFunc("POST /api/v1/lots", lotHandler.Create)
 	mux.HandleFunc("GET /api/v1/lots", lotHandler.List)
 	mux.HandleFunc("GET /api/v1/lots/{id}", lotHandler.Get)
+
+	// マスタデータAPI
+	mux.HandleFunc("GET /api/v1/parts", masterHandler.ListParts)
+	mux.HandleFunc("GET /api/v1/inspection-items", masterHandler.ListInspectionItems)
+	mux.HandleFunc("GET /api/v1/workers", masterHandler.ListWorkers)
 
 	port := os.Getenv("PORT")
 	if port == "" {
