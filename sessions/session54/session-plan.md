@@ -13,6 +13,19 @@
 
 ## タスク
 
+### 0. 製品名・メーカーの裏取り（優先）
+
+**問題**: 「HORIBAウルトラライト」と記載しているが、正しくは「**ホリブロウルトラライト**」の可能性。
+
+**やること**:
+1. ウェブ調査で正式な製品名・メーカーを確認
+2. 関連ドキュメントの製品名を修正
+   - docs/missions/m1-sensor-evaluation/gnss/README.md
+   - docs/missions/m1-sensor-evaluation/gnss/09-design-verification-criteria.md
+   - sessions/session16/gnss-hearing-koitabashi-01.md
+
+---
+
 ### 1. 小板橋さんへの認識確認（優先）
 
 **参照**: [docs/missions/m1-sensor-evaluation/gnss/07-cross-sheet-findings.md](../../docs/missions/m1-sensor-evaluation/gnss/07-cross-sheet-findings.md)
