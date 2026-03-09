@@ -1,6 +1,38 @@
 # QA-FY26 ドキュメントインデックス
 
-**最終更新**: 2026-03-05 (Session 12)
+**最終更新**: 2026-03-09 (Session 47)
+
+---
+
+## M3 プロトタイプ（Session 41-46で実装）
+
+**ディレクトリ**: [prototype/](../prototype/)
+
+受入検査DBのプロトタイプ。カウンター方式の検査入力、ダッシュボード等を実装。
+
+### クイックスタート
+
+```bash
+cd prototype
+make up              # DB + Backend起動
+make frontend-dev    # Frontend起動（別ターミナル）
+# http://localhost:3000 を開く
+```
+
+### ドキュメント
+
+| ファイル | 内容 |
+|----------|------|
+| [quickstart.md](../prototype/docs/quickstart.md) | 起動手順 |
+| [demo-guide.md](../prototype/docs/demo-guide.md) | デモ手順・ヒアリングポイント |
+| [implementation-plan.md](../prototype/docs/implementation-plan.md) | 実装計画（Session別） |
+
+### 設計判断（ADR）
+
+| ADR | 内容 |
+|-----|------|
+| [ADR-001](../prototype/docs/adr/ADR-001-error-handling.md) | エラーハンドリング方針 |
+| [ADR-002](../prototype/docs/adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 |
 
 ---
 
@@ -131,24 +163,27 @@
 ## ディレクトリ構成
 
 ```
+prototype/                        ← M3プロトタイプ（Session 41-46）
+├── Makefile                      ← 操作コマンド（make help）
+├── makefiles/                    ← .mkファイル群
+├── backend/                      ← Go API
+├── frontend/                     ← Next.js
+├── db/                           ← PostgreSQL初期化
+└── docs/                         ← プロトタイプ関連ドキュメント
+
 docs/
-├── index.md                  ← このファイル（全体インデックス）
-├── slide-workflow.md         ← Marp→PPTXワークフロー
+├── index.md                      ← このファイル
 ├── missions/
 │   ├── m1-sensor-evaluation/     ← M1: センサー評価
 │   ├── m2-pointcloud-verification/ ← M2: 点群検証
 │   ├── m3-incoming-inspection-db/  ← M3: 受入検査DB
-│   ├── m4-defect-db/              ← M4: 工程不良DB
-│   └── m3m4-development-approach.md ← M3/M4の進め方
-├── qa-knowledge/
-│   ├── qa-fundamentals.md         ← QA基礎知識
-│   └── company-qa-qc.md           ← 自社QA/QC整理
-├── images/
-│   └── quality-flow.svg           ← フロー図
+│   └── m4-defect-db/             ← M4: 工程不良DB
+├── qa-knowledge/                 ← QA基礎知識
+└── images/                       ← 図表
 
 sessions/
-├── session-history/               ← セッション履歴
-├── session1/ 〜 session12/        ← 各セッション資料
+├── session-history/              ← セッション履歴（10件ごと）
+└── session1/ 〜 session47/       ← 各セッション資料
 ```
 
 ---

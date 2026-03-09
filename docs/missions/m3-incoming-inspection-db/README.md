@@ -1,7 +1,47 @@
 # M3: 受入検査データベース化
 
 **担当**: ふじた
-**ステータス**: Phase 1（分析・可視化）進行中
+**ステータス**: プロトタイプ完成 → ヒアリング準備中
+
+---
+
+## プロトタイプ（Session 41-46で実装）
+
+**ディレクトリ**: [prototype/](../../../prototype/)
+
+### クイックスタート
+
+```bash
+cd prototype
+make up              # DB + Backend起動
+make frontend-dev    # Frontend起動（別ターミナル）
+# http://localhost:3000 を開く
+```
+
+### 画面構成
+
+| 画面 | URL | 機能 |
+|------|-----|------|
+| ロット登録 | `/` | 部品選択 → ロット登録 → 検査開始 |
+| 検査入力 | `/inspection` | カウンター方式（OK/NG/SKIP） |
+| 検査一覧 | `/records` | フィルター、CSVエクスポート |
+| ダッシュボード | `/dashboard` | KPI、月別グラフ、分析 |
+
+### ドキュメント
+
+| ファイル | 内容 |
+|----------|------|
+| [quickstart.md](../../../prototype/docs/quickstart.md) | 起動手順 |
+| [demo-guide.md](../../../prototype/docs/demo-guide.md) | デモ手順・ヒアリングポイント |
+| [implementation-plan.md](../../../prototype/docs/implementation-plan.md) | 実装計画（Session別） |
+| [ADR-001](../../../prototype/docs/adr/ADR-001-error-handling.md) | エラーハンドリング方針 |
+| [ADR-002](../../../prototype/docs/adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 |
+
+### 技術スタック
+
+- **Backend**: Go + net/http + pgx（PostgreSQL）
+- **Frontend**: Next.js 15 + TypeScript + Tailwind CSS
+- **DB**: PostgreSQL 16
 
 ---
 
@@ -48,9 +88,11 @@
 
 | Phase | 内容 | 状態 |
 |-------|------|------|
-| **Phase 1** | 分析・可視化（現行Excelデータ） | **進行中** |
-| Phase 2 | 入力のデジタル化（ヒアリング後） | 未着手 |
+| **Phase 1** | 分析・可視化（現行Excelデータ） | ✅ 完了 |
+| **Phase 2** | 入力のデジタル化（ヒアリング後） | **プロトタイプ完成** |
 | Phase 3 | M3/M4統合 + トレーサビリティ | 品質協定書締結後 |
+
+> **Note**: Session 41-46でPhase 2のプロトタイプを先行実装。ヒアリングでフィードバックを得て修正する方針。
 
 ### 制約
 
@@ -143,4 +185,4 @@ M3/M4に関連する品質管理の概念:
 
 ---
 
-*更新日: 2026-03-06 (Session 32)*
+*更新日: 2026-03-09 (Session 47)*

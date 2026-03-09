@@ -180,3 +180,48 @@
 - 一気通貫デモ（時間があれば）
 
 ---
+
+## Session 47 (2026-03-09)
+
+**概要**: Makefile整備 + ドキュメント整理。ヒアリング準備完了。
+
+**実施内容**:
+1. **Makefile整備** — prototype/makefiles/に.mkファイル群を作成
+2. **デモドキュメント作成** — quickstart.md, demo-guide.md
+3. **過去資料整理** — docs/index.md更新、M3 README更新
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [prototype/Makefile](../../prototype/Makefile) | メインMakefile |
+| [prototype/makefiles/db.mk](../../prototype/makefiles/db.mk) | DB操作コマンド |
+| [prototype/makefiles/backend.mk](../../prototype/makefiles/backend.mk) | Backend操作コマンド |
+| [prototype/makefiles/frontend.mk](../../prototype/makefiles/frontend.mk) | Frontend操作コマンド |
+| [prototype/makefiles/docker.mk](../../prototype/makefiles/docker.mk) | Docker全体操作 |
+| [prototype/makefiles/demo.mk](../../prototype/makefiles/demo.mk) | デモ用コマンド |
+| [prototype/docs/quickstart.md](../../prototype/docs/quickstart.md) | 起動手順 |
+| [prototype/docs/demo-guide.md](../../prototype/docs/demo-guide.md) | デモ手順・ヒアリングポイント |
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [docs/index.md](../../docs/index.md) | プロトタイプセクション追加 |
+| [docs/missions/m3-incoming-inspection-db/README.md](../../docs/missions/m3-incoming-inspection-db/README.md) | プロトタイプへのリンク追加 |
+
+**主なコマンド**:
+```bash
+make help          # コマンド一覧
+make up            # 全サービス起動
+make demo-flow     # デモフロー表示
+```
+
+**残課題**:
+- demo-guide.mdが過去のヒアリング資料（Session 10のスライド等）を十分に参照していない
+- プレゼン用スライド作成の検討
+
+**次セッション（Session 48）でやること**:
+- 過去のヒアリング資料の整理・統合（Session 10, 8のスライド等）
+- プレゼン用スライド作成検討
+- demo-guide.mdの改善
+
+---
