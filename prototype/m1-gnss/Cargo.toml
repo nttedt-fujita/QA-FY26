@@ -1,0 +1,31 @@
+[package]
+name = "m1-gnss"
+version = "0.1.0"
+edition = "2021"
+description = "GNSS評価ツール（F9P UBX通信 + Webサーバー）"
+
+[dependencies]
+# Webフレームワーク
+actix-web = "4"
+actix-files = "0.6"
+
+# シリアル通信
+serialport = "4"
+
+# 非同期ランタイム
+tokio = { version = "1", features = ["full"] }
+
+# JSON処理
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# ログ
+log = "0.4"
+env_logger = "0.11"
+
+# バイナリ解析用
+bytes = "1"
+
+[dev-dependencies]
+# テスト用
+tokio-test = "0.4"

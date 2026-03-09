@@ -314,3 +314,34 @@ docs/
 - モック実装開始
 
 ---
+
+## Session 60 (2026-03-09)
+
+**概要**: GNSS評価ツール技術選定最終決定 + 環境構築 + TDD Phase 0-2
+
+**実施内容**:
+1. **ADR-005作成** — GNSS評価ツール技術スタック選定（Rust + Actix-web + Docker）
+2. **プロジェクト作成** — `prototype/m1-gnss/` にRust + Dev Container環境構築
+3. **TDD Phase 0-2** — NAV-PVTパーサーの設計（振る舞い記述、テストシナリオリスト）
+
+**重要な決定**:
+- **技術スタック**: Rust + Actix-web + 自前UBXパース + Docker（Dev Container）
+- **ディレクトリ**: `prototype/m1-gnss/`（ミッション番号に合わせた命名）
+- **開発方針**: TDDで進める
+- `tools/gnss-eval/` は削除（`prototype/m1-gnss/` に統合）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [docs/adr/ADR-005-gnss-tool-tech-stack.md](../../docs/adr/ADR-005-gnss-tool-tech-stack.md) | 技術選定ADR |
+| [prototype/m1-gnss/](../../prototype/m1-gnss/) | GNSS評価ツールプロジェクト |
+| [prototype/m1-gnss/docs/nav-pvt-design-decisions.md](../../prototype/m1-gnss/docs/nav-pvt-design-decisions.md) | NAV-PVTパーサー設計判断 |
+| [session60/session-summary.md](../session60/session-summary.md) | セッションサマリー |
+| [session61/session-plan.md](../session61/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 61）でやること**:
+- TDD Phase 3: NAV-PVTパーサーのテストコード作成
+- TDD Phase 4: 実装（Red → Green）
+- 他のUBXメッセージの設計（NAV-SAT, NAV-SIG等）
+
+---
