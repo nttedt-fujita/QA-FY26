@@ -1,11 +1,16 @@
 // 検査セッションの型定義（バックエンドと同期）
 
 // マスタデータ（APIレスポンスと同期）
+// バックエンド: internal/repository/master.go の Part struct と対応
 export interface Part {
   part_id: string;
   name: string;
   category: string;
-  supplier_id: string;
+  supplier_id?: string; // バックエンドでは *string（オプショナル）
+  spec_doc_url?: string;
+  latest_fw_version?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface InspectionItem {

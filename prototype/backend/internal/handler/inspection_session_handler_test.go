@@ -132,9 +132,9 @@ func TestInspectionSessionHandler_Count(t *testing.T) {
 
 		var resp map[string]interface{}
 		json.Unmarshal(w.Body.Bytes(), &resp)
-		counts := resp["counts"].(map[string]interface{})
-		if counts["pass"].(float64) != 1 {
-			t.Errorf("pass = %v, want 1", counts["pass"])
+		// レスポンス形式: ok_count, ng_count, skip_count
+		if resp["ok_count"].(float64) != 1 {
+			t.Errorf("ok_count = %v, want 1", resp["ok_count"])
 		}
 	})
 
@@ -152,9 +152,9 @@ func TestInspectionSessionHandler_Count(t *testing.T) {
 
 		var resp map[string]interface{}
 		json.Unmarshal(w.Body.Bytes(), &resp)
-		counts := resp["counts"].(map[string]interface{})
-		if counts["pass"].(float64) != 0 {
-			t.Errorf("pass = %v, want 0", counts["pass"])
+		// レスポンス形式: ok_count, ng_count, skip_count
+		if resp["ok_count"].(float64) != 0 {
+			t.Errorf("ok_count = %v, want 0", resp["ok_count"])
 		}
 	})
 }
@@ -197,11 +197,12 @@ func TestInspectionSessionHandler_Finish(t *testing.T) {
 
 		var resp map[string]interface{}
 		json.Unmarshal(w.Body.Bytes(), &resp)
-		if _, ok := resp["record_id"]; !ok {
-			t.Error("レスポンスにrecord_idが含まれていない")
+		// レスポンス形式: inspection_record_id, man_hours, result, ok_count, ng_count, skip_count
+		if _, ok := resp["inspection_record_id"]; !ok {
+			t.Errorf("レスポンスにinspection_record_idが含まれていない: %v", resp)
 		}
-		if resp["work_time_min"] == nil {
-			t.Error("work_time_minがない")
+		if resp["man_hours"] == nil {
+			t.Errorf("man_hoursがない: %v", resp)
 		}
 	})
 

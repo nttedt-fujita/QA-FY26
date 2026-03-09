@@ -103,7 +103,7 @@ export async function getLotsForInspection(): Promise<LotForInspection[]> {
   return (lotsData.lots ?? []).map((lot: Lot) => ({
     lot_id: lot.lot_id,
     part_id: lot.part_id,
-    part_name: partsMap.get(lot.part_id)?.part_name ?? lot.part_id,
+    part_name: partsMap.get(lot.part_id)?.name ?? lot.part_id,
     quantity: lot.quantity,
     arrival_date: lot.arrival_date,
   }));
