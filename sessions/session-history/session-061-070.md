@@ -193,3 +193,35 @@
 - Ubuntu PCでM3プロトタイプの作業を再開（時間があれば）
 
 ---
+
+## Session 67 (2026-03-10)
+
+**概要**: AS-DT1仕様書（ユーザーズガイド FW1.00）の確認とドキュメント化
+
+**実施内容**:
+1. **PDF抽出スクリプト作成** — 目次確認→ユーザー確認→抽出のフローで作業
+2. **仕様書からの情報抽出** — 6カテゴリに分けてMarkdown生成
+3. **質問リスト更新（v2）** — 仕様書から判明した事項を整理、残り15件に絞り込み
+
+**主な発見**:
+- 電源仕様、物理仕様、耐衝撃性などが仕様書から判明
+- 「APIマニュアル」への参照が複数箇所あり、別途確認が必要
+- 反射率10%未満、IP等級、耐振動などは仕様書に記載なし
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session67/extract_as_dt1_spec.py](../session67/extract_as_dt1_spec.py) | PDF抽出スクリプト |
+| [session67/extracted/](../session67/extracted/) | 抽出済みMarkdown（6ファイル） |
+| [session67/as-dt1-spec-questions-v2.md](../session67/as-dt1-spec-questions-v2.md) | 質問リスト更新版 |
+| [session67/session-summary.md](../session67/session-summary.md) | セッションサマリー |
+| [session68/session-plan.md](../session68/session-plan.md) | 次セッション計画 |
+
+**Hooks観察**:
+- PDFを直接読みに行った問題 → PDF作業フローのルール化を提案
+
+**次セッション（Session 68）でやること**:
+- APIマニュアルPDFの目次確認・抽出
+- 抽出済みファイルの正式配置（`docs/missions/m1-sensor-evaluation/lidar/as-dt1/`）
+
+---
