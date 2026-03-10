@@ -58,3 +58,32 @@
 - ユーザー指摘で発覚、`~/.claude/hooks-observations.md`に記録
 
 ---
+
+## Session 73 (2026-03-10)
+
+**概要**: GNSS評価ツールの要求整理・要求定義作成
+
+**実施内容**:
+1. **ドキュメント配置** — Session 72のテストシナリオを正式配置先に移動
+2. **過去の要求確認** — Session 16（小板橋さんヒアリング）、Session 56-57の内容確認
+3. **ヒアリング** — 藤田さんの理想像を整理（自動検査、複数台同時接続、SQLite保存）
+4. **要求定義作成** — EARSパターンで10件の要求を定義
+
+**重要な決定**:
+| 項目 | 決定 |
+|------|------|
+| 用途 | 受入検査（屋内で確認できる範囲）|
+| RTK確認 | 一旦保留（受入検査ではやらない）|
+| 同時接続台数 | 2〜5台程度（認知負荷に収まる範囲）|
+| データ保存 | SQLite |
+| レポート出力 | PDF + CSV |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session73/gnss-tool-needs.md](../session73/gnss-tool-needs.md) | 要求定義（EARS記法）|
+| [session73/session-summary.md](../session73/session-summary.md) | セッションサマリー |
+| [session74/session-plan.md](../session74/session-plan.md) | 次セッション計画 |
+| [docs/.../13-ubx-parser-test-scenarios.md](../../docs/missions/m1-sensor-evaluation/gnss/13-ubx-parser-test-scenarios.md) | テストシナリオ正式配置 |
+
+---
