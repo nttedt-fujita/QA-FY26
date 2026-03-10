@@ -61,6 +61,40 @@ netsh advfirewall firewall delete rule name="WSL2 M3 Backend"
 - 今回はWindows PC上のWSL2で作業（普段のUbuntu PCとは別）
 - テストデータ投入等の本格作業はUbuntu PCで実施予定
 
+---
+
+## 追加作業: ソニー製LiDAR AS-DT1 納入仕様確認（同日）
+
+### 背景
+
+- 大林さんより、ソニー製LiDAR「AS-DT1」の納入仕様を確認したいとの依頼
+- 石川さんより、質問事項をサマリーしておくよう指示
+
+### 実施内容
+
+1. **既存プロジェクト調査**
+   - SONY-LiDAR-TestMinutesプロジェクトにAS-DT1の詳細情報があることを確認
+   - 仕様書からの情報、既存の技術質問リストを参照
+
+2. **質問リスト作成（初版）**
+   - データシートから判明している仕様を整理（6カテゴリ）
+   - データシートに記載がない項目を質問リストとして整理（26項目）
+
+### 作成ファイル
+
+| ファイル | 内容 |
+|----------|------|
+| [task_sony_lidar_as-dt1.md](task_sony_lidar_as-dt1.md) | タスク定義（藤田さん作成） |
+| [as-dt1-spec-questions.md](as-dt1-spec-questions.md) | 質問リスト初版 |
+
+### 未完了（調査不足）
+
+- task_sony_lidar_as-dt1.mdの観点に基づいた体系的なWeb調査
+- 一般的なLiDARセンサー納入仕様の考え方・ベストプラクティス調査
+- エビデンス（参照URL・出典）を整備した上での情報再整理
+
+---
+
 ## 未実施（次セッションへ持ち越し）
 
 - UBXパーサー実装（NAV-STATUS/NAV-DOP/MON-RF）— TDD
@@ -68,5 +102,6 @@ netsh advfirewall firewall delete rule name="WSL2 M3 Backend"
 
 ## 次セッションでやること
 
+- **AS-DT1納入仕様調査の続き**: Web調査・エビデンス整備・質問リスト再構成
 - Ubuntu PCでM3プロトタイプの作業を再開
-- Session 66計画のタスク（UBXパーサー実装）を実施
+- UBXパーサー実装（時間があれば）
