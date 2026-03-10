@@ -225,3 +225,40 @@
 - 抽出済みファイルの正式配置（`docs/missions/m1-sensor-evaluation/lidar/as-dt1/`）
 
 ---
+
+## Session 68 (2026-03-10)
+
+**概要**: AS-DT1 APIマニュアル（FW1.00）の確認とドキュメント化
+
+**実施内容**:
+1. **APIマニュアルPDF抽出** — 目次確認→ユーザー確認→抽出のフローを遵守
+2. **質問リスト更新（v3）** — 4件解決（Q03, Q08, Q10, Q11）、残り12件
+3. **正式ドキュメント配置** — `docs/missions/m1-sensor-evaluation/lidar/as-dt1/`に配置
+
+**解決した質問**:
+- Q03: データフォーマット → 3形式（ascii/binary/binz）の詳細仕様
+- Q08: SDK対応OS → Windows 11, Ubuntu 24.04, Jetson, Raspberry Pi
+- Q10: サンプルコード・API → SDK提供あり（Python API + サンプルアプリ）
+- Q11: FWアップデート方法 → USB/UART経由、Python API、サンプルアプリ
+
+**主な発見**:
+- 出力形式: ascii/binary/binzの3種類、binaryは0.25mm分解能
+- SDK: Python API提供、4種のOS対応
+- IMU: 100Hz、加速度±4G、角速度±500dps
+- デバイス検索API: シリアル番号からポート検索可能
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session68/extract_api_manual.py](../session68/extract_api_manual.py) | APIマニュアル抽出スクリプト |
+| [session68/extracted/](../session68/extracted/) | 抽出済みMarkdown（6ファイル） |
+| [session68/as-dt1-spec-questions-v3.md](../session68/as-dt1-spec-questions-v3.md) | 質問リストv3 |
+| [docs/missions/m1-sensor-evaluation/lidar/as-dt1/](../../docs/missions/m1-sensor-evaluation/lidar/as-dt1/) | 正式配置先 |
+| [session68/session-summary.md](../session68/session-summary.md) | セッションサマリー |
+| [session69/session-plan.md](../session69/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 69）でやること**:
+- AS-DT1質問リストの最終レビュー・提出準備
+- GNSS評価ツール: UBXパーサー実装（TDD）
+
+---
