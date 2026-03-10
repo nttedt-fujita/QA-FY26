@@ -25,6 +25,7 @@ F9P GNSS受信機の評価用Webツール。
 3. コンテナ内でターミナルを開き:
 
 ```bash
+cd backend
 cargo run
 ```
 
@@ -40,6 +41,7 @@ docker build -f Dockerfile.dev -t m1-gnss-dev .
 docker run -it --rm \
   -v $(pwd):/workspace \
   -p 8080:8080 \
+  -w /workspace/backend \
   m1-gnss-dev \
   cargo run
 ```

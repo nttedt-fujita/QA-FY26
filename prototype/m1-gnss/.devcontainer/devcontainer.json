@@ -18,6 +18,6 @@
     }
   },
   "forwardPorts": [8080],
-  "postCreateCommand": "cargo fetch",
+  "postCreateCommand": "cd backend && cargo fetch",
   "remoteUser": "root"
 }

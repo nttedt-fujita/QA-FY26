@@ -66,3 +66,36 @@
 - NAV-PVTパーサーのTDD実装
 
 ---
+
+## Session 63 (2026-03-10)
+
+**概要**: GNSS評価ツールのテーブル設計・ディレクトリ構成整理・NAV-PVTパーサー実装
+
+**実施内容**:
+1. **テーブル設計** — `db/schema.sql`作成（9テーブル）
+2. **ディレクトリ構成整理** — src/ → backend/に移動
+3. **NAV-PVTパーサー実装** — TDDでテスト13件を含むパーサー実装
+
+**重要な決定**:
+- ペイロードのバイトオフセットは仕様書推測に基づく（実機検証待ち）
+- テストはテーブルテスト形式で統一
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [db/schema.sql](../../prototype/m1-gnss/db/schema.sql) | SQLiteスキーマ定義 |
+| [backend/src/lib.rs](../../prototype/m1-gnss/backend/src/lib.rs) | ライブラリルート |
+| [backend/src/ubx/nav_pvt.rs](../../prototype/m1-gnss/backend/src/ubx/nav_pvt.rs) | NAV-PVTパーサー |
+| [session63/session-summary.md](../session63/session-summary.md) | セッションサマリー |
+
+**未実施（Session 64へ持ち越し）**:
+- DevContainer内でのテスト実行確認
+- 他のUBXメッセージパーサー
+- Next.jsフロントエンド作成
+
+**次セッション（Session 64）でやること**:
+- テスト実行確認
+- NAV-STATUS, NAV-DOPパーサー
+- Next.jsプロジェクト作成
+
+---
