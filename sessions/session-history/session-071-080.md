@@ -31,3 +31,30 @@
 - DevContainer内でのテスト実行確認
 
 ---
+
+## Session 72 (2026-03-10)
+
+**概要**: GNSS評価ツール UBXパーサー実装（TDD）
+
+**実施内容**:
+1. **DevContainer環境整備** — Dockerfile.devのRustバージョンを`latest`に更新
+2. **NAV-STATUSパーサー実装** — TTFF、RTK状態、FIX有効性判定
+3. **NAV-DOPパーサー実装** — 精度劣化係数（スケール0.01変換）
+4. **MON-RFパーサー実装** — ジャミング状態監視、可変長ブロック対応
+
+**テスト結果**: 15テスト全パス
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [nav_status.rs](../../prototype/m1-gnss/backend/src/ubx/nav_status.rs) | NAV-STATUSパーサー |
+| [nav_dop.rs](../../prototype/m1-gnss/backend/src/ubx/nav_dop.rs) | NAV-DOPパーサー |
+| [mon_rf.rs](../../prototype/m1-gnss/backend/src/ubx/mon_rf.rs) | MON-RFパーサー |
+| [session72/ubx-parser-test-scenarios.md](../session72/ubx-parser-test-scenarios.md) | テストシナリオ文書 |
+| [session72/session-summary.md](../session72/session-summary.md) | セッションサマリー |
+
+**Hooks観察**:
+- TDD Phase 1（振る舞い記述）で仕様書フィールドのヌケモレ発生
+- ユーザー指摘で発覚、`~/.claude/hooks-observations.md`に記録
+
+---
