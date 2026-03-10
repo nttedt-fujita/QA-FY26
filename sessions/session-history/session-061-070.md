@@ -127,3 +127,35 @@
 - テスト実行確認
 
 ---
+
+## Session 65 (2026-03-10)
+
+**概要**: 受入検査Excel分析資料の整理（石川さんからの質問対応）
+
+**実施内容**:
+1. **工数上位10品目の詳細資料作成** — 作業者・件ごとの工数を抽出
+2. **検査内容別の工数詳細資料作成** — 「外観＋通電」「動作確認」の内訳
+3. **退職者情報の整理** — 若原、加藤、角田が退職済み
+
+**重要な発見**:
+- PCM Assy 24hは電源基板にヒートシンクを貼る作業（小笠原さん情報）。担当者（若原・加藤）は退職済み
+- チャージャ 16.7hは備考の計算と合致、杉山に確認可能
+- 長野さんは2人（長野将、長野佳）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session65/top10-inspection-details.md](../session65/top10-inspection-details.md) | 工数上位10品目の詳細 |
+| [session65/inspection-type-details.md](../session65/inspection-type-details.md) | 検査内容別の工数内訳 |
+| [session65/session-summary.md](../session65/session-summary.md) | セッションサマリー |
+| [session66/session-plan.md](../session66/session-plan.md) | 次セッション計画 |
+
+**未実施（Session 66へ持ち越し）**:
+- UBXパーサー実装（TDD）
+- DevContainer内でのテスト実行確認
+
+**次セッション（Session 66）でやること**:
+- NAV-STATUS/NAV-DOP/MON-RFパーサー実装（TDD）
+- テスト実行確認
+
+---
