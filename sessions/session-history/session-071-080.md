@@ -127,6 +127,33 @@
 
 ---
 
+## Session 76 (2026-03-10)
+
+**概要**: UBXパーサー追加実装（MON-VER, SEC-UNIQID）— TDD Phase 1
+
+**実施内容**:
+1. **仕様抽出** — PDFからMON-VER、SEC-UNIQIDの仕様を抽出
+2. **TDD Phase 1** — 振る舞い記述（MON-VER 8件、SEC-UNIQID 6件）
+
+**発生した問題**:
+- 仕様書の探し方で手戻り（セッション履歴を先に確認すべきだった）
+- Session 64でPDF抽出ツールとubx-messages-spec.mdを作成済みだったが見落とした
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session76/ubx-mon-ver-sec-uniqid-spec.md](../session76/ubx-mon-ver-sec-uniqid-spec.md) | MON-VER、SEC-UNIQID仕様 + 振る舞い記述 |
+| [session76/ubx-mon-ver-sec-uniqid-raw.md](../session76/ubx-mon-ver-sec-uniqid-raw.md) | PDFから抽出した生データ |
+| [session76/session-summary.md](../session76/session-summary.md) | セッションサマリー |
+| [session77/session-plan.md](../session77/session-plan.md) | 次セッション計画 |
+
+**Hooks観察**: 1件記録（セッション履歴を先に確認すべきパターン）
+
+**次セッション（Session 77）でやること**:
+- TDD Phase 2〜5: テストシナリオ作成 → テストコード → 実装 → リファクタリング
+
+---
+
 ## Session 73 (2026-03-10)
 
 **概要**: GNSS評価ツールの要求整理・要求定義作成
