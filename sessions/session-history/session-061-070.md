@@ -296,3 +296,32 @@
 - GNSS評価ツール: UBXパーサー実装（TDD）
 
 ---
+
+## Session 70 (2026-03-10)
+
+**概要**: AS-DT1仕様書の追加抽出 + 質問リストv6作成
+
+**実施内容**:
+1. **ユーザーズガイド追加抽出** — p8, 20, 29-32をPythonスクリプトで抽出
+2. **質問リストv6作成** — Q09削除（ROS2確認済み）、Q17追加（放熱設計の熱特性）
+3. **IP等級のWeb調査** — IP67認証条件を調査、推測排除
+
+**主な発見**:
+- 放熱板仕様: 150mm×80mm×10mm以上、熱伝導率140W/(m・K)以上（UG p8画像から確認）
+- 防塵防滴: コネクター部は防塵防滴構造ではない（UG p32）
+- IP67認証には全開口部の防塵防滴が必要（Web調査）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session70/extract_additional_pages.py](../session70/extract_additional_pages.py) | PDF追加抽出スクリプト |
+| [session70/extracted/07-maintenance-and-specs.md](../session70/extracted/07-maintenance-and-specs.md) | 抽出済みMarkdown |
+| [session70/as-dt1-spec-questions-v5.md](../session70/as-dt1-spec-questions-v5.md) | 質問リストv6 |
+| [session70/session-summary.md](../session70/session-summary.md) | セッションサマリー |
+| [session71/session-plan.md](../session71/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 71）でやること**:
+- 質問リストv6の最終レビュー（抜け漏れ確認）
+- GNSS評価ツール: UBXパーサー実装（TDD）
+
+---
