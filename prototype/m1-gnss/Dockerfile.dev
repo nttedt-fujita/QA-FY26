@@ -1,5 +1,5 @@
 # GNSS評価ツール開発用Dockerfile
-FROM rust:1.76-slim-bookworm
+FROM rust:latest
 
 # 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y \
