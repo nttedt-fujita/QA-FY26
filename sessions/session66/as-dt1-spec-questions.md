@@ -152,11 +152,14 @@
 
 | ファイルパス | 内容 |
 |-------------|------|
-| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/sessions/session-152/custom_AS-DT1_ユーザーズガイド_FW1.00.pdf` | SONY公式仕様書（カスタム抜粋版21ページ） |
-| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/results/reports/002-spec-vs-field-data-analysis.md` | 仕様書×フィールドデータ照合レポート（仕様値転記あり） |
-| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/results/reports/003-roi-spec-comparison.md` | ROI付きデータと仕様値の正式比較 |
-| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/docs/noise-test-docs/manufacturer-questions.md` | メーカーへの技術質問リスト（7項目） |
-| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/CLAUDE.md` | プロジェクト概要・座標系定義など |
+| `.../results/reports/002-spec-vs-field-data-analysis.md` | **仕様書からの転記あり**（本資料の主な情報源） |
+| `.../results/reports/003-roi-spec-comparison.md` | ROI付きデータと仕様値の正式比較 |
+| `.../docs/noise-test-docs/manufacturer-questions.md` | メーカーへの技術質問リスト（7項目） |
+| `.../CLAUDE.md` | プロジェクト概要・座標系定義など |
+
+**注**: 元のSONY公式仕様書PDF（AS-DT1 ユーザーズガイド FW1.00）は `.gitignore` 除外のためリポジトリに含まれていない。仕様値は `002-spec-vs-field-data-analysis.md` に転記されている。
+
+**プロジェクトパス**: `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/`
 
 #### Web情報源
 
