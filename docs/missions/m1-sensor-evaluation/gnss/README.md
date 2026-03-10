@@ -45,6 +45,7 @@
 | [10-tool-design-notes.md](10-tool-design-notes.md) | ツール設計メモ（Session 56） | Session 16-17統合 |
 | [11-px4-uorb-mapping.md](11-px4-uorb-mapping.md) | PX4 uORBとUBXメッセージの対応（Session 57更新） | 調査完了 |
 | [12-px4-source-evidence.md](12-px4-source-evidence.md) | PX4ソースコード調査エビデンス（Session 57） | URL+原文抜粋 |
+| [13-ubx-parser-test-scenarios.md](13-ubx-parser-test-scenarios.md) | UBXパーサー振る舞い・テストシナリオ（Session 72） | TDD実装 |
 
 ---
 
