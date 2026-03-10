@@ -59,6 +59,44 @@
 
 ---
 
+## Session 74 (2026-03-10)
+
+**概要**: GNSS評価ツール要件定義・アーキテクチャ設計（ADR乖離問題発覚）
+
+**実施内容**:
+1. **要件定義作成** — FR8件/NFR5件/IFR4件を定義
+2. **アーキテクチャ設計** — コンポーネント構成、データフロー、状態遷移
+3. **実装計画** — 3フェーズ（MVP/レポート/複数台）+ 実機テスト計画
+4. **ドキュメント配置** — Session 73の要求定義を正式配置先に移動
+
+**発生した問題**:
+- ADR-005を読まずにTauri + SvelteKitと書いた
+- ADR-005を読んでも古い情報（静的HTML）で、Session 61の決定（Next.js）を見落とした
+- 結果、アーキテクチャを3回修正
+
+**重要な発見**:
+- ADR-005とSession 61の決定が乖離している
+- ADR運用ルールの見直しが必要
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session74/gnss-tool-requirements.md](../session74/gnss-tool-requirements.md) | 要件定義 |
+| [session74/gnss-tool-architecture.md](../session74/gnss-tool-architecture.md) | アーキテクチャ設計 |
+| [session74/gnss-tool-implementation-plan.md](../session74/gnss-tool-implementation-plan.md) | 実装計画 + 実機テスト計画 |
+| [session74/session-summary.md](../session74/session-summary.md) | セッションサマリー |
+| [session75/session-plan.md](../session75/session-plan.md) | 次セッション計画 |
+| [14-gnss-tool-needs.md](../../docs/missions/m1-sensor-evaluation/gnss/14-gnss-tool-needs.md) | 要求定義の正式配置 |
+
+**Hooks観察**: 4件記録（ADR未読、履歴未読、ADR乖離、3回修正）
+
+**次セッション（Session 75）でやること**:
+- ADR-005のメンテナンス
+- ADR運用ルールの見直し（adr-management/SKILL.md、rules/10-adr-enforcement.md）
+- CLAUDE.mdのADR一覧更新
+
+---
+
 ## Session 73 (2026-03-10)
 
 **概要**: GNSS評価ツールの要求整理・要求定義作成
