@@ -276,3 +276,40 @@
 - ポート列挙、接続管理、状態管理
 
 ---
+
+## Session 80 (2026-03-10)
+
+**概要**: DeviceManager設計（TDD Phase 1-2）
+
+**実施内容**:
+1. **TDD Phase 1** — 振る舞い記述（ポート列挙、接続管理、状態管理、UBX送受信、ポート監視）
+2. **設計判断** — トレイト抽象化、1Hzポーリング、Inspecting状態管理、複数装置対応準備
+3. **TDD Phase 2** — テストシナリオリスト作成（32シナリオ）
+
+**重要な設計判断**:
+| 項目 | 決定 | 理由 |
+|------|------|------|
+| トレイト | `SerialPortProvider` で外部依存を抽象化 | 単体テストでモック差し替え可能 |
+| ホットプラグ | 1Hz（1秒間隔）ポーリング | シンプルさ優先 |
+| Inspecting状態 | DeviceManagerが管理 | 振る舞い視点で「装置の状態」に含まれるのが自然 |
+| 複数装置管理 | Phase 1は1台制限、データ構造は複数対応で準備 | 段階的拡張 |
+
+**重要な議論**:
+- 「責務」（実装視点）vs「振る舞い」（ユーザー視点）の設計判断
+- エビデンス: Khorikov、Kent Beck (2024)、Evans (DDD)
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session80/device-manager-behavior.md](../session80/device-manager-behavior.md) | 振る舞い記述（TDD Phase 1） |
+| [session80/device-manager-test-scenarios.md](../session80/device-manager-test-scenarios.md) | テストシナリオリスト（TDD Phase 2） |
+| [session80/session-summary.md](../session80/session-summary.md) | セッションサマリー |
+| [session81/session-plan.md](../session81/session-plan.md) | 次セッション計画 |
+
+**進捗**: Phase 1 Step 2（DeviceManager）TDD Phase 2完了
+
+**次セッション（Session 81）でやること**:
+- テストシナリオリスト承認
+- TDD Phase 3-5: テストコード → 実装 → リファクタリング
+
+---
