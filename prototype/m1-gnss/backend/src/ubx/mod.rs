@@ -1,5 +1,7 @@
 //! UBXプロトコル関連モジュール
 
+pub mod cfg_prt;
+pub mod cfg_rate;
 pub mod common;
 pub mod mon_rf;
 pub mod mon_ver;
