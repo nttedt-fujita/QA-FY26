@@ -46,7 +46,16 @@ Session 74でADR-005とSession 61の決定が乖離していることが発覚:
 - ADR-005の状態を明確化
 - 「Session 61で変更あり」の注記を追加
 
-### 4. hooks観察の整理
+### 4. Session 73/74のドキュメント正式配置
+
+| ファイル | 配置先 |
+|----------|--------|
+| session73/gnss-tool-needs.md | ✅ 済（14-gnss-tool-needs.md） |
+| session74/gnss-tool-requirements.md | `docs/missions/m1-sensor-evaluation/gnss/15-gnss-tool-requirements.md` |
+| session74/gnss-tool-architecture.md | `docs/missions/m1-sensor-evaluation/gnss/16-gnss-tool-architecture.md` |
+| session74/gnss-tool-implementation-plan.md | `docs/missions/m1-sensor-evaluation/gnss/17-gnss-tool-implementation-plan.md` |
+
+### 5. hooks観察の整理
 
 Session 74で記録した4件の観察を確認し、優先度をつける。
 
