@@ -159,3 +159,32 @@
 - テスト実行確認
 
 ---
+
+## Session 66 (2026-03-10)
+
+**概要**: M3プロトタイプの起動・動作確認（Windows PC / WSL2環境）
+
+**実施内容**:
+1. **M3プロトタイプ起動** — Docker Compose（PostgreSQL + Go Backend）+ Next.jsフロントエンド
+2. **API動作確認** — 部品・ロット・作業者の取得、ダッシュボードAPIを確認
+3. **別PCアクセス設定** — WSL2ポートフォワーディング + ファイアウォール設定
+
+**重要な情報**:
+- WSL2 IP: 172.20.171.75（Windows PC: 192.168.100.57）
+- ポートフォワーディング設定済み（3000, 8080）
+- 解除コマンドはsession-summaryに記載
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session66/session-summary.md](../session66/session-summary.md) | セッションサマリー |
+
+**未実施（次セッションへ持ち越し）**:
+- UBXパーサー実装（NAV-STATUS/NAV-DOP/MON-RF）— TDD
+- DevContainer内でのテスト実行確認
+
+**次セッションでやること**:
+- Ubuntu PCでM3プロトタイプの作業を再開
+- UBXパーサー実装（TDD）
+
+---
