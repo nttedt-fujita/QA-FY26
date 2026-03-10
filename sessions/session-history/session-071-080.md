@@ -154,6 +154,35 @@
 
 ---
 
+## Session 77 (2026-03-10)
+
+**概要**: UBXパーサー実装（MON-VER, SEC-UNIQID）— TDD Phase 2〜5
+
+**実施内容**:
+1. **TDD Phase 2** — テストシナリオリスト作成・承認
+2. **TDD Phase 3** — テストコード作成（テーブルテスト形式）
+3. **TDD Phase 4** — 実装（Red → Green）— 全20テストパス
+4. **TDD Phase 5** — リファクタリング（common.rsに共通処理を抽出）
+
+**テスト結果**: 20テスト全パス
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [mon_ver.rs](../../prototype/m1-gnss/backend/src/ubx/mon_ver.rs) | MON-VERパーサー |
+| [sec_uniqid.rs](../../prototype/m1-gnss/backend/src/ubx/sec_uniqid.rs) | SEC-UNIQIDパーサー |
+| [common.rs](../../prototype/m1-gnss/backend/src/ubx/common.rs) | 共通定義（checksum, ヘッダー定数）|
+| [session77/session-summary.md](../session77/session-summary.md) | セッションサマリー |
+| [session78/session-plan.md](../session78/session-plan.md) | 次セッション計画 |
+
+**進捗**: Phase 1 Step 1（UBXパーサー）5/7完了
+
+**次セッション（Session 78）でやること**:
+- CFG-RATE, CFG-PRT パーサー実装（TDD）
+- または DeviceManager実装に着手
+
+---
+
 ## Session 73 (2026-03-10)
 
 **概要**: GNSS評価ツールの要求整理・要求定義作成
