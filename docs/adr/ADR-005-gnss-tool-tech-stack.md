@@ -2,7 +2,17 @@
 
 **ステータス**: 承認済み
 **日付**: 2026-03-09
+**最終更新**: 2026-03-10（Session 75でフロントエンド選定を更新）
 **関連ADR**: [ADR-004](ADR-004-gnss-tool-approach.md)（直接UBX通信アプローチ採用）
+
+---
+
+## 変更履歴
+
+| 日付 | 変更内容 | 関連セッション |
+|------|----------|---------------|
+| 2026-03-09 | 初版作成（静的HTML + JavaScript） | Session 59 |
+| 2026-03-10 | フロントエンドをNext.js（React）に変更 | Session 61, 75 |
 
 ---
 
@@ -38,26 +48,27 @@ ADR-004で「直接UBX通信ツール」を採用することが決定した。
 | シリアル通信 | serialport crate | 成熟、クロスプラットフォーム |
 | UBXパース | 自前実装 | 必要な5-6メッセージのみ、仕様書ベース |
 | 開発環境 | Docker + Dev Container | 環境再現性、Rustインストール不要 |
-| フロントエンド | 静的HTML + JavaScript | 最小構成、後で拡張可能 |
+| フロントエンド | Next.js（React） | 表現力が高い、エコシステムが豊富（Session 61で変更）|
+| データベース | SQLite | 軽量、単一ファイル、セットアップ不要 |
 
 ### ディレクトリ構成
 
 ```
 prototype/m1-gnss/
-├── .devcontainer/
-│   └── devcontainer.json
-├── Dockerfile.dev
-├── Cargo.toml
-├── src/
-│   ├── main.rs
-│   ├── ubx/           # UBXパース
-│   │   ├── mod.rs
-│   │   ├── parser.rs
-│   │   └── messages.rs
-│   ├── serial/        # シリアル通信
-│   └── web/           # HTTPサーバー
-└── static/            # フロントエンド
-    └── index.html
+├── backend/                # Rustバックエンド
+│   ├── .devcontainer/
+│   │   └── devcontainer.json
+│   ├── Dockerfile.dev
+│   ├── Cargo.toml
+│   └── src/
+│       ├── main.rs
+│       ├── ubx/           # UBXパース
+│       ├── serial/        # シリアル通信
+│       └── web/           # HTTPサーバー
+└── frontend/              # Next.js フロントエンド
+    ├── package.json
+    ├── app/               # App Router
+    └── components/
 ```
 
 ---
@@ -98,4 +109,5 @@ prototype/m1-gnss/
 ## 参照
 
 - [Session 59 技術選定比較](../../sessions/session59/gnss-tool-tech-comparison.md)
+- [Session 61 フロントエンド選定](../../sessions/session61/session-summary.md) — Next.js採用の決定
 - [ADR-004 GNSS評価ツールのアプローチ選択](ADR-004-gnss-tool-approach.md)

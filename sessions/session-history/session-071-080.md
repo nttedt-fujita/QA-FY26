@@ -97,6 +97,36 @@
 
 ---
 
+## Session 75 (2026-03-10)
+
+**概要**: ADR・ドキュメント整理（実装前の立ち止まり）
+
+**実施内容**:
+1. **ADR-005メンテナンス** — Session 61の決定（Next.js）を反映、変更履歴追加
+2. **ADR運用ルール見直し** — 変更時はADR更新を必須化、確認順序を明確化
+3. **CLAUDE.md更新** — ADR一覧に「最終更新」列追加
+4. **Session 74ドキュメント正式配置** — 要件定義・アーキテクチャ・実装計画
+
+**重要な決定**:
+| 項目 | 決定 |
+|------|------|
+| ADR更新タイミング | 決定変更時は同セッション内で更新 |
+| ADR確認順序 | CLAUDE.md → ADR詳細 → セッション履歴 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [15-gnss-tool-requirements.md](../../docs/missions/m1-sensor-evaluation/gnss/15-gnss-tool-requirements.md) | 要件定義（正式配置） |
+| [16-gnss-tool-architecture.md](../../docs/missions/m1-sensor-evaluation/gnss/16-gnss-tool-architecture.md) | アーキテクチャ（正式配置） |
+| [17-gnss-tool-implementation-plan.md](../../docs/missions/m1-sensor-evaluation/gnss/17-gnss-tool-implementation-plan.md) | 実装計画（正式配置） |
+| [session75/session-summary.md](../session75/session-summary.md) | セッションサマリー |
+| [session76/session-plan.md](../session76/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 76）でやること**:
+- UBXパーサー追加実装（MON-VER, SEC-UNIQID）— TDD
+
+---
+
 ## Session 73 (2026-03-10)
 
 **概要**: GNSS評価ツールの要求整理・要求定義作成
