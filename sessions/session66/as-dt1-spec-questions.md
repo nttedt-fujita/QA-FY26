@@ -148,12 +148,23 @@
 
 ### 3.3 情報源
 
+#### 社内参照ファイル（SONY-LiDAR-TestMinutesプロジェクト）
+
+| ファイルパス | 内容 |
+|-------------|------|
+| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/sessions/session-152/custom_AS-DT1_ユーザーズガイド_FW1.00.pdf` | SONY公式仕様書（カスタム抜粋版21ページ） |
+| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/results/reports/002-spec-vs-field-data-analysis.md` | 仕様書×フィールドデータ照合レポート（仕様値転記あり） |
+| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/results/reports/003-roi-spec-comparison.md` | ROI付きデータと仕様値の正式比較 |
+| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/docs/noise-test-docs/manufacturer-questions.md` | メーカーへの技術質問リスト（7項目） |
+| `/home/nttedt-fujita/workspace/SONY-LiDAR-TestMinutes/CLAUDE.md` | プロジェクト概要・座標系定義など |
+
+#### Web情報源
+
 | 情報源 | 内容 |
 |--------|------|
 | [Sony AS-DT1 製品ページ](https://pro.sony/ue_US/products/lidar/as-dt1) | 公式製品情報 |
 | [CNX Software記事](https://www.cnx-software.com/2025/04/23/sony-as-dt1-tiny-industrial-lidar-depth-sensor-can-operate-under-bright-conditions-up-to-100000-lux/) | 技術記事（100000 lx対応情報） |
 | [Newsshooter記事](https://www.newsshooter.com/2025/04/10/sony-as-dt1-the-worlds-smallest-and-lightest-miniature-precision-lidar-depth-sensor/) | 製品発表記事 |
-| AS-DT1 ユーザーズガイド FW1.00 | SONY公式仕様書（社内保有） |
 
 ### 3.4 発売時期
 
