@@ -162,12 +162,13 @@
 
 ## Session 66 (2026-03-10)
 
-**概要**: M3プロトタイプの起動・動作確認（Windows PC / WSL2環境）
+**概要**: M3プロトタイプの起動・動作確認（Windows PC / WSL2環境）+ AS-DT1納入仕様質問リスト作成
 
 **実施内容**:
 1. **M3プロトタイプ起動** — Docker Compose（PostgreSQL + Go Backend）+ Next.jsフロントエンド
 2. **API動作確認** — 部品・ロット・作業者の取得、ダッシュボードAPIを確認
 3. **別PCアクセス設定** — WSL2ポートフォワーディング + ファイアウォール設定
+4. **AS-DT1納入仕様調査** — 既存プロジェクト（SONY-LiDAR-TestMinutes）の情報確認、質問リスト初版作成
 
 **重要な情報**:
 - WSL2 IP: 172.20.171.75（Windows PC: 192.168.100.57）
@@ -178,13 +179,17 @@
 | ファイル | 内容 |
 |----------|------|
 | [session66/session-summary.md](../session66/session-summary.md) | セッションサマリー |
+| [session66/task_sony_lidar_as-dt1.md](../session66/task_sony_lidar_as-dt1.md) | AS-DT1タスク定義 |
+| [session66/as-dt1-spec-questions.md](../session66/as-dt1-spec-questions.md) | AS-DT1質問リスト初版 |
+| [session67/session-plan.md](../session67/session-plan.md) | 次セッション計画 |
 
 **未実施（次セッションへ持ち越し）**:
+- AS-DT1納入仕様: Web調査・エビデンス整備・質問リスト再構成
 - UBXパーサー実装（NAV-STATUS/NAV-DOP/MON-RF）— TDD
 - DevContainer内でのテスト実行確認
 
-**次セッションでやること**:
-- Ubuntu PCでM3プロトタイプの作業を再開
-- UBXパーサー実装（TDD）
+**次セッション（Session 67）でやること**:
+- AS-DT1納入仕様調査の続き（Web調査、エビデンス整備）
+- Ubuntu PCでM3プロトタイプの作業を再開（時間があれば）
 
 ---
