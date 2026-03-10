@@ -45,8 +45,13 @@ netsh advfirewall firewall add rule name="WSL2 M3 Backend" dir=in action=allow p
 ### 4. 解除コマンド（メモ）
 
 ```powershell
+# ポートフォワーディング解除
 netsh interface portproxy delete v4tov4 listenport=3000 listenaddress=0.0.0.0
 netsh interface portproxy delete v4tov4 listenport=8080 listenaddress=0.0.0.0
+
+# ファイアウォールルール削除
+netsh advfirewall firewall delete rule name="WSL2 M3 Frontend"
+netsh advfirewall firewall delete rule name="WSL2 M3 Backend"
 ```
 
 ---
