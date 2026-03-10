@@ -241,3 +241,38 @@
 - CFG-RATE/CFG-PRT の TDD Phase 2〜5（テストシナリオ → テストコード → 実装 → リファクタリング）
 
 ---
+
+## Session 79 (2026-03-10)
+
+**概要**: CFG-RATE/CFG-PRT パーサー実装（TDD Phase 2〜5）
+
+**実施内容**:
+1. **TDD Phase 2** — テストシナリオリスト作成、ヌケモレ確認で3件追加
+2. **設計判断** — timeRef範囲外→Unknown、複数プロトコル同時→サポート、portID≠3→エラー
+3. **TDD Phase 3** — テストコード作成（CFG-RATE 11件、CFG-PRT 13件）
+4. **TDD Phase 4** — 実装（Red → Green）— 全28テストパス
+5. **TDD Phase 5** — リファクタリング（追加の共通化は不要と判断）
+
+**重要な設計判断**:
+| 項目 | 決定 |
+|------|------|
+| timeRef範囲外（6以上） | Unknown として扱う（エラーではない） |
+| 複数プロトコル同時 | サポートする（ビットマスクなので当然） |
+| portID≠3 | UnsupportedPortエラー（USBのみ対応） |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg_rate.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_rate.rs) | CFG-RATEパーサー |
+| [cfg_prt.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_prt.rs) | CFG-PRTパーサー |
+| [session79/cfg-parser-design-decisions.md](../session79/cfg-parser-design-decisions.md) | 設計判断メモ |
+| [session79/session-summary.md](../session79/session-summary.md) | セッションサマリー |
+| [session80/session-plan.md](../session80/session-plan.md) | 次セッション計画 |
+
+**進捗**: Phase 1 Step 1（UBXパーサー）7/7 完了 ✅
+
+**次セッション（Session 80）でやること**:
+- DeviceManager実装（Phase 1 Step 2）
+- ポート列挙、接続管理、状態管理
+
+---
