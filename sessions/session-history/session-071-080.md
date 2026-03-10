@@ -211,3 +211,33 @@
 | [docs/.../13-ubx-parser-test-scenarios.md](../../docs/missions/m1-sensor-evaluation/gnss/13-ubx-parser-test-scenarios.md) | テストシナリオ正式配置 |
 
 ---
+
+## Session 78 (2026-03-10)
+
+**概要**: CFG-RATE/CFG-PRT パーサー実装準備（TDD Phase 1）
+
+**実施内容**:
+1. **仕様抽出** — PDFからCFG-RATE、CFG-PRTの仕様を抽出（pdf_page_extractor.py使用）
+2. **仕様整理** — 抽出データを整理してMarkdownドキュメント化
+3. **TDD Phase 1** — 振る舞い記述（CFG-RATE 10件、CFG-PRT 11件）
+
+**重要な決定**:
+| 項目 | 決定 | 理由 |
+|------|------|------|
+| CFG-PRTのスコープ | USBポート(portID=3)のみ | 受入検査ではUSB接続のみ使用 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session78/cfg-rate-prt-raw.md](../session78/cfg-rate-prt-raw.md) | PDFから抽出した生データ |
+| [session78/cfg-rate-prt-spec.md](../session78/cfg-rate-prt-spec.md) | 仕様書（整理済み） |
+| [session78/cfg-rate-prt-behavior.md](../session78/cfg-rate-prt-behavior.md) | 振る舞い記述（TDD Phase 1） |
+| [session78/session-summary.md](../session78/session-summary.md) | セッションサマリー |
+| [session79/session-plan.md](../session79/session-plan.md) | 次セッション計画 |
+
+**進捗**: Phase 1 Step 1（UBXパーサー）5/7（CFG-RATE/CFG-PRTはPhase 1のみ完了）
+
+**次セッション（Session 79）でやること**:
+- CFG-RATE/CFG-PRT の TDD Phase 2〜5（テストシナリオ → テストコード → 実装 → リファクタリング）
+
+---
