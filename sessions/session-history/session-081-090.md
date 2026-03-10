@@ -64,3 +64,32 @@
 - 24シナリオのテストコード作成と実装
 
 ---
+
+## Session 83 (2026-03-10)
+
+**概要**: InspectionEngine実装開始（TDD Phase 3 一部）
+
+**実施内容**:
+1. **inspectionモジュール作成**
+   - types.rs: 型定義（InspectionItem, InspectionResult, Verdict等）
+   - judge.rs: 結果判定ロジック
+2. **テストコード作成（一部）**
+   - D1-D3: 構造体テスト（7テスト）
+   - C1-C5: 結果判定ロジックテスト（9テスト）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [inspection/mod.rs](../../prototype/m1-gnss/backend/src/inspection/mod.rs) | モジュール定義 |
+| [inspection/types.rs](../../prototype/m1-gnss/backend/src/inspection/types.rs) | 型定義 + D1-D3テスト |
+| [inspection/judge.rs](../../prototype/m1-gnss/backend/src/inspection/judge.rs) | 判定ロジック + C1-C5テスト |
+| [session83/session-summary.md](../session83/session-summary.md) | セッションサマリー |
+
+**進捗**: Phase 1 Step 3（InspectionEngine）TDD Phase 3 一部完了
+
+**次セッション（Session 84）でやること**:
+- lib.rsにinspectionモジュール追加、engine.rs作成
+- 残りテストシナリオ（A1-A4, G1-G5, B1-B2, E1-E2, F1-F3）
+- TDD Phase 4-5（実装→リファクタリング）
+
+---
