@@ -103,3 +103,43 @@
 - 実機対応（FTDI、ボーレート設定）
 
 ---
+
+## Session 84 (2026-03-11)
+
+**概要**: InspectionEngine実装完了（TDD Phase 3-4）
+
+**実施内容**:
+1. **ビルド可能化**
+   - lib.rsにinspectionモジュール追加
+   - engine.rs作成
+2. **TDD Phase 3-4** — 残り16シナリオのテスト＋実装
+   - A1-A4: 検査シーケンス実行（4テスト）
+   - B1-B2: 通信疎通（2テスト）
+   - G1-G5: 各検査項目UBX送信（5テスト）
+   - F1-F3: 異常系（3テスト）
+   - E1-E2: 状態連携 → Phase 1では省略
+
+**テスト結果**: 81テスト全パス（device 22 + ubx 28 + inspection 31）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [inspection/engine.rs](../../prototype/m1-gnss/backend/src/inspection/engine.rs) | InspectionEngine本体 + テスト |
+| [session84/session-summary.md](../session84/session-summary.md) | セッションサマリー |
+| [session85/session-plan.md](../session85/session-plan.md) | 次セッション計画 |
+
+**進捗**: Phase 1 Step 3（InspectionEngine）完了 ✅
+
+**実機テストまでのロードマップ**:
+```
+Session 85: DB Repository実装
+Session 86-87: 基本UI実装
+Session 88: FTDI対応＋ボーレート設定
+Session 89: Phase 1 統合テスト（実機）T1-1〜T1-7
+```
+
+**次セッション（Session 85）でやること**:
+- DB Repository実装（Phase 1 Step 4）
+- FTDI対応方針決定
+
+---
