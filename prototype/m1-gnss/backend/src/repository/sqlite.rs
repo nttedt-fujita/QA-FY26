@@ -377,6 +377,29 @@ impl SqliteRepository {
         Ok(result)
     }
 
+    /// 全屋内検査を取得（最新順）
+    pub fn get_all_inspections(&self) -> Result<Vec<IndoorInspection>, RepositoryError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT id, device_id, inspected_at, overall_result
+             FROM indoor_inspections ORDER BY inspected_at DESC"
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        let rows = stmt.query_map([], |row| {
+            Ok(IndoorInspection {
+                id: Some(row.get(0)?),
+                device_id: row.get(1)?,
+                inspected_at: row.get(2)?,
+                overall_result: row.get(3)?,
+            })
+        }).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        let mut result = Vec::new();
+        for row in rows {
+            result.push(row.map_err(|e| RepositoryError::Sql(e.to_string()))?);
+        }
+        Ok(result)
+    }
+
     /// 屋内検査の総合判定を更新
     pub fn update_inspection_result(&self, inspection_id: i64, result: &str) -> Result<(), RepositoryError> {
         let affected = self.conn.execute(
