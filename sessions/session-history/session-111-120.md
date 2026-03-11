@@ -102,3 +102,39 @@
 - 屋内/屋外検査ページ分離
 
 ---
+
+## Session 114 (2026-03-11)
+
+**概要**: ネットワークRTK（NTRIP）調査
+
+**実施内容**:
+1. **NTRIPプロトコル調査（1次情報）**
+   - ESA公式ドキュメント（NtripDocumentation.pdf）を取得・分析
+   - NTRIP Version 1.0 仕様を抽出
+   - Rev1 vs Rev2 の違いを整理
+2. **ZED-F9P RTK設定調査**
+   - Integration Manual からRTK configuration (Page 16-24) を抽出
+   - RTCMデータの送信方法確認（シリアルに流すだけでOK）
+3. **Rustライブラリ調査・身元確認**
+   - nav-solutions/ntrip-client を推奨ライブラリとして選定
+   - 組織の信頼性確認（GNSS専門、27リポジトリ、活発）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session114/ntrip-research-summary.md](../session114/ntrip-research-summary.md) | 調査結果まとめ |
+| [session114/ntrip-protocol-spec.md](../session114/ntrip-protocol-spec.md) | NTRIP仕様抽出 |
+| [session114/rtk-configuration.md](../session114/rtk-configuration.md) | ZED-F9P RTK設定 |
+| [session114/integration-manual-toc.md](../session114/integration-manual-toc.md) | Integration Manual 目次 |
+| [session114/session-summary.md](../session114/session-summary.md) | セッションサマリー |
+| [session115/session-plan.md](../session115/session-plan.md) | 次セッション計画 |
+
+**決定事項**:
+- NTRIPクライアント機能をアプリに追加する方針
+- nav-solutions/ntrip-client を使用
+- NTRIP設定UI（5項目）が必要
+
+**次セッション（Session 115）でやること**:
+- NTRIP機能実装開始（クレート追加、API設計、UI）
+
+---
