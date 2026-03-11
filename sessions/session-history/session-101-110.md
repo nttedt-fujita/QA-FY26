@@ -119,12 +119,16 @@
 | manager.rs | ログ強化、wait_for_ack追加 |
 | ubx/mod.rs | ackモジュール追加 |
 
-**実機テスト結果**: 1回目 5項目全てPass
+**実機テスト結果**: 100回以上テスト、99%以上Pass
 - ACK-ACK受信成功 → NMEA OFF適用確認
-- drain_bufferで読み捨てデータなし
+- 1回だけFwVersionエラー（NMEA ONのACK-ACKが遅れて届いた）
+
+**発見した問題**:
+- NMEA ON送信後にACK-ACKを待っていない
+- 次の検査でACK-ACKがConnectivityの応答として処理される
+- 応答が1つずつズレてパースエラー
 
 **次セッション（Session 104）でやること**:
-- 複数回テストして安定性確認
-- エラー発生時のログ分析
+- NMEA ON送信後もACK-ACKを待つ修正
 
 ---
