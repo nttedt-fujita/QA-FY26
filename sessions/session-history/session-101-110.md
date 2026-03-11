@@ -132,3 +132,39 @@
 - NMEA ON送信後もACK-ACKを待つ修正
 
 ---
+
+## Session 104 (2026-03-11)
+
+**概要**: NMEA ON後のACK待ち追加（残り1%エラー対策）
+
+**実施内容**:
+1. **engine.rs 修正**
+   - NMEA ON送信後に `wait_for_ack()` を追加
+   - 500msタイムアウトでACK-ACKを待機
+   - 次回検査でACK-ACKが遅れて届く問題を解消
+2. **テスト修正**
+   - `all_pass_responses()` にNMEA ON ACK-ACK追加
+   - 関連テスト（B1, F2）にもACK応答追加
+3. **連続テストツール追加**
+   - `make stress-test` で100回連続テスト
+   - エラー時は `/tmp/gnss-stress-test/` にログ保存
+
+**テスト結果**: 159テスト全パス
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| engine.rs | NMEA ON後ACK待ち追加、テスト修正 |
+| api.mk | stress-test ターゲット追加 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session104/session-summary.md](../session104/session-summary.md) | セッションサマリー |
+| [session105/session-plan.md](../session105/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 105）でやること**:
+- 実機テスト結果確認（100回連続テスト0%エラー）
+- 屋外検査項目の調査・設計
+
+---
