@@ -1,0 +1,84 @@
+# セッション履歴: Session 101〜110
+
+## Session 101 (2026-03-11)
+
+**概要**: UBX通信タイミング問題の対策実装（案A: B5 62同期）
+
+**実施内容**:
+1. **案A: receive_ubx で B5 62 同期を実装**
+   - 受信データから `B5 62` を探す同期処理を追加
+   - `extract_ubx_frame` ヘルパー関数を追加
+   - NMEAが先に届いてもUBXフレームを正しく読み取れるようになった
+2. **テスト追加（+6テスト）**
+   - C5-1〜C5-6: UBXフレーム同期テスト
+3. **実機テスト**
+   - 改善を確認（4/5項目Pass）
+   - ただしタイミング依存で失敗するケースあり
+
+**テスト結果**: 144テスト全パス（138 → 144）
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| [src/device/manager.rs](../../prototype/m1-gnss/backend/src/device/manager.rs) | receive_ubx B5 62同期、extract_ubx_frame追加、テスト+6 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session101/session-summary.md](../session101/session-summary.md) | セッションサマリー |
+| [session102/session-plan.md](../session102/session-plan.md) | 次セッション計画 |
+
+**残課題**:
+- 案Bの実装（検査中のNMEA OFF/ON）
+
+**次セッション（Session 102）でやること**:
+- 案B: cfg_valset.rs 作成（NMEA OFF/ONメッセージ生成）
+- 案B: engine.rs で検査開始/終了時に NMEA OFF/ON
+- 実機テストで効果確認（5項目安定Pass）
+
+---
+
+## Session 102 (2026-03-11)
+
+**概要**: UBX通信タイミング問題の対策実装（案B: NMEA OFF/ON）
+
+**実施内容**:
+1. **cfg_valset.rs 作成**
+   - CFG-VALSETメッセージ生成モジュール新規作成
+   - `set_uart1_nmea_output(enable, layer)` 関数実装
+   - テスト5件追加
+2. **engine.rs でNMEA制御追加**
+   - run()冒頭でNMEA OFF、最後でNMEA ON
+   - CFG-VALSET送信後に50ms待機
+3. **テスト修正・追加**
+   - G1-G5テスト修正（NMEA制御メッセージを考慮）
+   - H1-H3テスト追加（NMEA制御検証）
+4. **実機テスト**
+   - 効果は限定的（エラー率あまり変わらず）
+   - 通信疎通/FWバージョンでエラー発生
+
+**テスト結果**: 152テスト全パス（144 → 152、+8テスト）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg_valset.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_valset.rs) | CFG-VALSETメッセージ生成 |
+| [session102/session-summary.md](../session102/session-summary.md) | セッションサマリー |
+| [session103/session-plan.md](../session103/session-plan.md) | 次セッション計画 |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| engine.rs | NMEA OFF/ON制御追加、テスト修正・追加 |
+| ubx/mod.rs | cfg_valsetモジュール追加 |
+
+**残課題**:
+- タイミング問題が根本解決していない
+- CFG-VALSETのACK確認、または待機時間調整が必要
+
+**次セッション（Session 103）でやること**:
+- タイミング問題の原因をさらに調査
+- ACK確認の実装、または待機時間調整
+- 安定して5項目Passする状態を目指す
+
+---
