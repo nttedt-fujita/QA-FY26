@@ -23,6 +23,9 @@ serde_json = "1"
 log = "0.4"
 env_logger = "0.11"
 
+# URLエンコーディング
+urlencoding = "2"
+
 # バイナリ解析用
 bytes = "1"
 

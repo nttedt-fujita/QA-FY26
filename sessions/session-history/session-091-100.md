@@ -71,3 +71,39 @@
 - 装置接続画面の実装
 
 ---
+
+## Session 93 (2026-03-11)
+
+**概要**: フロントエンド/バックエンド統合開始
+
+**実施内容**:
+1. **モックアップ色調調整**
+   - 画面2（装置接続）: 緑 → 青 `#5b9bd5`
+   - 画面3（検査）: 黄 → 青 `#2e75b6`
+2. **Next.jsプロジェクト作成**
+   - `prototype/m1-gnss/frontend/` に配置
+   - App Router + TypeScript + Tailwind CSS
+3. **Actix-web APIエンドポイント実装**
+   - `GET /api/devices`, `POST .../connect`, `POST .../disconnect`
+   - `SerialPort`トレイトに`Send`追加
+4. **装置接続画面の実装**
+   - `/devices` ページ、`DeviceCard` コンポーネント
+
+**テスト結果**: 138テスト全パス
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [src/web/mod.rs](../../prototype/m1-gnss/backend/src/web/mod.rs) | webモジュール定義 |
+| [src/web/device_api.rs](../../prototype/m1-gnss/backend/src/web/device_api.rs) | 装置管理API |
+| [ADR-008](../../docs/adr/m1/ADR-008-api-test-strategy.md) | APIテスト戦略 |
+| [src/lib/api.ts](../../prototype/m1-gnss/frontend/src/lib/api.ts) | API呼び出しモジュール |
+| [src/components/DeviceCard.tsx](../../prototype/m1-gnss/frontend/src/components/DeviceCard.tsx) | 装置カード |
+| [src/app/devices/page.tsx](../../prototype/m1-gnss/frontend/src/app/devices/page.tsx) | 装置接続画面 |
+
+**次セッション（Session 94）でやること**:
+- CORS設定追加
+- 統合動作確認
+- ロット管理画面の実装
+
+---

@@ -5,3 +5,4 @@ pub mod inspection;
 pub mod repository;
 pub mod service;
 pub mod ubx;
+pub mod web;
