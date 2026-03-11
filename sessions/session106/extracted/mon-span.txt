@@ -1,0 +1,138 @@
+
+============================================================
+Page 134
+============================================================
+
+u-blox F9 HPG 1.32 - Interface Description
+bit 0   U:1
+awake
+-
+-
+not in backup mode
+3.14.12 UBX-MON-SPAN (0x0a 0x31)
+3.14.12.1 Signal characteristics
+Message
+UBX-MON-SPAN
+Signal characteristics
+Type
+Periodic/polled
+Comment
+This message is to be used as a basic spectrum analyzer, where it displays one spectrum for each of the
+receiver's existing RF paths. The spectrum is conveyed with the following parameters: The frequency span
+in Hz, the frequency bin resolution in Hz, the center frequency in Hz, and 256 bins with amplitude data.
+Additionally, in order to give further insight on the signal captured by the receiver, the current gain of the
+internal programmable gain ampliﬁer (PGA) is provided.
+This message gives information for comparative analysis rather than absolute and precise spectrum
+overview. Users should not expect highly accurate spectrum amplitude.
+Note that the PGA gain is not included in the spectrum data but is available as a separate ﬁeld. Neither the
+spectrum, nor the PGA gain considers the internal ﬁxed LNA gain or an external third-party LNA.
+The center frequency at each bin, assuming a zero-based bin count, can be computed as
+f(i) = center + span * (i - 127) / 256
+Header
+Class
+ID
+Length (Bytes)
+Payload
+Checksum
+Message
+structure
+0xb5 0x62
+0x0a
+0x31
+4 + numRfBlocks·272
+see below
+CK_A CK_B
+Payload description:
+Byte offset
+Type
+Name
+Scale
+Unit
+Description
+0
+U1
+version
+-
+-
+Message version (0x00 for this version)
+1
+U1
+numRfBlocks
+-
+-
+Number of RF blocks included
+2
+U1[2]
+reserved0
+-
+-
+Reserved
+Start of repeated group (numRfBlocks times)
+4 + n·272
+U1[256]
+spectrum
+-
+dB
+Spectrum data (number of points = span/res)
+260 + n·272
+U4
+span
+-
+Hz
+Spectrum span
+264 + n·272
+U4
+res
+-
+Hz
+Resolution of the spectrum
+268 + n·272
+U4
+center
+-
+Hz
+Center of spectrum span
+272 + n·272
+U1
+pga
+-
+dB
+Programmable gain ampliﬁer
+273 + n·272
+U1[3]
+reserved1
+-
+-
+Reserved
+End of repeated group (numRfBlocks times)
+3.14.13 UBX-MON-SYS (0x0a 0x39)
+3.14.13.1 Current system performance information
+Message
+UBX-MON-SYS
+Current system performance information
+Type
+Periodic/polled
+Comment
+This message contains operationally relevant system information for monitoring purposes.
+cpuLoadMax value is only valid, if 1 second output frequency is set.
+Detailed information about ioUsage/ioUsageMax are available in UBX-MON-COMMS message.
+tempValue has an accuracy of +/- 2 deg.
+Header
+Class
+ID
+Length (Bytes)
+Payload
+Checksum
+Message
+structure
+0xb5 0x62
+0x0a
+0x39
+24
+see below
+CK_A CK_B
+UBX-22008968 - R01
+ 
+3 UBX protocol
+Page 134 of 305
+C1-Public
