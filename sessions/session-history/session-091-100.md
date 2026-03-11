@@ -182,3 +182,39 @@
 - InspectionServiceとの統合
 
 ---
+
+## Session 96 (2026-03-11)
+
+**概要**: 検査API実装
+
+**実施内容**:
+1. **検査API実装**
+   - `POST /api/inspections` - 検査実行（接続中装置）
+   - `GET /api/inspections` - 検査履歴一覧取得
+2. **リポジトリ拡張**
+   - `get_all_inspections()` メソッド追加
+3. **InspectionServiceとの統合**
+   - APIハンドラーからInspectionServiceを呼び出し
+
+**テスト結果**: 138テスト全パス
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [src/web/inspection_api.rs](../../prototype/m1-gnss/backend/src/web/inspection_api.rs) | 検査API（新規） |
+| [session96/session-summary.md](../session96/session-summary.md) | セッションサマリー |
+| [session97/session-plan.md](../session97/session-plan.md) | 次セッション計画 |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| src/web/mod.rs | inspection_apiモジュール追加 |
+| src/repository/sqlite.rs | get_all_inspections追加 |
+| src/main.rs | inspection_api::configure追加 |
+
+**次セッション（Session 97）でやること**:
+- フロントエンド（ロット画面）実装
+- ロット一覧/詳細/編集フォーム
+- API連携テスト
+
+---
