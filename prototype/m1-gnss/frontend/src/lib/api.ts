@@ -258,3 +258,49 @@ export async function listInspections(): Promise<InspectionListResponse> {
   }
   return res.json();
 }
+
+// ===========================================
+// NAV-SIG API（衛星信号情報）
+// ===========================================
+
+/**
+ * 衛星信号情報
+ */
+export interface NavSignal {
+  gnss_id: number;     // 0=GPS, 1=SBAS, 2=Galileo, 3=BeiDou, 5=QZSS, 6=GLONASS
+  sv_id: number;       // 衛星番号
+  sig_id: number;      // 信号識別子
+  cno: number;         // C/N0 [dBHz]
+  quality_ind: number; // 品質指標（0-7）
+  is_l1: boolean;      // L1帯か
+  is_l2: boolean;      // L2帯か
+}
+
+/**
+ * 信号統計情報
+ */
+export interface SignalStats {
+  gps_visible_count: number;       // GPS L1可視衛星数
+  gps_l2_reception_count: number;  // GPS L2受信中衛星数
+  gps_l2_reception_rate: number;   // L2受信率（0.0〜1.0）
+}
+
+/**
+ * NAV-SIGレスポンス
+ */
+export interface NavSigResponse {
+  signals: NavSignal[];
+  stats: SignalStats;
+}
+
+/**
+ * NAV-SIG（衛星信号情報）を取得
+ */
+export async function getNavSig(): Promise<NavSigResponse> {
+  const res = await fetch(`${API_BASE}/api/nav-sig`);
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
