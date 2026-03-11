@@ -359,8 +359,15 @@ mod tests {
         build_ubx_frame(0x06, 0x00, &payload)
     }
 
+    /// ACK-ACK応答を生成（CFG-VALSET用）
+    fn ack_ack_response(target_class: u8, target_id: u8) -> Vec<u8> {
+        // ACK-ACK: class=0x05, id=0x01, payload=[target_class, target_id]
+        build_ubx_frame(0x05, 0x01, &[target_class, target_id])
+    }
+
     fn all_pass_responses() -> Vec<Vec<u8>> {
         vec![
+            ack_ack_response(0x06, 0x8A), // NMEA OFF ACK-ACK
             nav_status_response(),
             mon_ver_response("HPG 1.32"),
             sec_uniqid_response(&[0xAB, 0xCD, 0xEF, 0x12, 0x34]),
@@ -450,6 +457,7 @@ mod tests {
         let provider = MockProvider::new()
             .with_ports(vec![f9p_port("/dev/ttyACM0")])
             .with_responses(vec![
+                ack_ack_response(0x06, 0x8A), // NMEA OFF ACK-ACK
                 nav_status_response(),
                 mon_ver_response("HPG 1.32"),
                 // 3項目目以降は応答なし → タイムアウト

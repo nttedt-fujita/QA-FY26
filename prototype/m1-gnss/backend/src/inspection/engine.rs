@@ -89,14 +89,26 @@ impl InspectionEngine {
         // TODO: 状態をInspectingに変更
 
         // NMEA出力をOFF（検査中のNMEA混入を防ぐ）
-        info!("NMEA出力をOFFにします");
         let nmea_off_msg = set_uart1_nmea_output(false, Layer::Ram);
+        let hex_str: String = nmea_off_msg.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
+        info!("[NMEA制御] OFF送信開始: {} ({}バイト)", hex_str, nmea_off_msg.len());
+
         if let Err(e) = manager.send_ubx(&nmea_off_msg) {
-            warn!("NMEA OFF送信エラー: {} （検査は続行）", e);
+            warn!("[NMEA制御] OFF送信エラー: {} （検査は続行）", e);
         } else {
-            // CFG-VALSETの処理時間を待つ
-            std::thread::sleep(std::time::Duration::from_millis(50));
-            debug!("NMEA OFF 送信完了");
+            // ACK-ACKを待つ（CFG-VALSETが完了したことを確認）
+            debug!("[NMEA制御] ACK待機開始（500ms timeout）");
+            match manager.wait_for_ack(0x06, 0x8A, std::time::Duration::from_millis(500)) {
+                Ok(true) => {
+                    info!("[NMEA制御] ACK-ACK受信、NMEA OFF適用完了");
+                }
+                Ok(false) => {
+                    warn!("[NMEA制御] ACK-NAK受信（設定失敗）、検査は続行");
+                }
+                Err(e) => {
+                    warn!("[NMEA制御] ACK待機エラー: {} （検査は続行）", e);
+                }
+            }
         }
 
         let mut results = Vec::new();
@@ -127,10 +139,12 @@ impl InspectionEngine {
         manager: &mut DeviceManager<P>,
         item: &InspectionItem,
     ) -> InspectionResult {
-        info!("=== 検査項目開始: {:?} ===", item.item_type);
+        info!("========================================");
+        info!("[検査] {:?} 開始", item.item_type);
+        info!("========================================");
 
         // 受信バッファをクリア（前回の応答の残りを除去）
-        debug!("[{:?}] drain_buffer 開始", item.item_type);
+        debug!("[{:?}] Step1: drain_buffer 開始", item.item_type);
         if let Err(e) = manager.drain_buffer() {
             warn!("[{:?}] drain_buffer エラー: {}", item.item_type, e);
             return InspectionResult::new(
@@ -138,12 +152,12 @@ impl InspectionEngine {
                 Verdict::Error(format!("Drain error: {}", e)),
             );
         }
-        debug!("[{:?}] drain_buffer 完了", item.item_type);
+        debug!("[{:?}] Step1: drain_buffer 完了", item.item_type);
 
         // UBXメッセージを送信
         let poll_message = self.create_poll_message(&item.item_type);
         let hex_str: String = poll_message.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
-        debug!("[{:?}] 送信データ ({}バイト): {}", item.item_type, poll_message.len(), hex_str);
+        info!("[{:?}] Step2: poll送信 ({}バイト): {}", item.item_type, poll_message.len(), hex_str);
 
         if let Err(e) = manager.send_ubx(&poll_message) {
             warn!("[{:?}] send_ubx エラー: {}", item.item_type, e);
@@ -152,18 +166,34 @@ impl InspectionEngine {
                 Verdict::Error(format!("Send error: {}", e)),
             );
         }
-        debug!("[{:?}] send_ubx 完了", item.item_type);
+        debug!("[{:?}] Step2: poll送信 完了", item.item_type);
 
         // 応答が届くまで少し待機（装置の処理時間を考慮）
-        debug!("[{:?}] 50ms 待機開始", item.item_type);
+        debug!("[{:?}] Step3: 50ms待機開始", item.item_type);
         std::thread::sleep(std::time::Duration::from_millis(50));
-        debug!("[{:?}] 待機完了、receive_ubx開始 (timeout={:?})", item.item_type, item.timeout);
+        info!("[{:?}] Step3: 待機完了、receive_ubx開始 (timeout={:?})", item.item_type, item.timeout);
 
         // 応答を受信
         match manager.receive_ubx(item.timeout) {
             Ok(response) => {
                 let hex_str: String = response.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
-                info!("[{:?}] 受信データ ({}バイト): {}", item.item_type, response.len(), hex_str);
+                info!("[{:?}] Step4: 受信成功 ({}バイト): {}", item.item_type, response.len(), hex_str);
+
+                // UBXフレームの詳細解析（仮説検証用）
+                if response.len() >= 4 {
+                    let class = response[2];
+                    let id = response[3];
+                    debug!("[{:?}] UBX Class=0x{:02X}, ID=0x{:02X}", item.item_type, class, id);
+
+                    // ACK/NAKのチェック
+                    if class == 0x05 {
+                        if id == 0x01 {
+                            debug!("[{:?}] *** ACK-ACK 受信 ***", item.item_type);
+                        } else if id == 0x00 {
+                            warn!("[{:?}] *** ACK-NAK 受信 ***", item.item_type);
+                        }
+                    }
+                }
 
                 // パースして値を取得
                 let (actual_value, error) = self.parse_response(&item.item_type, &response);
@@ -174,21 +204,24 @@ impl InspectionEngine {
                     actual_value.as_deref(),
                     error.as_deref(),
                 );
-                info!("[{:?}] 判定結果: {:?}", item.item_type, verdict);
+                info!("[{:?}] Step5: 判定結果: {:?}", item.item_type, verdict);
+                info!("----------------------------------------");
 
                 InspectionResult::new(item.item_type.clone(), verdict)
                     .with_expected(item.expected.clone())
                     .with_actual(actual_value.unwrap_or_default())
             }
             Err(DeviceManagerError::Timeout) => {
-                warn!("[{:?}] タイムアウト発生", item.item_type);
+                warn!("[{:?}] Step4: タイムアウト発生", item.item_type);
+                info!("----------------------------------------");
                 InspectionResult::new(
                     item.item_type.clone(),
                     Verdict::Error("Timeout".to_string()),
                 )
             }
             Err(e) => {
-                warn!("[{:?}] receive_ubx エラー: {}", item.item_type, e);
+                warn!("[{:?}] Step4: receive_ubx エラー: {}", item.item_type, e);
+                info!("----------------------------------------");
                 InspectionResult::new(
                     item.item_type.clone(),
                     Verdict::Error(format!("{}", e)),
@@ -544,14 +577,21 @@ mod tests {
         valid_ubx_response(0x06, 0x00, &payload)
     }
 
-    /// 5項目すべての正常応答を生成
+    /// ACK-ACK応答を生成（CFG-VALSET用）
+    fn ack_ack_response(target_class: u8, target_id: u8) -> Vec<u8> {
+        // ACK-ACK: class=0x05, id=0x01, payload=[target_class, target_id]
+        valid_ubx_response(0x05, 0x01, &[target_class, target_id])
+    }
+
+    /// 5項目すべての正常応答を生成（NMEA OFF のACK応答を含む）
     fn all_pass_responses() -> Vec<Vec<u8>> {
         vec![
-            valid_ubx_response(0x01, 0x03, &[0u8; 16]), // Connectivity
-            mon_ver_response("HPG 1.32"),               // FwVersion
+            ack_ack_response(0x06, 0x8A),                 // NMEA OFF ACK-ACK
+            valid_ubx_response(0x01, 0x03, &[0u8; 16]),   // Connectivity
+            mon_ver_response("HPG 1.32"),                 // FwVersion
             sec_uniqid_response(&[0xAB, 0xCD, 0xEF, 0x12, 0x34]), // SerialNumber
-            cfg_rate_response(100),                      // OutputRate: 100ms
-            cfg_prt_response(115200),                    // PortConfig: 115200bps
+            cfg_rate_response(100),                       // OutputRate: 100ms
+            cfg_prt_response(115200),                     // PortConfig: 115200bps
         ]
     }
 
@@ -658,7 +698,10 @@ mod tests {
 
         let provider = MockProvider::new()
             .with_ports(vec![f9p_port("/dev/ttyACM0")])
-            .with_responses(vec![valid_ubx_response(0x01, 0x03, &[0u8; 16])]);
+            .with_responses(vec![
+                ack_ack_response(0x06, 0x8A),             // NMEA OFF ACK-ACK
+                valid_ubx_response(0x01, 0x03, &[0u8; 16]),
+            ]);
 
         let mut manager = DeviceManager::new(provider);
         manager.list_devices().unwrap();
@@ -825,15 +868,16 @@ mod tests {
     /// F1: 切断で中断、部分結果を返す
     #[test]
     fn test_f1_disconnect_returns_partial_results() {
-        // 3項目目で切断をシミュレート
+        // 4項目目で切断をシミュレート（ACK + 3項目 = 4回目で切断）
         let provider = MockProvider::new()
             .with_ports(vec![f9p_port("/dev/ttyACM0")])
             .with_responses(vec![
+                ack_ack_response(0x06, 0x8A),             // NMEA OFF ACK-ACK
                 valid_ubx_response(0x01, 0x03, &[0u8; 16]), // Connectivity: OK
                 mon_ver_response("HPG 1.32"),               // FwVersion: OK
                 // 3項目目以降は切断エラー
             ])
-            .disconnect_at(3); // 3回目のreadで切断
+            .disconnect_at(4); // 4回目のreadで切断
 
         let mut manager = DeviceManager::new(provider);
         manager.list_devices().unwrap();
@@ -867,6 +911,7 @@ mod tests {
         let provider = MockProvider::new()
             .with_ports(vec![f9p_port("/dev/ttyACM0")])
             .with_responses(vec![
+                ack_ack_response(0x06, 0x8A),             // NMEA OFF ACK-ACK
                 valid_ubx_response(0x01, 0x03, &[0u8; 16]), // Pass
                 mon_ver_response("HPG 1.32"),               // Fail（期待値と不一致）
                 sec_uniqid_response(&[0xAB, 0xCD, 0xEF, 0x12, 0x34]), // Pass
@@ -902,6 +947,7 @@ mod tests {
         let provider = MockProvider::new()
             .with_ports(vec![f9p_port("/dev/ttyACM0")])
             .with_responses(vec![
+                ack_ack_response(0x06, 0x8A),             // NMEA OFF ACK-ACK
                 valid_ubx_response(0x01, 0x03, &[0u8; 16]), // Pass
                 mon_ver_response("HPG 1.32"),               // Fail
                 // 3項目目: 応答なし → タイムアウト
