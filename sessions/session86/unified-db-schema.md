@@ -183,12 +183,42 @@ lots（ロット）
 
 ---
 
-## 5. 質問
+## 5. 未反映の議論内容（Session 87で要検討）
+
+**IMPORTANT**: 以下の議論内容がDB設計に十分反映されていない。
+
+| 議論内容 | 現状 | 要検討 |
+|----------|------|--------|
+| FWバージョンの多数派・はずれ値比較 | inspection_item_resultsに保存 | ロット単位で集計する設計が不明確 |
+| FW期待値はロットにない（意図的） | lotsにexpected_fw_versionなし | コメントで意図を説明すべき |
+| 装置のFWバージョンを直接見れる | devicesにfw_versionカラムなし | 追加するか、クエリで対応するか |
+| 検査項目5つ | item_nameに入る | 具体的なitem_name値の定義が必要 |
+
+### 検討オプション
+
+**FWバージョンの扱い**:
+1. **devicesにfw_versionカラム追加** — 最新FWを直接参照できる
+2. **クエリで対応** — inspection_item_resultsからitem_name='fw'を集計
+
+**item_nameの定義**:
+```
+communication — 通信疎通
+serial — シリアル番号
+fw — FWバージョン
+rate — 出力レート
+port — ポート設定
+```
+
+---
+
+## 6. 質問
 
 1. この設計で進めてよいか？
 2. Session 63のスキーマは破棄して新しいものに置き換える？
 3. 既存の計測データテーブル（nav_pvt等）の`session_id`を`measurement_id`にリネームする？
+4. **FWバージョンはdevicesに持たせるか、クエリで対応するか？**
 
 ---
 
 *作成: 2026-03-11 Session 86*
+*更新: 2026-03-11 Session 86終了時 — 未反映の議論内容を追記*
