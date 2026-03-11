@@ -79,8 +79,9 @@
 
 ## 実機テスト結果
 
-**1回目: 5項目全てPass**
+**100回以上テスト: 99%以上Pass、1回だけFwVersionエラー**
 
+### 成功時のログ
 ```
 [NMEA制御] ACK-ACK受信、NMEA OFF適用完了
 [Connectivity] Step5: 判定結果: Pass
@@ -90,18 +91,36 @@
 [PortConfig] Step5: 判定結果: Pass
 ```
 
-**検証結果**:
-- ACK確認が効いている（ACK-ACK受信後に検査開始）
-- NMEA OFFが適用された状態で検査できている
-- drain_bufferで読み捨てデータなし（NMEA混入なし）
+### 失敗時のログ分析（1/100以上）
+
+**現象**: FwVersionで `ParseError: MON-VER too short`
+
+**ログ詳細**:
+```
+[Connectivity] Step4: 受信成功 (10バイト): B5 62 05 01 02 00 06 8A 98 C1
+[Connectivity] UBX Class=0x05, ID=0x01
+[Connectivity] *** ACK-ACK 受信 ***   ← NAV-STATUSではなくACK-ACK！
+
+[FwVersion] Step4: 受信成功 (24バイト): B5 62 01 03 10 00 ...
+[FwVersion] UBX Class=0x01, ID=0x03   ← MON-VERではなくNAV-STATUS！
+[FwVersion] パース結果: error=Some("ParseError: MON-VER too short")
+```
+
+**原因**: 前回検査の **NMEA ON** のACK-ACKが遅れて届いた
+
+**連鎖的な影響**:
+- Connectivity → NMEA ONのACK-ACK（1つズレ）
+- FwVersion → NAV-STATUS（1つズレ）→ パースエラー
+
+**根本原因**: NMEA ON送信後にACK-ACKを待っていない
 
 ---
 
 ## 次のステップ（Session 104）
 
-複数回テストして安定性を確認:
-- 連続実行で再現性を確認
-- エラーが発生する場合はログ分析
+**修正案**: NMEA ON送信後もACK-ACKを待つ
+- 現在: `send_ubx(nmea_on_msg)` で終了
+- 修正後: `send_ubx(nmea_on_msg) → wait_for_ack()`
 
 ---
 
