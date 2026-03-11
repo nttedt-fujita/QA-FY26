@@ -151,6 +151,8 @@
 
 **テスト結果**: 159テスト全パス
 
+**実機テスト結果**: 200回連続テスト Pass（0%エラー）
+
 **変更ファイル**:
 | ファイル | 変更内容 |
 |----------|----------|
@@ -164,7 +166,34 @@
 | [session105/session-plan.md](../session105/session-plan.md) | 次セッション計画 |
 
 **次セッション（Session 105）でやること**:
-- 実機テスト結果確認（100回連続テスト0%エラー）
 - 屋外検査項目の調査・設計
+
+---
+
+## Session 105 (2026-03-11)
+
+**概要**: 屋外検査項目の調査・要求整理
+
+**実施内容**:
+1. **セッション履歴の修正**
+   - Session 104の「200回連続テストPass」記載漏れを修正
+2. **過去資料の確認**
+   - 元Excel（小峰無線GPS確認.xlsx）で確認していた情報を整理
+   - 07-cross-sheet-findings.md、03-spectrum-analyze.md等を確認
+3. **発見した問題**
+   - NAV-SAT vs NAV-SIG: 07-cross-sheet-findings.mdでは**NAV-SIG**推奨
+   - MON-SPANの仕様未確認（128MHz/256点の取得方法不明）
+   - 要求整理が先 — 合格基準・ヒアリング結果を確認してから設計すべき
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session105/session-summary.md](../session105/session-summary.md) | セッションサマリー |
+| [session105/outdoor-inspection-design.md](../session105/outdoor-inspection-design.md) | 屋外検査設計（ドラフト、不完全） |
+| [session106/session-plan.md](../session106/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 106）でやること**:
+- u-blox仕様書確認（MON-SPAN p.134）
+- 屋外検査の要求整理（What）
 
 ---
