@@ -291,25 +291,24 @@ mod tests {
     use super::*;
     use crate::device::filter::PortInfo;
     use crate::inspection::types::ExpectedValue;
-    use std::cell::RefCell;
     use std::collections::VecDeque;
     use std::io;
-    use std::rc::Rc;
+    use std::sync::{Arc, Mutex};
     use std::time::Duration;
 
     // ===========================================
-    // モック実装（DeviceManagerと同じ）
+    // モック実装（DeviceManagerと同じ、Send対応）
     // ===========================================
 
     use crate::device::manager::SerialPort;
 
-    /// モックシリアルポート
+    /// モックシリアルポート（Send対応）
     struct MockSerialPort {
-        write_data: Rc<RefCell<Vec<u8>>>,
-        read_queue: Rc<RefCell<VecDeque<Vec<u8>>>>,
+        write_data: Arc<Mutex<Vec<u8>>>,
+        read_queue: Arc<Mutex<VecDeque<Vec<u8>>>>,
         should_timeout: bool,
         should_disconnect: bool,
-        call_count: Rc<RefCell<usize>>,
+        call_count: Arc<Mutex<usize>>,
         disconnect_at: Option<usize>,
     }
 
@@ -318,14 +317,14 @@ mod tests {
             if self.should_disconnect {
                 return Err(io::Error::new(io::ErrorKind::BrokenPipe, "disconnected"));
             }
-            self.write_data.borrow_mut().extend_from_slice(data);
+            self.write_data.lock().unwrap().extend_from_slice(data);
             Ok(data.len())
         }
 
         fn read(&mut self, buf: &mut [u8]) -> Result<usize, io::Error> {
             // 切断チェック
             {
-                let mut count = self.call_count.borrow_mut();
+                let mut count = self.call_count.lock().unwrap();
                 *count += 1;
                 if let Some(disconnect_at) = self.disconnect_at {
                     if *count >= disconnect_at {
@@ -338,7 +337,7 @@ mod tests {
                 return Err(io::Error::new(io::ErrorKind::TimedOut, "timeout"));
             }
 
-            let mut queue = self.read_queue.borrow_mut();
+            let mut queue = self.read_queue.lock().unwrap();
             if let Some(data) = queue.pop_front() {
                 let len = buf.len().min(data.len());
                 buf[..len].copy_from_slice(&data[..len]);
@@ -353,14 +352,14 @@ mod tests {
         }
     }
 
-    /// モックProvider
+    /// モックProvider（Send対応）
     struct MockProvider {
         ports: Vec<PortInfo>,
-        write_data: Rc<RefCell<Vec<u8>>>,
-        read_queue: Rc<RefCell<VecDeque<Vec<u8>>>>,
+        write_data: Arc<Mutex<Vec<u8>>>,
+        read_queue: Arc<Mutex<VecDeque<Vec<u8>>>>,
         should_timeout: bool,
         should_disconnect: bool,
-        call_count: Rc<RefCell<usize>>,
+        call_count: Arc<Mutex<usize>>,
         disconnect_at: Option<usize>,
     }
 
@@ -368,11 +367,11 @@ mod tests {
         fn new() -> Self {
             Self {
                 ports: vec![],
-                write_data: Rc::new(RefCell::new(Vec::new())),
-                read_queue: Rc::new(RefCell::new(VecDeque::new())),
+                write_data: Arc::new(Mutex::new(Vec::new())),
+                read_queue: Arc::new(Mutex::new(VecDeque::new())),
                 should_timeout: false,
                 should_disconnect: false,
-                call_count: Rc::new(RefCell::new(0)),
+                call_count: Arc::new(Mutex::new(0)),
                 disconnect_at: None,
             }
         }
@@ -384,7 +383,7 @@ mod tests {
 
         /// 各検査項目ごとの応答を設定
         fn with_responses(mut self, responses: Vec<Vec<u8>>) -> Self {
-            self.read_queue = Rc::new(RefCell::new(responses.into()));
+            self.read_queue = Arc::new(Mutex::new(responses.into()));
             self
         }
 
@@ -393,7 +392,7 @@ mod tests {
             self
         }
 
-        fn get_write_data(&self) -> Rc<RefCell<Vec<u8>>> {
+        fn get_write_data(&self) -> Arc<Mutex<Vec<u8>>> {
             self.write_data.clone()
         }
 
@@ -646,7 +645,7 @@ mod tests {
         let engine = InspectionEngine::with_items(items);
         let _ = engine.run(&mut manager);
 
-        let data = write_data.borrow();
+        let data = write_data.lock().unwrap();
         // NAV-STATUS poll: 0xB5 0x62 0x01 0x03 ...
         assert!(data.len() >= 4);
         assert_eq!(data[0], 0xB5);
@@ -672,7 +671,7 @@ mod tests {
         let engine = InspectionEngine::with_items(items);
         let _ = engine.run(&mut manager);
 
-        let data = write_data.borrow();
+        let data = write_data.lock().unwrap();
         // MON-VER poll: 0xB5 0x62 0x0A 0x04 ...
         assert_eq!(data[2], 0x0A);
         assert_eq!(data[3], 0x04);
@@ -695,7 +694,7 @@ mod tests {
         let engine = InspectionEngine::with_items(items);
         let _ = engine.run(&mut manager);
 
-        let data = write_data.borrow();
+        let data = write_data.lock().unwrap();
         // SEC-UNIQID poll: 0xB5 0x62 0x27 0x03 ...
         assert_eq!(data[2], 0x27);
         assert_eq!(data[3], 0x03);
@@ -718,7 +717,7 @@ mod tests {
         let engine = InspectionEngine::with_items(items);
         let _ = engine.run(&mut manager);
 
-        let data = write_data.borrow();
+        let data = write_data.lock().unwrap();
         // CFG-RATE poll: 0xB5 0x62 0x06 0x08 ...
         assert_eq!(data[2], 0x06);
         assert_eq!(data[3], 0x08);
@@ -741,7 +740,7 @@ mod tests {
         let engine = InspectionEngine::with_items(items);
         let _ = engine.run(&mut manager);
 
-        let data = write_data.borrow();
+        let data = write_data.lock().unwrap();
         // CFG-PRT poll: 0xB5 0x62 0x06 0x00 ...
         assert_eq!(data[2], 0x06);
         assert_eq!(data[3], 0x00);

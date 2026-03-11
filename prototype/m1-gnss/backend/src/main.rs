@@ -1,5 +1,8 @@
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_web::middleware::Logger;
 use serde::Serialize;
+
+use m1_gnss::web::device_api::{self, AppState};
 
 /// ヘルスチェック用レスポンス
 #[derive(Serialize)]
@@ -49,10 +52,16 @@ async fn main() -> std::io::Result<()> {
     log::info!("GNSS評価ツールを起動します...");
     log::info!("http://localhost:8080 でアクセス可能");
 
-    HttpServer::new(|| {
+    // アプリケーション状態（DeviceManagerを共有）
+    let app_state = web::Data::new(AppState::new());
+
+    HttpServer::new(move || {
         App::new()
+            .wrap(Logger::default())
+            .app_data(app_state.clone())
             .route("/health", web::get().to(health))
             .route("/api/gnss/status", web::get().to(gnss_status))
+            .configure(device_api::configure)
     })
     .bind("0.0.0.0:8080")?
     .run()

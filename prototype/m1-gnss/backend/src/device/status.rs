@@ -21,6 +21,19 @@ pub enum DeviceStatus {
     Error(String),
 }
 
+impl fmt::Display for DeviceStatus {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            DeviceStatus::Detected => write!(f, "detected"),
+            DeviceStatus::Connecting => write!(f, "connecting"),
+            DeviceStatus::Connected => write!(f, "connected"),
+            DeviceStatus::Inspecting => write!(f, "inspecting"),
+            DeviceStatus::Disconnected => write!(f, "disconnected"),
+            DeviceStatus::Error(msg) => write!(f, "error: {}", msg),
+        }
+    }
+}
+
 /// 状態遷移エラー
 #[derive(Debug, Clone, PartialEq)]
 pub struct TransitionError {

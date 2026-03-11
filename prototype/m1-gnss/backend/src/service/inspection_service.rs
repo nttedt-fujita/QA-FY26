@@ -194,25 +194,24 @@ mod tests {
     use crate::device::filter::PortInfo;
     use crate::device::manager::{DeviceManagerError, SerialPort};
     use crate::repository::Lot;
-    use std::cell::RefCell;
     use std::collections::VecDeque;
     use std::io;
-    use std::rc::Rc;
+    use std::sync::{Arc, Mutex};
     use std::time::Duration;
 
     // ===========================================
-    // モック実装（InspectionEngineテストと同じ）
+    // モック実装（InspectionEngineテストと同じ、Send対応）
     // ===========================================
 
     struct MockSerialPort {
-        write_data: Rc<RefCell<Vec<u8>>>,
-        read_queue: Rc<RefCell<VecDeque<Vec<u8>>>>,
+        write_data: Arc<Mutex<Vec<u8>>>,
+        read_queue: Arc<Mutex<VecDeque<Vec<u8>>>>,
         should_timeout: bool,
     }
 
     impl SerialPort for MockSerialPort {
         fn write(&mut self, data: &[u8]) -> Result<usize, io::Error> {
-            self.write_data.borrow_mut().extend_from_slice(data);
+            self.write_data.lock().unwrap().extend_from_slice(data);
             Ok(data.len())
         }
 
@@ -221,7 +220,7 @@ mod tests {
                 return Err(io::Error::new(io::ErrorKind::TimedOut, "timeout"));
             }
 
-            let mut queue = self.read_queue.borrow_mut();
+            let mut queue = self.read_queue.lock().unwrap();
             if let Some(data) = queue.pop_front() {
                 let len = buf.len().min(data.len());
                 buf[..len].copy_from_slice(&data[..len]);
@@ -238,8 +237,8 @@ mod tests {
 
     struct MockProvider {
         ports: Vec<PortInfo>,
-        write_data: Rc<RefCell<Vec<u8>>>,
-        read_queue: Rc<RefCell<VecDeque<Vec<u8>>>>,
+        write_data: Arc<Mutex<Vec<u8>>>,
+        read_queue: Arc<Mutex<VecDeque<Vec<u8>>>>,
         should_timeout: bool,
     }
 
@@ -247,8 +246,8 @@ mod tests {
         fn new() -> Self {
             Self {
                 ports: vec![],
-                write_data: Rc::new(RefCell::new(Vec::new())),
-                read_queue: Rc::new(RefCell::new(VecDeque::new())),
+                write_data: Arc::new(Mutex::new(Vec::new())),
+                read_queue: Arc::new(Mutex::new(VecDeque::new())),
                 should_timeout: false,
             }
         }
@@ -259,7 +258,7 @@ mod tests {
         }
 
         fn with_responses(mut self, responses: Vec<Vec<u8>>) -> Self {
-            self.read_queue = Rc::new(RefCell::new(responses.into()));
+            self.read_queue = Arc::new(Mutex::new(responses.into()));
             self
         }
     }

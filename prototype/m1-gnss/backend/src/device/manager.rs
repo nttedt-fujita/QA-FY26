@@ -66,7 +66,9 @@ pub trait SerialPortProvider {
 }
 
 /// シリアルポートトレイト
-pub trait SerialPort {
+///
+/// `Send`を要求するのはActix-webのスレッド間共有のため
+pub trait SerialPort: Send {
     /// データを書き込む
     fn write(&mut self, data: &[u8]) -> Result<usize, io::Error>;
 
@@ -328,9 +330,8 @@ impl<P: SerialPortProvider> DeviceManager<P> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::cell::RefCell;
     use std::collections::VecDeque;
-    use std::rc::Rc;
+    use std::sync::{Arc, Mutex};
     use std::time::Duration;
 
     use super::super::filter::{F9P_PID, F9P_VID};
@@ -339,16 +340,16 @@ mod tests {
     // モック実装
     // ===========================================
 
-    /// モックシリアルポート
+    /// モックシリアルポート（Send対応）
     struct MockSerialPort {
-        write_data: Rc<RefCell<Vec<u8>>>,
-        read_data: Rc<RefCell<VecDeque<u8>>>,
+        write_data: Arc<Mutex<Vec<u8>>>,
+        read_data: Arc<Mutex<VecDeque<u8>>>,
         should_timeout: bool,
     }
 
     impl SerialPort for MockSerialPort {
         fn write(&mut self, data: &[u8]) -> Result<usize, io::Error> {
-            self.write_data.borrow_mut().extend_from_slice(data);
+            self.write_data.lock().unwrap().extend_from_slice(data);
             Ok(data.len())
         }
 
@@ -356,7 +357,7 @@ mod tests {
             if self.should_timeout {
                 return Err(io::Error::new(io::ErrorKind::TimedOut, "timeout"));
             }
-            let mut read_data = self.read_data.borrow_mut();
+            let mut read_data = self.read_data.lock().unwrap();
             let len = buf.len().min(read_data.len());
             for i in 0..len {
                 buf[i] = read_data.pop_front().unwrap();
@@ -369,11 +370,11 @@ mod tests {
         }
     }
 
-    /// モックSerialPortProvider
+    /// モックSerialPortProvider（Send対応）
     struct MockProvider {
         ports: Vec<PortInfo>,
-        write_data: Rc<RefCell<Vec<u8>>>,
-        read_data: Rc<RefCell<VecDeque<u8>>>,
+        write_data: Arc<Mutex<Vec<u8>>>,
+        read_data: Arc<Mutex<VecDeque<u8>>>,
         should_timeout: bool,
     }
 
@@ -381,8 +382,8 @@ mod tests {
         fn new() -> Self {
             Self {
                 ports: vec![],
-                write_data: Rc::new(RefCell::new(Vec::new())),
-                read_data: Rc::new(RefCell::new(VecDeque::new())),
+                write_data: Arc::new(Mutex::new(Vec::new())),
+                read_data: Arc::new(Mutex::new(VecDeque::new())),
                 should_timeout: false,
             }
         }
@@ -393,7 +394,7 @@ mod tests {
         }
 
         fn with_read_data(mut self, data: Vec<u8>) -> Self {
-            self.read_data = Rc::new(RefCell::new(data.into()));
+            self.read_data = Arc::new(Mutex::new(data.into()));
             self
         }
 
