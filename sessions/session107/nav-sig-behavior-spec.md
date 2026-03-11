@@ -1,19 +1,21 @@
-# NAV-SIGパーサー 振る舞い仕様
+# NAV-SIGパーサー + signal_stats 振る舞い仕様
 
 **作成日**: 2026-03-11
-**セッション**: 107
+**更新日**: 2026-03-11
+**セッション**: 107, 109
 **Phase**: TDD Phase 1（振る舞いの記述）
 
 ---
 
 ## 1. 概要
 
-NAV-SIG (0x01 0x43) パーサーの振る舞い仕様。
-屋外検査でL1/L2別のC/N0（受信感度）を取得するために使用。
+NAV-SIG (0x01 0x43) パーサーおよびsignal_stats集計関数の振る舞い仕様。
+屋外検査でL1/L2別のC/N0（受信感度）およびL2受信率を取得するために使用。
 
 **参照**:
 - [outdoor-inspection-needs.md](../session106/outdoor-inspection-needs.md) — 要求整理
 - [ubx-signal-identifiers.md](../../docs/missions/m1-sensor-evaluation/gnss/ubx-signal-identifiers.md) — sigId定義
+- [ADR-008](../../docs/adr/m1/ADR-008-outdoor-inspection-criteria.md) — 屋外検査の合格基準
 
 ---
 
@@ -116,9 +118,59 @@ NAV-SIG (0x01 0x43) パーサーの振る舞い仕様。
 
 ---
 
-## 7. テストシナリオリスト（Phase 2用）
+## 7. signal_stats集計関数（ADR-008より）
 
-### 7.1 パース機能
+### 7.1 qualityIndの定義
+
+| 値 | 意味 | L2受信中？ |
+|----|------|-----------|
+| 0 | no signal | ❌ |
+| 1 | searching signal | ❌ |
+| 2 | signal acquired | ❌ |
+| 3 | signal detected but unusable | ❌ |
+| 4 | code locked and time synchronized | ❌ |
+| 5-7 | code and carrier locked | ✅ |
+
+**決定**: qualityInd ≥ 5 を「L2受信中」とする（RTKに必要な搬送波ロック）
+
+### 7.2 gps_visible_count()
+
+| 入力 | 期待される振る舞い |
+|------|-------------------|
+| GPS L1信号2つ（SV1, SV5） | 2を返す |
+| GPS L1信号1つ + L2信号1つ（同一SV1） | 1を返す（ユニーク衛星数） |
+| GPS信号なし | 0を返す |
+| GLONASS L1信号のみ | 0を返す（GPSのみカウント） |
+
+**定義**: gnssId=0（GPS）かつis_l1()=trueの信号を持つ衛星のユニーク数（svIdでカウント）
+
+### 7.3 gps_l2_reception_count()
+
+| 入力 | 期待される振る舞い |
+|------|-------------------|
+| GPS L2信号1つ（qualityInd=5） | 1を返す |
+| GPS L2信号1つ（qualityInd=4） | 0を返す（閾値未満） |
+| GPS L2信号2つ（同一SV、qualityInd=5,6） | 1を返す（ユニーク衛星数） |
+| GPS L2信号なし | 0を返す |
+
+**定義**: gnssId=0（GPS）かつis_l2()=trueかつqualityInd≥5の信号を持つ衛星のユニーク数
+
+### 7.4 gps_l2_reception_rate()
+
+| 入力 | 期待される振る舞い |
+|------|-------------------|
+| 可視2、L2受信1 | 0.5を返す |
+| 可視4、L2受信2 | 0.5を返す |
+| 可視2、L2受信0 | 0.0を返す |
+| 可視0（GPS信号なし） | 0.0を返す（0除算回避） |
+
+**定義**: gps_l2_reception_count / gps_visible_count（可視0の場合は0.0）
+
+---
+
+## 8. テストシナリオリスト（Phase 2用）
+
+### 8.1 パース機能
 
 - [ ] GPS L1信号1つをパースできる
 - [ ] GPS L1 + L2（2信号）をパースできる
@@ -130,17 +182,40 @@ NAV-SIG (0x01 0x43) パーサーの振る舞い仕様。
 - [ ] チェックサム不正でChecksumErrorエラー
 - [ ] データ長不足でInsufficientLengthエラー
 
-### 7.2 L1/L2判定
+### 8.2 L1/L2判定
 
+**GPS (gnssId=0)**:
 - [ ] GPS sigId=0 → is_l1()=true, is_l2()=false
 - [ ] GPS sigId=3 → is_l1()=false, is_l2()=true
 - [ ] GPS sigId=4 → is_l1()=false, is_l2()=true
-- [ ] GLONASS sigId=0 → is_l1()=true
-- [ ] GLONASS sigId=2 → is_l2()=true
-- [ ] Galileo sigId=0 → is_l1()=true, is_l2()=false
-- [ ] 未知のsigId → is_l1()=false, is_l2()=false
 
-### 7.3 ユーティリティ
+**SBAS (gnssId=1)**:
+- [ ] SBAS sigId=0 → is_l1()=true, is_l2()=false
+
+**Galileo (gnssId=2)**:
+- [ ] Galileo sigId=0 → is_l1()=true, is_l2()=false
+- [ ] Galileo sigId=1 → is_l1()=true, is_l2()=false
+
+**BeiDou (gnssId=3)**:
+- [ ] BeiDou sigId=0 → is_l1()=true, is_l2()=false
+- [ ] BeiDou sigId=5 → is_l1()=true, is_l2()=false（B1C）
+- [ ] BeiDou sigId=2 → is_l1()=false, is_l2()=true
+- [ ] BeiDou sigId=3 → is_l1()=false, is_l2()=true
+
+**QZSS (gnssId=5)**:
+- [ ] QZSS sigId=0 → is_l1()=true, is_l2()=false
+- [ ] QZSS sigId=1 → is_l1()=true, is_l2()=false（L1S）
+- [ ] QZSS sigId=4 → is_l1()=false, is_l2()=true
+- [ ] QZSS sigId=5 → is_l1()=false, is_l2()=true
+
+**GLONASS (gnssId=6)**:
+- [ ] GLONASS sigId=0 → is_l1()=true, is_l2()=false
+- [ ] GLONASS sigId=2 → is_l1()=false, is_l2()=true
+
+**その他**:
+- [ ] 未知のgnssId/sigId → is_l1()=false, is_l2()=false
+
+### 8.3 ユーティリティ
 
 - [ ] l1_signals()がL1帯のみ返す
 - [ ] l2_signals()がL2帯のみ返す
@@ -148,9 +223,29 @@ NAV-SIG (0x01 0x43) パーサーの振る舞い仕様。
 - [ ] get_cno_pair()がL1のみのときNoneを返す
 - [ ] is_used()がsigFlags bit 3を正しく判定
 
+### 8.4 signal_stats集計関数
+
+**gps_visible_count**:
+- [ ] GPS L1信号2つ（別衛星SV1, SV5）→ 2
+- [ ] GPS L1+L2（同一衛星SV1）→ 1（ユニーク衛星数）
+- [ ] GPS信号なし → 0
+- [ ] GLONASS信号のみ → 0（GPSのみカウント）
+
+**gps_l2_reception_count**:
+- [ ] GPS L2（qualityInd=5）→ 1（搬送波ロック）
+- [ ] GPS L2（qualityInd=7）→ 1（上限値）
+- [ ] GPS L2（qualityInd=4）→ 0（閾値未満）
+- [ ] GPS L2なし → 0
+
+**gps_l2_reception_rate**:
+- [ ] 可視2、L2受信1 → 0.5
+- [ ] 可視2、L2受信2 → 1.0（100%）
+- [ ] 可視2、L2受信0 → 0.0
+- [ ] 可視0（GPS信号なし）→ 0.0（0除算回避）
+
 ---
 
-## 8. 次セッションでの実装
+## 9. 次セッションでの実装
 
 Phase 3-5でこの振る舞い仕様に基づいて実装する。
 
