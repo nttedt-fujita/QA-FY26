@@ -303,3 +303,39 @@
 - 根本原因の特定（ログ追加、送受信ダンプ）
 
 ---
+
+## Session 99 (2026-03-11)
+
+**概要**: UBX通信タイミング問題のデバッグログ追加
+
+**実施内容**:
+1. **デバッグログ追加**
+   - engine.rs: execute_item() に詳細ログ（送受信データ hex dump）
+   - manager.rs: send_ubx, receive_ubx, drain_buffer にログ
+2. **実機テスト（中断）**
+   - プロセス競合で中断
+
+**テスト結果**: 138テスト全パス
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| src/inspection/engine.rs | デバッグログ追加 |
+| src/device/manager.rs | デバッグログ追加 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session99/session-summary.md](../session99/session-summary.md) | セッションサマリー |
+| [session100/session-plan.md](../session100/session-plan.md) | 次セッション計画 |
+
+**残課題**:
+- 実機テストでログ確認
+- 根本原因の特定と対策
+
+**次セッション（Session 100）でやること**:
+- 開発環境の整理
+- 実機テストでログ確認
+- 根本原因の特定と対策
+
+---
