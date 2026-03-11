@@ -108,6 +108,6 @@ prototype/m1-gnss/
 
 ## 参照
 
-- [Session 59 技術選定比較](../../sessions/session59/gnss-tool-tech-comparison.md)
-- [Session 61 フロントエンド選定](../../sessions/session61/session-summary.md) — Next.js採用の決定
+- [Session 59 技術選定比較](../../../sessions/session59/gnss-tool-tech-comparison.md)
+- [Session 61 フロントエンド選定](../../../sessions/session61/session-summary.md) — Next.js採用の決定
 - [ADR-004 GNSS評価ツールのアプローチ選択](ADR-004-gnss-tool-approach.md)

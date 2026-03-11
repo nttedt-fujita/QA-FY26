@@ -21,16 +21,21 @@
 2. **区切りのいいところでdocs/に配置**
    - 技術方針、設計書、分析結果などは `docs/missions/` に移動
    - 以降の更新は `docs/` 側を更新する
-   - sessions/ の元ファイルは作成経緯の記録として残す
 
-3. **二重管理を防ぐ**
+3. **正式配置後はsessions/から削除**
+   - 上位互換のドキュメントが存在する場合は削除
+   - 「廃止マーク」ではなく削除が適切
+   - session-plan.md、session-summary.md は管理用として残す
+
+4. **二重管理を防ぐ**
    - 同じ情報を複数の場所に書かない
    - 詳細は1箇所に置き、他からは参照リンクで済ませる
 
-4. **正式ドキュメントの配置先**
+5. **正式ドキュメントの配置先**
+   - M1関連: `docs/missions/m1-sensor-evaluation/`
    - M3関連: `docs/missions/m3-incoming-inspection-db/`
    - M4関連: `docs/missions/m4-defect-db/`
-   - ツール: `tools/`
+   - ADR: `docs/adr/{m1,m3,common}/`
 
 ## 藤田さんの担当ミッション
 
@@ -88,15 +93,31 @@
 
 **IMPORTANT**: ADRに関わる判断時は作業を止めて確認を取ること。詳細は `~/.claude/rules/10-adr-enforcement.md` 参照。
 
-| ADR | タイトル | 影響範囲 | 状態 | 最終更新 |
-|-----|---------|---------|------|---------|
-| [ADR-001](docs/adr/ADR-001-error-handling.md) | エラーハンドリング方針 | 全API | 承認済み | - |
-| [ADR-002](docs/adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 | 型定義・API設計 | 承認済み | - |
-| [ADR-003](docs/adr/ADR-003-lot-list-view.md) | ロット一覧画面の設計判断 | FE画面・ナビ | 承認済み | - |
-| [ADR-004](docs/adr/ADR-004-gnss-tool-approach.md) | GNSS評価ツールのアプローチ選択 | M1-B GNSS評価 | 承認済み | - |
-| [ADR-005](docs/adr/ADR-005-gnss-tool-tech-stack.md) | GNSS評価ツール技術スタック選定 | M1-B GNSS評価 | 承認済み | Session 75 |
+**ADR構造**: ミッション別サブディレクトリ（番号はグローバル連番）
+- `docs/adr/m1/` — M1専用
+- `docs/adr/m3/` — M3専用
+- `docs/adr/common/` — ミッション横断
 
-**ADR詳細ファイル配置先**: `docs/adr/`
+### M3（受入検査DB）
+
+| ADR | タイトル | 影響範囲 | 状態 |
+|-----|---------|---------|------|
+| [ADR-001](docs/adr/m3/ADR-001-error-handling.md) | エラーハンドリング方針 | 全API | 承認済み |
+| [ADR-002](docs/adr/m3/ADR-002-api-contract.md) | API契約とFE/BE整合性 | 型定義・API設計 | 承認済み |
+| [ADR-003](docs/adr/m3/ADR-003-lot-list-view.md) | ロット一覧画面の設計判断 | FE画面・ナビ | 承認済み |
+
+### M1（センサー評価）
+
+| ADR | タイトル | 影響範囲 | 状態 |
+|-----|---------|---------|------|
+| [ADR-004](docs/adr/m1/ADR-004-gnss-tool-approach.md) | GNSS評価ツールのアプローチ選択 | M1-B GNSS評価 | 承認済み |
+| [ADR-005](docs/adr/m1/ADR-005-gnss-tool-tech-stack.md) | GNSS評価ツール技術スタック選定 | M1-B GNSS評価 | 承認済み |
+
+### 共通（ミッション横断）
+
+| ADR | タイトル | 影響範囲 | 状態 |
+|-----|---------|---------|------|
+| [ADR-006](docs/adr/common/ADR-006-m1-m3-integration.md) | M1/M3統合方針 | M1-B、M3 | 承認済み |
 
 ## 過去セッションの重要な決定
 
