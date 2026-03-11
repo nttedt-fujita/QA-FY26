@@ -270,3 +270,40 @@
 - NAV-SIGパーサー実装（TDD Phase 2-5）
 
 ---
+
+## Session 108 (2026-03-11)
+
+**概要**: 屋外検査合格基準のADR作成 + TDDで振る舞い仕様の抜け漏れ確認
+
+**実施内容**:
+1. **屋外検査合格基準のADR作成（ADR-008）**
+   - 業界標準調査（Session 53）をベースに合格基準を確定
+   - L1受信感度: ≥30 dBHz、L2受信率: GPS 50%以上
+   - RTK FIX時間: ≤30秒、RTK FIX率: >95%
+2. **TDDスキルで要求・振る舞いの抜け漏れ確認**
+   - qualityInd ≥ 5 を「L2受信中」の定義として決定
+   - 集計ロジックはフリー関数（signal_stats）として実装決定
+   - 閾値判定は検査ロジック（OutdoorInspector等）の責任と決定
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ADR-008](../../docs/adr/m1/ADR-008-outdoor-inspection-criteria.md) | 屋外検査の合格基準 |
+| [session108/session-summary.md](../session108/session-summary.md) | セッションサマリー |
+| [session109/session-plan.md](../session109/session-plan.md) | 次セッション計画 |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| CLAUDE.md | ADR一覧にADR-008追加 |
+
+**決定事項（ADR-008に記録）**:
+- qualityInd ≥ 5（搬送波ロック以上）を「L2受信中」とする
+- 集計ロジックはフリー関数（案C）で実装
+- 閾値判定はパーサーではなく検査ロジックに持たせる
+
+**次セッション（Session 109）でやること**:
+- NAV-SIG振る舞い仕様の更新（ADR-008の決定を反映）
+- NAV-SIGパーサー + signal_stats実装（TDD Phase 3-5）
+
+---
