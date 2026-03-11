@@ -12,6 +12,7 @@ import {
   listInspections,
 } from "@/lib/api";
 import { InspectionResult } from "@/components/InspectionResult";
+import { NavSigPanel } from "@/components/NavSigPanel";
 
 /**
  * 検査実行画面
@@ -159,6 +160,11 @@ export default function InspectionsPage() {
           >
             {isLoading ? "検査中..." : "検査開始"}
           </button>
+        </div>
+
+        {/* NAV-SIG（衛星信号）パネル */}
+        <div className="mb-6">
+          <NavSigPanel enabled={!!connectedDevice} />
         </div>
 
         {/* エラー表示 */}

@@ -69,3 +69,36 @@
 - 実機テスト
 
 ---
+
+## Session 113 (2026-03-11)
+
+**概要**: NAV-SIG フロントエンド実装
+
+**実施内容**:
+1. **api.ts にNAV-SIG API追加**
+   - NavSignal, SignalStats, NavSigResponse 型定義
+   - getNavSig() 関数
+2. **NavSigPanel.tsx 新規作成**
+   - L1/L2別C/N0一覧テーブル
+   - L2受信率ゲージ（50%基準）
+   - 合格/不合格表示
+   - 1秒ポーリング
+3. **inspections/page.tsx に統合**
+4. **実機テスト**
+   - GPS L1: 3衛星、L2: 0衛星（0%不合格）確認
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [NavSigPanel.tsx](../../prototype/m1-gnss/frontend/src/components/NavSigPanel.tsx) | 新規作成 |
+| [session113/session-summary.md](../session113/session-summary.md) | セッションサマリー |
+| [session114/session-plan.md](../session114/session-plan.md) | 次セッション計画 |
+
+**確認事項**:
+- NAV-SIGは検査ロジックに未組込（リアルタイムモニタリング専用）
+- ユーザー要望: 屋外/屋内検査はページを分けたい
+
+**次セッション（Session 114）でやること**:
+- 屋内/屋外検査ページ分離
+
+---
