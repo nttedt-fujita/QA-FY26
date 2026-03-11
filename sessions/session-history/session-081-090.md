@@ -143,3 +143,43 @@ Session 89: Phase 1 統合テスト（実機）T1-1〜T1-7
 - FTDI対応方針決定
 
 ---
+
+## Session 85 (2026-03-11)
+
+**概要**: DB Repository実装 → **ドメインモデリング未実施の問題発覚で途中終了**
+
+**実施内容**:
+1. **DB Repository実装（途中）**
+   - rusqlite/chronoをCargo.tomlに追加
+   - repositoryモジュール作成（types.rs, sqlite.rs）
+   - 93テスト全パス
+2. **問題発覚**: ドメインモデリングをやらずにDB設計に入っていた
+3. **ドメインモデリング開始（途中）**
+   - 要求（Needs）から名詞抽出
+   - 5軸チェックリスト
+   - **ロット**という概念の必要性が判明
+4. **運用イメージの修正**
+   - 当初: ロットを先に登録、期待値を決める
+   - 実際: 最初の1台が仮の期待値、複数台検査で多数派がわかる
+
+**学び**:
+- ドメインモデリングを省略してDB設計に入ると手戻りが発生する
+- 運用イメージの確認が重要
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session85/incoming-inspection-domain-model.md](../session85/incoming-inspection-domain-model.md) | 受入検査ドメインモデル（途中） |
+| [session85/db-repository-behavior.md](../session85/db-repository-behavior.md) | DB Repository振る舞い記述（見直し必要） |
+| [repository/types.rs](../../prototype/m1-gnss/backend/src/repository/types.rs) | 型定義（見直し必要） |
+| [repository/sqlite.rs](../../prototype/m1-gnss/backend/src/repository/sqlite.rs) | SQLite実装（見直し必要） |
+| [session85/session-summary.md](../session85/session-summary.md) | セッションサマリー |
+| [session86/session-plan.md](../session86/session-plan.md) | 次セッション計画 |
+
+**進捗**: Phase 1 Step 4（DB Repository）**途中** — ドメインモデリング要修正
+
+**次セッション（Session 86）でやること**:
+- ドメインモデリング完了（運用イメージ反映、屋外確認項目整理）
+- DB設計見直し
+
+---
