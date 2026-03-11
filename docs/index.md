@@ -29,10 +29,16 @@ make frontend-dev    # Frontend起動（別ターミナル）
 
 ### 設計判断（ADR）
 
-| ADR | 内容 |
-|-----|------|
-| [ADR-001](adr/ADR-001-error-handling.md) | エラーハンドリング方針 |
-| [ADR-002](adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 |
+ADRはミッション別に配置: `adr/{m1,m3,common}/`
+
+| ADR | 内容 | 配置先 |
+|-----|------|--------|
+| [ADR-001](adr/m3/ADR-001-error-handling.md) | エラーハンドリング方針 | M3 |
+| [ADR-002](adr/m3/ADR-002-api-contract.md) | API契約とFE/BE整合性 | M3 |
+| [ADR-003](adr/m3/ADR-003-lot-list-view.md) | ロット一覧画面 | M3 |
+| [ADR-004](adr/m1/ADR-004-gnss-tool-approach.md) | GNSSツールアプローチ | M1 |
+| [ADR-005](adr/m1/ADR-005-gnss-tool-tech-stack.md) | GNSS技術スタック | M1 |
+| [ADR-006](adr/common/ADR-006-m1-m3-integration.md) | M1/M3統合方針 | 共通 |
 
 ---
 

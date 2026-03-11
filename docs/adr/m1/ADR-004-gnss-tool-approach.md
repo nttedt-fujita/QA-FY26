@@ -83,6 +83,6 @@ F9Pと直接シリアル通信し、UBX-NAV-SIGを取得する独立ツールを
 
 ## 参照資料
 
-- [11-px4-uorb-mapping.md](../missions/m1-sensor-evaluation/gnss/11-px4-uorb-mapping.md) — PX4調査結果
-- [08-ubx-protocol-index.md](../missions/m1-sensor-evaluation/gnss/08-ubx-protocol-index.md) — UBXプロトコル仕様索引
-- [10-tool-design-notes.md](../missions/m1-sensor-evaluation/gnss/10-tool-design-notes.md) — ツール設計メモ
+- [11-px4-uorb-mapping.md](../../missions/m1-sensor-evaluation/gnss/11-px4-uorb-mapping.md) — PX4調査結果
+- [08-ubx-protocol-index.md](../../missions/m1-sensor-evaluation/gnss/08-ubx-protocol-index.md) — UBXプロトコル仕様索引
+- [10-tool-design-notes.md](../../missions/m1-sensor-evaluation/gnss/10-tool-design-notes.md) — ツール設計メモ

@@ -268,3 +268,30 @@ Session 89: Phase 1 統合テスト（実機）T1-1〜T1-7
 - InspectionEngineとRepositoryの統合
 
 ---
+
+## Session 88 (2026-03-11)
+
+**概要**: ドキュメントメンテナンス + ADR構造変更
+
+**実施内容**:
+1. **設計/実装整合性レビュー** — ドメインモデルとDB設計の整合性確認（OK）
+2. **ADR構造変更** — フラット → ミッション別サブディレクトリ（m1/, m3/, common/）
+3. **ドキュメント正式配置** — gnss-unified-domain-model.md, m1-m3-relationship.md
+4. **不要ドキュメント削除** — Session 85-86の途中版7ファイル
+5. **CLAUDE.md更新** — ドキュメント配置ルール、ADR一覧
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [docs/adr/common/ADR-006-m1-m3-integration.md](../../docs/adr/common/ADR-006-m1-m3-integration.md) | M1/M3統合方針（新規ADR） |
+| [docs/missions/m1-sensor-evaluation/gnss/19-gnss-unified-domain-model.md](../../docs/missions/m1-sensor-evaluation/gnss/19-gnss-unified-domain-model.md) | 統合ドメインモデル |
+| [session88/session-summary.md](../session88/session-summary.md) | セッションサマリー |
+
+**ルール追加**:
+- CLAUDE.md: 「正式配置後はsessions/から削除」（廃止マークではなく削除が適切）
+
+**次セッション（Session 89）でやること**:
+- FTDI対応 + ボーレート設定
+- InspectionEngineとRepositoryの統合
+
+---
