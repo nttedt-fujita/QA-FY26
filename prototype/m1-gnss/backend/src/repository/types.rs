@@ -1,57 +1,212 @@
 //! リポジトリ型定義
 //!
-//! InspectionRecord: DB保存用の検査レコード
+//! 統合DB設計に基づくエンティティ定義
+//! 参照: sessions/session86/gnss-unified-domain-model.md
 
-use std::collections::HashMap;
-
-/// 検査レコード（DB保存用）
+/// ロット（入荷単位）
 #[derive(Debug, Clone)]
-pub struct InspectionRecord {
-    /// ID（保存後に付与）
+pub struct Lot {
     pub id: Option<i64>,
-    /// 装置シリアル番号（SEC-UNIQID 16進文字列）
-    pub device_serial: String,
-    /// 検査日時（ISO8601形式）
-    pub inspected_at: String,
-    /// 全体判定（Pass/Fail/Error）
-    pub overall_verdict: String,
-    /// FWバージョン（実測値）
-    pub fw_version: Option<String>,
-    /// 各項目の判定
-    pub item_verdicts: HashMap<String, String>,
-    /// 備考
-    pub notes: Option<String>,
+    pub lot_number: String,
+    /// 出力レート期待値 (ms)
+    pub expected_rate_ms: Option<i32>,
+    /// ポート入力プロトコル期待値
+    pub expected_port_in_proto: Option<String>,
+    /// ポート出力プロトコル期待値
+    pub expected_port_out_proto: Option<String>,
+    pub memo: Option<String>,
 }
 
-impl InspectionRecord {
-    /// 新しい検査レコードを作成
-    pub fn new(device_serial: String, inspected_at: String, overall_verdict: String) -> Self {
+impl Lot {
+    pub fn new(lot_number: String) -> Self {
         Self {
             id: None,
-            device_serial,
-            inspected_at,
-            overall_verdict,
-            fw_version: None,
-            item_verdicts: HashMap::new(),
-            notes: None,
+            lot_number,
+            expected_rate_ms: None,
+            expected_port_in_proto: None,
+            expected_port_out_proto: None,
+            memo: None,
         }
     }
 
-    /// FWバージョンを設定
-    pub fn with_fw_version(mut self, fw_version: String) -> Self {
-        self.fw_version = Some(fw_version);
+    pub fn with_expected_rate(mut self, rate_ms: i32) -> Self {
+        self.expected_rate_ms = Some(rate_ms);
         self
     }
 
-    /// 項目判定を追加
-    pub fn with_item_verdict(mut self, item: &str, verdict: &str) -> Self {
-        self.item_verdicts.insert(item.to_string(), verdict.to_string());
+    pub fn with_expected_port_proto(mut self, in_proto: &str, out_proto: &str) -> Self {
+        self.expected_port_in_proto = Some(in_proto.to_string());
+        self.expected_port_out_proto = Some(out_proto.to_string());
+        self
+    }
+}
+
+/// 装置（個別のGNSSモジュール）
+#[derive(Debug, Clone)]
+pub struct Device {
+    pub id: Option<i64>,
+    pub lot_id: Option<i64>,
+    pub serial_number: String,
+    pub model_number: Option<String>,
+    /// FWバージョン（最後の検査で取得した値）
+    pub fw_version: Option<String>,
+    pub memo: Option<String>,
+}
+
+impl Device {
+    pub fn new(serial_number: String) -> Self {
+        Self {
+            id: None,
+            lot_id: None,
+            serial_number,
+            model_number: None,
+            fw_version: None,
+            memo: None,
+        }
+    }
+
+    pub fn with_lot(mut self, lot_id: i64) -> Self {
+        self.lot_id = Some(lot_id);
         self
     }
 
-    /// 備考を設定
-    pub fn with_notes(mut self, notes: String) -> Self {
-        self.notes = Some(notes);
+    pub fn with_model(mut self, model: &str) -> Self {
+        self.model_number = Some(model.to_string());
+        self
+    }
+
+    pub fn with_fw_version(mut self, fw: &str) -> Self {
+        self.fw_version = Some(fw.to_string());
+        self
+    }
+}
+
+/// 屋内検査（1回の検査作業）
+#[derive(Debug, Clone)]
+pub struct IndoorInspection {
+    pub id: Option<i64>,
+    pub device_id: i64,
+    /// 検査日時（ISO8601形式）
+    pub inspected_at: String,
+    /// 総合判定（Pass/Fail/Partial）
+    pub overall_result: Option<String>,
+}
+
+impl IndoorInspection {
+    pub fn new(device_id: i64, inspected_at: String) -> Self {
+        Self {
+            id: None,
+            device_id,
+            inspected_at,
+            overall_result: None,
+        }
+    }
+
+    pub fn with_result(mut self, result: &str) -> Self {
+        self.overall_result = Some(result.to_string());
+        self
+    }
+}
+
+/// 検査項目名
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum InspectionItemName {
+    /// 通信疎通
+    Communication,
+    /// シリアル番号
+    Serial,
+    /// FWバージョン
+    Fw,
+    /// 出力レート
+    Rate,
+    /// ポート設定
+    Port,
+}
+
+impl InspectionItemName {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Communication => "communication",
+            Self::Serial => "serial",
+            Self::Fw => "fw",
+            Self::Rate => "rate",
+            Self::Port => "port",
+        }
+    }
+
+    pub fn from_str(s: &str) -> Option<Self> {
+        match s {
+            "communication" => Some(Self::Communication),
+            "serial" => Some(Self::Serial),
+            "fw" => Some(Self::Fw),
+            "rate" => Some(Self::Rate),
+            "port" => Some(Self::Port),
+            _ => None,
+        }
+    }
+}
+
+/// 判定（Verdict）
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Verdict {
+    Pass,
+    Fail,
+    Error,
+    /// 記録のみ（FWバージョンなど、期待値なしで記録）
+    Recorded,
+}
+
+impl Verdict {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Pass => "Pass",
+            Self::Fail => "Fail",
+            Self::Error => "Error",
+            Self::Recorded => "Recorded",
+        }
+    }
+
+    pub fn from_str(s: &str) -> Option<Self> {
+        match s {
+            "Pass" => Some(Self::Pass),
+            "Fail" => Some(Self::Fail),
+            "Error" => Some(Self::Error),
+            "Recorded" => Some(Self::Recorded),
+            _ => None,
+        }
+    }
+}
+
+/// 検査項目結果
+#[derive(Debug, Clone)]
+pub struct InspectionItemResult {
+    pub id: Option<i64>,
+    pub inspection_id: i64,
+    pub item_name: InspectionItemName,
+    pub verdict: Verdict,
+    pub actual_value: Option<String>,
+    pub expected_value: Option<String>,
+}
+
+impl InspectionItemResult {
+    pub fn new(inspection_id: i64, item_name: InspectionItemName, verdict: Verdict) -> Self {
+        Self {
+            id: None,
+            inspection_id,
+            item_name,
+            verdict,
+            actual_value: None,
+            expected_value: None,
+        }
+    }
+
+    pub fn with_actual(mut self, value: &str) -> Self {
+        self.actual_value = Some(value.to_string());
+        self
+    }
+
+    pub fn with_expected(mut self, value: &str) -> Self {
+        self.expected_value = Some(value.to_string());
         self
     }
 }
@@ -65,6 +220,8 @@ pub enum RepositoryError {
     Sql(String),
     /// データ不正
     InvalidData(String),
+    /// 見つからない
+    NotFound(String),
 }
 
 impl std::fmt::Display for RepositoryError {
@@ -73,6 +230,7 @@ impl std::fmt::Display for RepositoryError {
             RepositoryError::Connection(msg) => write!(f, "Connection error: {}", msg),
             RepositoryError::Sql(msg) => write!(f, "SQL error: {}", msg),
             RepositoryError::InvalidData(msg) => write!(f, "Invalid data: {}", msg),
+            RepositoryError::NotFound(msg) => write!(f, "Not found: {}", msg),
         }
     }
 }
@@ -84,62 +242,171 @@ mod tests {
     use super::*;
 
     // ===========================================
-    // R1-R2: InspectionRecord構造体テスト
+    // L1-L3: Lot構造体テスト
     // ===========================================
 
-    /// R1: InspectionRecordを作成できる
     #[test]
-    fn test_r1_create_inspection_record() {
-        let record = InspectionRecord::new(
-            "0102030405060708".to_string(),
-            "2026-03-11T09:00:00+09:00".to_string(),
-            "Pass".to_string(),
+    fn test_l1_create_lot() {
+        let lot = Lot::new("LOT-2026-001".to_string());
+
+        assert_eq!(lot.lot_number, "LOT-2026-001");
+        assert!(lot.id.is_none());
+        assert!(lot.expected_rate_ms.is_none());
+    }
+
+    #[test]
+    fn test_l2_lot_with_expected_rate() {
+        let lot = Lot::new("LOT-2026-001".to_string())
+            .with_expected_rate(100);
+
+        assert_eq!(lot.expected_rate_ms, Some(100));
+    }
+
+    #[test]
+    fn test_l3_lot_with_port_proto() {
+        let lot = Lot::new("LOT-2026-001".to_string())
+            .with_expected_port_proto("UBX+NMEA", "UBX+NMEA");
+
+        assert_eq!(lot.expected_port_in_proto, Some("UBX+NMEA".to_string()));
+        assert_eq!(lot.expected_port_out_proto, Some("UBX+NMEA".to_string()));
+    }
+
+    // ===========================================
+    // D1-D3: Device構造体テスト
+    // ===========================================
+
+    #[test]
+    fn test_d1_create_device() {
+        let device = Device::new("0102030405060708".to_string());
+
+        assert_eq!(device.serial_number, "0102030405060708");
+        assert!(device.id.is_none());
+        assert!(device.lot_id.is_none());
+    }
+
+    #[test]
+    fn test_d2_device_with_lot() {
+        let device = Device::new("0102030405060708".to_string())
+            .with_lot(1);
+
+        assert_eq!(device.lot_id, Some(1));
+    }
+
+    #[test]
+    fn test_d3_device_with_fw_version() {
+        let device = Device::new("0102030405060708".to_string())
+            .with_fw_version("HPG 1.32");
+
+        assert_eq!(device.fw_version, Some("HPG 1.32".to_string()));
+    }
+
+    // ===========================================
+    // I1-I2: IndoorInspection構造体テスト
+    // ===========================================
+
+    #[test]
+    fn test_i1_create_inspection() {
+        let inspection = IndoorInspection::new(1, "2026-03-11T09:00:00+09:00".to_string());
+
+        assert_eq!(inspection.device_id, 1);
+        assert_eq!(inspection.inspected_at, "2026-03-11T09:00:00+09:00");
+        assert!(inspection.id.is_none());
+        assert!(inspection.overall_result.is_none());
+    }
+
+    #[test]
+    fn test_i2_inspection_with_result() {
+        let inspection = IndoorInspection::new(1, "2026-03-11T09:00:00+09:00".to_string())
+            .with_result("Pass");
+
+        assert_eq!(inspection.overall_result, Some("Pass".to_string()));
+    }
+
+    // ===========================================
+    // N1-N2: InspectionItemName enumテスト
+    // ===========================================
+
+    #[test]
+    fn test_n1_item_name_as_str() {
+        assert_eq!(InspectionItemName::Communication.as_str(), "communication");
+        assert_eq!(InspectionItemName::Serial.as_str(), "serial");
+        assert_eq!(InspectionItemName::Fw.as_str(), "fw");
+        assert_eq!(InspectionItemName::Rate.as_str(), "rate");
+        assert_eq!(InspectionItemName::Port.as_str(), "port");
+    }
+
+    #[test]
+    fn test_n2_item_name_from_str() {
+        assert_eq!(InspectionItemName::from_str("communication"), Some(InspectionItemName::Communication));
+        assert_eq!(InspectionItemName::from_str("serial"), Some(InspectionItemName::Serial));
+        assert_eq!(InspectionItemName::from_str("fw"), Some(InspectionItemName::Fw));
+        assert_eq!(InspectionItemName::from_str("rate"), Some(InspectionItemName::Rate));
+        assert_eq!(InspectionItemName::from_str("port"), Some(InspectionItemName::Port));
+        assert_eq!(InspectionItemName::from_str("unknown"), None);
+    }
+
+    // ===========================================
+    // V1-V2: Verdict enumテスト
+    // ===========================================
+
+    #[test]
+    fn test_v1_verdict_as_str() {
+        assert_eq!(Verdict::Pass.as_str(), "Pass");
+        assert_eq!(Verdict::Fail.as_str(), "Fail");
+        assert_eq!(Verdict::Error.as_str(), "Error");
+        assert_eq!(Verdict::Recorded.as_str(), "Recorded");
+    }
+
+    #[test]
+    fn test_v2_verdict_from_str() {
+        assert_eq!(Verdict::from_str("Pass"), Some(Verdict::Pass));
+        assert_eq!(Verdict::from_str("Fail"), Some(Verdict::Fail));
+        assert_eq!(Verdict::from_str("Error"), Some(Verdict::Error));
+        assert_eq!(Verdict::from_str("Recorded"), Some(Verdict::Recorded));
+        assert_eq!(Verdict::from_str("Unknown"), None);
+    }
+
+    // ===========================================
+    // R1-R3: InspectionItemResult構造体テスト
+    // ===========================================
+
+    #[test]
+    fn test_r1_create_item_result() {
+        let result = InspectionItemResult::new(
+            1,
+            InspectionItemName::Communication,
+            Verdict::Pass,
         );
 
-        assert_eq!(record.device_serial, "0102030405060708");
-        assert_eq!(record.inspected_at, "2026-03-11T09:00:00+09:00");
-        assert_eq!(record.overall_verdict, "Pass");
-        assert!(record.id.is_none());
+        assert_eq!(result.inspection_id, 1);
+        assert_eq!(result.item_name, InspectionItemName::Communication);
+        assert_eq!(result.verdict, Verdict::Pass);
+        assert!(result.id.is_none());
     }
 
-    /// R1: FWバージョンを設定できる
     #[test]
-    fn test_r1_with_fw_version() {
-        let record = InspectionRecord::new(
-            "0102030405060708".to_string(),
-            "2026-03-11T09:00:00+09:00".to_string(),
-            "Pass".to_string(),
+    fn test_r2_item_result_with_actual() {
+        let result = InspectionItemResult::new(
+            1,
+            InspectionItemName::Fw,
+            Verdict::Recorded,
         )
-        .with_fw_version("HPG 1.32".to_string());
+        .with_actual("HPG 1.32");
 
-        assert_eq!(record.fw_version, Some("HPG 1.32".to_string()));
+        assert_eq!(result.actual_value, Some("HPG 1.32".to_string()));
     }
 
-    /// R1: 項目判定を追加できる
     #[test]
-    fn test_r1_with_item_verdict() {
-        let record = InspectionRecord::new(
-            "0102030405060708".to_string(),
-            "2026-03-11T09:00:00+09:00".to_string(),
-            "Pass".to_string(),
+    fn test_r3_item_result_with_expected() {
+        let result = InspectionItemResult::new(
+            1,
+            InspectionItemName::Rate,
+            Verdict::Pass,
         )
-        .with_item_verdict("connectivity", "Pass")
-        .with_item_verdict("fw_version", "Pass")
-        .with_item_verdict("serial_number", "Pass");
+        .with_actual("100")
+        .with_expected("100");
 
-        assert_eq!(record.item_verdicts.len(), 3);
-        assert_eq!(record.item_verdicts.get("connectivity"), Some(&"Pass".to_string()));
-    }
-
-    /// R2: ID は保存前は None
-    #[test]
-    fn test_r2_id_none_before_save() {
-        let record = InspectionRecord::new(
-            "0102030405060708".to_string(),
-            "2026-03-11T09:00:00+09:00".to_string(),
-            "Pass".to_string(),
-        );
-
-        assert!(record.id.is_none());
+        assert_eq!(result.actual_value, Some("100".to_string()));
+        assert_eq!(result.expected_value, Some("100".to_string()));
     }
 }
