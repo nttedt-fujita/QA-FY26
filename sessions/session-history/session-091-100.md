@@ -258,3 +258,48 @@
 - 結果テーブル表示
 
 ---
+
+## Session 98 (2026-03-11)
+
+**概要**: フロントエンド（検査画面）実装 + タイミング問題対策
+
+**実施内容**:
+1. **検査API関数追加**
+   - api.ts に runInspection, listInspections 追加
+   - 型定義: InspectionResponse, InspectionSummary, ItemResult
+2. **検査結果表示コンポーネント作成**
+   - InspectionResult.tsx（結果テーブル、総合判定）
+3. **検査画面実装**
+   - app/inspections/page.tsx（ロット選択、装置表示、検査開始、履歴）
+4. **タイミング問題対策**
+   - DeviceManager.drain_buffer() 追加
+   - poll送信前にバッファクリア、送信後50ms待機
+   - **結果**: 一部改善したが完全には解決せず
+
+**テスト結果**: 138テスト全パス
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [src/lib/api.ts](../../prototype/m1-gnss/frontend/src/lib/api.ts) | 検査API関数追加 |
+| [src/components/InspectionResult.tsx](../../prototype/m1-gnss/frontend/src/components/InspectionResult.tsx) | 検査結果表示 |
+| [src/app/inspections/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/page.tsx) | 検査画面 |
+| [session98/session-summary.md](../session98/session-summary.md) | セッションサマリー |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| src/device/manager.rs | drain_buffer()追加 |
+| src/inspection/engine.rs | drain_buffer呼び出し、50ms待機追加 |
+| src/service/inspection_service.rs | モック修正 |
+
+**残課題**:
+- タイミング問題（5項目中、ポート設定のみ高確率成功、他はエラー多発）
+- トランザクション/ロールバック機能（テストデータをDBに残したくない）
+- テストデータ一括削除機能
+
+**次セッション（Session 99）でやること**:
+- タイミング問題のデバッグ手法検討
+- 根本原因の特定（ログ追加、送受信ダンプ）
+
+---

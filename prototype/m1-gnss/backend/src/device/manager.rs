@@ -325,6 +325,33 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             Err(e) => Err(DeviceManagerError::IoError(e)),
         }
     }
+
+    /// 受信バッファをドレイン（空読み）
+    ///
+    /// poll送信前に呼び出して、前回の応答の残りをクリアする
+    pub fn drain_buffer(&mut self) -> Result<(), DeviceManagerError> {
+        use std::time::Duration;
+
+        let port = self
+            .connected_port
+            .as_mut()
+            .ok_or(DeviceManagerError::NotConnected)?;
+
+        // 短いタイムアウトで空読み
+        port.set_timeout(Duration::from_millis(10))?;
+
+        let mut buf = vec![0u8; 1024];
+        loop {
+            match port.read(&mut buf) {
+                Ok(0) => break,
+                Ok(_) => continue, // データがあれば読み捨てる
+                Err(e) if e.kind() == io::ErrorKind::TimedOut => break,
+                Err(_) => break, // その他のエラーは無視して終了
+            }
+        }
+
+        Ok(())
+    }
 }
 
 #[cfg(test)]
