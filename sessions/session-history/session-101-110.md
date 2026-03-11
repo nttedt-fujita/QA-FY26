@@ -307,3 +307,51 @@
 - NAV-SIGパーサー + signal_stats実装（TDD Phase 3-5）
 
 ---
+
+## Session 109 (2026-03-11)
+
+**概要**: NAV-SIG振る舞い仕様更新 + テストシナリオリスト確定（TDD Phase 1-2）
+
+**実施内容**:
+1. **TDD Phase 0: プロジェクト文脈の相互確認**
+   - 既存コードのsigId判定バグを発見・整理
+   - ADR-008の決定事項を確認
+   - signal_statsの定義を確定
+2. **TDD Phase 1: 振る舞い仕様の更新**
+   - nav-sig-behavior-spec.md を更新
+   - ADR-008の決定を反映（qualityInd ≥ 5、signal_stats）
+3. **TDD Phase 2: テストシナリオリスト確定**
+   - ヌケモレ確認（SBAS, BeiDou, QZSSのテストケース追加）
+   - 境界値テスト追加（qualityInd=7、100%ケース）
+
+**発見したバグ（既存コード）**:
+| 箇所 | 問題 |
+|------|------|
+| is_l1() GPS | sigId=3をL1扱い（実際はL2） |
+| is_l2() GPS | sigId=3が漏れ |
+| is_l2() BeiDou | 完全に漏れ |
+| is_l2() QZSS | sigId=5が漏れ |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| [nav-sig-behavior-spec.md](../session107/nav-sig-behavior-spec.md) | ADR-008反映、signal_stats追加、テストシナリオ確定 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session109/session-summary.md](../session109/session-summary.md) | セッションサマリー |
+| [session110/session-plan.md](../session110/session-plan.md) | 次セッション計画 |
+
+**テストシナリオリスト（確定）**:
+| カテゴリ | テスト数 |
+|---------|---------|
+| 8.2 L1/L2判定 | 17件 |
+| 8.4 signal_stats | 12件 |
+
+**次セッション（Session 110）でやること**:
+- TDD Phase 3: テストコード作成
+- TDD Phase 4: 実装（sigIdバグ修正 + signal_stats新規）
+- TDD Phase 5: リファクタリング
+
+---
