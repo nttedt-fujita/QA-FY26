@@ -44,9 +44,11 @@ ntrip-client = "0.1"
 
 ## 参照資料
 
-- [session114/ntrip-research-summary.md](../session114/ntrip-research-summary.md) — 調査結果まとめ
-- [session114/ntrip-protocol-spec.md](../session114/ntrip-protocol-spec.md) — NTRIP仕様
-- [session114/rtk-configuration.md](../session114/rtk-configuration.md) — ZED-F9P RTK設定
+- [20-ntrip-rtk-implementation.md](../../docs/missions/m1-sensor-evaluation/gnss/20-ntrip-rtk-implementation.md) — 調査結果まとめ
+- [21-ntrip-protocol-spec.md](../../docs/missions/m1-sensor-evaluation/gnss/21-ntrip-protocol-spec.md) — NTRIP仕様
+- [22-rtk-configuration.md](../../docs/missions/m1-sensor-evaluation/gnss/22-rtk-configuration.md) — ZED-F9P RTK設定
+
+**注**: 実際のセッションではRTK実装ではなく、ドキュメント正式配置を実施。詳細はsession-summary.md参照。
 
 ---
 

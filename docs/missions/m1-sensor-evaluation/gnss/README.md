@@ -46,6 +46,25 @@
 | [11-px4-uorb-mapping.md](11-px4-uorb-mapping.md) | PX4 uORBとUBXメッセージの対応（Session 57更新） | 調査完了 |
 | [12-px4-source-evidence.md](12-px4-source-evidence.md) | PX4ソースコード調査エビデンス（Session 57） | URL+原文抜粋 |
 | [13-ubx-parser-test-scenarios.md](13-ubx-parser-test-scenarios.md) | UBXパーサー振る舞い・テストシナリオ（Session 72） | TDD実装 |
+| [14-gnss-tool-needs.md](14-gnss-tool-needs.md) | GNSSツール要求（What） | Session 71 |
+| [15-gnss-tool-requirements.md](15-gnss-tool-requirements.md) | GNSSツール要件（How） | Session 71 |
+| [16-gnss-tool-architecture.md](16-gnss-tool-architecture.md) | GNSSツールアーキテクチャ | Session 71 |
+| [17-gnss-tool-implementation-plan.md](17-gnss-tool-implementation-plan.md) | GNSSツール実装計画 | Session 71 |
+| [18-cfg-parser-design-decisions.md](18-cfg-parser-design-decisions.md) | CFGパーサー設計判断 | Session 75 |
+| [19-gnss-unified-domain-model.md](19-gnss-unified-domain-model.md) | GNSS統合ドメインモデル | Session 109 |
+| [20-ntrip-rtk-implementation.md](20-ntrip-rtk-implementation.md) | NTRIP/RTK実装方針 | Session 114 |
+| [21-ntrip-protocol-spec.md](21-ntrip-protocol-spec.md) | NTRIPプロトコル仕様抽出 | Session 114 |
+| [22-rtk-configuration.md](22-rtk-configuration.md) | ZED-F9P RTK設定 | Session 114 |
+
+### 補足ドキュメント
+
+| ファイル | 内容 |
+|---------|------|
+| [api-spec.md](api-spec.md) | API仕様 |
+| [ubx-nav-messages.md](ubx-nav-messages.md) | UBX NAVメッセージ一覧 |
+| [ubx-mon-messages.md](ubx-mon-messages.md) | UBX MONメッセージ一覧 |
+| [ubx-signal-identifiers.md](ubx-signal-identifiers.md) | UBX信号識別子 |
+| [sources/](sources/) | 1次情報PDF（NTRIP仕様書等） |
 
 ---
 
