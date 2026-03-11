@@ -232,3 +232,41 @@
 - ドキュメント整理（直近セッションの資料メンテナンス）
 
 ---
+
+## Session 107 (2026-03-11)
+
+**概要**: NAV-SIG仕様調査 + TDD Phase 1振る舞い記述
+
+**実施内容**:
+1. **sigId定義の正確な抽出**
+   - PDF p.18-21からsigId定義を抽出
+   - L1/L2判定ロジックの正確な仕様を確認
+   - **重要発見**: 既存コードにバグあり（GPS sigId 3をL1Cと誤認、実際はL2 CL）
+2. **NAV-SAT/NAV-SIG仕様の正式配置**
+   - docs/missions/m1-sensor-evaluation/gnss/に正式ドキュメント作成
+3. **TDD Phase 1: 振る舞い記述**
+   - NAV-SIGパーサーの振る舞い仕様を作成
+   - テストシナリオリストを設計
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ubx-signal-identifiers.md](../../docs/missions/m1-sensor-evaluation/gnss/ubx-signal-identifiers.md) | sigId定義（正式版） |
+| [ubx-nav-messages.md](../../docs/missions/m1-sensor-evaluation/gnss/ubx-nav-messages.md) | NAV-SAT/NAV-SIG仕様 |
+| [ubx-mon-messages.md](../../docs/missions/m1-sensor-evaluation/gnss/ubx-mon-messages.md) | MON-SPAN/MON-RF仕様 |
+| [session107/nav-sig-behavior-spec.md](../session107/nav-sig-behavior-spec.md) | NAV-SIG振る舞い仕様（TDD Phase 1） |
+| [session107/ubx-spec-extract.md](../session107/ubx-spec-extract.md) | PDF抽出結果（中間ファイル） |
+| [session107/session-summary.md](../session107/session-summary.md) | セッションサマリー |
+| [session108/session-plan.md](../session108/session-plan.md) | 次セッション計画 |
+| [nav_sig.rs](../../prototype/m1-gnss/backend/src/ubx/nav_sig.rs) | NAV-SIGパーサー（ドラフト、sigId判定バグあり） |
+
+**残課題**:
+- 屋外検査要求の確定（ヒアリング未完了部分）
+- nav_sig.rsのsigId判定バグ修正
+- TDD Phase 2-5（テスト実装・コード修正）
+
+**次セッション（Session 108）でやること**:
+- 屋外検査要求の確定（業界標準ベースで合格基準設定）
+- NAV-SIGパーサー実装（TDD Phase 2-5）
+
+---
