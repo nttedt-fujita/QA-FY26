@@ -112,6 +112,7 @@
 |-----|---------|---------|------|
 | [ADR-004](docs/adr/m1/ADR-004-gnss-tool-approach.md) | GNSS評価ツールのアプローチ選択 | M1-B GNSS評価 | 承認済み |
 | [ADR-005](docs/adr/m1/ADR-005-gnss-tool-tech-stack.md) | GNSS評価ツール技術スタック選定 | M1-B GNSS評価 | 承認済み |
+| [ADR-007](docs/adr/m1/ADR-007-baud-rate-detection.md) | ボーレート自動検出方式 | DeviceManager | 承認済み |
 
 ### 共通（ミッション横断）
 

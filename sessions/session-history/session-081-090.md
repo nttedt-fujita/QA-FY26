@@ -329,3 +329,37 @@ Session 89: Phase 1 統合テスト（実機）T1-1〜T1-7
 - InspectionEngine → Repository統合（時間があれば）
 
 ---
+
+## Session 90 (2026-03-11)
+
+**概要**: ボーレート自動判定調査 + 今後の計画整理
+
+**実施内容**:
+1. **ボーレート自動判定調査**
+   - ZED-F9P Integration ManualをPythonスクリプトで分析
+   - 結論: ZED-F9P側には自動ボーレート検出機能なし
+   - u-centerはホスト側で複数ボーレート試行を実装
+2. **ADR-007作成**
+   - ホスト側（DeviceManager）で複数ボーレート試行方式を採用
+   - 候補: 38400 → 115200 → 9600
+3. **ホットプラグ検出の計画整理**
+   - イベント駆動 vs ポーリングの解説
+   - Phase 1はポーリング、Phase 2以降でイベント駆動を検討
+4. **今後のセッション計画整理**
+
+**計画変更**:
+- InspectionEngine → Repository統合は次回へ延期
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ADR-007-baud-rate-detection.md](../../docs/adr/m1/ADR-007-baud-rate-detection.md) | ボーレート自動検出方式 |
+| [hotplug-detection-plan.md](../session90/hotplug-detection-plan.md) | ホットプラグ検出機能の計画 |
+| [session90/session-summary.md](../session90/session-summary.md) | セッションサマリー |
+
+**進捗**: Phase 1 Step 6（ボーレート）ADR作成済み
+
+**次セッション（Session 91）でやること**:
+- コンポーネント統合（InspectionEngine → Repository）
+
+---
