@@ -1,0 +1,505 @@
+
+============================================================
+Page 152
+============================================================
+
+u-blox F9 HPG 1.32 - Interface Description
+0
+U4
+iTOW
+-
+ms
+GPS time of week of the navigation epoch.
+See the description of iTOW for details.
+4
+U1
+geo
+-
+-
+PRN Number of the GEO where correction and
+integrity data is used from
+5
+U1
+mode
+-
+-
+SBAS Mode
+•
+0 Disabled
+•
+1 Enabled integrity
+•
+3 Enabled test mode
+6
+I1
+sys
+-
+-
+SBAS System (WAAS/EGNOS/...)
+•
+-1 Unknown
+•
+0 WAAS
+•
+1 EGNOS
+•
+2 MSAS
+•
+3 GAGAN
+•
+16 GPS
+7
+X1
+service
+-
+-
+SBAS Services available
+bit 0   U:1
+Ranging
+-
+-
+GEO may be used as ranging source
+bit 1   U:1
+Corrections
+-
+-
+GEO is providing correction data
+bit 2   U:1
+Integrity
+-
+-
+GEO is providing integrity
+bit 3   U:1
+Testmode
+-
+-
+GEO is in test mode
+bit 4   U:1
+Bad
+-
+-
+Problem with signal or broadcast data indicated
+8
+U1
+cnt
+-
+-
+Number of SV data following
+9
+X1
+statusFlags
+-
+-
+SBAS status ﬂags
+bits 1…0   U:2
+integrityUsed
+-
+-
+SBAS integrity used
+•
+0 = Unknown
+•
+1 = Integrity information is not available or SBAS
+integrity is not enabled
+•
+2 = Receiver uses only GPS satellites for which
+integrity information is available
+10
+U1[2]
+reserved0
+-
+-
+Reserved
+Start of repeated group (cnt times)
+12 + n·12
+U1
+svid
+-
+-
+SV ID
+13 + n·12
+U1
+reserved1
+-
+-
+Reserved
+14 + n·12
+U1
+udre
+-
+-
+Monitoring status
+15 + n·12
+U1
+svSys
+-
+-
+System (WAAS/EGNOS/...)
+same as SYS
+16 + n·12
+U1
+svService
+-
+-
+Services available
+same as SERVICE
+17 + n·12
+U1
+reserved2
+-
+-
+Reserved
+18 + n·12
+I2
+prc
+-
+cm
+Pseudo Range correction in [cm]
+20 + n·12
+U1[2]
+reserved3
+-
+-
+Reserved
+22 + n·12
+I2
+ic
+-
+cm
+Ionosphere correction in [cm]
+End of repeated group (cnt times)
+3.15.18 UBX-NAV-SIG (0x01 0x43)
+UBX-22008968 - R01
+ 
+3 UBX protocol
+Page 152 of 305
+C1-Public
+
+
+============================================================
+Page 153
+============================================================
+
+u-blox F9 HPG 1.32 - Interface Description
+3.15.18.1 Signal information
+Message
+UBX-NAV-SIG
+Signal information
+Type
+Periodic/polled
+Comment
+This message displays information about signals currently tracked by the receiver.
+On the F9 platform the maximum number of signals is 120.
+Header
+Class
+ID
+Length (Bytes)
+Payload
+Checksum
+Message
+structure
+0xb5 0x62
+0x01
+0x43
+8 + numSigs·16
+see below
+CK_A CK_B
+Payload description:
+Byte offset
+Type
+Name
+Scale
+Unit
+Description
+0
+U4
+iTOW
+-
+ms
+GPS time of week of the navigation epoch.
+See section iTOW timestamps in the integration
+manual for details.
+4
+U1
+version
+-
+-
+Message version (0x00 for this version)
+5
+U1
+numSigs
+-
+-
+Number of signals
+6
+U1[2]
+reserved0
+-
+-
+Reserved
+Start of repeated group (numSigs times)
+8 + n·16
+U1
+gnssId
+-
+-
+GNSS 
+identiﬁer 
+(see 
+Satellite 
+Numbering) 
+for
+assignment
+9 + n·16
+U1
+svId
+-
+-
+Satellite identiﬁer (see Satellite Numbering) for
+assignment
+10 + n·16
+U1
+sigId
+-
+-
+New style signal identiﬁer (see Signal Identiﬁers)
+11 + n·16
+U1
+freqId
+-
+-
+Only used for GLONASS: This is the frequency slot + 7
+(range from 0 to 13)
+12 + n·16
+I2
+prRes
+0.1
+m
+Pseudorange residual
+14 + n·16
+U1
+cno
+-
+dBHz
+Carrier-to-noise density ratio (signal strength)
+15 + n·16
+U1
+qualityInd
+-
+-
+Signal quality indicator:
+•
+0 = no signal
+•
+1 = searching signal
+•
+2 = signal acquired
+•
+3 = signal detected but unusable
+•
+4 = code locked and time synchronized
+•
+5, 6, 7 = code and carrier locked and time
+synchronized
+16 + n·16
+U1
+corrSource
+-
+-
+Correction source:
+•
+0 = no corrections
+•
+1 = SBAS corrections
+•
+2 = BeiDou corrections
+•
+3 = RTCM2 corrections
+•
+4 = RTCM3 OSR corrections
+•
+5 = RTCM3 SSR corrections
+•
+6 = QZSS SLAS corrections
+•
+7 = SPARTN corrections
+•
+8 = CLAS corrections
+UBX-22008968 - R01
+ 
+3 UBX protocol
+Page 153 of 305
+C1-Public
+
+
+============================================================
+Page 154
+============================================================
+
+u-blox F9 HPG 1.32 - Interface Description
+17 + n·16
+U1
+ionoModel
+-
+-
+Ionospheric model used:
+•
+0 = no model
+•
+1 = Klobuchar model transmitted by GPS
+•
+2 = SBAS model
+•
+3 = Klobuchar model transmitted by BeiDou
+•
+8 = Iono delay derived from dual frequency
+observations
+18 + n·16
+X2
+sigFlags
+-
+-
+Signal related ﬂags
+bits 1…0   U:2
+health
+-
+-
+Signal health ﬂag:
+•
+0 = unknown
+•
+1 = healthy
+•
+2 = unhealthy
+bit 2   U:1
+prSmoothed
+-
+-
+1 = Pseudorange has been smoothed
+bit 3   U:1
+prUsed
+-
+-
+1 = Pseudorange has been used for this signal
+bit 4   U:1
+crUsed
+-
+-
+1 = Carrier range has been used for this signal
+bit 5   U:1
+doUsed
+-
+-
+1 = Range rate (Doppler) has been used for this signal
+bit 6   U:1
+prCorrUsed
+-
+-
+1 = Pseudorange corrections have been used for this
+signal
+bit 7   U:1
+crCorrUsed
+-
+-
+1 = Carrier range corrections have been used for this
+signal
+bit 8   U:1
+doCorrUsed
+-
+-
+1 = Range rate (Doppler) corrections have been used
+for this signal
+20 + n·16
+U1[4]
+reserved1
+-
+-
+Reserved
+End of repeated group (numSigs times)
+3.15.19 UBX-NAV-SLAS (0x01 0x42)
+3.15.19.1 QZSS L1S SLAS status data
+Message
+UBX-NAV-SLAS
+QZSS L1S SLAS status data
+Type
+Periodic/polled
+Comment
+This message outputs the status of the QZSS L1S SLAS sub system
+Header
+Class
+ID
+Length (Bytes)
+Payload
+Checksum
+Message
+structure
+0xb5 0x62
+0x01
+0x42
+20 + cnt·8
+see below
+CK_A CK_B
+Payload description:
+Byte offset
+Type
+Name
+Scale
+Unit
+Description
+0
+U4
+iTOW
+-
+ms
+GPS time of week of the navigation epoch.
+See the description of iTOW for details.
+4
+U1
+version
+-
+-
+Message version (0x00 for this version)
+5
+U1[3]
+reserved0
+-
+-
+Reserved
+8
+I4
+gmsLon
+1e-3
+deg
+Longitude of the used ground monitoring station
+12
+I4
+gmsLat
+1e-3
+deg
+Latitude of the used ground monitoring station
+16
+U1
+gmsCode
+-
+-
+Code of the used ground monitoring station according
+to the QZSS SLAS Interface Speciﬁcation, available
+from qzss.go.jp/en/
+17
+U1
+qzssSvId
+-
+-
+Satellite identiﬁer of the QZS/GEO whose correction
+data is used (see Satellite Numbering)
+18
+X1
+serviceFlags
+-
+-
+Flags regarding SLAS service
+UBX-22008968 - R01
+ 
+3 UBX protocol
+Page 154 of 305
+C1-Public

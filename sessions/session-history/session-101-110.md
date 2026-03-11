@@ -197,3 +197,38 @@
 - 屋外検査の要求整理（What）
 
 ---
+
+## Session 106 (2026-03-11)
+
+**概要**: MON-SPAN仕様確認 + 屋外検査要求整理
+
+**実施内容**:
+1. **UBX仕様書からの情報抽出**
+   - PyMuPDFでPDFから目次抽出→該当ページ読み取り
+   - MON-SPAN (p.134), NAV-SAT (p.150-151), NAV-SIG (p.152-154)を抽出
+2. **MON-SPAN仕様の確認**
+   - 256点のスペクトラムデータ（dB単位）
+   - 中心周波数計算: f(i) = center + span × (i - 127) / 256
+   - 128MHz/256点の場合、分解能500kHz
+3. **NAV-SAT vs NAV-SIG比較**
+   - 結論: 屋外検査では**NAV-SIG**を使用（L1/L2別のC/N0が必要）
+4. **屋外検査の要求整理**
+   - 優先度の高い要求（What）を整理
+   - 実装優先順位を決定
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session106/ubx-spec-memo.md](../session106/ubx-spec-memo.md) | MON-SPAN, NAV-SAT, NAV-SIG仕様メモ |
+| [session106/outdoor-inspection-needs.md](../session106/outdoor-inspection-needs.md) | 屋外検査の要求整理（What） |
+| [session106/session-summary.md](../session106/session-summary.md) | セッションサマリー |
+| [session107/session-plan.md](../session107/session-plan.md) | 次セッション計画 |
+
+**hooks観察**:
+- PDF抽出スクリプトを毎回新規作成している問題を記録
+
+**次セッション（Session 107）でやること**:
+- NAV-SIGパーサー実装（TDD）
+- ドキュメント整理（直近セッションの資料メンテナンス）
+
+---
