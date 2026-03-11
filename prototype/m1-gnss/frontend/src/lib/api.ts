@@ -80,3 +80,103 @@ export async function disconnectDevice(path: string): Promise<void> {
     throw new Error(error.error);
   }
 }
+
+// ===========================================
+// ロットAPI
+// ===========================================
+
+/**
+ * ロット情報
+ */
+export interface Lot {
+  id: number;
+  lot_number: string;
+  expected_rate_ms: number | null;
+  expected_port_in_proto: string | null;
+  expected_port_out_proto: string | null;
+  memo: string | null;
+}
+
+/**
+ * ロット一覧レスポンス
+ */
+export interface LotListResponse {
+  lots: Lot[];
+}
+
+/**
+ * ロット作成リクエスト
+ */
+export interface CreateLotRequest {
+  lot_number: string;
+  expected_rate_ms?: number;
+  expected_port_in_proto?: string;
+  expected_port_out_proto?: string;
+  memo?: string;
+}
+
+/**
+ * ロット更新リクエスト
+ */
+export interface UpdateLotRequest {
+  expected_rate_ms?: number;
+  expected_port_in_proto?: string;
+  expected_port_out_proto?: string;
+  memo?: string;
+}
+
+/**
+ * ロット一覧を取得
+ */
+export async function listLots(): Promise<LotListResponse> {
+  const res = await fetch(`${API_BASE}/api/lots`);
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
+
+/**
+ * ロットを作成
+ */
+export async function createLot(request: CreateLotRequest): Promise<Lot> {
+  const res = await fetch(`${API_BASE}/api/lots`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
+
+/**
+ * ロット詳細を取得
+ */
+export async function getLot(id: number): Promise<Lot> {
+  const res = await fetch(`${API_BASE}/api/lots/${id}`);
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
+
+/**
+ * ロットを更新
+ */
+export async function updateLot(id: number, request: UpdateLotRequest): Promise<Lot> {
+  const res = await fetch(`${API_BASE}/api/lots/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}

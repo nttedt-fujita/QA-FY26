@@ -218,3 +218,43 @@
 - API連携テスト
 
 ---
+
+## Session 97 (2026-03-11)
+
+**概要**: フロントエンド（ロット画面）実装
+
+**実施内容**:
+1. **ロット用API関数追加**
+   - api.ts に listLots, createLot, getLot, updateLot 追加
+2. **LotListコンポーネント作成**
+   - ロット一覧表示、選択状態管理
+3. **LotFormコンポーネント作成**
+   - 新規作成/編集フォーム（ロット番号、出力レート、ポート設定、メモ）
+4. **ロット画面統合**
+   - 2カラムレイアウト（モックアップ準拠）
+5. **ナビゲーション追加**
+   - タブナビ（ロット / 装置 / 検査）、ヘッダー
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [src/components/LotList.tsx](../../prototype/m1-gnss/frontend/src/components/LotList.tsx) | ロット一覧 |
+| [src/components/LotForm.tsx](../../prototype/m1-gnss/frontend/src/components/LotForm.tsx) | ロット詳細/編集 |
+| [src/components/Navigation.tsx](../../prototype/m1-gnss/frontend/src/components/Navigation.tsx) | タブナビ |
+| [src/app/lots/page.tsx](../../prototype/m1-gnss/frontend/src/app/lots/page.tsx) | ロット管理画面 |
+| [session97/session-summary.md](../session97/session-summary.md) | セッションサマリー |
+| [session98/session-plan.md](../session98/session-plan.md) | 次セッション計画 |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| src/lib/api.ts | ロットAPI関数追加 |
+| src/app/layout.tsx | ヘッダー・ナビゲーション追加 |
+| src/app/page.tsx | /lots へリダイレクト |
+
+**次セッション（Session 98）でやること**:
+- 検査画面の実装
+- 検査API連携
+- 結果テーブル表示
+
+---
