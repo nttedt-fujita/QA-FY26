@@ -174,6 +174,38 @@ impl SqliteRepository {
         Ok(result)
     }
 
+    /// ロットを更新
+    pub fn update_lot(
+        &self,
+        id: i64,
+        expected_rate_ms: Option<i32>,
+        expected_port_in_proto: Option<&str>,
+        expected_port_out_proto: Option<&str>,
+        memo: Option<&str>,
+    ) -> Result<(), RepositoryError> {
+        let affected = self.conn.execute(
+            "UPDATE lots SET
+                expected_rate_ms = ?1,
+                expected_port_in_proto = ?2,
+                expected_port_out_proto = ?3,
+                memo = ?4,
+                updated_at = datetime('now')
+             WHERE id = ?5",
+            params![
+                expected_rate_ms,
+                expected_port_in_proto,
+                expected_port_out_proto,
+                memo,
+                id,
+            ],
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        if affected == 0 {
+            return Err(RepositoryError::NotFound(format!("Lot id={}", id)));
+        }
+        Ok(())
+    }
+
     // ===========================================
     // Device CRUD
     // ===========================================
