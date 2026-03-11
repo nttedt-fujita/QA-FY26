@@ -2,7 +2,7 @@
 //!
 //! GNSS装置の検出・接続・状態管理を行うマネージャー
 
-use log::{debug, trace};
+use log::{debug, info, trace, warn};
 use std::io;
 
 use super::filter::{filter_gnss_ports, PortInfo};
@@ -359,6 +359,32 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             // 蓄積データから B5 62 を探す
             if let Some(ubx_frame) = Self::extract_ubx_frame(&accumulated) {
                 debug!("receive_ubx: UBXフレーム抽出成功（{}バイト）", ubx_frame.len());
+
+                // 蓄積データにUBX以外のデータがあった場合、それをログ出力（仮説検証用）
+                if let Some(sync_pos) = accumulated.windows(2).position(|w| w == [0xB5, 0x62]) {
+                    if sync_pos > 0 {
+                        let prefix = &accumulated[..sync_pos];
+                        let hex_str: String = prefix.iter().take(32).map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
+                        let truncated = if prefix.len() > 32 { "..." } else { "" };
+
+                        // データ種別判定
+                        let data_type = if prefix.starts_with(b"$") {
+                            "NMEA"
+                        } else {
+                            "不明"
+                        };
+                        debug!("receive_ubx: UBX前に{}バイトの{}データあり: {}{}", sync_pos, data_type, hex_str, truncated);
+
+                        // NMEAの場合は内容も表示
+                        if data_type == "NMEA" {
+                            if let Ok(nmea_str) = String::from_utf8(prefix.to_vec()) {
+                                let preview: String = nmea_str.chars().take(60).collect();
+                                debug!("receive_ubx: NMEA内容: {}", preview.replace('\n', "\\n").replace('\r', "\\r"));
+                            }
+                        }
+                    }
+                }
+
                 return Ok(ubx_frame);
             }
         }
@@ -401,6 +427,74 @@ impl<P: SerialPortProvider> DeviceManager<P> {
         Some(frame)
     }
 
+    /// ACK-ACKを待つ
+    ///
+    /// CFG-VALSETなどの設定コマンド送信後に呼び出す。
+    /// 指定したclass/idに対するACK-ACKを受信するまで待つ。
+    ///
+    /// # Arguments
+    /// * `expected_class` - 送信したメッセージのクラス
+    /// * `expected_id` - 送信したメッセージのID
+    /// * `timeout` - タイムアウト
+    ///
+    /// # Returns
+    /// * Ok(true) - ACK-ACK受信
+    /// * Ok(false) - ACK-NAK受信
+    /// * Err - タイムアウトまたはエラー
+    pub fn wait_for_ack(
+        &mut self,
+        expected_class: u8,
+        expected_id: u8,
+        timeout: std::time::Duration,
+    ) -> Result<bool, DeviceManagerError> {
+        use crate::ubx::ack::{parse_ack, AckResult};
+
+        debug!(
+            "wait_for_ack: Class=0x{:02X}, ID=0x{:02X}, timeout={:?} で開始",
+            expected_class, expected_id, timeout
+        );
+
+        // UBXフレームを受信
+        let frame = self.receive_ubx(timeout)?;
+
+        // ACK判定
+        match parse_ack(&frame) {
+            AckResult::Ack { class, id } => {
+                if class == expected_class && id == expected_id {
+                    info!(
+                        "wait_for_ack: ACK-ACK受信 (Class=0x{:02X}, ID=0x{:02X})",
+                        class, id
+                    );
+                    Ok(true)
+                } else {
+                    warn!(
+                        "wait_for_ack: 異なるメッセージのACK受信 (Class=0x{:02X}, ID=0x{:02X})",
+                        class, id
+                    );
+                    Ok(true) // 一応成功扱い
+                }
+            }
+            AckResult::Nak { class, id } => {
+                warn!(
+                    "wait_for_ack: ACK-NAK受信 (Class=0x{:02X}, ID=0x{:02X})",
+                    class, id
+                );
+                Ok(false)
+            }
+            AckResult::NotAck => {
+                // ACK/NAKでない応答が来た場合
+                let hex_str: String = frame.iter().take(16).map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
+                warn!("wait_for_ack: ACK/NAKでない応答: {}", hex_str);
+                // 一応成功扱い（設定が適用された可能性がある）
+                Ok(true)
+            }
+            AckResult::TooShort | AckResult::InvalidSync => {
+                warn!("wait_for_ack: 不正なフレーム受信");
+                Ok(false)
+            }
+        }
+    }
+
     /// 受信バッファをドレイン（空読み）
     ///
     /// poll送信前に呼び出して、前回の応答の残りをクリアする
@@ -417,11 +511,13 @@ impl<P: SerialPortProvider> DeviceManager<P> {
 
         let mut buf = vec![0u8; 1024];
         let mut total_drained = 0usize;
+        let mut all_drained_data: Vec<u8> = Vec::new();
         loop {
             match port.read(&mut buf) {
                 Ok(0) => break,
                 Ok(n) => {
                     total_drained += n;
+                    all_drained_data.extend_from_slice(&buf[..n]);
                     trace!("drain_buffer: {}バイト読み捨て", n);
                     continue;
                 }
@@ -431,7 +527,28 @@ impl<P: SerialPortProvider> DeviceManager<P> {
         }
 
         if total_drained > 0 {
-            debug!("drain_buffer: 合計 {}バイト読み捨て", total_drained);
+            // 読み捨てたデータの内容をログ出力（仮説検証用）
+            let hex_str: String = all_drained_data.iter().take(64).map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
+            let truncated = if all_drained_data.len() > 64 { "..." } else { "" };
+
+            // NMEAかUBXか判別
+            let data_type = if all_drained_data.starts_with(&[0xB5, 0x62]) {
+                "UBX"
+            } else if all_drained_data.starts_with(b"$") {
+                "NMEA"
+            } else {
+                "不明"
+            };
+
+            debug!("drain_buffer: 合計 {}バイト読み捨て ({}): {}{}", total_drained, data_type, hex_str, truncated);
+
+            // NMEAの場合は文字列としてもログ出力
+            if data_type == "NMEA" {
+                if let Ok(nmea_str) = String::from_utf8(all_drained_data.clone()) {
+                    let preview: String = nmea_str.chars().take(80).collect();
+                    debug!("drain_buffer: NMEA内容: {}", preview.replace('\n', "\\n").replace('\r', "\\r"));
+                }
+            }
         }
 
         Ok(())

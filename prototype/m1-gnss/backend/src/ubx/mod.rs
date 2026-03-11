@@ -1,5 +1,6 @@
 //! UBXプロトコル関連モジュール
 
+pub mod ack;
 pub mod cfg_prt;
 pub mod cfg_rate;
 pub mod cfg_valset;

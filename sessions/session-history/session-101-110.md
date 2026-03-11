@@ -82,3 +82,49 @@
 - 安定して5項目Passする状態を目指す
 
 ---
+
+## Session 103 (2026-03-11)
+
+**概要**: UBX通信タイミング問題の根本解決（ACK確認実装）
+
+**実施内容**:
+1. **デバッグログのメンテナンス**
+   - 仮説検証可能なログ出力を追加
+   - drain_bufferで読み捨てデータの内容をログ出力
+   - receive_ubxでUBX前の蓄積データを詳細ログ
+2. **ubx/ack.rs 新規作成**
+   - `parse_ack()`: ACK-ACK/ACK-NAK判定
+   - `is_ack_for()`: 指定class/idのACK判定
+   - テスト7件追加
+3. **manager.rs に wait_for_ack() 追加**
+   - CFG-VALSET送信後にACK-ACKを待つ
+   - 500msタイムアウト
+4. **engine.rs の NMEA OFF 処理変更**
+   - 変更前: send_ubx() → 50ms待機
+   - 変更後: send_ubx() → wait_for_ack()
+
+**テスト結果**: 159テスト全パス（152 → 159、+7テスト）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ack.rs](../../prototype/m1-gnss/backend/src/ubx/ack.rs) | ACK/NAKメッセージ関連 |
+| [session103/session-summary.md](../session103/session-summary.md) | セッションサマリー |
+| [session104/session-plan.md](../session104/session-plan.md) | 次セッション計画 |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| engine.rs | ログ強化、ACK確認追加 |
+| manager.rs | ログ強化、wait_for_ack追加 |
+| ubx/mod.rs | ackモジュール追加 |
+
+**実機テスト結果**: 1回目 5項目全てPass
+- ACK-ACK受信成功 → NMEA OFF適用確認
+- drain_bufferで読み捨てデータなし
+
+**次セッション（Session 104）でやること**:
+- 複数回テストして安定性確認
+- エラー発生時のログ分析
+
+---
