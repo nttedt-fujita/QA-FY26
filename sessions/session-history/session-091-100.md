@@ -379,3 +379,41 @@
 - 案B（NMEA OFF/ON）の実装
 
 ---
+
+## Session 101 (2026-03-11)
+
+**概要**: UBX通信タイミング問題の対策実装（案A: B5 62同期）
+
+**実施内容**:
+1. **案A: receive_ubx で B5 62 同期を実装**
+   - 受信データから `B5 62` を探す同期処理を追加
+   - `extract_ubx_frame` ヘルパー関数を追加
+   - NMEAが先に届いてもUBXフレームを正しく読み取れるようになった
+2. **テスト追加（+6テスト）**
+   - C5-1〜C5-6: UBXフレーム同期テスト
+3. **実機テスト**
+   - 改善を確認（4/5項目Pass）
+   - ただしタイミング依存で失敗するケースあり
+
+**テスト結果**: 144テスト全パス（138 → 144）
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| [src/device/manager.rs](../../prototype/m1-gnss/backend/src/device/manager.rs) | receive_ubx B5 62同期、extract_ubx_frame追加、テスト+6 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session101/session-summary.md](../session101/session-summary.md) | セッションサマリー |
+| [session102/session-plan.md](../session102/session-plan.md) | 次セッション計画 |
+
+**残課題**:
+- 案Bの実装（検査中のNMEA OFF/ON）
+
+**次セッション（Session 102）でやること**:
+- 案B: cfg_valset.rs 作成（NMEA OFF/ONメッセージ生成）
+- 案B: engine.rs で検査開始/終了時に NMEA OFF/ON
+- 実機テストで効果確認（5項目安定Pass）
+
+---

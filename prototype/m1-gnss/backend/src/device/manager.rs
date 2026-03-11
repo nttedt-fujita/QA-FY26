@@ -307,31 +307,98 @@ impl<P: SerialPortProvider> DeviceManager<P> {
     }
 
     /// UBXメッセージを受信
+    ///
+    /// 受信データから `B5 62` を探し、UBXフレームのみを抽出して返す。
+    /// NMEAなど他のデータが先に届いても、UBXフレームを正しく読み取れる。
     pub fn receive_ubx(&mut self, timeout: std::time::Duration) -> Result<Vec<u8>, DeviceManagerError> {
+        use std::time::Instant;
+
         let port = self
             .connected_port
             .as_mut()
             .ok_or(DeviceManagerError::NotConnected)?;
 
-        debug!("receive_ubx: タイムアウト設定 {:?}", timeout);
-        port.set_timeout(timeout)?;
+        let start = Instant::now();
+        let mut accumulated: Vec<u8> = Vec::new();
 
-        let mut buf = vec![0u8; 1024];
-        match port.read(&mut buf) {
-            Ok(n) => {
-                buf.truncate(n);
-                debug!("receive_ubx: {}バイト受信", n);
-                Ok(buf)
+        debug!("receive_ubx: タイムアウト {:?} で開始", timeout);
+
+        loop {
+            // タイムアウトチェック
+            let elapsed = start.elapsed();
+            if elapsed >= timeout {
+                debug!("receive_ubx: タイムアウト（{}バイト受信済み）", accumulated.len());
+                return Err(DeviceManagerError::Timeout);
             }
-            Err(e) if e.kind() == io::ErrorKind::TimedOut => {
-                debug!("receive_ubx: タイムアウト");
-                Err(DeviceManagerError::Timeout)
+
+            // 残りタイムアウトを設定
+            let remaining = timeout - elapsed;
+            port.set_timeout(remaining)?;
+
+            // データを読む
+            let mut buf = vec![0u8; 1024];
+            match port.read(&mut buf) {
+                Ok(n) if n > 0 => {
+                    trace!("receive_ubx: {}バイト読み取り", n);
+                    accumulated.extend_from_slice(&buf[..n]);
+                }
+                Ok(_) => continue, // 0バイト読み取り
+                Err(e) if e.kind() == io::ErrorKind::TimedOut => {
+                    // タイムアウトだが、蓄積データがあれば処理を試みる
+                    if accumulated.is_empty() {
+                        debug!("receive_ubx: タイムアウト（データなし）");
+                        return Err(DeviceManagerError::Timeout);
+                    }
+                }
+                Err(e) => {
+                    debug!("receive_ubx: IOエラー {:?}", e.kind());
+                    return Err(DeviceManagerError::IoError(e));
+                }
             }
-            Err(e) => {
-                debug!("receive_ubx: IOエラー {:?}", e.kind());
-                Err(DeviceManagerError::IoError(e))
+
+            // 蓄積データから B5 62 を探す
+            if let Some(ubx_frame) = Self::extract_ubx_frame(&accumulated) {
+                debug!("receive_ubx: UBXフレーム抽出成功（{}バイト）", ubx_frame.len());
+                return Ok(ubx_frame);
             }
         }
+    }
+
+    /// 蓄積データからUBXフレームを抽出
+    ///
+    /// B5 62 を探し、完全なUBXフレームがあれば抽出して返す。
+    /// フレームが不完全な場合は None を返す。
+    fn extract_ubx_frame(data: &[u8]) -> Option<Vec<u8>> {
+        // B5 62 を探す
+        let sync_pos = data.windows(2).position(|w| w == [0xB5, 0x62])?;
+
+        // ヘッダー（class, id, length）が読めるか確認
+        // B5 62 + class(1) + id(1) + length(2) = 6バイト必要
+        if data.len() < sync_pos + 6 {
+            trace!("extract_ubx_frame: ヘッダー不完全（{}/6バイト）", data.len() - sync_pos);
+            return None;
+        }
+
+        // length を読む（リトルエンディアン）
+        let length_offset = sync_pos + 4;
+        let payload_length = u16::from_le_bytes([data[length_offset], data[length_offset + 1]]) as usize;
+
+        // フレーム全体が読めるか確認
+        // B5 62 + class + id + length(2) + payload + checksum(2) = 8 + payload_length
+        let frame_length = 6 + payload_length + 2;
+        if data.len() < sync_pos + frame_length {
+            trace!(
+                "extract_ubx_frame: フレーム不完全（{}/{}バイト）",
+                data.len() - sync_pos,
+                frame_length
+            );
+            return None;
+        }
+
+        // 完全なフレームを抽出
+        let frame = data[sync_pos..sync_pos + frame_length].to_vec();
+        trace!("extract_ubx_frame: フレーム抽出（{}バイト）", frame.len());
+        Some(frame)
     }
 
     /// 受信バッファをドレイン（空読み）
@@ -850,5 +917,133 @@ mod tests {
         // 既に接続中
         let result = manager.connect_auto_detect("/dev/ttyACM0");
         assert!(matches!(result, Err(DeviceManagerError::MaxDevicesReached)));
+    }
+
+    // ===========================================
+    // C5. UBXフレーム同期テスト（B5 62 同期）
+    // ===========================================
+
+    /// C5-1: NMEAが先に来てもUBXフレームを正しく読める
+    #[test]
+    fn test_c5_1_nmea_before_ubx() {
+        // NMEA + UBXフレームのデータを準備
+        // NMEA: $GNGGA,... (例)
+        // UBX: MON-VER応答（簡略版）
+        let nmea = b"$GNGGA,123456.00,3536.65432,N,13944.37890,E,1,12,0.7,35.2,M,39.5,M,,*5A\r\n";
+        let ubx = vec![
+            0xB5, 0x62, // sync
+            0x0A, 0x04, // class: MON, id: VER
+            0x04, 0x00, // length: 4
+            0x01, 0x02, 0x03, 0x04, // payload
+            0x00, 0x00, // checksum (dummy)
+        ];
+
+        let mut data = nmea.to_vec();
+        data.extend(&ubx);
+
+        let provider = MockProvider::new()
+            .with_ports(vec![f9p_port("/dev/ttyACM0")])
+            .with_read_data(data);
+        let mut manager = DeviceManager::new(provider);
+
+        manager.list_devices().unwrap();
+        manager.connect("/dev/ttyACM0").unwrap();
+
+        let result = manager.receive_ubx(Duration::from_secs(1));
+        assert!(result.is_ok(), "NMEAが先に来てもUBXフレームを読めるはず");
+
+        let frame = result.unwrap();
+        assert_eq!(frame[0..2], [0xB5, 0x62], "UBXフレームの先頭はB5 62");
+        assert_eq!(frame.len(), 12, "UBXフレームの長さは12バイト");
+    }
+
+    /// C5-2: UBXフレームのみの場合も正しく読める
+    #[test]
+    fn test_c5_2_ubx_only() {
+        let ubx = vec![
+            0xB5, 0x62, // sync
+            0x0A, 0x04, // class: MON, id: VER
+            0x04, 0x00, // length: 4
+            0x01, 0x02, 0x03, 0x04, // payload
+            0x00, 0x00, // checksum (dummy)
+        ];
+
+        let provider = MockProvider::new()
+            .with_ports(vec![f9p_port("/dev/ttyACM0")])
+            .with_read_data(ubx.clone());
+        let mut manager = DeviceManager::new(provider);
+
+        manager.list_devices().unwrap();
+        manager.connect("/dev/ttyACM0").unwrap();
+
+        let result = manager.receive_ubx(Duration::from_secs(1));
+        assert!(result.is_ok());
+
+        let frame = result.unwrap();
+        assert_eq!(frame, ubx);
+    }
+
+    /// C5-3: B5 62が見つからない場合はタイムアウト
+    #[test]
+    fn test_c5_3_no_ubx_sync() {
+        // NMEAのみ
+        let nmea = b"$GNGGA,123456.00,3536.65432,N,13944.37890,E,1,12,0.7,35.2,M,39.5,M,,*5A\r\n";
+
+        let provider = MockProvider::new()
+            .with_ports(vec![f9p_port("/dev/ttyACM0")])
+            .with_read_data(nmea.to_vec());
+        let mut manager = DeviceManager::new(provider);
+
+        manager.list_devices().unwrap();
+        manager.connect("/dev/ttyACM0").unwrap();
+
+        let result = manager.receive_ubx(Duration::from_millis(100));
+        assert!(matches!(result, Err(DeviceManagerError::Timeout)));
+    }
+
+    /// C5-4: extract_ubx_frame 単体テスト - NMEAの後にUBX
+    #[test]
+    fn test_c5_4_extract_ubx_frame_after_nmea() {
+        let nmea = b"$GNGGA,123\r\n";
+        let ubx = [
+            0xB5, 0x62, // sync
+            0x0A, 0x04, // class: MON, id: VER
+            0x02, 0x00, // length: 2
+            0xAA, 0xBB, // payload
+            0x00, 0x00, // checksum
+        ];
+
+        let mut data = nmea.to_vec();
+        data.extend(&ubx);
+
+        let result = DeviceManager::<MockProvider>::extract_ubx_frame(&data);
+        assert!(result.is_some());
+
+        let frame = result.unwrap();
+        assert_eq!(frame, ubx.to_vec());
+    }
+
+    /// C5-5: extract_ubx_frame 単体テスト - フレーム不完全
+    #[test]
+    fn test_c5_5_extract_ubx_frame_incomplete() {
+        // ヘッダーはあるがペイロードが足りない
+        let data = vec![
+            0xB5, 0x62, // sync
+            0x0A, 0x04, // class: MON, id: VER
+            0x10, 0x00, // length: 16 (16バイト必要だが足りない)
+            0xAA, 0xBB, // payload (2バイトしかない)
+        ];
+
+        let result = DeviceManager::<MockProvider>::extract_ubx_frame(&data);
+        assert!(result.is_none(), "フレームが不完全な場合はNone");
+    }
+
+    /// C5-6: extract_ubx_frame 単体テスト - B5 62 なし
+    #[test]
+    fn test_c5_6_extract_ubx_frame_no_sync() {
+        let data = b"$GNGGA,123456.00,3536.65432,N\r\n";
+
+        let result = DeviceManager::<MockProvider>::extract_ubx_frame(data);
+        assert!(result.is_none(), "B5 62がない場合はNone");
     }
 }
