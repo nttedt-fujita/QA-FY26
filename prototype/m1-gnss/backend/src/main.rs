@@ -1,5 +1,6 @@
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_cors::Cors;
 use actix_web::middleware::Logger;
+use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde::Serialize;
 
 use m1_gnss::web::device_api::{self, AppState};
@@ -56,7 +57,15 @@ async fn main() -> std::io::Result<()> {
     let app_state = web::Data::new(AppState::new());
 
     HttpServer::new(move || {
+        // CORS設定: フロントエンド（localhost:3000）からのリクエストを許可
+        let cors = Cors::default()
+            .allowed_origin("http://localhost:3000")
+            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+            .allowed_headers(vec!["Content-Type"])
+            .max_age(3600);
+
         App::new()
+            .wrap(cors)
             .wrap(Logger::default())
             .app_data(app_state.clone())
             .route("/health", web::get().to(health))
