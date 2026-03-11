@@ -1,45 +1,49 @@
 # Session 104 計画
 
-**目的**: 実機テストでSession 103の効果を確認
+**目的**: NMEA ON後のACK待ち追加（残りの1%エラー対策）
 
 ---
 
 ## 背景
 
-Session 103で以下を実装:
-- CFG-VALSET後のACK確認（wait_for_ack）
-- 詳細なデバッグログ
+Session 103で100回以上テスト:
+- 99%以上Pass
+- 1回だけFwVersionエラー
+
+**原因**: NMEA ON送信後にACK-ACKを待っていない
+- 前回検査のNMEA ONのACK-ACKが次の検査で遅れて届く
+- Connectivityの応答として処理され、以降1つずつズレる
 
 ---
 
 ## やること
 
-### 1. 実機テスト
+### 1. NMEA ON後のACK待ち追加
 
-```bash
-cd prototype/m1-gnss/backend
-RUST_LOG=debug cargo run
+engine.rs の修正:
+```rust
+// 現在
+if let Err(e) = manager.send_ubx(&nmea_on_msg) {
+    warn!("NMEA ON送信エラー: {}", e);
+} else {
+    debug!("NMEA ON 送信完了");
+}
+
+// 修正後
+if let Err(e) = manager.send_ubx(&nmea_on_msg) {
+    warn!("NMEA ON送信エラー: {}", e);
+} else {
+    match manager.wait_for_ack(0x06, 0x8A, std::time::Duration::from_millis(500)) {
+        Ok(true) => info!("[NMEA制御] ACK-ACK受信、NMEA ON適用完了"),
+        Ok(false) => warn!("[NMEA制御] ACK-NAK受信"),
+        Err(e) => warn!("[NMEA制御] ACK待機エラー: {}", e),
+    }
+}
 ```
 
-5項目全てPassするか確認:
-1. 通信疎通（Connectivity）
-2. FWバージョン
-3. シリアル番号
-4. 出力レート
-5. ポート設定
+### 2. 実機テスト
 
-### 2. ログ分析
-
-エラーが発生した場合、ログから原因を特定:
-- ACK-ACKは受信できているか
-- drain_bufferで何が読み捨てられているか
-- receive_ubxでUBX前に何のデータがあったか
-
-### 3. 追加対策（必要に応じて）
-
-効果がない場合:
-- 案2: NMEA OFF後の待機時間延長（100ms〜200ms）
-- 案3: 接続時にバッファ完全クリア（1秒間drain_buffer）
+連続100回以上テストして0%エラーを確認
 
 ---
 
@@ -47,7 +51,6 @@ RUST_LOG=debug cargo run
 
 - [Session 103 サマリー](../session103/session-summary.md)
 - [engine.rs](../../prototype/m1-gnss/backend/src/inspection/engine.rs)
-- [manager.rs](../../prototype/m1-gnss/backend/src/device/manager.rs)
 
 ---
 
