@@ -2,13 +2,11 @@
 //!
 //! GNSS装置の受入検査を実行するメインロジック
 
-use std::time::Duration;
-
 use crate::device::manager::{DeviceManager, DeviceManagerError, SerialPortProvider};
 use crate::device::status::DeviceStatus;
 
 use super::judge::judge_result;
-use super::types::{ExpectedValue, InspectionItem, InspectionResult, ItemType, Verdict};
+use super::types::{InspectionItem, InspectionResult, ItemType, Verdict};
 
 /// 検査エンジンのエラー
 #[derive(Debug)]
@@ -241,9 +239,12 @@ impl InspectionEngine {
                 }
             }
             ItemType::SerialNumber => {
-                // SEC-UNIQID: 5バイトのユニークID
-                if response.len() >= 11 {
-                    let unique_id: String = response[6..11]
+                // SEC-UNIQID: payload構造
+                // [0]: version, [1-3]: reserved, [4-8]: uniqueId (5バイト)
+                // フレーム: sync(2) + class(1) + id(1) + len(2) + payload
+                // payload開始位置は6、uniqueIdは payload[4..9] = response[10..15]
+                if response.len() >= 15 {
+                    let unique_id: String = response[10..15]
                         .iter()
                         .map(|b| format!("{:02X}", b))
                         .collect();
@@ -289,10 +290,12 @@ impl Default for InspectionEngine {
 mod tests {
     use super::*;
     use crate::device::filter::PortInfo;
+    use crate::inspection::types::ExpectedValue;
     use std::cell::RefCell;
     use std::collections::VecDeque;
     use std::io;
     use std::rc::Rc;
+    use std::time::Duration;
 
     // ===========================================
     // モック実装（DeviceManagerと同じ）
