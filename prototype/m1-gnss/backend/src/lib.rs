@@ -2,4 +2,5 @@
 
 pub mod device;
 pub mod inspection;
+pub mod repository;
 pub mod ubx;

@@ -26,6 +26,12 @@ env_logger = "0.11"
 # バイナリ解析用
 bytes = "1"
 
+# DB
+rusqlite = { version = "0.31", features = ["bundled"] }
+
+# 日時
+chrono = { version = "0.4", features = ["serde"] }
+
 [dev-dependencies]
 # テスト用
 tokio-test = "0.4"
