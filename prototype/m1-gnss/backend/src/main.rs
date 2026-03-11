@@ -4,6 +4,7 @@ use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde::Serialize;
 
 use m1_gnss::web::device_api::{self, AppState};
+use m1_gnss::web::lot_api;
 
 /// ヘルスチェック用レスポンス
 #[derive(Serialize)]
@@ -71,6 +72,7 @@ async fn main() -> std::io::Result<()> {
             .route("/health", web::get().to(health))
             .route("/api/gnss/status", web::get().to(gnss_status))
             .configure(device_api::configure)
+            .configure(lot_api::configure)
     })
     .bind("0.0.0.0:8080")?
     .run()

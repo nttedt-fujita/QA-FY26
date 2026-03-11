@@ -145,3 +145,40 @@
 - 残りの実装計画を明確化
 
 ---
+
+## Session 95 (2026-03-11)
+
+**概要**: 実装状況整理 + ロット管理API実装
+
+**実施内容**:
+1. **実装状況の整理**
+   - 過去の成果物（ドメインモデル、UI設計書）を確認
+   - 現状の実装状況を可視化
+2. **実装ロードマップ作成**
+   - Session 95〜98の計画を策定
+3. **ロット管理API実装**
+   - `GET /api/lots`, `POST /api/lots`, `GET /api/lots/{id}`, `PUT /api/lots/{id}`
+   - curl手動テストで動作確認
+
+**テスト結果**: 138テスト全パス（API統合テストは未実装、今後の課題）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [src/web/lot_api.rs](../../prototype/m1-gnss/backend/src/web/lot_api.rs) | ロット管理API |
+| [implementation-roadmap.md](../session95/implementation-roadmap.md) | 実装ロードマップ |
+| [api-spec.md](../../docs/missions/m1-sensor-evaluation/gnss/api-spec.md) | API仕様書 |
+| [session95/session-summary.md](../session95/session-summary.md) | セッションサマリー |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| src/web/device_api.rs | AppStateにRepository追加 |
+| src/repository/sqlite.rs | update_lot追加 |
+| ADR-008 | 現状セクション追加 |
+
+**次セッション（Session 96）でやること**:
+- 検査API実装（`POST /api/inspections`, `GET /api/inspections`）
+- InspectionServiceとの統合
+
+---

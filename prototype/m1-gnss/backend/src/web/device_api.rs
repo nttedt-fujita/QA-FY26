@@ -11,6 +11,7 @@ use std::sync::Mutex;
 use crate::device::filter::PortInfo;
 use crate::device::manager::{DeviceManager, DeviceManagerError};
 use crate::device::status::DeviceStatus;
+use crate::repository::SqliteRepository;
 
 // ===========================================
 // API レスポンス型
@@ -149,12 +150,17 @@ impl crate::device::manager::SerialPort for RealSerialPort {
 /// APIで共有するアプリケーション状態
 pub struct AppState {
     pub device_manager: Mutex<DeviceManager<RealSerialPortProvider>>,
+    pub repository: Mutex<SqliteRepository>,
 }
 
 impl AppState {
     pub fn new() -> Self {
+        // DBファイルはカレントディレクトリに作成
+        let repo = SqliteRepository::new("gnss_evaluation.db")
+            .expect("データベース初期化に失敗");
         Self {
             device_manager: Mutex::new(DeviceManager::new(RealSerialPortProvider)),
+            repository: Mutex::new(repo),
         }
     }
 }
