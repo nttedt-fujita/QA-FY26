@@ -60,3 +60,49 @@ inspections:
 
 health:
 	@curl -s $(API_URL)/health | jq .
+
+# ====================
+# 連続テスト
+# ====================
+
+# 連続テスト（デフォルト100回）
+# 使い方: make stress-test [COUNT=100] [LOT_ID=1]
+LOG_DIR := /tmp/gnss-stress-test
+COUNT := 100
+LOT_ID := 1
+
+.PHONY: stress-test stress-clean
+
+stress-test:
+	@mkdir -p $(LOG_DIR)
+	@echo "=========================================="
+	@echo "  連続テスト開始: $(COUNT)回"
+	@echo "  LOT_ID: $(LOT_ID)"
+	@echo "  ログ出力: $(LOG_DIR)/"
+	@echo "=========================================="
+	@pass=0; fail=0; \
+	for i in $$(seq 1 $(COUNT)); do \
+		result=$$(curl -s -X POST "$(API_URL)/api/inspections" \
+			-H "Content-Type: application/json" \
+			-d '{"lot_id": $(LOT_ID)}'); \
+		verdict=$$(echo "$$result" | jq -r '.overall_result // "Error"'); \
+		if [ "$$verdict" = "Pass" ]; then \
+			pass=$$((pass + 1)); \
+			printf "\r[%3d/%d] Pass: %d, Fail: %d" $$i $(COUNT) $$pass $$fail; \
+		else \
+			fail=$$((fail + 1)); \
+			printf "\n[%3d/%d] *** FAIL/ERROR ***\n" $$i $(COUNT); \
+			echo "$$result" | tee "$(LOG_DIR)/error-$$i.json" | jq .; \
+		fi; \
+		sleep 0.3; \
+	done; \
+	echo ""; \
+	echo "=========================================="; \
+	echo "  結果: Pass=$$pass, Fail=$$fail / $(COUNT)"; \
+	echo "  エラーログ: $(LOG_DIR)/error-*.json"; \
+	echo "=========================================="
+
+# テストログ削除
+stress-clean:
+	@rm -rf $(LOG_DIR)
+	@echo "ログ削除完了: $(LOG_DIR)"

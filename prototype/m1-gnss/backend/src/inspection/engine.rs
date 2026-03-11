@@ -120,12 +120,24 @@ impl InspectionEngine {
         }
 
         // NMEA出力をON（元に戻す、成功/失敗に関わらず実行）
-        info!("NMEA出力をONに戻します");
+        info!("[NMEA制御] ON送信開始");
         let nmea_on_msg = set_uart1_nmea_output(true, Layer::Ram);
         if let Err(e) = manager.send_ubx(&nmea_on_msg) {
-            warn!("NMEA ON送信エラー: {}", e);
+            warn!("[NMEA制御] ON送信エラー: {}", e);
         } else {
-            debug!("NMEA ON 送信完了");
+            // ACK-ACKを待つ（次回検査でACK-ACKが遅れて届くのを防ぐ）
+            debug!("[NMEA制御] ACK待機開始（500ms timeout）");
+            match manager.wait_for_ack(0x06, 0x8A, std::time::Duration::from_millis(500)) {
+                Ok(true) => {
+                    info!("[NMEA制御] ACK-ACK受信、NMEA ON適用完了");
+                }
+                Ok(false) => {
+                    warn!("[NMEA制御] ACK-NAK受信（設定失敗）");
+                }
+                Err(e) => {
+                    warn!("[NMEA制御] ACK待機エラー: {}", e);
+                }
+            }
         }
 
         // TODO: 状態をConnectedに戻す
@@ -583,7 +595,7 @@ mod tests {
         valid_ubx_response(0x05, 0x01, &[target_class, target_id])
     }
 
-    /// 5項目すべての正常応答を生成（NMEA OFF のACK応答を含む）
+    /// 5項目すべての正常応答を生成（NMEA OFF/ON のACK応答を含む）
     fn all_pass_responses() -> Vec<Vec<u8>> {
         vec![
             ack_ack_response(0x06, 0x8A),                 // NMEA OFF ACK-ACK
@@ -592,6 +604,7 @@ mod tests {
             sec_uniqid_response(&[0xAB, 0xCD, 0xEF, 0x12, 0x34]), // SerialNumber
             cfg_rate_response(100),                       // OutputRate: 100ms
             cfg_prt_response(115200),                     // PortConfig: 115200bps
+            ack_ack_response(0x06, 0x8A),                 // NMEA ON ACK-ACK
         ]
     }
 
@@ -701,6 +714,7 @@ mod tests {
             .with_responses(vec![
                 ack_ack_response(0x06, 0x8A),             // NMEA OFF ACK-ACK
                 valid_ubx_response(0x01, 0x03, &[0u8; 16]),
+                ack_ack_response(0x06, 0x8A),             // NMEA ON ACK-ACK
             ]);
 
         let mut manager = DeviceManager::new(provider);
@@ -876,6 +890,7 @@ mod tests {
                 valid_ubx_response(0x01, 0x03, &[0u8; 16]), // Connectivity: OK
                 mon_ver_response("HPG 1.32"),               // FwVersion: OK
                 // 3項目目以降は切断エラー
+                // NMEA ON ACK-ACKも切断でエラーになる
             ])
             .disconnect_at(4); // 4回目のreadで切断
 
@@ -915,6 +930,7 @@ mod tests {
                 valid_ubx_response(0x01, 0x03, &[0u8; 16]), // Pass
                 mon_ver_response("HPG 1.32"),               // Fail（期待値と不一致）
                 sec_uniqid_response(&[0xAB, 0xCD, 0xEF, 0x12, 0x34]), // Pass
+                ack_ack_response(0x06, 0x8A),             // NMEA ON ACK-ACK
             ]);
 
         let mut manager = DeviceManager::new(provider);
@@ -943,7 +959,7 @@ mod tests {
             InspectionItem::new(ItemType::SerialNumber), // Error (timeout)
         ];
 
-        // 3項目目はタイムアウト
+        // 3項目目はタイムアウト、NMEA ON ACKもタイムアウト
         let provider = MockProvider::new()
             .with_ports(vec![f9p_port("/dev/ttyACM0")])
             .with_responses(vec![
@@ -951,6 +967,7 @@ mod tests {
                 valid_ubx_response(0x01, 0x03, &[0u8; 16]), // Pass
                 mon_ver_response("HPG 1.32"),               // Fail
                 // 3項目目: 応答なし → タイムアウト
+                // NMEA ON ACK: 応答なし → タイムアウト（warnログのみ）
             ]);
 
         let mut manager = DeviceManager::new(provider);
