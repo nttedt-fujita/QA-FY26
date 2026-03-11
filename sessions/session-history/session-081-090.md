@@ -183,3 +183,46 @@ Session 89: Phase 1 統合テスト（実機）T1-1〜T1-7
 - DB設計見直し
 
 ---
+
+## Session 86 (2026-03-11)
+
+**概要**: ドメインモデリング完了 + 屋内/屋外統合ドメインモデル作成
+
+**実施内容**:
+1. **ドメインモデリング修正**
+   - FW判定方式を明確化（FWはRecorded、他はPass/Fail）
+2. **過去コンテキスト確認**
+   - Session 62（屋外計測向け）とSession 85（屋内検査向け）で別々のモデルが存在
+3. **統合ドメインモデル作成**
+   - 運用フロー: 屋内検査 → 屋外計測
+   - 装置の紐づけ: シリアル番号で紐づける
+   - M3との統合: 後で（両方プロトタイプ）
+4. **統合DB設計（ドラフト）**
+   - lots, indoor_inspections, inspection_item_results を追加
+
+**重要な決定**:
+| 項目 | 決定 |
+|------|------|
+| 運用フロー | 屋内検査 → 屋外計測 |
+| 装置の紐づけ | シリアル番号で紐づける |
+| M3との統合 | 後で（両方プロトタイプ） |
+| FW判定 | Recorded（全記録、後で比較） |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session86/incoming-inspection-domain-model-v2.md](../session86/incoming-inspection-domain-model-v2.md) | 屋内検査ドメインモデル（FW判定修正） |
+| [session86/m1-m3-relationship.md](../session86/m1-m3-relationship.md) | M1とM3の関係性整理 |
+| [session86/domain-model-integration.md](../session86/domain-model-integration.md) | 統合検討 |
+| [session86/gnss-unified-domain-model.md](../session86/gnss-unified-domain-model.md) | **統合ドメインモデル（決定版）** |
+| [session86/unified-db-schema.md](../session86/unified-db-schema.md) | 統合DB設計（ドラフト） |
+| [session86/session-summary.md](../session86/session-summary.md) | セッションサマリー |
+| [session87/session-plan.md](../session87/session-plan.md) | 次セッション計画 |
+
+**進捗**: ドメインモデリング完了、DB設計ドラフト作成
+
+**次セッション（Session 87）でやること**:
+- 統合DB設計の確定・実装
+- 既存コードの修正
+
+---
