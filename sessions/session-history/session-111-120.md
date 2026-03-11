@@ -122,12 +122,10 @@
 **作成ファイル**:
 | ファイル | 内容 |
 |----------|------|
-| [session114/ntrip-research-summary.md](../session114/ntrip-research-summary.md) | 調査結果まとめ |
-| [session114/ntrip-protocol-spec.md](../session114/ntrip-protocol-spec.md) | NTRIP仕様抽出 |
-| [session114/rtk-configuration.md](../session114/rtk-configuration.md) | ZED-F9P RTK設定 |
-| [session114/integration-manual-toc.md](../session114/integration-manual-toc.md) | Integration Manual 目次 |
+| [20-ntrip-rtk-implementation.md](../../docs/missions/m1-sensor-evaluation/gnss/20-ntrip-rtk-implementation.md) | 調査結果まとめ（Session 115で正式配置） |
+| [21-ntrip-protocol-spec.md](../../docs/missions/m1-sensor-evaluation/gnss/21-ntrip-protocol-spec.md) | NTRIP仕様抽出（Session 115で正式配置） |
+| [22-rtk-configuration.md](../../docs/missions/m1-sensor-evaluation/gnss/22-rtk-configuration.md) | ZED-F9P RTK設定（Session 115で正式配置） |
 | [session114/session-summary.md](../session114/session-summary.md) | セッションサマリー |
-| [session115/session-plan.md](../session115/session-plan.md) | 次セッション計画 |
 
 **決定事項**:
 - NTRIPクライアント機能をアプリに追加する方針
@@ -136,5 +134,41 @@
 
 **次セッション（Session 115）でやること**:
 - NTRIP機能実装開始（クレート追加、API設計、UI）
+
+---
+
+## Session 115 (2026-03-11)
+
+**概要**: RTK関連ドキュメント正式配置
+
+**実施内容**:
+1. **全体進捗おさらい**
+   - M1-GNSS全体タスクを確認
+   - RTK実装は優先度が高くないことを確認
+2. **RTK関連ドキュメント正式配置**
+   - Session 114のドラフトを`docs/missions/m1-sensor-evaluation/gnss/`に移動
+   - 20-ntrip-rtk-implementation.md（実装方針）
+   - 21-ntrip-protocol-spec.md（仕様抽出）
+   - 22-rtk-configuration.md（ZED-F9P設定）
+   - sources/NtripDocumentation.pdf（原本）
+3. **クリーンアップ**
+   - session114からドラフト削除
+   - README.md更新
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [20-ntrip-rtk-implementation.md](../../docs/missions/m1-sensor-evaluation/gnss/20-ntrip-rtk-implementation.md) | NTRIP/RTK実装方針 |
+| [21-ntrip-protocol-spec.md](../../docs/missions/m1-sensor-evaluation/gnss/21-ntrip-protocol-spec.md) | NTRIP仕様抽出 |
+| [22-rtk-configuration.md](../../docs/missions/m1-sensor-evaluation/gnss/22-rtk-configuration.md) | ZED-F9P RTK設定 |
+| [session115/session-summary.md](../session115/session-summary.md) | セッションサマリー |
+| [session116/session-plan.md](../session116/session-plan.md) | 次セッション計画 |
+
+**決定事項**:
+- RTK実装は優先度が高くない
+- 次の優先: MON-SPAN or 屋内/屋外ページ分離
+
+**次セッション（Session 116）でやること**:
+- MON-SPANパーサー実装、または屋内/屋外検査ページ分離
 
 ---

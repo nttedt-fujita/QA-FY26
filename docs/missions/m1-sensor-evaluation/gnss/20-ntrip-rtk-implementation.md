@@ -1,6 +1,6 @@
-# NTRIP調査結果サマリー
+# NTRIP/RTK 実装方針
 
-Session 114で調査したネットワークRTK（NTRIP）の実装に必要な情報。
+ネットワークRTK（NTRIP）の調査結果と実装方針。
 
 ---
 
@@ -125,7 +125,7 @@ serial_port.write(&rtcm_data)?;
 
 ---
 
-## 5. Rustライブラリ評価
+## 5. Rustライブラリ選定
 
 ### 推奨: nav-solutions/ntrip-client
 
@@ -154,9 +154,7 @@ serial_port.write(&rtcm_data)?;
 
 ---
 
-## 6. 実装方針
-
-### アーキテクチャ
+## 6. 実装アーキテクチャ
 
 ```
 [フロントエンド]
@@ -181,27 +179,7 @@ serial_port.write(&rtcm_data)?;
 
 ---
 
-## 7. 参照資料
-
-### 1次情報
-
-| 資料 | 場所 |
-|------|------|
-| NTRIP仕様書 (Version 1.0) | [session114/NtripDocumentation.pdf](NtripDocumentation.pdf) |
-| NTRIP仕様抽出 | [session114/ntrip-protocol-spec.md](ntrip-protocol-spec.md) |
-| ZED-F9P RTK設定 | [session114/rtk-configuration.md](rtk-configuration.md) |
-
-### Web情報
-
-| 情報 | URL |
-|------|-----|
-| NTRIP Rev1 vs Rev2 | https://www.use-snip.com/kb/knowledge-base/ntrip-rev1-versus-rev2-formats/ |
-| ntrip-client crate | https://lib.rs/crates/ntrip-client |
-| nav-solutions GitHub | https://github.com/nav-solutions |
-
----
-
-## 8. NTRIP設定項目（UI必須）
+## 7. NTRIP設定項目（UI必須）
 
 アプリに必要な設定入力項目:
 
@@ -226,14 +204,25 @@ serial_port.write(&rtcm_data)?;
 
 ---
 
-## 9. 次のアクション
+## 8. 参照資料
 
-1. [ ] ntrip-client クレートを Cargo.toml に追加
-2. [ ] NTRIP接続設定のAPI設計（上記5項目）
-3. [ ] RTCMストリーム転送の実装
-4. [ ] フロントエンドにNTRIP設定UI追加
-5. [ ] 認証情報の保存方法検討（セキュリティ考慮）
+### 1次情報
+
+| 資料 | 場所 |
+|------|------|
+| NTRIP仕様書 (Version 1.0) | [sources/NtripDocumentation.pdf](sources/NtripDocumentation.pdf) |
+| NTRIP仕様抽出 | [21-ntrip-protocol-spec.md](21-ntrip-protocol-spec.md) |
+| ZED-F9P RTK設定 | [22-rtk-configuration.md](22-rtk-configuration.md) |
+
+### Web情報
+
+| 情報 | URL |
+|------|-----|
+| NTRIP Rev1 vs Rev2 | https://www.use-snip.com/kb/knowledge-base/ntrip-rev1-versus-rev2-formats/ |
+| ntrip-client crate | https://lib.rs/crates/ntrip-client |
+| nav-solutions GitHub | https://github.com/nav-solutions |
 
 ---
 
 *作成: Session 114 (2026-03-11)*
+*正式配置: Session 115 (2026-03-11)*
