@@ -6,6 +6,7 @@ use log::{debug, info, warn};
 
 use crate::device::manager::{DeviceManager, DeviceManagerError, SerialPortProvider};
 use crate::device::status::DeviceStatus;
+use crate::ubx::cfg_valset::{set_uart1_nmea_output, Layer};
 
 use super::judge::judge_result;
 use super::types::{InspectionItem, InspectionResult, ItemType, Verdict};
@@ -87,12 +88,32 @@ impl InspectionEngine {
 
         // TODO: 状態をInspectingに変更
 
+        // NMEA出力をOFF（検査中のNMEA混入を防ぐ）
+        info!("NMEA出力をOFFにします");
+        let nmea_off_msg = set_uart1_nmea_output(false, Layer::Ram);
+        if let Err(e) = manager.send_ubx(&nmea_off_msg) {
+            warn!("NMEA OFF送信エラー: {} （検査は続行）", e);
+        } else {
+            // CFG-VALSETの処理時間を待つ
+            std::thread::sleep(std::time::Duration::from_millis(50));
+            debug!("NMEA OFF 送信完了");
+        }
+
         let mut results = Vec::new();
 
         // 各検査項目を実行
         for item in &self.items {
             let result = self.execute_item(manager, item);
             results.push(result);
+        }
+
+        // NMEA出力をON（元に戻す、成功/失敗に関わらず実行）
+        info!("NMEA出力をONに戻します");
+        let nmea_on_msg = set_uart1_nmea_output(true, Layer::Ram);
+        if let Err(e) = manager.send_ubx(&nmea_on_msg) {
+            warn!("NMEA ON送信エラー: {}", e);
+        } else {
+            debug!("NMEA ON 送信完了");
         }
 
         // TODO: 状態をConnectedに戻す
@@ -673,6 +694,12 @@ mod tests {
     // G1-G5: 各検査項目のUBX送信テスト
     // ===========================================
 
+    /// 送信データ内に指定したUBXメッセージパターンが含まれているか確認
+    /// NMEA OFF/ONメッセージを含む全送信データから対象のpollを探す
+    fn contains_ubx_message(data: &[u8], class: u8, id: u8) -> bool {
+        data.windows(4).any(|w| w[0] == 0xB5 && w[1] == 0x62 && w[2] == class && w[3] == id)
+    }
+
     /// G1: 通信疎通でNAV-STATUS pollを送信する
     #[test]
     fn test_g1_connectivity_sends_nav_status_poll() {
@@ -692,11 +719,7 @@ mod tests {
 
         let data = write_data.lock().unwrap();
         // NAV-STATUS poll: 0xB5 0x62 0x01 0x03 ...
-        assert!(data.len() >= 4);
-        assert_eq!(data[0], 0xB5);
-        assert_eq!(data[1], 0x62);
-        assert_eq!(data[2], 0x01);
-        assert_eq!(data[3], 0x03);
+        assert!(contains_ubx_message(&data, 0x01, 0x03), "NAV-STATUS pollが含まれていない");
     }
 
     /// G2: FWバージョンでMON-VER pollを送信する
@@ -718,8 +741,7 @@ mod tests {
 
         let data = write_data.lock().unwrap();
         // MON-VER poll: 0xB5 0x62 0x0A 0x04 ...
-        assert_eq!(data[2], 0x0A);
-        assert_eq!(data[3], 0x04);
+        assert!(contains_ubx_message(&data, 0x0A, 0x04), "MON-VER pollが含まれていない");
     }
 
     /// G3: シリアル番号でSEC-UNIQID pollを送信する
@@ -741,8 +763,7 @@ mod tests {
 
         let data = write_data.lock().unwrap();
         // SEC-UNIQID poll: 0xB5 0x62 0x27 0x03 ...
-        assert_eq!(data[2], 0x27);
-        assert_eq!(data[3], 0x03);
+        assert!(contains_ubx_message(&data, 0x27, 0x03), "SEC-UNIQID pollが含まれていない");
     }
 
     /// G4: 出力レートでCFG-RATE pollを送信する
@@ -764,8 +785,7 @@ mod tests {
 
         let data = write_data.lock().unwrap();
         // CFG-RATE poll: 0xB5 0x62 0x06 0x08 ...
-        assert_eq!(data[2], 0x06);
-        assert_eq!(data[3], 0x08);
+        assert!(contains_ubx_message(&data, 0x06, 0x08), "CFG-RATE pollが含まれていない");
     }
 
     /// G5: ポート設定でCFG-PRT pollを送信する
@@ -787,8 +807,7 @@ mod tests {
 
         let data = write_data.lock().unwrap();
         // CFG-PRT poll: 0xB5 0x62 0x06 0x00 ...
-        assert_eq!(data[2], 0x06);
-        assert_eq!(data[3], 0x00);
+        assert!(contains_ubx_message(&data, 0x06, 0x00), "CFG-PRT pollが含まれていない");
     }
 
     // ===========================================
@@ -908,5 +927,95 @@ mod tests {
     #[test]
     fn test_engine_creation() {
         let _engine = InspectionEngine::new();
+    }
+
+    // ===========================================
+    // H1-H3: NMEA制御テスト（案B）
+    // ===========================================
+
+    /// H1: 検査開始時にNMEA OFFが送信される
+    #[test]
+    fn test_h1_nmea_off_sent_at_start() {
+        let items = vec![InspectionItem::new(ItemType::Connectivity)];
+
+        let provider = MockProvider::new()
+            .with_ports(vec![f9p_port("/dev/ttyACM0")])
+            .with_responses(vec![valid_ubx_response(0x01, 0x03, &[0u8; 16])]);
+        let write_data = provider.get_write_data();
+
+        let mut manager = DeviceManager::new(provider);
+        manager.list_devices().unwrap();
+        manager.connect("/dev/ttyACM0").unwrap();
+
+        let engine = InspectionEngine::with_items(items);
+        let _ = engine.run(&mut manager);
+
+        let data = write_data.lock().unwrap();
+        // CFG-VALSET: 0xB5 0x62 0x06 0x8A ...
+        assert!(contains_ubx_message(&data, 0x06, 0x8A), "CFG-VALSET（NMEA制御）が含まれていない");
+    }
+
+    /// H2: NMEA OFFがpollより先に送信される
+    #[test]
+    fn test_h2_nmea_off_before_poll() {
+        let items = vec![InspectionItem::new(ItemType::Connectivity)];
+
+        let provider = MockProvider::new()
+            .with_ports(vec![f9p_port("/dev/ttyACM0")])
+            .with_responses(vec![valid_ubx_response(0x01, 0x03, &[0u8; 16])]);
+        let write_data = provider.get_write_data();
+
+        let mut manager = DeviceManager::new(provider);
+        manager.list_devices().unwrap();
+        manager.connect("/dev/ttyACM0").unwrap();
+
+        let engine = InspectionEngine::with_items(items);
+        let _ = engine.run(&mut manager);
+
+        let data = write_data.lock().unwrap();
+
+        // CFG-VALSETの位置を探す
+        let cfg_valset_pos = data.windows(4)
+            .position(|w| w[0] == 0xB5 && w[1] == 0x62 && w[2] == 0x06 && w[3] == 0x8A);
+
+        // NAV-STATUS pollの位置を探す
+        let nav_status_pos = data.windows(4)
+            .position(|w| w[0] == 0xB5 && w[1] == 0x62 && w[2] == 0x01 && w[3] == 0x03);
+
+        assert!(cfg_valset_pos.is_some(), "CFG-VALSETが見つからない");
+        assert!(nav_status_pos.is_some(), "NAV-STATUS pollが見つからない");
+
+        // NMEA OFF (CFG-VALSET) がpollより先に送信されている
+        assert!(
+            cfg_valset_pos.unwrap() < nav_status_pos.unwrap(),
+            "NMEA OFFがpollより後に送信されている"
+        );
+    }
+
+    /// H3: 検査終了時にNMEA ONが送信される（2つのCFG-VALSETがある）
+    #[test]
+    fn test_h3_nmea_on_sent_at_end() {
+        let items = vec![InspectionItem::new(ItemType::Connectivity)];
+
+        let provider = MockProvider::new()
+            .with_ports(vec![f9p_port("/dev/ttyACM0")])
+            .with_responses(vec![valid_ubx_response(0x01, 0x03, &[0u8; 16])]);
+        let write_data = provider.get_write_data();
+
+        let mut manager = DeviceManager::new(provider);
+        manager.list_devices().unwrap();
+        manager.connect("/dev/ttyACM0").unwrap();
+
+        let engine = InspectionEngine::with_items(items);
+        let _ = engine.run(&mut manager);
+
+        let data = write_data.lock().unwrap();
+
+        // CFG-VALSETが2回送信される（OFF + ON）
+        let cfg_valset_count = data.windows(4)
+            .filter(|w| w[0] == 0xB5 && w[1] == 0x62 && w[2] == 0x06 && w[3] == 0x8A)
+            .count();
+
+        assert_eq!(cfg_valset_count, 2, "CFG-VALSETが2回送信されていない（OFF + ON）");
     }
 }
