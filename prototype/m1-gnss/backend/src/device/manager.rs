@@ -83,6 +83,13 @@ pub const DEFAULT_BAUD_RATE: u32 = 115200;
 /// F9P評価ボードのボーレート（FTDI経由）
 pub const F9P_EVAL_BAUD_RATE: u32 = 38400;
 
+/// ボーレート自動検出の候補リスト（ADR-007）
+/// 順序: 38400（F9Pデフォルト） → 115200（高速設定） → 9600（セーフブート）
+pub const BAUD_RATE_CANDIDATES: [u32; 3] = [38400, 115200, 9600];
+
+/// ボーレート自動検出のタイムアウト（ms）
+pub const AUTO_DETECT_TIMEOUT_MS: u64 = 500;
+
 /// DeviceManager
 ///
 /// Phase 1では1台のみ接続可能。Phase 2以降で複数台対応予定。
@@ -93,6 +100,8 @@ pub struct DeviceManager<P: SerialPortProvider> {
     connected_device_index: Option<usize>,
     /// 接続時のボーレート
     baud_rate: u32,
+    /// 自動検出で検出されたボーレート
+    detected_baud_rate: Option<u32>,
 }
 
 impl<P: SerialPortProvider> DeviceManager<P> {
@@ -104,6 +113,7 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             connected_port: None,
             connected_device_index: None,
             baud_rate: DEFAULT_BAUD_RATE,
+            detected_baud_rate: None,
         }
     }
 
@@ -115,6 +125,7 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             connected_port: None,
             connected_device_index: None,
             baud_rate,
+            detected_baud_rate: None,
         }
     }
 
@@ -126,6 +137,13 @@ impl<P: SerialPortProvider> DeviceManager<P> {
     /// 現在のボーレートを取得
     pub fn baud_rate(&self) -> u32 {
         self.baud_rate
+    }
+
+    /// 自動検出されたボーレートを取得
+    ///
+    /// connect_auto_detect() で接続した場合のみ Some を返す
+    pub fn detected_baud_rate(&self) -> Option<u32> {
+        self.detected_baud_rate
     }
 
     /// 利用可能なデバイス一覧を取得（F9P直接 + FTDI経由）
@@ -179,6 +197,76 @@ impl<P: SerialPortProvider> DeviceManager<P> {
         Ok(())
     }
 
+    /// ボーレートを自動検出して接続（ADR-007）
+    ///
+    /// 候補ボーレート（38400, 115200, 9600）を順番に試し、
+    /// UBX-MON-VER Poll で応答があったボーレートで接続する。
+    ///
+    /// # 戻り値
+    /// - Ok(baud_rate): 検出されたボーレート
+    /// - Err: 全候補で応答がなかった場合
+    pub fn connect_auto_detect(&mut self, path: &str) -> Result<u32, DeviceManagerError> {
+        use crate::ubx::mon_ver;
+        use std::time::Duration;
+
+        // 既に接続中の場合はエラー
+        if self.connected_port.is_some() {
+            return Err(DeviceManagerError::MaxDevicesReached);
+        }
+
+        // デバイスを探す
+        let device_index = self
+            .devices
+            .iter()
+            .position(|d| d.port.path == path)
+            .ok_or_else(|| DeviceManagerError::PortNotFound(path.to_string()))?;
+
+        let timeout = Duration::from_millis(AUTO_DETECT_TIMEOUT_MS);
+        let poll_request = mon_ver::poll_request();
+
+        // 各ボーレートを試行
+        for &baud_rate in &BAUD_RATE_CANDIDATES {
+            // ポートを開く
+            let port_result = self.provider.open(path, baud_rate);
+            let mut port = match port_result {
+                Ok(p) => p,
+                Err(_) => continue, // 開けなければ次の候補へ
+            };
+
+            // MON-VER Poll を送信
+            if port.write(&poll_request).is_err() {
+                continue;
+            }
+
+            // タイムアウト設定
+            if port.set_timeout(timeout).is_err() {
+                continue;
+            }
+
+            // 応答を待つ
+            let mut buf = vec![0u8; 256];
+            match port.read(&mut buf) {
+                Ok(n) if n > 0 => {
+                    // 何らかの応答があれば成功
+                    // 状態を更新
+                    self.devices[device_index].status = DeviceStatus::Connected;
+                    self.connected_port = Some(port);
+                    self.connected_device_index = Some(device_index);
+                    self.baud_rate = baud_rate;
+                    self.detected_baud_rate = Some(baud_rate);
+                    return Ok(baud_rate);
+                }
+                _ => {
+                    // タイムアウトまたはエラー → 次の候補へ
+                    continue;
+                }
+            }
+        }
+
+        // 全候補で失敗
+        Err(DeviceManagerError::Timeout)
+    }
+
     /// 切断
     pub fn disconnect(&mut self) -> Result<(), DeviceManagerError> {
         if self.connected_port.is_none() {
@@ -192,6 +280,7 @@ impl<P: SerialPortProvider> DeviceManager<P> {
 
         self.connected_port = None;
         self.connected_device_index = None;
+        self.detected_baud_rate = None;
 
         Ok(())
     }
@@ -569,5 +658,152 @@ mod tests {
 
         let result = manager.receive_ubx(Duration::from_secs(1));
         assert!(matches!(result, Err(DeviceManagerError::Timeout)));
+    }
+
+    // ===========================================
+    // C4. ボーレート自動検出テスト（ADR-007）
+    // ===========================================
+
+    /// ボーレートに応じて応答を変えるモック
+    struct BaudRateMockPort {
+        baud_rate: u32,
+        respond_at_baud: u32,
+    }
+
+    impl SerialPort for BaudRateMockPort {
+        fn write(&mut self, _data: &[u8]) -> Result<usize, io::Error> {
+            Ok(8) // MON-VER Poll は 8バイト
+        }
+
+        fn read(&mut self, buf: &mut [u8]) -> Result<usize, io::Error> {
+            if self.baud_rate == self.respond_at_baud {
+                // 応答をシミュレート（MON-VER の最小応答）
+                let response = [0xB5, 0x62, 0x0A, 0x04];
+                let len = buf.len().min(response.len());
+                buf[..len].copy_from_slice(&response[..len]);
+                Ok(len)
+            } else {
+                // タイムアウト
+                Err(io::Error::new(io::ErrorKind::TimedOut, "no response"))
+            }
+        }
+
+        fn set_timeout(&mut self, _timeout: Duration) -> Result<(), io::Error> {
+            Ok(())
+        }
+    }
+
+    struct BaudRateMockProvider {
+        ports: Vec<PortInfo>,
+        respond_at_baud: u32,
+    }
+
+    impl BaudRateMockProvider {
+        fn new(respond_at_baud: u32) -> Self {
+            Self {
+                ports: vec![f9p_port("/dev/ttyACM0")],
+                respond_at_baud,
+            }
+        }
+    }
+
+    impl SerialPortProvider for BaudRateMockProvider {
+        fn available_ports(&self) -> Result<Vec<PortInfo>, DeviceManagerError> {
+            Ok(self.ports.clone())
+        }
+
+        fn open(&self, path: &str, baud_rate: u32) -> Result<Box<dyn SerialPort>, DeviceManagerError> {
+            if !self.ports.iter().any(|p| p.path == path) {
+                return Err(DeviceManagerError::PortNotFound(path.to_string()));
+            }
+            Ok(Box::new(BaudRateMockPort {
+                baud_rate,
+                respond_at_baud: self.respond_at_baud,
+            }))
+        }
+    }
+
+    /// C4-1: 38400で応答（最初の候補で成功）
+    #[test]
+    fn test_c4_1_auto_detect_first_candidate() {
+        let provider = BaudRateMockProvider::new(38400);
+        let mut manager = DeviceManager::new(provider);
+
+        manager.list_devices().unwrap();
+        let result = manager.connect_auto_detect("/dev/ttyACM0");
+
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), 38400);
+        assert_eq!(manager.detected_baud_rate(), Some(38400));
+        assert_eq!(manager.baud_rate(), 38400);
+    }
+
+    /// C4-2: 115200で応答（2番目の候補で成功）
+    #[test]
+    fn test_c4_2_auto_detect_second_candidate() {
+        let provider = BaudRateMockProvider::new(115200);
+        let mut manager = DeviceManager::new(provider);
+
+        manager.list_devices().unwrap();
+        let result = manager.connect_auto_detect("/dev/ttyACM0");
+
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), 115200);
+        assert_eq!(manager.detected_baud_rate(), Some(115200));
+    }
+
+    /// C4-3: 9600で応答（3番目の候補で成功）
+    #[test]
+    fn test_c4_3_auto_detect_third_candidate() {
+        let provider = BaudRateMockProvider::new(9600);
+        let mut manager = DeviceManager::new(provider);
+
+        manager.list_devices().unwrap();
+        let result = manager.connect_auto_detect("/dev/ttyACM0");
+
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap(), 9600);
+        assert_eq!(manager.detected_baud_rate(), Some(9600));
+    }
+
+    /// C4-4: どのボーレートでも応答なし（タイムアウト）
+    #[test]
+    fn test_c4_4_auto_detect_all_fail() {
+        let provider = BaudRateMockProvider::new(57600); // 候補にないボーレート
+        let mut manager = DeviceManager::new(provider);
+
+        manager.list_devices().unwrap();
+        let result = manager.connect_auto_detect("/dev/ttyACM0");
+
+        assert!(matches!(result, Err(DeviceManagerError::Timeout)));
+        assert_eq!(manager.detected_baud_rate(), None);
+    }
+
+    /// C4-5: 自動検出後に切断すると detected_baud_rate がリセットされる
+    #[test]
+    fn test_c4_5_disconnect_resets_detected_baud_rate() {
+        let provider = BaudRateMockProvider::new(38400);
+        let mut manager = DeviceManager::new(provider);
+
+        manager.list_devices().unwrap();
+        manager.connect_auto_detect("/dev/ttyACM0").unwrap();
+        assert_eq!(manager.detected_baud_rate(), Some(38400));
+
+        manager.disconnect().unwrap();
+        assert_eq!(manager.detected_baud_rate(), None);
+    }
+
+    /// C4-6: 既に接続中に自動検出を試みるとエラー
+    #[test]
+    fn test_c4_6_auto_detect_while_connected() {
+        let provider = BaudRateMockProvider::new(38400);
+        let mut manager = DeviceManager::new(provider);
+
+        manager.list_devices().unwrap();
+        manager.connect_auto_detect("/dev/ttyACM0").unwrap();
+
+        // 既に接続中
+        let result = manager.connect_auto_detect("/dev/ttyACM0");
+        assert!(matches!(result, Err(DeviceManagerError::MaxDevicesReached)));
     }
 }
