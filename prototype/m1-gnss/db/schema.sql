@@ -1,26 +1,93 @@
--- GNSS評価ツール スキーマ定義
--- 作成日: 2026-03-10
--- Session: 63
--- 参照: docs/domain-model.md
+-- GNSS評価ツール 統合スキーマ定義
+-- 作成日: 2026-03-10 (Session 63)
+-- 更新日: 2026-03-11 (Session 87) - 屋内検査対応追加
+-- 参照: sessions/session86/gnss-unified-domain-model.md
 
 PRAGMA foreign_keys = ON;
 
 -- ============================================================
--- デバイス（評価対象のGNSSモジュール）
+-- ロット（入荷単位）
 -- ============================================================
-CREATE TABLE IF NOT EXISTS devices (
+-- 屋内検査時の期待値はロット単位で管理する
+-- FWバージョンの期待値はここには持たない（多数派判定のため、検査結果から集計）
+CREATE TABLE IF NOT EXISTS lots (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    model_number TEXT NOT NULL,           -- 型番
-    serial_number TEXT NOT NULL UNIQUE,   -- シリアル番号
-    memo TEXT,                            -- メモ
+    lot_number TEXT NOT NULL UNIQUE,       -- ロット番号
+
+    -- 期待値（屋内検査用）
+    expected_rate_ms INTEGER,              -- 出力レート期待値 (ms)
+    expected_port_in_proto TEXT,           -- ポート入力プロトコル期待値
+    expected_port_out_proto TEXT,          -- ポート出力プロトコル期待値
+
+    memo TEXT,                             -- メモ
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
 -- ============================================================
--- 計測セッション（1回の評価作業）
+-- 装置（個別のGNSSモジュール）
 -- ============================================================
-CREATE TABLE IF NOT EXISTS measurement_sessions (
+CREATE TABLE IF NOT EXISTS devices (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    lot_id INTEGER,                        -- 所属ロット（FK、NULLable: ロット未割当ても許容）
+    serial_number TEXT NOT NULL UNIQUE,    -- シリアル番号（SEC-UNIQID）
+    model_number TEXT,                     -- 型番
+    fw_version TEXT,                       -- FWバージョン（最後の検査で取得した値）
+    memo TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+
+    FOREIGN KEY (lot_id) REFERENCES lots(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_devices_lot ON devices(lot_id);
+
+-- ============================================================
+-- 屋内検査（1回の検査作業）
+-- ============================================================
+CREATE TABLE IF NOT EXISTS indoor_inspections (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    device_id INTEGER NOT NULL,            -- 対象装置（FK）
+    inspected_at TEXT NOT NULL,            -- 検査日時
+
+    -- 総合判定
+    overall_result TEXT,                   -- Pass/Fail/Partial
+
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+
+    FOREIGN KEY (device_id) REFERENCES devices(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_indoor_inspections_device ON indoor_inspections(device_id);
+
+-- ============================================================
+-- 検査項目結果（各項目の結果）
+-- ============================================================
+-- item_name: communication, serial, fw, rate, port
+-- verdict: Pass, Fail, Error, Recorded
+CREATE TABLE IF NOT EXISTS inspection_item_results (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    inspection_id INTEGER NOT NULL,        -- 屋内検査（FK）
+
+    item_name TEXT NOT NULL,               -- 項目名
+    verdict TEXT NOT NULL,                 -- 判定
+    actual_value TEXT,                     -- 実測値
+    expected_value TEXT,                   -- 期待値
+
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+
+    FOREIGN KEY (inspection_id) REFERENCES indoor_inspections(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_inspection_results_inspection
+    ON inspection_item_results(inspection_id);
+
+-- ============================================================
+-- 屋外計測（1回の計測作業）
+-- ============================================================
+-- 旧: measurement_sessions (Session 63)
+CREATE TABLE IF NOT EXISTS outdoor_measurements (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     device_id INTEGER NOT NULL,
 
@@ -54,12 +121,14 @@ CREATE TABLE IF NOT EXISTS measurement_sessions (
     FOREIGN KEY (device_id) REFERENCES devices(id)
 );
 
+CREATE INDEX IF NOT EXISTS idx_outdoor_measurements_device ON outdoor_measurements(device_id);
+
 -- ============================================================
 -- NAV-PVT（位置・状態）
 -- ============================================================
 CREATE TABLE IF NOT EXISTS nav_pvt_records (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id INTEGER NOT NULL,
+    measurement_id INTEGER NOT NULL,       -- 旧: session_id
 
     -- タイムスタンプ
     itow INTEGER NOT NULL,                -- GPS Time of Week (ms)
@@ -100,18 +169,18 @@ CREATE TABLE IF NOT EXISTS nav_pvt_records (
     valid_time INTEGER,                   -- 時刻有効フラグ
     fully_resolved INTEGER,               -- 完全解決フラグ
 
-    FOREIGN KEY (session_id) REFERENCES measurement_sessions(id)
+    FOREIGN KEY (measurement_id) REFERENCES outdoor_measurements(id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_nav_pvt_session_itow
-    ON nav_pvt_records(session_id, itow);
+CREATE INDEX IF NOT EXISTS idx_nav_pvt_measurement_itow
+    ON nav_pvt_records(measurement_id, itow);
 
 -- ============================================================
 -- NAV-STATUS（FIX状態）
 -- ============================================================
 CREATE TABLE IF NOT EXISTS nav_status_records (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id INTEGER NOT NULL,
+    measurement_id INTEGER NOT NULL,
 
     itow INTEGER NOT NULL,
     recorded_at TEXT NOT NULL,
@@ -121,18 +190,18 @@ CREATE TABLE IF NOT EXISTS nav_status_records (
     ttff INTEGER,                         -- Time to First Fix (ms)
     msss INTEGER,                         -- Time since startup (ms)
 
-    FOREIGN KEY (session_id) REFERENCES measurement_sessions(id)
+    FOREIGN KEY (measurement_id) REFERENCES outdoor_measurements(id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_nav_status_session_itow
-    ON nav_status_records(session_id, itow);
+CREATE INDEX IF NOT EXISTS idx_nav_status_measurement_itow
+    ON nav_status_records(measurement_id, itow);
 
 -- ============================================================
 -- NAV-DOP（精度劣化係数）
 -- ============================================================
 CREATE TABLE IF NOT EXISTS nav_dop_records (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id INTEGER NOT NULL,
+    measurement_id INTEGER NOT NULL,
 
     itow INTEGER NOT NULL,
     recorded_at TEXT NOT NULL,
@@ -145,18 +214,18 @@ CREATE TABLE IF NOT EXISTS nav_dop_records (
     n_dop INTEGER,                        -- Northing DOP (0.01)
     e_dop INTEGER,                        -- Easting DOP (0.01)
 
-    FOREIGN KEY (session_id) REFERENCES measurement_sessions(id)
+    FOREIGN KEY (measurement_id) REFERENCES outdoor_measurements(id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_nav_dop_session_itow
-    ON nav_dop_records(session_id, itow);
+CREATE INDEX IF NOT EXISTS idx_nav_dop_measurement_itow
+    ON nav_dop_records(measurement_id, itow);
 
 -- ============================================================
 -- NAV-SAT（衛星情報）
 -- ============================================================
 CREATE TABLE IF NOT EXISTS satellites (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id INTEGER NOT NULL,
+    measurement_id INTEGER NOT NULL,
 
     itow INTEGER NOT NULL,
     recorded_at TEXT NOT NULL,
@@ -173,18 +242,18 @@ CREATE TABLE IF NOT EXISTS satellites (
     sv_used INTEGER,                      -- 使用フラグ
     health INTEGER,                       -- ヘルス状態
 
-    FOREIGN KEY (session_id) REFERENCES measurement_sessions(id)
+    FOREIGN KEY (measurement_id) REFERENCES outdoor_measurements(id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_satellites_session_itow
-    ON satellites(session_id, itow);
+CREATE INDEX IF NOT EXISTS idx_satellites_measurement_itow
+    ON satellites(measurement_id, itow);
 
 -- ============================================================
 -- NAV-SIG（信号情報）
 -- ============================================================
 CREATE TABLE IF NOT EXISTS signals (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id INTEGER NOT NULL,
+    measurement_id INTEGER NOT NULL,
 
     itow INTEGER NOT NULL,
     recorded_at TEXT NOT NULL,
@@ -207,18 +276,18 @@ CREATE TABLE IF NOT EXISTS signals (
     cr_used INTEGER,
     do_used INTEGER,
 
-    FOREIGN KEY (session_id) REFERENCES measurement_sessions(id)
+    FOREIGN KEY (measurement_id) REFERENCES outdoor_measurements(id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_signals_session_itow
-    ON signals(session_id, itow);
+CREATE INDEX IF NOT EXISTS idx_signals_measurement_itow
+    ON signals(measurement_id, itow);
 
 -- ============================================================
 -- MON-SPAN（スペクトラム）
 -- ============================================================
 CREATE TABLE IF NOT EXISTS mon_span_records (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id INTEGER NOT NULL,
+    measurement_id INTEGER NOT NULL,
 
     recorded_at TEXT NOT NULL,
 
@@ -231,18 +300,18 @@ CREATE TABLE IF NOT EXISTS mon_span_records (
     -- スペクトラムデータ (256バイト)
     spectrum BLOB,
 
-    FOREIGN KEY (session_id) REFERENCES measurement_sessions(id)
+    FOREIGN KEY (measurement_id) REFERENCES outdoor_measurements(id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_mon_span_session
-    ON mon_span_records(session_id, recorded_at);
+CREATE INDEX IF NOT EXISTS idx_mon_span_measurement
+    ON mon_span_records(measurement_id, recorded_at);
 
 -- ============================================================
 -- MON-RF（RF状態）
 -- ============================================================
 CREATE TABLE IF NOT EXISTS mon_rf_records (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_id INTEGER NOT NULL,
+    measurement_id INTEGER NOT NULL,
 
     recorded_at TEXT NOT NULL,
 
@@ -264,8 +333,8 @@ CREATE TABLE IF NOT EXISTS mon_rf_records (
     ofs_q INTEGER,                        -- オフセットQ
     mag_q INTEGER,                        -- マグニチュードQ
 
-    FOREIGN KEY (session_id) REFERENCES measurement_sessions(id)
+    FOREIGN KEY (measurement_id) REFERENCES outdoor_measurements(id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_mon_rf_session
-    ON mon_rf_records(session_id, recorded_at);
+CREATE INDEX IF NOT EXISTS idx_mon_rf_measurement
+    ON mon_rf_records(measurement_id, recorded_at);

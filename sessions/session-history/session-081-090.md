@@ -232,3 +232,39 @@ Session 89: Phase 1 統合テスト（実機）T1-1〜T1-7
 - 既存コードの修正
 
 ---
+
+## Session 87 (2026-03-11)
+
+**概要**: 統合DB設計の確定・実装
+
+**実施内容**:
+1. **未反映点の解決**
+   - FWバージョン: devicesテーブルにfw_versionカラム追加
+   - item_name定義: communication/serial/fw/rate/port
+2. **schema.sql更新**
+   - lots, indoor_inspections, inspection_item_results追加
+   - measurement_sessions → outdoor_measurementsリネーム
+   - session_id → measurement_idリネーム
+3. **repository/types.rs全面書き換え**
+   - Lot, Device, IndoorInspection, InspectionItemResult
+   - InspectionItemName enum, Verdict enum
+4. **repository/sqlite.rs全面書き換え**
+   - 全エンティティのCRUD操作実装
+
+**テスト結果**: 110テスト全パス
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [db/schema.sql](../../prototype/m1-gnss/db/schema.sql) | 統合スキーマ |
+| [repository/types.rs](../../prototype/m1-gnss/backend/src/repository/types.rs) | 新エンティティ |
+| [repository/sqlite.rs](../../prototype/m1-gnss/backend/src/repository/sqlite.rs) | CRUD実装 |
+| [session87/session-summary.md](../session87/session-summary.md) | セッションサマリー |
+
+**進捗**: Phase 1 Step 4（DB Repository）屋内検査関連 完了 ✅
+
+**次セッション（Session 88）でやること**:
+- FTDI対応＋ボーレート設定
+- InspectionEngineとRepositoryの統合
+
+---
