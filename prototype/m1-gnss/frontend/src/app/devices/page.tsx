@@ -87,7 +87,7 @@ export default function DevicesPage() {
             装置
           </a>
           <a
-            href="/inspection"
+            href="/inspections"
             className="border-b-2 border-transparent px-4 py-3 text-gray-500 hover:text-gray-700"
           >
             検査

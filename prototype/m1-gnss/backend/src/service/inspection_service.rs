@@ -207,6 +207,7 @@ mod tests {
         write_data: Arc<Mutex<Vec<u8>>>,
         read_queue: Arc<Mutex<VecDeque<Vec<u8>>>>,
         should_timeout: bool,
+        current_timeout_ms: Arc<Mutex<u64>>,
     }
 
     impl SerialPort for MockSerialPort {
@@ -216,6 +217,14 @@ mod tests {
         }
 
         fn read(&mut self, buf: &mut [u8]) -> Result<usize, io::Error> {
+            // drain_buffer用の短いタイムアウト（20ms以下）の場合はすぐにタイムアウト
+            {
+                let timeout_ms = *self.current_timeout_ms.lock().unwrap();
+                if timeout_ms <= 20 {
+                    return Err(io::Error::new(io::ErrorKind::TimedOut, "drain"));
+                }
+            }
+
             if self.should_timeout {
                 return Err(io::Error::new(io::ErrorKind::TimedOut, "timeout"));
             }
@@ -230,7 +239,8 @@ mod tests {
             }
         }
 
-        fn set_timeout(&mut self, _timeout: Duration) -> Result<(), io::Error> {
+        fn set_timeout(&mut self, timeout: Duration) -> Result<(), io::Error> {
+            *self.current_timeout_ms.lock().unwrap() = timeout.as_millis() as u64;
             Ok(())
         }
     }
@@ -240,6 +250,7 @@ mod tests {
         write_data: Arc<Mutex<Vec<u8>>>,
         read_queue: Arc<Mutex<VecDeque<Vec<u8>>>>,
         should_timeout: bool,
+        current_timeout_ms: Arc<Mutex<u64>>,
     }
 
     impl MockProvider {
@@ -249,6 +260,7 @@ mod tests {
                 write_data: Arc::new(Mutex::new(Vec::new())),
                 read_queue: Arc::new(Mutex::new(VecDeque::new())),
                 should_timeout: false,
+                current_timeout_ms: Arc::new(Mutex::new(1000)),
             }
         }
 
@@ -280,6 +292,7 @@ mod tests {
                 write_data: self.write_data.clone(),
                 read_queue: self.read_queue.clone(),
                 should_timeout: self.should_timeout,
+                current_timeout_ms: self.current_timeout_ms.clone(),
             }))
         }
     }

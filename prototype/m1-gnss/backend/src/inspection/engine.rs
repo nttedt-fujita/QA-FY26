@@ -104,6 +104,14 @@ impl InspectionEngine {
         manager: &mut DeviceManager<P>,
         item: &InspectionItem,
     ) -> InspectionResult {
+        // 受信バッファをクリア（前回の応答の残りを除去）
+        if let Err(e) = manager.drain_buffer() {
+            return InspectionResult::new(
+                item.item_type.clone(),
+                Verdict::Error(format!("Drain error: {}", e)),
+            );
+        }
+
         // UBXメッセージを送信
         let poll_message = self.create_poll_message(&item.item_type);
 
@@ -113,6 +121,9 @@ impl InspectionEngine {
                 Verdict::Error(format!("Send error: {}", e)),
             );
         }
+
+        // 応答が届くまで少し待機（装置の処理時間を考慮）
+        std::thread::sleep(std::time::Duration::from_millis(50));
 
         // 応答を受信
         match manager.receive_ubx(item.timeout) {
@@ -310,6 +321,8 @@ mod tests {
         should_disconnect: bool,
         call_count: Arc<Mutex<usize>>,
         disconnect_at: Option<usize>,
+        /// 現在設定されているタイムアウト（drain_buffer検出用）
+        current_timeout_ms: Arc<Mutex<u64>>,
     }
 
     impl SerialPort for MockSerialPort {
@@ -322,6 +335,14 @@ mod tests {
         }
 
         fn read(&mut self, buf: &mut [u8]) -> Result<usize, io::Error> {
+            // drain_buffer用の短いタイムアウト（20ms以下）の場合はすぐにタイムアウト
+            {
+                let timeout_ms = *self.current_timeout_ms.lock().unwrap();
+                if timeout_ms <= 20 {
+                    return Err(io::Error::new(io::ErrorKind::TimedOut, "drain"));
+                }
+            }
+
             // 切断チェック
             {
                 let mut count = self.call_count.lock().unwrap();
@@ -347,7 +368,8 @@ mod tests {
             }
         }
 
-        fn set_timeout(&mut self, _timeout: Duration) -> Result<(), io::Error> {
+        fn set_timeout(&mut self, timeout: Duration) -> Result<(), io::Error> {
+            *self.current_timeout_ms.lock().unwrap() = timeout.as_millis() as u64;
             Ok(())
         }
     }
@@ -361,6 +383,7 @@ mod tests {
         should_disconnect: bool,
         call_count: Arc<Mutex<usize>>,
         disconnect_at: Option<usize>,
+        current_timeout_ms: Arc<Mutex<u64>>,
     }
 
     impl MockProvider {
@@ -373,6 +396,7 @@ mod tests {
                 should_disconnect: false,
                 call_count: Arc::new(Mutex::new(0)),
                 disconnect_at: None,
+                current_timeout_ms: Arc::new(Mutex::new(1000)),
             }
         }
 
@@ -423,6 +447,7 @@ mod tests {
                 should_disconnect: self.should_disconnect,
                 call_count: self.call_count.clone(),
                 disconnect_at: self.disconnect_at,
+                current_timeout_ms: self.current_timeout_ms.clone(),
             }))
         }
     }

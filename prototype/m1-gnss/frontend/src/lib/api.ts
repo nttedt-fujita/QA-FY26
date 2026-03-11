@@ -180,3 +180,81 @@ export async function updateLot(id: number, request: UpdateLotRequest): Promise<
   }
   return res.json();
 }
+
+// ===========================================
+// 検査API
+// ===========================================
+
+/**
+ * 検査項目結果
+ */
+export interface ItemResult {
+  item_name: string;
+  verdict: string;
+  actual_value: string | null;
+  expected_value: string | null;
+}
+
+/**
+ * 検査実行レスポンス
+ */
+export interface InspectionResponse {
+  inspection_id: number;
+  device_id: number;
+  serial_number: string;
+  overall_result: string;
+  items: ItemResult[];
+}
+
+/**
+ * 検査履歴（一覧用）
+ */
+export interface InspectionSummary {
+  id: number;
+  device_id: number;
+  serial_number: string | null;
+  inspected_at: string;
+  overall_result: string | null;
+}
+
+/**
+ * 検査一覧レスポンス
+ */
+export interface InspectionListResponse {
+  inspections: InspectionSummary[];
+}
+
+/**
+ * 検査実行リクエスト
+ */
+export interface RunInspectionRequest {
+  lot_id?: number;
+}
+
+/**
+ * 検査を実行
+ */
+export async function runInspection(request: RunInspectionRequest): Promise<InspectionResponse> {
+  const res = await fetch(`${API_BASE}/api/inspections`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
+
+/**
+ * 検査履歴を取得
+ */
+export async function listInspections(): Promise<InspectionListResponse> {
+  const res = await fetch(`${API_BASE}/api/inspections`);
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
