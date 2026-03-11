@@ -355,3 +355,41 @@
 - TDD Phase 5: リファクタリング
 
 ---
+
+## Session 110 (2026-03-11)
+
+**概要**: NAV-SIGパーサー + signal_stats実装（TDD Phase 3-5）
+
+**実施内容**:
+1. **L1/L2判定テスト修正・追加（17件）**
+   - 振る舞い仕様（8.2）に基づくテストケース作成
+   - GPS, SBAS, Galileo, BeiDou, QZSS, GLONASSの全GNSSをカバー
+2. **sigId判定バグ修正**
+   - is_l1(): GPS sigId=3削除、SBAS追加、BeiDou sigId=5追加
+   - is_l2(): GPS sigId=3追加、BeiDou 2,3追加、QZSS sigId=5追加
+3. **signal_stats関数実装（+3関数）**
+   - gps_visible_count(): GPS L1可視衛星数
+   - gps_l2_reception_count(): GPS L2受信中衛星数（qualityInd≥5）
+   - gps_l2_reception_rate(): GPS L2受信率
+4. **残作業の整理**
+   - TTFF測定、MON-RFの調査が必要と判明
+
+**テスト結果**: 166テスト全パス（159 → 166、+7テスト）
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| [nav_sig.rs](../../prototype/m1-gnss/backend/src/ubx/nav_sig.rs) | is_l1/is_l2バグ修正、signal_stats追加、テスト+7 |
+| [ubx/mod.rs](../../prototype/m1-gnss/backend/src/ubx/mod.rs) | nav_sigモジュール登録 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session110/session-summary.md](../session110/session-summary.md) | セッションサマリー |
+| [session111/session-plan.md](../session111/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 111）でやること**:
+- 屋外検査の残作業整理（TTFF、MON-RF等の調査）
+- 優先度の再整理
+
+---
