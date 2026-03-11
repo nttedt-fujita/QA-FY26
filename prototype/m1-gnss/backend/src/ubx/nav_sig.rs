@@ -88,22 +88,28 @@ pub struct SignalInfo {
 }
 
 impl SignalInfo {
-    /// 信号がL1帯かどうか（GPS/QZSS/Galileo/BeiDou）
+    /// 信号がL1帯かどうか
+    /// 参照: docs/missions/m1-sensor-evaluation/gnss/ubx-signal-identifiers.md
     pub fn is_l1(&self) -> bool {
         match self.gnss_id {
-            0 | 5 => self.sig_id == 0 || self.sig_id == 3, // GPS/QZSS: L1C/A(0), L1C(3)
+            0 => self.sig_id == 0,                          // GPS: L1C/A(0)のみ
+            1 => self.sig_id == 0,                          // SBAS: L1(0)
             2 => self.sig_id == 0 || self.sig_id == 1,      // Galileo: E1-C(0), E1-B(1)
-            3 => self.sig_id == 0 || self.sig_id == 1,      // BeiDou: B1I(0), B1C(1)
+            3 => matches!(self.sig_id, 0 | 1 | 5),          // BeiDou: B1I(0), B1C(1), B1C pilot(5)
+            5 => self.sig_id == 0 || self.sig_id == 1,      // QZSS: L1C/A(0), L1S(1)
             6 => self.sig_id == 0,                          // GLONASS: L1 OF(0)
             _ => false,
         }
     }
 
-    /// 信号がL2帯かどうか（GPS/QZSS/GLONASS）
+    /// 信号がL2帯かどうか
+    /// 参照: docs/missions/m1-sensor-evaluation/gnss/ubx-signal-identifiers.md
     pub fn is_l2(&self) -> bool {
         match self.gnss_id {
-            0 | 5 => self.sig_id == 4, // GPS/QZSS: L2 CL(4)
-            6 => self.sig_id == 2,     // GLONASS: L2 OF(2)
+            0 => self.sig_id == 3 || self.sig_id == 4,      // GPS: L2 CL(3), L2 CM(4)
+            3 => self.sig_id == 2 || self.sig_id == 3,      // BeiDou: B2I(2), B2a(3)
+            5 => self.sig_id == 4 || self.sig_id == 5,      // QZSS: L2 CL(4), L2 CM(5)
+            6 => self.sig_id == 2,                          // GLONASS: L2 OF(2)
             _ => false,
         }
     }
@@ -256,6 +262,46 @@ fn calculate_checksum(data: &[u8]) -> (u8, u8) {
     (ck_a, ck_b)
 }
 
+// --- signal_stats 集計関数 ---
+// 参照: ADR-008, sessions/session107/nav-sig-behavior-spec.md
+
+use std::collections::HashSet;
+
+/// L2受信中とみなすqualityIndの閾値（搬送波ロック以上）
+const QUALITY_IND_THRESHOLD: u8 = 5;
+
+/// GPS L1信号を持つ可視衛星数（ユニークsvIdでカウント）
+/// gnssId=0かつis_l1()=trueの信号を持つ衛星のユニーク数
+pub fn gps_visible_count(signals: &[SignalInfo]) -> usize {
+    let gps_l1_sv_ids: HashSet<u8> = signals
+        .iter()
+        .filter(|s| s.gnss_id == 0 && s.is_l1())
+        .map(|s| s.sv_id)
+        .collect();
+    gps_l1_sv_ids.len()
+}
+
+/// GPS L2受信中の衛星数（qualityInd >= 5）
+/// gnssId=0かつis_l2()=trueかつqualityInd>=5の信号を持つ衛星のユニーク数
+pub fn gps_l2_reception_count(signals: &[SignalInfo]) -> usize {
+    let gps_l2_sv_ids: HashSet<u8> = signals
+        .iter()
+        .filter(|s| s.gnss_id == 0 && s.is_l2() && s.quality_ind >= QUALITY_IND_THRESHOLD)
+        .map(|s| s.sv_id)
+        .collect();
+    gps_l2_sv_ids.len()
+}
+
+/// GPS L2受信率（l2_reception_count / visible_count、可視0の場合は0.0）
+pub fn gps_l2_reception_rate(signals: &[SignalInfo]) -> f64 {
+    let visible = gps_visible_count(signals);
+    if visible == 0 {
+        return 0.0;
+    }
+    let l2_count = gps_l2_reception_count(signals);
+    l2_count as f64 / visible as f64
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -382,7 +428,8 @@ mod tests {
         }
     }
 
-    /// テストケース: L1/L2判定
+    /// テストケース: L1/L2判定（振る舞い仕様 8.2 に基づく17件）
+    /// 参照: sessions/session107/nav-sig-behavior-spec.md
     #[test]
     fn test_l1_l2_detection() {
         #[derive(Debug)]
@@ -396,17 +443,36 @@ mod tests {
         }
 
         let cases = vec![
-            // GPS
-            TestCase { name: "GPS L1C/A", gnss_id: 0, sig_id: 0, expected_l1: true, expected_l2: false, should_succeed: true },
-            TestCase { name: "GPS L1C", gnss_id: 0, sig_id: 3, expected_l1: true, expected_l2: false, should_succeed: true },
-            TestCase { name: "GPS L2 CL", gnss_id: 0, sig_id: 4, expected_l1: false, expected_l2: true, should_succeed: true },
-            // GLONASS
-            TestCase { name: "GLONASS L1", gnss_id: 6, sig_id: 0, expected_l1: true, expected_l2: false, should_succeed: true },
-            TestCase { name: "GLONASS L2", gnss_id: 6, sig_id: 2, expected_l1: false, expected_l2: true, should_succeed: true },
-            // Galileo
-            TestCase { name: "Galileo E1-C", gnss_id: 2, sig_id: 0, expected_l1: true, expected_l2: false, should_succeed: true },
-            // その他
-            TestCase { name: "Unknown signal", gnss_id: 0, sig_id: 99, expected_l1: false, expected_l2: false, should_succeed: true },
+            // GPS (gnssId=0)
+            TestCase { name: "GPS sigId=0 L1C/A", gnss_id: 0, sig_id: 0, expected_l1: true, expected_l2: false, should_succeed: true },
+            TestCase { name: "GPS sigId=3 L2 CL", gnss_id: 0, sig_id: 3, expected_l1: false, expected_l2: true, should_succeed: true },
+            TestCase { name: "GPS sigId=4 L2 CM", gnss_id: 0, sig_id: 4, expected_l1: false, expected_l2: true, should_succeed: true },
+
+            // SBAS (gnssId=1)
+            TestCase { name: "SBAS sigId=0 L1", gnss_id: 1, sig_id: 0, expected_l1: true, expected_l2: false, should_succeed: true },
+
+            // Galileo (gnssId=2) - L2帯なし
+            TestCase { name: "Galileo sigId=0 E1-C", gnss_id: 2, sig_id: 0, expected_l1: true, expected_l2: false, should_succeed: true },
+            TestCase { name: "Galileo sigId=1 E1-B", gnss_id: 2, sig_id: 1, expected_l1: true, expected_l2: false, should_succeed: true },
+
+            // BeiDou (gnssId=3)
+            TestCase { name: "BeiDou sigId=0 B1I", gnss_id: 3, sig_id: 0, expected_l1: true, expected_l2: false, should_succeed: true },
+            TestCase { name: "BeiDou sigId=5 B1C", gnss_id: 3, sig_id: 5, expected_l1: true, expected_l2: false, should_succeed: true },
+            TestCase { name: "BeiDou sigId=2 B2I", gnss_id: 3, sig_id: 2, expected_l1: false, expected_l2: true, should_succeed: true },
+            TestCase { name: "BeiDou sigId=3 B2a", gnss_id: 3, sig_id: 3, expected_l1: false, expected_l2: true, should_succeed: true },
+
+            // QZSS (gnssId=5)
+            TestCase { name: "QZSS sigId=0 L1C/A", gnss_id: 5, sig_id: 0, expected_l1: true, expected_l2: false, should_succeed: true },
+            TestCase { name: "QZSS sigId=1 L1S", gnss_id: 5, sig_id: 1, expected_l1: true, expected_l2: false, should_succeed: true },
+            TestCase { name: "QZSS sigId=4 L2 CL", gnss_id: 5, sig_id: 4, expected_l1: false, expected_l2: true, should_succeed: true },
+            TestCase { name: "QZSS sigId=5 L2 CM", gnss_id: 5, sig_id: 5, expected_l1: false, expected_l2: true, should_succeed: true },
+
+            // GLONASS (gnssId=6)
+            TestCase { name: "GLONASS sigId=0 L1 OF", gnss_id: 6, sig_id: 0, expected_l1: true, expected_l2: false, should_succeed: true },
+            TestCase { name: "GLONASS sigId=2 L2 OF", gnss_id: 6, sig_id: 2, expected_l1: false, expected_l2: true, should_succeed: true },
+
+            // その他（未知のgnssId/sigId）
+            TestCase { name: "Unknown gnssId=99", gnss_id: 99, sig_id: 0, expected_l1: false, expected_l2: false, should_succeed: true },
         ];
 
         for tc in cases {
@@ -557,6 +623,198 @@ mod tests {
                 assert!(result.is_ok(), "{}: expected success", tc.name);
             } else {
                 assert!(result.is_err(), "{}: expected error, got {:?}", tc.name, result);
+            }
+        }
+    }
+
+    /// テスト用SignalInfo生成ヘルパー（quality_ind指定可能）
+    fn make_signal_with_quality(gnss_id: u8, sv_id: u8, sig_id: u8, cno: u8, quality_ind: u8) -> SignalInfo {
+        SignalInfo {
+            gnss_id,
+            sv_id,
+            sig_id,
+            freq_id: 0,
+            pr_res: 0,
+            cno,
+            quality_ind,
+            corr_source: 0,
+            iono_model: 0,
+            sig_flags: 0x0008,
+        }
+    }
+
+    /// テストケース: gps_visible_count（振る舞い仕様 8.4）
+    #[test]
+    fn test_gps_visible_count() {
+        struct TestCase {
+            name: &'static str,
+            signals: Vec<SignalInfo>,
+            expected: usize,
+            should_succeed: bool,
+        }
+
+        let cases = vec![
+            // 正常系: GPS L1信号2つ（別衛星SV1, SV5）
+            TestCase {
+                name: "GPS L1 signals from 2 different SVs",
+                signals: vec![
+                    make_signal_with_quality(0, 1, 0, 45, 5), // GPS SV1 L1
+                    make_signal_with_quality(0, 5, 0, 42, 5), // GPS SV5 L1
+                ],
+                expected: 2,
+                should_succeed: true,
+            },
+            // 正常系: GPS L1+L2（同一衛星SV1）→ ユニーク衛星数=1
+            TestCase {
+                name: "GPS L1+L2 same SV",
+                signals: vec![
+                    make_signal_with_quality(0, 1, 0, 45, 5), // GPS SV1 L1
+                    make_signal_with_quality(0, 1, 3, 38, 5), // GPS SV1 L2
+                ],
+                expected: 1,
+                should_succeed: true,
+            },
+            // 境界値: GPS信号なし
+            TestCase {
+                name: "No GPS signals",
+                signals: vec![],
+                expected: 0,
+                should_succeed: true,
+            },
+            // 境界値: GLONASS信号のみ（GPSのみカウント）
+            TestCase {
+                name: "GLONASS only",
+                signals: vec![
+                    make_signal_with_quality(6, 10, 0, 40, 5), // GLONASS SV10 L1
+                ],
+                expected: 0,
+                should_succeed: true,
+            },
+        ];
+
+        for tc in cases {
+            if tc.should_succeed {
+                let result = gps_visible_count(&tc.signals);
+                assert_eq!(result, tc.expected, "{}: gps_visible_count mismatch", tc.name);
+            }
+        }
+    }
+
+    /// テストケース: gps_l2_reception_count（振る舞い仕様 8.4）
+    #[test]
+    fn test_gps_l2_reception_count() {
+        struct TestCase {
+            name: &'static str,
+            signals: Vec<SignalInfo>,
+            expected: usize,
+            should_succeed: bool,
+        }
+
+        let cases = vec![
+            // 正常系: GPS L2（qualityInd=5）→ 搬送波ロック
+            TestCase {
+                name: "GPS L2 with qualityInd=5",
+                signals: vec![
+                    make_signal_with_quality(0, 1, 3, 38, 5), // GPS SV1 L2, qualityInd=5
+                ],
+                expected: 1,
+                should_succeed: true,
+            },
+            // 境界値: GPS L2（qualityInd=7）→ 上限値
+            TestCase {
+                name: "GPS L2 with qualityInd=7",
+                signals: vec![
+                    make_signal_with_quality(0, 1, 3, 38, 7), // GPS SV1 L2, qualityInd=7
+                ],
+                expected: 1,
+                should_succeed: true,
+            },
+            // 境界値: GPS L2（qualityInd=4）→ 閾値未満
+            TestCase {
+                name: "GPS L2 with qualityInd=4 (below threshold)",
+                signals: vec![
+                    make_signal_with_quality(0, 1, 3, 38, 4), // GPS SV1 L2, qualityInd=4
+                ],
+                expected: 0,
+                should_succeed: true,
+            },
+            // 境界値: GPS L2なし
+            TestCase {
+                name: "No GPS L2 signals",
+                signals: vec![
+                    make_signal_with_quality(0, 1, 0, 45, 5), // GPS SV1 L1 only
+                ],
+                expected: 0,
+                should_succeed: true,
+            },
+        ];
+
+        for tc in cases {
+            if tc.should_succeed {
+                let result = gps_l2_reception_count(&tc.signals);
+                assert_eq!(result, tc.expected, "{}: gps_l2_reception_count mismatch", tc.name);
+            }
+        }
+    }
+
+    /// テストケース: gps_l2_reception_rate（振る舞い仕様 8.4）
+    #[test]
+    fn test_gps_l2_reception_rate() {
+        struct TestCase {
+            name: &'static str,
+            signals: Vec<SignalInfo>,
+            expected: f64,
+            should_succeed: bool,
+        }
+
+        let cases = vec![
+            // 正常系: 可視2、L2受信1 → 0.5
+            TestCase {
+                name: "2 visible, 1 L2 reception",
+                signals: vec![
+                    make_signal_with_quality(0, 1, 0, 45, 5), // GPS SV1 L1
+                    make_signal_with_quality(0, 1, 3, 38, 5), // GPS SV1 L2 (qualityInd>=5)
+                    make_signal_with_quality(0, 5, 0, 42, 5), // GPS SV5 L1
+                    make_signal_with_quality(0, 5, 3, 30, 4), // GPS SV5 L2 (qualityInd<5)
+                ],
+                expected: 0.5,
+                should_succeed: true,
+            },
+            // 境界値: 可視2、L2受信2 → 1.0（100%）
+            TestCase {
+                name: "2 visible, 2 L2 reception (100%)",
+                signals: vec![
+                    make_signal_with_quality(0, 1, 0, 45, 5), // GPS SV1 L1
+                    make_signal_with_quality(0, 1, 3, 38, 5), // GPS SV1 L2
+                    make_signal_with_quality(0, 5, 0, 42, 5), // GPS SV5 L1
+                    make_signal_with_quality(0, 5, 3, 36, 6), // GPS SV5 L2
+                ],
+                expected: 1.0,
+                should_succeed: true,
+            },
+            // 境界値: 可視2、L2受信0 → 0.0
+            TestCase {
+                name: "2 visible, 0 L2 reception",
+                signals: vec![
+                    make_signal_with_quality(0, 1, 0, 45, 5), // GPS SV1 L1
+                    make_signal_with_quality(0, 5, 0, 42, 5), // GPS SV5 L1
+                ],
+                expected: 0.0,
+                should_succeed: true,
+            },
+            // 境界値: 可視0（GPS信号なし）→ 0.0（0除算回避）
+            TestCase {
+                name: "0 visible (division by zero)",
+                signals: vec![],
+                expected: 0.0,
+                should_succeed: true,
+            },
+        ];
+
+        for tc in cases {
+            if tc.should_succeed {
+                let result = gps_l2_reception_rate(&tc.signals);
+                assert!((result - tc.expected).abs() < 0.001, "{}: gps_l2_reception_rate mismatch (got {}, expected {})", tc.name, result, tc.expected);
             }
         }
     }
