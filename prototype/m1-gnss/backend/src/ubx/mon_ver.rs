@@ -9,8 +9,8 @@ use std::fmt;
 use super::common::{calculate_checksum, UBX_SYNC_1, UBX_SYNC_2};
 
 /// MON-VER メッセージ識別子
-const MON_CLASS: u8 = 0x0A;
-const MON_VER_ID: u8 = 0x04;
+pub const MON_CLASS: u8 = 0x0A;
+pub const MON_VER_ID: u8 = 0x04;
 
 /// MON-VER 固定部分のペイロード長（swVersion + hwVersion）
 const MON_VER_BASE_PAYLOAD_LEN: usize = 40;
@@ -58,6 +58,20 @@ impl fmt::Display for ParseError {
 }
 
 impl std::error::Error for ParseError {}
+
+/// MON-VER Poll リクエストを生成
+///
+/// ペイロードなしの Poll リクエスト（8バイト）
+pub fn poll_request() -> Vec<u8> {
+    let mut frame = vec![UBX_SYNC_1, UBX_SYNC_2, MON_CLASS, MON_VER_ID];
+    // ペイロード長: 0
+    frame.extend_from_slice(&0u16.to_le_bytes());
+    // チェックサム計算（Class, ID, Length）
+    let (ck_a, ck_b) = calculate_checksum(&frame[2..]);
+    frame.push(ck_a);
+    frame.push(ck_b);
+    frame
+}
 
 /// MON-VER パース結果
 #[derive(Debug, Clone, PartialEq)]
@@ -343,5 +357,31 @@ mod tests {
                 assert!(result.is_err(), "{}: expected error, got {:?}", tc.name, result);
             }
         }
+    }
+
+    /// Poll リクエスト生成テスト
+    #[test]
+    fn test_poll_request() {
+        let request = poll_request();
+
+        // 8バイト固定（header 2 + class 1 + id 1 + len 2 + checksum 2）
+        assert_eq!(request.len(), 8, "Poll request should be 8 bytes");
+
+        // ヘッダー確認
+        assert_eq!(request[0], UBX_SYNC_1);
+        assert_eq!(request[1], UBX_SYNC_2);
+
+        // Class/ID確認
+        assert_eq!(request[2], MON_CLASS);
+        assert_eq!(request[3], MON_VER_ID);
+
+        // ペイロード長 = 0
+        assert_eq!(request[4], 0);
+        assert_eq!(request[5], 0);
+
+        // チェックサム検証
+        let (expected_ck_a, expected_ck_b) = calculate_checksum(&request[2..6]);
+        assert_eq!(request[6], expected_ck_a);
+        assert_eq!(request[7], expected_ck_b);
     }
 }
