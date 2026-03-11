@@ -295,3 +295,37 @@ Session 89: Phase 1 統合テスト（実機）T1-1〜T1-7
 - InspectionEngineとRepositoryの統合
 
 ---
+
+## Session 89 (2026-03-11)
+
+**概要**: FTDI対応 + ボーレート調査計画
+
+**実施内容**:
+1. **FTDI対応**
+   - filter.rs: FTDI_VID/PID定数、is_ftdi_device(), filter_gnss_ports()追加
+   - manager.rs: filter_gnss_ports使用、ボーレート設定機能追加
+   - テスト追加（C1-C6）
+2. **ボーレート調査計画作成**
+   - ZED-F9P Integration Manualの調査計画をドキュメント化
+   - Pythonスクリプトで目次抽出→該当ページ抽出の方針
+
+**計画変更**:
+- InspectionEngine → Repository統合は次回へ延期
+- ボーレート自動判定の可能性を先に調査
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [filter.rs](../../prototype/m1-gnss/backend/src/device/filter.rs) | FTDI対応追加 |
+| [manager.rs](../../prototype/m1-gnss/backend/src/device/manager.rs) | ボーレート設定追加 |
+| [baud-rate-investigation-plan.md](../session89/baud-rate-investigation-plan.md) | ボーレート調査計画 |
+| [session89/session-summary.md](../session89/session-summary.md) | セッションサマリー |
+
+**進捗**: Phase 1 Step 5（FTDI対応）完了、Step 6（ボーレート）調査中
+
+**次セッション（Session 90）でやること**:
+- ZED-F9P Integration ManualのPDF読み込み（Pythonで目次抽出）
+- ボーレート自動判定の調査・方針決定
+- InspectionEngine → Repository統合（時間があれば）
+
+---

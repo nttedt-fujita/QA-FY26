@@ -4,7 +4,7 @@
 
 use std::io;
 
-use super::filter::{filter_f9p_ports, PortInfo};
+use super::filter::{filter_gnss_ports, PortInfo};
 use super::status::DeviceStatus;
 
 /// DeviceManagerのエラー
@@ -78,7 +78,10 @@ pub trait SerialPort {
 }
 
 /// デフォルトボーレート（u-blox F9P）
-const DEFAULT_BAUD_RATE: u32 = 115200;
+pub const DEFAULT_BAUD_RATE: u32 = 115200;
+
+/// F9P評価ボードのボーレート（FTDI経由）
+pub const F9P_EVAL_BAUD_RATE: u32 = 38400;
 
 /// DeviceManager
 ///
@@ -88,6 +91,8 @@ pub struct DeviceManager<P: SerialPortProvider> {
     devices: Vec<Device>,
     connected_port: Option<Box<dyn SerialPort>>,
     connected_device_index: Option<usize>,
+    /// 接続時のボーレート
+    baud_rate: u32,
 }
 
 impl<P: SerialPortProvider> DeviceManager<P> {
@@ -98,16 +103,38 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             devices: Vec::new(),
             connected_port: None,
             connected_device_index: None,
+            baud_rate: DEFAULT_BAUD_RATE,
         }
     }
 
-    /// 利用可能なデバイス一覧を取得（F9Pのみ）
+    /// ボーレートを指定して作成
+    pub fn with_baud_rate(provider: P, baud_rate: u32) -> Self {
+        Self {
+            provider,
+            devices: Vec::new(),
+            connected_port: None,
+            connected_device_index: None,
+            baud_rate,
+        }
+    }
+
+    /// ボーレートを設定
+    pub fn set_baud_rate(&mut self, baud_rate: u32) {
+        self.baud_rate = baud_rate;
+    }
+
+    /// 現在のボーレートを取得
+    pub fn baud_rate(&self) -> u32 {
+        self.baud_rate
+    }
+
+    /// 利用可能なデバイス一覧を取得（F9P直接 + FTDI経由）
     pub fn list_devices(&mut self) -> Result<Vec<Device>, DeviceManagerError> {
         let ports = self.provider.available_ports()?;
-        let f9p_ports = filter_f9p_ports(ports);
+        let gnss_ports = filter_gnss_ports(ports);
 
         // 既存デバイスリストを更新
-        self.devices = f9p_ports
+        self.devices = gnss_ports
             .into_iter()
             .map(|port| {
                 // 既存デバイスがあれば状態を引き継ぐ
@@ -142,7 +169,7 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             .ok_or_else(|| DeviceManagerError::PortNotFound(path.to_string()))?;
 
         // ポートを開く
-        let port = self.provider.open(path, DEFAULT_BAUD_RATE)?;
+        let port = self.provider.open(path, self.baud_rate)?;
 
         // 状態を更新
         self.devices[device_index].status = DeviceStatus::Connected;
