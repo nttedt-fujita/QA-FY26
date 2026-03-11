@@ -2,6 +2,7 @@
 //!
 //! GNSS装置の検出・接続・状態管理を行うマネージャー
 
+use log::{debug, trace};
 use std::io;
 
 use super::filter::{filter_gnss_ports, PortInfo};
@@ -300,7 +301,8 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             .as_mut()
             .ok_or(DeviceManagerError::NotConnected)?;
 
-        port.write(data)?;
+        let written = port.write(data)?;
+        trace!("send_ubx: {}バイト書き込み", written);
         Ok(())
     }
 
@@ -311,18 +313,24 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             .as_mut()
             .ok_or(DeviceManagerError::NotConnected)?;
 
+        debug!("receive_ubx: タイムアウト設定 {:?}", timeout);
         port.set_timeout(timeout)?;
 
         let mut buf = vec![0u8; 1024];
         match port.read(&mut buf) {
             Ok(n) => {
                 buf.truncate(n);
+                debug!("receive_ubx: {}バイト受信", n);
                 Ok(buf)
             }
             Err(e) if e.kind() == io::ErrorKind::TimedOut => {
+                debug!("receive_ubx: タイムアウト");
                 Err(DeviceManagerError::Timeout)
             }
-            Err(e) => Err(DeviceManagerError::IoError(e)),
+            Err(e) => {
+                debug!("receive_ubx: IOエラー {:?}", e.kind());
+                Err(DeviceManagerError::IoError(e))
+            }
         }
     }
 
@@ -341,13 +349,22 @@ impl<P: SerialPortProvider> DeviceManager<P> {
         port.set_timeout(Duration::from_millis(10))?;
 
         let mut buf = vec![0u8; 1024];
+        let mut total_drained = 0usize;
         loop {
             match port.read(&mut buf) {
                 Ok(0) => break,
-                Ok(_) => continue, // データがあれば読み捨てる
+                Ok(n) => {
+                    total_drained += n;
+                    trace!("drain_buffer: {}バイト読み捨て", n);
+                    continue;
+                }
                 Err(e) if e.kind() == io::ErrorKind::TimedOut => break,
-                Err(_) => break, // その他のエラーは無視して終了
+                Err(_) => break,
             }
+        }
+
+        if total_drained > 0 {
+            debug!("drain_buffer: 合計 {}バイト読み捨て", total_drained);
         }
 
         Ok(())

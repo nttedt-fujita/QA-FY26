@@ -2,6 +2,8 @@
 //!
 //! GNSS装置の受入検査を実行するメインロジック
 
+use log::{debug, info, warn};
+
 use crate::device::manager::{DeviceManager, DeviceManagerError, SerialPortProvider};
 use crate::device::status::DeviceStatus;
 
@@ -104,50 +106,68 @@ impl InspectionEngine {
         manager: &mut DeviceManager<P>,
         item: &InspectionItem,
     ) -> InspectionResult {
+        info!("=== 検査項目開始: {:?} ===", item.item_type);
+
         // 受信バッファをクリア（前回の応答の残りを除去）
+        debug!("[{:?}] drain_buffer 開始", item.item_type);
         if let Err(e) = manager.drain_buffer() {
+            warn!("[{:?}] drain_buffer エラー: {}", item.item_type, e);
             return InspectionResult::new(
                 item.item_type.clone(),
                 Verdict::Error(format!("Drain error: {}", e)),
             );
         }
+        debug!("[{:?}] drain_buffer 完了", item.item_type);
 
         // UBXメッセージを送信
         let poll_message = self.create_poll_message(&item.item_type);
+        let hex_str: String = poll_message.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
+        debug!("[{:?}] 送信データ ({}バイト): {}", item.item_type, poll_message.len(), hex_str);
 
         if let Err(e) = manager.send_ubx(&poll_message) {
+            warn!("[{:?}] send_ubx エラー: {}", item.item_type, e);
             return InspectionResult::new(
                 item.item_type.clone(),
                 Verdict::Error(format!("Send error: {}", e)),
             );
         }
+        debug!("[{:?}] send_ubx 完了", item.item_type);
 
         // 応答が届くまで少し待機（装置の処理時間を考慮）
+        debug!("[{:?}] 50ms 待機開始", item.item_type);
         std::thread::sleep(std::time::Duration::from_millis(50));
+        debug!("[{:?}] 待機完了、receive_ubx開始 (timeout={:?})", item.item_type, item.timeout);
 
         // 応答を受信
         match manager.receive_ubx(item.timeout) {
             Ok(response) => {
+                let hex_str: String = response.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
+                info!("[{:?}] 受信データ ({}バイト): {}", item.item_type, response.len(), hex_str);
+
                 // パースして値を取得
                 let (actual_value, error) = self.parse_response(&item.item_type, &response);
+                debug!("[{:?}] パース結果: actual={:?}, error={:?}", item.item_type, actual_value, error);
 
                 let verdict = judge_result(
                     &item.expected,
                     actual_value.as_deref(),
                     error.as_deref(),
                 );
+                info!("[{:?}] 判定結果: {:?}", item.item_type, verdict);
 
                 InspectionResult::new(item.item_type.clone(), verdict)
                     .with_expected(item.expected.clone())
                     .with_actual(actual_value.unwrap_or_default())
             }
             Err(DeviceManagerError::Timeout) => {
+                warn!("[{:?}] タイムアウト発生", item.item_type);
                 InspectionResult::new(
                     item.item_type.clone(),
                     Verdict::Error("Timeout".to_string()),
                 )
             }
             Err(e) => {
+                warn!("[{:?}] receive_ubx エラー: {}", item.item_type, e);
                 InspectionResult::new(
                     item.item_type.clone(),
                     Verdict::Error(format!("{}", e)),
