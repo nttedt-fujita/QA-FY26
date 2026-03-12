@@ -92,3 +92,31 @@
 - フロントエンドに接続/切断ボタン追加
 
 ---
+
+## Session 134 (2026-03-12)
+
+**概要**: NTRIP APIテスト改善 + フロントエンド接続ボタン
+
+**実施内容**:
+1. **テーブルテスト形式への書き直し**
+   - rstest追加、should_successパラメータ必須化
+   - Base64境界値テスト追加
+2. **APIハンドラー統合テスト追加**
+   - GET /status、POST /disconnect のテスト
+   - 28テスト全てパス
+3. **フロントエンド接続ボタン**
+   - 設定画面にNTRIP接続セクション追加
+   - 接続/切断ボタン、状態表示、統計情報
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [Cargo.toml](../../prototype/m1-gnss/backend/Cargo.toml) | rstest追加 |
+| [ntrip_api.rs](../../prototype/m1-gnss/backend/src/web/ntrip_api.rs) | テーブルテスト形式 + API統合テスト |
+| [settings/page.tsx](../../prototype/m1-gnss/frontend/src/app/settings/page.tsx) | NTRIP接続/切断ボタン追加 |
+
+**次セッション（Session 135）でやること**:
+- 実機でのNTRIP接続テスト
+- または残タスクの優先度確認
+
+---
