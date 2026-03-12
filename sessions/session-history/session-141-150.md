@@ -258,3 +258,65 @@
 - ADR-012を更新
 
 ---
+
+## Session 148 (2026-03-12)
+
+**概要**: 統合API問題の原因特定（Class/IDログ追加）
+
+**実施内容**:
+1. **ログ解析で原因特定**
+   - 「不明データ」の正体はMON-SPANのスペクトラムデータ
+   - 定期出力がまだ有効（USB用キーでは無効化されない）
+   - 実機はUART1接続のため、UART1用キーが必要
+
+**決定事項**:
+| 項目 | 決定 |
+|------|------|
+| 原因 | USB用キーでは無効化されない（実機はUART1接続） |
+| 対策 | UART1用キーを追加して無効化 |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [log-analysis-report.md](../session148/log-analysis-report.md) | ログ分析レポート |
+
+**次セッション（Session 149）でやること**:
+- UART1用キーを追加して定期出力を無効化
+
+---
+
+## Session 149 (2026-03-12)
+
+**概要**: UART1用キー追加 + Layer::Bbr変更
+
+**実施内容**:
+1. **UART1用キーを追加**
+   - cfg_valset.rsに6つのUART1用キーを追加
+   - disable_periodic_outputを12キー（USB+UART1）対応に修正
+2. **動作確認で問題継続**
+   - UART1用キー追加後も「不明データあり」が続く
+   - Session 130との差分確認 → Session 130では定期出力を制御していなかった
+3. **Layer::Bbrに変更**
+   - BBRに書き込んで不揮発性に
+
+**決定事項**:
+| 項目 | 決定 |
+|------|------|
+| 定期出力無効化 | Layer::Bbr（不揮発性） |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg_valset.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_valset.rs) | UART1用キー追加、12キー対応 |
+| [device_api.rs](../../prototype/m1-gnss/backend/src/web/device_api.rs) | Layer::Ram → Layer::Bbr |
+
+**残った課題**:
+- Layer::Bbr変更後の動作確認
+- ADR-012の更新
+
+**次セッション（Session 150）でやること**:
+- Layer::Bbr変更後の動作確認
+- 問題解決していればADR-012更新
+- 解決していなければSession 130方式を検討
+
+---

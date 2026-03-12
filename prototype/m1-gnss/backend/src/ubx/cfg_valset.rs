@@ -52,6 +52,30 @@ pub const CFG_MSGOUT_MON_SPAN_USB: u32 = 0x2091038e;
 /// CFG-MSGOUT-UBX_MON_RF_USB
 pub const CFG_MSGOUT_MON_RF_USB: u32 = 0x2091035c;
 
+// ===========================================
+// CFG-MSGOUT キーID（UART1用）
+// 出典: u-blox F9 HPG 1.32 Interface Description (UBX-22008968) p.234-251
+// 実機はUSBハブ経由でUART1として接続されるため、UART1用キーが必要
+// ===========================================
+
+/// CFG-MSGOUT-UBX_NAV_PVT_UART1
+pub const CFG_MSGOUT_NAV_PVT_UART1: u32 = 0x20910007;
+
+/// CFG-MSGOUT-UBX_NAV_STATUS_UART1
+pub const CFG_MSGOUT_NAV_STATUS_UART1: u32 = 0x2091001b;
+
+/// CFG-MSGOUT-UBX_NAV_SAT_UART1
+pub const CFG_MSGOUT_NAV_SAT_UART1: u32 = 0x20910016;
+
+/// CFG-MSGOUT-UBX_NAV_SIG_UART1
+pub const CFG_MSGOUT_NAV_SIG_UART1: u32 = 0x20910346;
+
+/// CFG-MSGOUT-UBX_MON_SPAN_UART1
+pub const CFG_MSGOUT_MON_SPAN_UART1: u32 = 0x2091038c;
+
+/// CFG-MSGOUT-UBX_MON_RF_UART1
+pub const CFG_MSGOUT_MON_RF_UART1: u32 = 0x2091035a;
+
 /// NMEA出力を制御するCFG-VALSETメッセージを生成
 ///
 /// # Arguments
@@ -179,16 +203,44 @@ pub fn set_periodic_output(config: &PeriodicOutputConfig, layer: Layer) -> Vec<u
 /// 定期出力を無効化するCFG-VALSETメッセージを生成
 ///
 /// 全てのメッセージを出力レート0（ポーリングのみ）に設定
+/// USB用とUART1用の両方のキーを設定（実機はUART1接続のため）
 pub fn disable_periodic_output(layer: Layer) -> Vec<u8> {
-    let config = PeriodicOutputConfig {
-        nav_pvt: 0,
-        nav_status: 0,
-        nav_sat: 0,
-        nav_sig: 0,
-        mon_span: 0,
-        mon_rf: 0,
-    };
-    set_periodic_output(&config, layer)
+    // ペイロード構成:
+    // - version (1 byte): 0x00
+    // - layers (1 byte): レイヤービットマスク
+    // - reserved (2 bytes): 0x00, 0x00
+    // - cfgData (N bytes): 各キー(4bytes) + 値(1byte)
+
+    let mut payload = vec![
+        0x00,           // version
+        layer as u8,    // layers
+        0x00, 0x00,     // reserved
+    ];
+
+    // USB用とUART1用の両方のキーを0に設定
+    let configs: [(u32, u8); 12] = [
+        // USB用
+        (CFG_MSGOUT_NAV_PVT_USB, 0),
+        (CFG_MSGOUT_NAV_STATUS_USB, 0),
+        (CFG_MSGOUT_NAV_SAT_USB, 0),
+        (CFG_MSGOUT_NAV_SIG_USB, 0),
+        (CFG_MSGOUT_MON_SPAN_USB, 0),
+        (CFG_MSGOUT_MON_RF_USB, 0),
+        // UART1用
+        (CFG_MSGOUT_NAV_PVT_UART1, 0),
+        (CFG_MSGOUT_NAV_STATUS_UART1, 0),
+        (CFG_MSGOUT_NAV_SAT_UART1, 0),
+        (CFG_MSGOUT_NAV_SIG_UART1, 0),
+        (CFG_MSGOUT_MON_SPAN_UART1, 0),
+        (CFG_MSGOUT_MON_RF_UART1, 0),
+    ];
+
+    for (key, value) in configs {
+        payload.extend_from_slice(&key.to_le_bytes());
+        payload.push(value);
+    }
+
+    build_ubx_frame(CFG_CLASS, CFG_VALSET_ID, &payload)
 }
 
 #[cfg(test)]
@@ -339,14 +391,22 @@ mod tests {
         }
     }
 
-    /// 定期出力無効化時に全メッセージのレートが0になる
+    /// 定期出力無効化時に全メッセージのレートが0になる（USB + UART1の12キー）
     #[rstest]
-    #[case::nav_pvt(0, 0, true)]
-    #[case::nav_status(1, 0, true)]
-    #[case::nav_sat(2, 0, true)]
-    #[case::nav_sig(3, 0, true)]
-    #[case::mon_span(4, 0, true)]
-    #[case::mon_rf(5, 0, true)]
+    // USB用（index 0-5）
+    #[case::usb_nav_pvt(0, 0, true)]
+    #[case::usb_nav_status(1, 0, true)]
+    #[case::usb_nav_sat(2, 0, true)]
+    #[case::usb_nav_sig(3, 0, true)]
+    #[case::usb_mon_span(4, 0, true)]
+    #[case::usb_mon_rf(5, 0, true)]
+    // UART1用（index 6-11）
+    #[case::uart1_nav_pvt(6, 0, true)]
+    #[case::uart1_nav_status(7, 0, true)]
+    #[case::uart1_nav_sat(8, 0, true)]
+    #[case::uart1_nav_sig(9, 0, true)]
+    #[case::uart1_mon_span(10, 0, true)]
+    #[case::uart1_mon_rf(11, 0, true)]
     fn test_定期出力無効化で全レートが0になる(
         #[case] index: usize,
         #[case] expected_rate: u8,
@@ -381,6 +441,31 @@ mod tests {
             assert_eq!(frame.payload_len(), 34, "payload length");
             // 最初のキーがNAV-PVT
             assert_eq!(frame.first_key(), CFG_MSGOUT_NAV_PVT_USB, "first key = NAV-PVT");
+            // チェックサム
+            assert!(frame.checksum_valid(), "checksum");
+        }
+    }
+
+    /// 定期出力無効化メッセージの構造が正しい（USB + UART1の12キー）
+    #[rstest]
+    #[case::正常系(Layer::Ram, true)]
+    fn test_定期出力無効化メッセージ構造が正しい(
+        #[case] layer: Layer,
+        #[case] should_succeed: bool,
+    ) {
+        let msg = disable_periodic_output(layer);
+        let frame = UbxFrame::new(&msg);
+
+        if should_succeed {
+            // UBXヘッダー
+            assert_eq!(frame.sync1(), 0xB5, "sync1");
+            assert_eq!(frame.sync2(), 0x62, "sync2");
+            assert_eq!(frame.class(), 0x06, "class = CFG");
+            assert_eq!(frame.id(), 0x8A, "id = VALSET");
+            // ペイロード長: version(1) + layers(1) + reserved(2) + 12*(key(4) + value(1)) = 64
+            assert_eq!(frame.payload_len(), 64, "payload length (12 keys)");
+            // 最初のキーがNAV-PVT USB
+            assert_eq!(frame.first_key(), CFG_MSGOUT_NAV_PVT_USB, "first key = NAV-PVT USB");
             // チェックサム
             assert!(frame.checksum_valid(), "checksum");
         }
