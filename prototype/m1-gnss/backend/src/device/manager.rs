@@ -361,9 +361,16 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             .as_mut()
             .ok_or(DeviceManagerError::NotConnected)?;
 
-        let written = port.write(data)?;
-        trace!("write_data: {}バイト書き込み", written);
-        Ok(written)
+        match port.write(data) {
+            Ok(written) => {
+                trace!("write_data: {}バイト書き込み", written);
+                Ok(written)
+            }
+            Err(e) => {
+                warn!("[write_data] IOエラー: {} (データ長: {})", e, data.len());
+                Err(DeviceManagerError::IoError(e))
+            }
+        }
     }
 
     /// UBXメッセージを受信

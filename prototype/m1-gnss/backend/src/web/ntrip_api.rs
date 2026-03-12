@@ -198,22 +198,33 @@ fn base64_encode(input: &str) -> String {
     result
 }
 
-/// GGAセンテンスを生成（テスト用固定位置）
+/// GGAセンテンスを生成
 ///
 /// VRS型NTRIPサービスでは、クライアントが位置情報を送信する必要がある。
-/// 現在は東京近辺の固定座標を使用（テスト用）。
-fn generate_gga_sentence() -> String {
+/// lat/lonを受け取り、NMEA GGAフォーマットで出力する。
+fn generate_gga_sentence(lat: f64, lon: f64) -> String {
     use chrono::Utc;
 
     let now = Utc::now();
     let time_str = now.format("%H%M%S.00").to_string();
 
-    // 東京近辺の座標（テスト用固定値）
-    // 緯度: 35.6762° N → 3540.572 (DDMM.MMM形式)
-    // 経度: 139.6503° E → 13939.018 (DDDMM.MMM形式)
+    // 緯度をDDMM.MMMM形式に変換
+    let lat_abs = lat.abs();
+    let lat_deg = lat_abs.floor() as u32;
+    let lat_min = (lat_abs - lat_deg as f64) * 60.0;
+    let lat_dir = if lat >= 0.0 { "N" } else { "S" };
+    let lat_str = format!("{:02}{:07.4}", lat_deg, lat_min);
+
+    // 経度をDDDMM.MMMM形式に変換
+    let lon_abs = lon.abs();
+    let lon_deg = lon_abs.floor() as u32;
+    let lon_min = (lon_abs - lon_deg as f64) * 60.0;
+    let lon_dir = if lon >= 0.0 { "E" } else { "W" };
+    let lon_str = format!("{:03}{:07.4}", lon_deg, lon_min);
+
     let gga_body = format!(
-        "GPGGA,{},3540.5720,N,13939.0180,E,1,08,1.0,50.0,M,0.0,M,,",
-        time_str
+        "GPGGA,{},{},{},{},{},1,08,1.0,50.0,M,0.0,M,,",
+        time_str, lat_str, lat_dir, lon_str, lon_dir
     );
 
     // チェックサム計算（$と*の間のXOR）
@@ -221,6 +232,11 @@ fn generate_gga_sentence() -> String {
 
     format!("${gga_body}*{checksum:02X}\r\n")
 }
+
+/// デフォルト位置（フォールバック用）
+/// 東京近辺の座標
+const DEFAULT_LAT: f64 = 35.6762;
+const DEFAULT_LON: f64 = 139.6503;
 
 /// NTRIPサーバーに接続
 ///
@@ -425,8 +441,20 @@ pub async fn connect_ntrip(
         // GGA定期送信タイマー（10秒間隔）
         let mut gga_interval = interval(Duration::from_secs(10));
 
+        // 現在位置を取得してGGAを生成するヘルパー
+        let get_gga = |app_state: &web::Data<AppState>| -> String {
+            let pos = app_state.current_position.lock().ok();
+            if let Some(p) = pos {
+                if p.valid {
+                    return generate_gga_sentence(p.lat, p.lon);
+                }
+            }
+            // フォールバック: デフォルト位置
+            generate_gga_sentence(DEFAULT_LAT, DEFAULT_LON)
+        };
+
         // 接続直後に最初のGGAを送信
-        let initial_gga = generate_gga_sentence();
+        let initial_gga = get_gga(&app_state_clone);
         log::info!("[NTRIP] 初回GGA送信: {}", initial_gga.trim());
         if let Err(e) = writer.write_all(initial_gga.as_bytes()).await {
             log::error!("[NTRIP] 初回GGA送信失敗: {}", e);
@@ -441,7 +469,7 @@ pub async fn connect_ntrip(
                 }
                 // GGA定期送信（10秒ごと）
                 _ = gga_interval.tick() => {
-                    let gga = generate_gga_sentence();
+                    let gga = get_gga(&app_state_clone);
                     log::debug!("[NTRIP] GGA送信: {}", gga.trim());
                     if let Err(e) = writer.write_all(gga.as_bytes()).await {
                         log::warn!("[NTRIP] GGA送信失敗: {}", e);
