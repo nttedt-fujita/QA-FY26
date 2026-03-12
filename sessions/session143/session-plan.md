@@ -11,7 +11,7 @@
 | # | 作業 | 読むべきファイル |
 |---|------|-----------------|
 | 1 | REST API vs GraphQL の解説 | - |
-| 2 | TDD Phase 2: テストシナリオリスト作成 | session142/session-summary.md |
+| 2 | TDD Phase 2: テストシナリオリスト作成 | session142/gnss-state-api-spec.md |
 | 3 | TDD Phase 3: テストコード作成（Red） | nav_sat_api.rs（テスト参考） |
 | 4 | TDD Phase 4: 実装（Green） | 既存APIファイル |
 | 5 | main.rsにAPI登録 | main.rs |
@@ -54,5 +54,6 @@ Session 142で決定した振る舞いに基づいてテストシナリオを作
 ## 参照
 
 - [Session 142 サマリー](../session142/session-summary.md)
+- [統合API仕様書](../session142/gnss-state-api-spec.md) ← **必読**
 - [ADR-012: 統合API方針](../../docs/adr/m1/ADR-012-periodic-output-and-unified-api.md)
 - [TDDスキル](../../.claude/skills/tdd-practice/SKILL.md)
