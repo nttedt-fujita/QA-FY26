@@ -51,6 +51,14 @@ Session 142で決定した振る舞いに基づいてテストシナリオを作
 
 ---
 
+## 持ち越しドキュメント（Session 142から）
+
+| ファイル | 行き先 | タイミング |
+|----------|--------|-----------|
+| [gnss-state-api-spec.md](../session142/gnss-state-api-spec.md) | `docs/missions/m1-sensor-evaluation/gnss/` | 実装完了後に正式配置 |
+
+---
+
 ## 参照
 
 - [Session 142 サマリー](../session142/session-summary.md)
