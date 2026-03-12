@@ -12,6 +12,7 @@ use m1_gnss::web::nav_sig_api;
 use m1_gnss::web::mon_span_api;
 use m1_gnss::web::nav_status_api;
 use m1_gnss::web::ntrip_api::{self, SharedNtripManager, NtripManager};
+use m1_gnss::web::gnss_state_api;
 
 use std::sync::Arc;
 use tokio::sync::Mutex as TokioMutex;
@@ -95,6 +96,7 @@ async fn main() -> std::io::Result<()> {
             .configure(mon_span_api::configure)
             .configure(nav_status_api::configure)
             .configure(ntrip_api::configure)
+            .configure(gnss_state_api::configure)
     })
     .bind("0.0.0.0:8080")?
     .run()
