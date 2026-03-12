@@ -238,3 +238,40 @@
 - MON-SPAN FE実装、または屋内/屋外検査ページ分離
 
 ---
+
+## Session 118 (2026-03-12)
+
+**概要**: MON-SPAN TDDレビュー + 仕様書参照ルール強制化
+
+**実施内容**:
+1. **TDDレビュー（MON-SPAN）**
+   - 仕様書（ubx-mon-messages.md）とテストを照合
+   - パーサーテスト: 8項目すべて仕様をカバー
+   - APIテスト: 6項目すべて適切
+   - 結論: 追加テスト不要
+2. **仕様書参照ルールの強制化**
+   - グローバルルール: `~/.claude/rules/13-spec-first-implementation.md`
+   - M1-GNSS固有: `prototype/m1-gnss/CLAUDE.md` 新規作成
+3. **ドキュメント正式配置**
+   - Session 116/117のドラフトを統合
+   - `23-mon-span-implementation.md` 作成
+   - ドラフト削除
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| `~/.claude/rules/13-spec-first-implementation.md` | 仕様書参照ルール（グローバル） |
+| [prototype/m1-gnss/CLAUDE.md](../../prototype/m1-gnss/CLAUDE.md) | M1-GNSS固有ルール |
+| [23-mon-span-implementation.md](../../docs/missions/m1-sensor-evaluation/gnss/23-mon-span-implementation.md) | MON-SPAN実装仕様（正式版） |
+| [session118/session-summary.md](../session118/session-summary.md) | セッションサマリー |
+| [session119/session-plan.md](../session119/session-plan.md) | 次セッション計画 |
+
+**決定事項**:
+- 仕様書参照ルールをグローバルルールとして追加
+- プロトタイプごとにCLAUDE.mdで具体的な仕様書パスを記載
+- MON-SPANテストは追加不要
+
+**次セッション（Session 119）でやること**:
+- MON-SPAN FE実装（スペクトラム波形、PGAゲージ）
+
+---
