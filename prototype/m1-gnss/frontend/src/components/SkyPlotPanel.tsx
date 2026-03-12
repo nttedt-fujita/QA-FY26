@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavSatResponse, SatelliteInfo, getNavSat } from "@/lib/api";
 
 /**
@@ -190,22 +190,6 @@ export function SkyPlotPanel({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // データ取得
-  const fetchData = useCallback(async () => {
-    if (!enabled) return;
-
-    setIsLoading(true);
-    try {
-      const res = await getNavSat();
-      setData(res);
-      setError(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "取得失敗");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [enabled]);
-
   // AbortController参照
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -217,16 +201,31 @@ export function SkyPlotPanel({
       return;
     }
 
-    abortControllerRef.current = new AbortController();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await getNavSat(controller.signal);
+        setData(res);
+        setError(null);
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return;
+        setError(e instanceof Error ? e.message : "取得失敗");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
     fetchData();
     const interval = setInterval(fetchData, pollIntervalMs);
 
     return () => {
       clearInterval(interval);
-      abortControllerRef.current?.abort();
+      controller.abort();
     };
-  }, [enabled, pollIntervalMs, fetchData]);
+  }, [enabled, pollIntervalMs]);
 
   if (!enabled) {
     return (

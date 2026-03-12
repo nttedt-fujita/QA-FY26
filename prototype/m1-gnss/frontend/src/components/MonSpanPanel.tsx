@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MonSpanResponse, SpanBlock, getMonSpan } from "@/lib/api";
 
 // PGAゲインの基準値（dB）
@@ -62,26 +62,6 @@ export function MonSpanPanel({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // データ取得
-  const fetchData = useCallback(async () => {
-    if (!enabled) return;
-
-    setIsLoading(true);
-    try {
-      console.log("[MON-SPAN] fetching...");
-      const res = await getMonSpan();
-      console.log("[MON-SPAN] success:", res.blocks.length, "blocks");
-      setData(res);
-      setError(null);
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "取得失敗";
-      console.error("[MON-SPAN] error:", msg);
-      setError(msg);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [enabled]);
-
   // AbortController参照
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -93,16 +73,35 @@ export function MonSpanPanel({
       return;
     }
 
-    abortControllerRef.current = new AbortController();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        console.log("[MON-SPAN] fetching...");
+        const res = await getMonSpan(controller.signal);
+        console.log("[MON-SPAN] success:", res.blocks.length, "blocks");
+        setData(res);
+        setError(null);
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return;
+        const msg = e instanceof Error ? e.message : "取得失敗";
+        console.error("[MON-SPAN] error:", msg);
+        setError(msg);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
     fetchData();
     const interval = setInterval(fetchData, pollIntervalMs);
 
     return () => {
       clearInterval(interval);
-      abortControllerRef.current?.abort();
+      controller.abort();
     };
-  }, [enabled, pollIntervalMs, fetchData]);
+  }, [enabled, pollIntervalMs]);
 
   // 全ブロックのPGA判定
   const allPgaNormal = data?.blocks.every((b) => b.pga >= PGA_NORMAL_THRESHOLD) ?? false;
