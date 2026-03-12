@@ -7,6 +7,7 @@ use tracing::{debug, info, warn};
 use crate::device::manager::{DeviceManager, DeviceManagerError, SerialPortProvider};
 use crate::device::status::DeviceStatus;
 use crate::ubx::cfg_valset::{set_uart1_nmea_output, Layer};
+use crate::ubx::mon_ver;
 
 use super::judge::judge_result;
 use super::types::{InspectionItem, InspectionResult, ItemType, Verdict};
@@ -307,14 +308,18 @@ impl InspectionEngine {
                 (Some("OK".to_string()), None)
             }
             ItemType::FwVersion => {
-                // MON-VER: ペイロードの最初の30バイトがソフトウェアバージョン
-                if response.len() >= 36 {
-                    let sw_version = String::from_utf8_lossy(&response[6..36])
-                        .trim_end_matches('\0')
-                        .to_string();
-                    (Some(sw_version), None)
-                } else {
-                    (None, Some("ParseError: MON-VER too short".to_string()))
+                // MON-VER: extensionからFWVERを抽出（u-center表示と一致）
+                match mon_ver::parse(response) {
+                    Ok(ver) => {
+                        // FWVER=HPG 1.32 のような形式から "HPG 1.32" を取り出す
+                        if let Some(fw_ver) = ver.fw_version() {
+                            (Some(fw_ver), None)
+                        } else {
+                            // FWVERがない場合はsw_versionにフォールバック
+                            (Some(ver.sw_version), None)
+                        }
+                    }
+                    Err(e) => (None, Some(format!("ParseError: {}", e))),
                 }
             }
             ItemType::SerialNumber => {
@@ -541,12 +546,21 @@ mod tests {
         InspectionEngine::build_ubx_frame(class, id, payload)
     }
 
-    /// MON-VER応答を生成
-    fn mon_ver_response(sw_version: &str) -> Vec<u8> {
-        let mut payload = vec![0u8; 40];
-        let bytes = sw_version.as_bytes();
-        let len = bytes.len().min(30);
-        payload[..len].copy_from_slice(&bytes[..len]);
+    /// MON-VER応答を生成（FWVERをextensionに含む）
+    fn mon_ver_response(fw_version: &str) -> Vec<u8> {
+        // payload: swVersion(30) + hwVersion(10) + extension(30)
+        let mut payload = vec![0u8; 70];
+        // swVersion: "EXT CORE 1.00"
+        let sw = b"EXT CORE 1.00";
+        payload[..sw.len()].copy_from_slice(sw);
+        // hwVersion (offset 30-39): "00190000"
+        let hw = b"00190000";
+        payload[30..30 + hw.len()].copy_from_slice(hw);
+        // extension (offset 40-69): "FWVER=HPG 1.32"
+        let fwver = format!("FWVER={}", fw_version);
+        let fwver_bytes = fwver.as_bytes();
+        let len = fwver_bytes.len().min(29);
+        payload[40..40 + len].copy_from_slice(&fwver_bytes[..len]);
         valid_ubx_response(0x0A, 0x04, &payload)
     }
 

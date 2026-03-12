@@ -79,3 +79,37 @@
   - 「取得中」「終了処理中」表示
 
 ---
+
+## Session 153 (2026-03-12)
+
+**概要**: 屋外動作確認 + FWバージョン取得修正
+
+**実施内容**:
+1. **屋外テストデータ確認**
+   - DBに27件の検査結果が保存されていることを確認
+   - **問題発見**: L1 C/N0が全て0dBHz
+   - L2受信率は50-56%で取得できている
+2. **FWバージョン取得方法の修正**
+   - 小板橋さんからの指摘: u-centerのFWVERはMON-VERのextension内
+   - `sw_version` → `extensions`の`FWVER=...`を抽出するよう修正
+
+**決定事項**:
+| 項目 | 決定 |
+|------|------|
+| FWバージョン取得元 | MON-VER extension内の`FWVER=`から抽出 |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [mon_ver.rs](../../prototype/m1-gnss/backend/src/ubx/mon_ver.rs) | `fw_version()`, `protocol_version()` メソッド追加 |
+| [engine.rs](../../prototype/m1-gnss/backend/src/inspection/engine.rs) | FwVersion解析でFWVERを使うように変更 |
+
+**残った課題**:
+- L1 C/N0が0の問題（NAV-SIG集計ロジック要調査）
+- FE側の状態表示改善
+
+**次セッション（Session 154）でやること**:
+- **FE側の状態表示改善**（リクエスト重複防止、取得中表示）
+- L1 C/N0が0になる原因調査
+
+---
