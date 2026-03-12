@@ -113,3 +113,34 @@
 - L1 C/N0が0になる原因調査
 
 ---
+
+## Session 154 (2026-03-12)
+
+**概要**: FE側の状態表示改善
+
+**実施内容**:
+1. **FE状態表示改善**
+   - InspectionStateを拡張: `idle | starting | running | completing | completed`
+   - ボタン連打防止（starting状態で重複開始を防止）
+   - 「開始中...」「集計中...」の表示を追加
+   - ビルド成功確認済み
+2. **L1 C/N0=0問題の調査**
+   - コードレビュー完了
+   - 原因候補: GPS L1信号が0件の場合にminL1Cno=0
+   - 屋内のため再現確認不可
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [useOutdoorInspection.ts](../../prototype/m1-gnss/frontend/src/hooks/useOutdoorInspection.ts) | InspectionState拡張 |
+| [outdoor/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/outdoor/page.tsx) | 状態表示UI更新 |
+
+**残った課題**:
+- L1 C/N0=0問題のデバッグログ追加（次回の屋外テスト前に実施）
+- u-centerコンフィグファイル解析（オプション）
+
+**次セッション（Session 155）でやること**:
+- FEにL1 C/N0デバッグ用のconsole.logを追加
+- 屋外テストでGPS L1信号の有無とcno値を確認
+
+---

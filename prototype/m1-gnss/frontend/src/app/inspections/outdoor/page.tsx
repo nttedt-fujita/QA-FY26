@@ -32,6 +32,7 @@ export default function OutdoorInspectionsPage() {
   // 屋外検査Hook
   const inspection = useOutdoorInspection();
   const isInspecting = inspection.state === "running";
+  const isProcessing = inspection.state === "starting" || inspection.state === "completing";
 
   // 接続中の装置を取得
   const connectedDevice = devices.find((d) => d.status === "connected");
@@ -189,7 +190,7 @@ export default function OutdoorInspectionsPage() {
                 setSelectedLotId(e.target.value ? Number(e.target.value) : null)
               }
               className="w-full rounded border border-gray-300 p-2"
-              disabled={isInspecting}
+              disabled={isInspecting || isProcessing}
             >
               <option value="">（ロットなし）</option>
               {lots.map((lot) => (
@@ -245,7 +246,7 @@ export default function OutdoorInspectionsPage() {
                 value={inspectionDurationSec}
                 onChange={(e) => setInspectionDurationSec(Number(e.target.value))}
                 className="rounded border border-gray-300 p-2"
-                disabled={inspection.state !== "idle"}
+                disabled={inspection.state !== "idle" && inspection.state !== "completed"}
               >
                 <option value={30}>30秒</option>
                 <option value={60}>60秒</option>
@@ -264,12 +265,28 @@ export default function OutdoorInspectionsPage() {
                 検査開始
               </button>
             )}
+            {inspection.state === "starting" && (
+              <button
+                disabled
+                className="rounded bg-gray-400 px-6 py-2 font-medium text-white cursor-not-allowed"
+              >
+                開始中...
+              </button>
+            )}
             {inspection.state === "running" && (
               <button
                 onClick={handleStopInspection}
                 className="rounded bg-red-600 px-6 py-2 font-medium text-white hover:bg-red-700"
               >
                 検査停止
+              </button>
+            )}
+            {inspection.state === "completing" && (
+              <button
+                disabled
+                className="rounded bg-gray-400 px-6 py-2 font-medium text-white cursor-not-allowed"
+              >
+                集計中...
               </button>
             )}
             {inspection.state === "completed" && (
@@ -282,20 +299,32 @@ export default function OutdoorInspectionsPage() {
             )}
 
             {/* 残り時間/サンプル数 */}
-            {isInspecting && (
+            {(isInspecting || isProcessing) && (
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">残り:</span>
-                  <span className="font-mono text-lg font-semibold text-blue-600">
-                    {inspection.remainingTime}秒
+                {isInspecting && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-600">残り:</span>
+                      <span className="font-mono text-lg font-semibold text-blue-600">
+                        {inspection.remainingTime}秒
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-gray-600">サンプル:</span>
+                      <span className="font-mono text-lg font-semibold text-gray-700">
+                        {inspection.sampleCount}
+                      </span>
+                    </div>
+                  </>
+                )}
+                {inspection.state === "starting" && (
+                  <span className="text-sm text-gray-600">検査を開始しています...</span>
+                )}
+                {inspection.state === "completing" && (
+                  <span className="text-sm text-gray-600">
+                    結果を集計しています... ({inspection.sampleCount}サンプル)
                   </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">サンプル:</span>
-                  <span className="font-mono text-lg font-semibold text-gray-700">
-                    {inspection.sampleCount}
-                  </span>
-                </div>
+                )}
               </div>
             )}
           </div>
