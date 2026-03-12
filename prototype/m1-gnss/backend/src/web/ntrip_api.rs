@@ -208,11 +208,52 @@ async fn connect_to_ntrip(
     username: &str,
     password: &str,
 ) -> Result<TcpStream, String> {
-    // TCP接続
+    use std::time::Duration;
+    use tokio::time::timeout;
+    use tokio::net::lookup_host;
+
+    const CONNECT_TIMEOUT: Duration = Duration::from_secs(10);
+    const READ_TIMEOUT: Duration = Duration::from_secs(10);
+
+    log::info!("[NTRIP] ========== 接続開始 ==========");
+    log::info!("[NTRIP] キャスター: {}:{}", caster_url, port);
+    log::info!("[NTRIP] マウントポイント: {}", mountpoint);
+    log::info!("[NTRIP] ユーザー: {}", username);
+
+    // DNS解決チェック
     let addr = format!("{}:{}", caster_url, port);
-    let mut stream = TcpStream::connect(&addr)
-        .await
-        .map_err(|e| format!("TCP接続失敗: {}", e))?;
+    log::info!("[NTRIP] DNS解決中: {}", caster_url);
+    match lookup_host(&addr).await {
+        Ok(mut addrs) => {
+            if let Some(resolved) = addrs.next() {
+                log::info!("[NTRIP] DNS解決成功: {} -> {}", caster_url, resolved);
+            } else {
+                log::error!("[NTRIP] DNS解決失敗: アドレスが見つかりません");
+                return Err(format!("DNS解決失敗: {} のアドレスが見つかりません", caster_url));
+            }
+        }
+        Err(e) => {
+            log::error!("[NTRIP] DNS解決失敗: {}", e);
+            return Err(format!("DNS解決失敗: {} - {}", caster_url, e));
+        }
+    }
+
+    log::info!("[NTRIP] TCP接続開始: {}", addr);
+
+    let mut stream = match timeout(CONNECT_TIMEOUT, TcpStream::connect(&addr)).await {
+        Ok(Ok(s)) => {
+            log::info!("[NTRIP] TCP接続成功");
+            s
+        }
+        Ok(Err(e)) => {
+            log::error!("[NTRIP] TCP接続失敗: {}", e);
+            return Err(format!("TCP接続失敗: {}", e));
+        }
+        Err(_) => {
+            log::error!("[NTRIP] TCP接続タイムアウト ({}秒)", CONNECT_TIMEOUT.as_secs());
+            return Err(format!("TCP接続タイムアウト ({}秒)", CONNECT_TIMEOUT.as_secs()));
+        }
+    };
 
     // NTRIP Rev1リクエストを送信
     // User-Agentは "NTRIP" で始める必要がある（仕様書 5.1節）
@@ -225,21 +266,40 @@ async fn connect_to_ntrip(
         mountpoint, auth
     );
 
+    log::info!("[NTRIP] リクエスト送信: GET /{}", mountpoint);
+    log::debug!("[NTRIP] リクエスト全文:\n{}", request);
+
     stream
         .write_all(request.as_bytes())
         .await
-        .map_err(|e| format!("リクエスト送信失敗: {}", e))?;
+        .map_err(|e| {
+            log::error!("[NTRIP] リクエスト送信失敗: {}", e);
+            format!("リクエスト送信失敗: {}", e)
+        })?;
 
-    // レスポンスを読む（最初の行だけ確認）
+    log::info!("[NTRIP] リクエスト送信完了、レスポンス待機中...");
+
+    // レスポンスを読む（タイムアウト付き）
     let mut reader = BufReader::new(&mut stream);
     let mut response_line = String::new();
-    reader
-        .read_line(&mut response_line)
-        .await
-        .map_err(|e| format!("レスポンス読み取り失敗: {}", e))?;
+
+    match timeout(READ_TIMEOUT, reader.read_line(&mut response_line)).await {
+        Ok(Ok(_)) => {
+            log::info!("[NTRIP] レスポンス受信: {}", response_line.trim());
+        }
+        Ok(Err(e)) => {
+            log::error!("[NTRIP] レスポンス読み取り失敗: {}", e);
+            return Err(format!("レスポンス読み取り失敗: {}", e));
+        }
+        Err(_) => {
+            log::error!("[NTRIP] レスポンスタイムアウト ({}秒)", READ_TIMEOUT.as_secs());
+            return Err(format!("レスポンスタイムアウト ({}秒)", READ_TIMEOUT.as_secs()));
+        }
+    }
 
     // NTRIP Rev1: "ICY 200 OK" または HTTP/1.x 200 OK
     if response_line.contains("200") {
+        log::info!("[NTRIP] 接続成功 (200 OK)");
         // ヘッダーの残りを読み捨てる（空行まで）
         loop {
             let mut line = String::new();
@@ -250,13 +310,18 @@ async fn connect_to_ntrip(
             if bytes_read == 0 || line.trim().is_empty() {
                 break;
             }
+            log::debug!("[NTRIP] ヘッダー: {}", line.trim());
         }
+        log::info!("[NTRIP] ヘッダー読み取り完了、RTCMストリーム開始");
         Ok(stream)
     } else if response_line.contains("401") {
+        log::error!("[NTRIP] 認証失敗 (401)");
         Err("認証失敗 (401 Unauthorized)".to_string())
     } else if response_line.contains("404") {
+        log::error!("[NTRIP] マウントポイント不明 (404)");
         Err("マウントポイントが見つかりません (404)".to_string())
     } else {
+        log::error!("[NTRIP] 予期しないレスポンス: {}", response_line.trim());
         Err(format!("予期しないレスポンス: {}", response_line.trim()))
     }
 }
