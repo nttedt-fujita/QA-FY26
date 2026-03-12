@@ -224,3 +224,42 @@
 - README.md の更新（チェックリスト追加）
 
 ---
+
+## Session 127 (2026-03-12)
+
+**概要**: M1-GNSSドキュメント整理の実行 + 計画テンプレート改善方針決定
+
+**実施内容**:
+1. **docs/gnss/ の番号振り直し（4ファイル）**
+   - 23→26, 24→27, 25→28, architecture→29
+2. **sessions/ の置き去りドキュメント整理（7件）**
+   - 3件をdocs/に移動（24, 25, 30番）
+   - 1件をprototype/m1-gnss/docs/に移動
+   - 3件を削除（進捗管理系）
+3. **README.md 更新**
+   - 「○○するときは△△を見る」チェックリスト追加
+   - Phase 3: ツール実装に更新
+4. **prototype/m1-gnss/CLAUDE.md 更新**
+   - 仕様書参照ルールに新ドキュメント追加
+5. **Session 130計画の更新**
+   - session-managementスキルの計画テンプレート更新を明記
+   - 「読むべきファイル」カラム必須化
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [gnss/README.md](../../docs/missions/m1-sensor-evaluation/gnss/README.md) | チェックリスト付きREADME |
+| [documentation-improvement-plan.md](../../docs/documentation-improvement-plan.md) | ドキュメント整理計画書（正式配置） |
+| [session127/session-summary.md](../session127/session-summary.md) | セッションサマリー |
+| [session128/session-plan.md](../session128/session-plan.md) | 次セッション計画 |
+
+**決定事項**:
+- セッション計画に「読むべきファイル」を明記することで、トークン節約
+- 新しいルール追加ではなく、計画テンプレートの改善で対応
+
+**次セッション（Session 128）でやること**:
+- 導線の修正（gnss/README.mdへの直接リンク追加）
+- M1整理結果の検証
+- M3/M4に同様の整理が必要か判断
+
+---
