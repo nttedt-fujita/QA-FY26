@@ -1,12 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   NtripSettings,
   loadNtripSettings,
   saveNtripSettings,
   isNtripSettingsComplete,
 } from "@/lib/ntrip-settings";
+
+// API Base URL
+const API_BASE = "http://localhost:8080";
+
+// NTRIP接続状態の型
+type NtripConnectionState =
+  | "Disconnected"
+  | "Connecting"
+  | "Connected"
+  | { Error: string };
+
+interface NtripStatusResponse {
+  state: NtripConnectionState;
+  bytes_received: number;
+  bytes_forwarded: number;
+  last_error: string | null;
+}
 
 /**
  * 設定画面（NTRIP認証設定）
@@ -22,11 +39,39 @@ export default function SettingsPage() {
   const [isSaved, setIsSaved] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  // NTRIP接続状態
+  const [ntripStatus, setNtripStatus] = useState<NtripStatusResponse | null>(null);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [connectionError, setConnectionError] = useState<string | null>(null);
+
+  // NTRIP状態をポーリング
+  const fetchNtripStatus = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE}/api/ntrip/status`);
+      if (response.ok) {
+        const data: NtripStatusResponse = await response.json();
+        setNtripStatus(data);
+      }
+    } catch {
+      // サーバー未起動時は無視
+    }
+  }, []);
+
   // 初回読み込み
   useEffect(() => {
     const loaded = loadNtripSettings();
     setSettings(loaded);
-  }, []);
+    // NTRIP状態も取得
+    fetchNtripStatus();
+  }, [fetchNtripStatus]);
+
+  // 接続中は1秒ごとにポーリング
+  useEffect(() => {
+    if (ntripStatus?.state === "Connected" || ntripStatus?.state === "Connecting") {
+      const interval = setInterval(fetchNtripStatus, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [ntripStatus?.state, fetchNtripStatus]);
 
   // バリデーション
   const validate = (): boolean => {
@@ -83,6 +128,67 @@ export default function SettingsPage() {
   };
 
   const isComplete = isNtripSettingsComplete(settings);
+
+  // NTRIP接続
+  const handleConnect = async () => {
+    if (!validate()) {
+      return;
+    }
+    setIsConnecting(true);
+    setConnectionError(null);
+
+    try {
+      const response = await fetch(`${API_BASE}/api/ntrip/connect`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          caster_url: settings.casterUrl,
+          port: settings.port,
+          mountpoint: settings.mountpoint,
+          username: settings.username,
+          password: settings.password,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        setConnectionError(data.error || "接続に失敗しました");
+      } else {
+        await fetchNtripStatus();
+      }
+    } catch (e) {
+      setConnectionError(e instanceof Error ? e.message : "接続エラー");
+    } finally {
+      setIsConnecting(false);
+    }
+  };
+
+  // NTRIP切断
+  const handleDisconnect = async () => {
+    try {
+      await fetch(`${API_BASE}/api/ntrip/disconnect`, {
+        method: "POST",
+      });
+      await fetchNtripStatus();
+      setConnectionError(null);
+    } catch (e) {
+      setConnectionError(e instanceof Error ? e.message : "切断エラー");
+    }
+  };
+
+  // 接続状態の判定
+  const isConnected = ntripStatus?.state === "Connected";
+  const isConnectingState = ntripStatus?.state === "Connecting" || isConnecting;
+
+  // 状態表示テキスト
+  const getStateText = (state: NtripConnectionState | undefined): string => {
+    if (!state) return "不明";
+    if (state === "Disconnected") return "未接続";
+    if (state === "Connecting") return "接続中...";
+    if (state === "Connected") return "接続済み";
+    if (typeof state === "object" && "Error" in state) return `エラー: ${state.Error}`;
+    return "不明";
+  };
 
   return (
     <div className="px-4 py-6">
@@ -258,6 +364,81 @@ export default function SettingsPage() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* NTRIP接続セクション */}
+      <div className="mt-6 rounded-lg border border-gray-200 bg-white p-6">
+        <h3 className="mb-4 text-lg font-medium text-gray-900">NTRIP接続</h3>
+
+        {/* 接続状態 */}
+        <div className="mb-4 flex items-center gap-3">
+          <span className="text-sm text-gray-500">接続状態:</span>
+          <span
+            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+              isConnected
+                ? "bg-green-100 text-green-800"
+                : isConnectingState
+                ? "bg-yellow-100 text-yellow-800"
+                : "bg-gray-100 text-gray-800"
+            }`}
+          >
+            {getStateText(ntripStatus?.state)}
+          </span>
+        </div>
+
+        {/* 統計情報（接続中のみ） */}
+        {isConnected && ntripStatus && (
+          <div className="mb-4 rounded-md bg-gray-50 p-3 text-sm">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <span className="text-gray-500">受信:</span>{" "}
+                <span className="font-mono">{ntripStatus.bytes_received.toLocaleString()} bytes</span>
+              </div>
+              <div>
+                <span className="text-gray-500">転送:</span>{" "}
+                <span className="font-mono">{ntripStatus.bytes_forwarded.toLocaleString()} bytes</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* エラー表示 */}
+        {connectionError && (
+          <div className="mb-4 rounded-md bg-red-50 p-3 text-sm text-red-700">
+            {connectionError}
+          </div>
+        )}
+
+        {/* 接続/切断ボタン */}
+        <div className="flex gap-3">
+          {!isConnected ? (
+            <button
+              onClick={handleConnect}
+              disabled={!isComplete || isConnectingState}
+              className={`rounded-md px-4 py-2 text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                !isComplete || isConnectingState
+                  ? "cursor-not-allowed bg-gray-400"
+                  : "bg-green-600 hover:bg-green-700 focus:ring-green-500"
+              }`}
+            >
+              {isConnectingState ? "接続中..." : "接続"}
+            </button>
+          ) : (
+            <button
+              onClick={handleDisconnect}
+              className="rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            >
+              切断
+            </button>
+          )}
+        </div>
+
+        {/* 補足 */}
+        {!isComplete && (
+          <p className="mt-3 text-xs text-gray-500">
+            接続するには、上記の認証設定を全て入力して保存してください。
+          </p>
+        )}
       </div>
 
       {/* 説明 */}

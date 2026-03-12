@@ -42,7 +42,7 @@ pub struct NtripConnectRequest {
 }
 
 /// NTRIP接続状態
-#[derive(Debug, Clone, Serialize, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum NtripConnectionState {
     /// 未接続
     Disconnected,
@@ -55,7 +55,7 @@ pub enum NtripConnectionState {
 }
 
 /// NTRIP状態レスポンス
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NtripStatusResponse {
     /// 接続状態
     pub state: NtripConnectionState,
@@ -68,7 +68,7 @@ pub struct NtripStatusResponse {
 }
 
 /// エラーレスポンス
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct NtripErrorResponse {
     pub error: String,
     pub code: String,
@@ -458,47 +458,290 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rstest::rstest;
 
+    // -----------------------------------------
+    // Base64エンコードのテーブルテスト
+    // -----------------------------------------
+    #[rstest]
+    // 正常系: 標準的なケース
+    #[case("Aladdin:open sesame", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==", true)]
+    #[case("user:pass", "dXNlcjpwYXNz", true)]
+    // 正常系: パディングなし（3の倍数バイト）
+    #[case("abc", "YWJj", true)]
+    #[case("abcdef", "YWJjZGVm", true)]
+    // 正常系: パディング1個（3n+2バイト）
+    #[case("ab", "YWI=", true)]
+    #[case("abcde", "YWJjZGU=", true)]
+    // 正常系: パディング2個（3n+1バイト）
+    #[case("a", "YQ==", true)]
+    #[case("abcd", "YWJjZA==", true)]
+    // 境界値: 空文字列
+    #[case("", "", true)]
+    // 正常系: 1文字
+    #[case("x", "eA==", true)]
+    fn test_base64_encode(
+        #[case] input: &str,
+        #[case] expected: &str,
+        #[case] should_succeed: bool,
+    ) {
+        let result = base64_encode(input);
+        if should_succeed {
+            assert_eq!(result, expected, "入力: {}", input);
+        }
+    }
+
+    // -----------------------------------------
+    // NtripManager状態遷移のテーブルテスト
+    // -----------------------------------------
+    #[rstest]
+    // 正常系: 初期状態
+    #[case(NtripConnectionState::Disconnected, true)]
+    // 正常系: 接続中への遷移
+    #[case(NtripConnectionState::Connecting, true)]
+    // 正常系: 接続済みへの遷移
+    #[case(NtripConnectionState::Connected, true)]
+    // 正常系: エラー状態への遷移
+    #[case(NtripConnectionState::Error("test error".to_string()), true)]
+    fn test_ntrip_manager_state_transition(
+        #[case] target_state: NtripConnectionState,
+        #[case] should_succeed: bool,
+    ) {
+        let mut manager = NtripManager::new();
+        // 初期状態の確認
+        assert_eq!(*manager.state(), NtripConnectionState::Disconnected);
+
+        if should_succeed {
+            manager.set_state(target_state.clone());
+            assert_eq!(*manager.state(), target_state);
+        }
+    }
+
+    // -----------------------------------------
+    // NtripManager統計のテーブルテスト
+    // -----------------------------------------
+    #[rstest]
+    // 正常系: 0バイト
+    #[case(0, 0, true)]
+    // 正常系: 典型的な値
+    #[case(100, 100, true)]
+    // 正常系: 受信のみ（転送失敗のケース）
+    #[case(1000, 0, true)]
+    // 正常系: 大きな値
+    #[case(1_000_000, 999_000, true)]
+    fn test_ntrip_manager_stats(
+        #[case] bytes_received: u64,
+        #[case] bytes_forwarded: u64,
+        #[case] should_succeed: bool,
+    ) {
+        let mut manager = NtripManager::new();
+        manager.add_bytes_received(bytes_received);
+        manager.add_bytes_forwarded(bytes_forwarded);
+
+        let status = manager.status();
+        if should_succeed {
+            assert_eq!(status.bytes_received, bytes_received);
+            assert_eq!(status.bytes_forwarded, bytes_forwarded);
+        }
+    }
+
+    // -----------------------------------------
+    // NtripManagerリセットのテーブルテスト
+    // -----------------------------------------
+    #[rstest]
+    // 正常系: 統計とエラーがリセットされる
+    #[case(100, 100, Some("test error".to_string()), true)]
+    // 正常系: エラーなしでもリセット可能
+    #[case(500, 400, None, true)]
+    // 境界値: 0でもリセット可能
+    #[case(0, 0, None, true)]
+    fn test_ntrip_manager_reset(
+        #[case] initial_received: u64,
+        #[case] initial_forwarded: u64,
+        #[case] initial_error: Option<String>,
+        #[case] should_succeed: bool,
+    ) {
+        let mut manager = NtripManager::new();
+        manager.add_bytes_received(initial_received);
+        manager.add_bytes_forwarded(initial_forwarded);
+        if let Some(err) = initial_error {
+            manager.set_last_error(err);
+        }
+
+        manager.reset_stats();
+
+        let status = manager.status();
+        if should_succeed {
+            assert_eq!(status.bytes_received, 0);
+            assert_eq!(status.bytes_forwarded, 0);
+            assert_eq!(status.last_error, None);
+        }
+    }
+
+    // -----------------------------------------
+    // NtripManager初期化のテスト
+    // -----------------------------------------
     #[test]
     fn test_ntrip_manager_new() {
         let manager = NtripManager::new();
         assert_eq!(*manager.state(), NtripConnectionState::Disconnected);
         assert_eq!(manager.bytes_received, 0);
         assert_eq!(manager.bytes_forwarded, 0);
+        assert!(manager.last_error.is_none());
+        assert!(manager.exit_tx.is_none());
     }
 
     #[test]
-    fn test_ntrip_manager_stats() {
-        let mut manager = NtripManager::new();
-        manager.add_bytes_received(100);
-        manager.add_bytes_forwarded(100);
-
-        let status = manager.status();
-        assert_eq!(status.bytes_received, 100);
-        assert_eq!(status.bytes_forwarded, 100);
+    fn test_ntrip_manager_default() {
+        let manager = NtripManager::default();
+        assert_eq!(*manager.state(), NtripConnectionState::Disconnected);
     }
 
-    #[test]
-    fn test_ntrip_manager_reset() {
-        let mut manager = NtripManager::new();
-        manager.add_bytes_received(100);
-        manager.set_last_error("test error".to_string());
+    // -----------------------------------------
+    // APIハンドラー統合テスト（GET /status）
+    // -----------------------------------------
+    mod api_tests {
+        use super::*;
+        use actix_web::{test, App};
 
-        manager.reset_stats();
+        /// NtripManagerの共有状態を作成
+        fn create_test_ntrip_state() -> SharedNtripManager {
+            Arc::new(TokioMutex::new(NtripManager::new()))
+        }
 
-        let status = manager.status();
-        assert_eq!(status.bytes_received, 0);
-        assert_eq!(status.last_error, None);
-    }
+        #[actix_web::test]
+        async fn test_get_status_returns_disconnected_initially() {
+            let ntrip_state = create_test_ntrip_state();
+            let app = test::init_service(
+                App::new()
+                    .app_data(web::Data::new(ntrip_state.clone()))
+                    .route("/api/ntrip/status", web::get().to(get_ntrip_status)),
+            )
+            .await;
 
-    #[test]
-    fn test_base64_encode() {
-        // "Aladdin:open sesame" -> "QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
-        assert_eq!(
-            base64_encode("Aladdin:open sesame"),
-            "QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
-        );
-        // "user:pass" -> "dXNlcjpwYXNz"
-        assert_eq!(base64_encode("user:pass"), "dXNlcjpwYXNz");
+            let req = test::TestRequest::get()
+                .uri("/api/ntrip/status")
+                .to_request();
+            let resp = test::call_service(&app, req).await;
+
+            assert!(resp.status().is_success());
+
+            let body: NtripStatusResponse = test::read_body_json(resp).await;
+            assert_eq!(body.state, NtripConnectionState::Disconnected);
+            assert_eq!(body.bytes_received, 0);
+            assert_eq!(body.bytes_forwarded, 0);
+        }
+
+        #[actix_web::test]
+        async fn test_get_status_returns_connected_state() {
+            let ntrip_state = create_test_ntrip_state();
+
+            // 接続状態に変更
+            {
+                let mut manager = ntrip_state.lock().await;
+                manager.set_state(NtripConnectionState::Connected);
+                manager.add_bytes_received(1000);
+                manager.add_bytes_forwarded(800);
+            }
+
+            let app = test::init_service(
+                App::new()
+                    .app_data(web::Data::new(ntrip_state.clone()))
+                    .route("/api/ntrip/status", web::get().to(get_ntrip_status)),
+            )
+            .await;
+
+            let req = test::TestRequest::get()
+                .uri("/api/ntrip/status")
+                .to_request();
+            let resp = test::call_service(&app, req).await;
+
+            assert!(resp.status().is_success());
+
+            let body: NtripStatusResponse = test::read_body_json(resp).await;
+            assert_eq!(body.state, NtripConnectionState::Connected);
+            assert_eq!(body.bytes_received, 1000);
+            assert_eq!(body.bytes_forwarded, 800);
+        }
+
+        #[actix_web::test]
+        async fn test_disconnect_when_not_connected_returns_bad_request() {
+            let ntrip_state = create_test_ntrip_state();
+            let app = test::init_service(
+                App::new()
+                    .app_data(web::Data::new(ntrip_state.clone()))
+                    .route("/api/ntrip/disconnect", web::post().to(disconnect_ntrip)),
+            )
+            .await;
+
+            let req = test::TestRequest::post()
+                .uri("/api/ntrip/disconnect")
+                .to_request();
+            let resp = test::call_service(&app, req).await;
+
+            // 接続していない状態でdisconnectはBadRequest
+            assert_eq!(resp.status(), actix_web::http::StatusCode::BAD_REQUEST);
+
+            let body: NtripErrorResponse = test::read_body_json(resp).await;
+            assert_eq!(body.code, "NOT_CONNECTED");
+        }
+
+        #[actix_web::test]
+        async fn test_disconnect_when_connected_returns_ok() {
+            let ntrip_state = create_test_ntrip_state();
+
+            // 接続状態に変更（exit_txも設定）
+            {
+                let mut manager = ntrip_state.lock().await;
+                manager.set_state(NtripConnectionState::Connected);
+                let (tx, _rx) = broadcast::channel::<()>(1);
+                manager.set_exit_tx(tx);
+            }
+
+            let app = test::init_service(
+                App::new()
+                    .app_data(web::Data::new(ntrip_state.clone()))
+                    .route("/api/ntrip/disconnect", web::post().to(disconnect_ntrip)),
+            )
+            .await;
+
+            let req = test::TestRequest::post()
+                .uri("/api/ntrip/disconnect")
+                .to_request();
+            let resp = test::call_service(&app, req).await;
+
+            assert!(resp.status().is_success());
+
+            // 状態がDisconnectedになっていることを確認
+            let manager = ntrip_state.lock().await;
+            assert_eq!(*manager.state(), NtripConnectionState::Disconnected);
+        }
+
+        #[actix_web::test]
+        async fn test_disconnect_when_connecting_returns_ok() {
+            let ntrip_state = create_test_ntrip_state();
+
+            // Connecting状態に変更
+            {
+                let mut manager = ntrip_state.lock().await;
+                manager.set_state(NtripConnectionState::Connecting);
+                let (tx, _rx) = broadcast::channel::<()>(1);
+                manager.set_exit_tx(tx);
+            }
+
+            let app = test::init_service(
+                App::new()
+                    .app_data(web::Data::new(ntrip_state.clone()))
+                    .route("/api/ntrip/disconnect", web::post().to(disconnect_ntrip)),
+            )
+            .await;
+
+            let req = test::TestRequest::post()
+                .uri("/api/ntrip/disconnect")
+                .to_request();
+            let resp = test::call_service(&app, req).await;
+
+            assert!(resp.status().is_success());
+        }
     }
 }
