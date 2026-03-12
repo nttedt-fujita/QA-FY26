@@ -211,6 +211,108 @@ impl InspectionItemResult {
     }
 }
 
+/// 屋外検査結果（DB保存対象）
+///
+/// ADR-008の合格基準に基づく集計結果
+/// 参照: docs/missions/m1-sensor-evaluation/gnss/27-outdoor-inspection-implementation-plan.md
+#[derive(Debug, Clone)]
+pub struct OutdoorInspectionResult {
+    pub id: Option<i64>,
+    pub device_id: Option<i64>,
+    pub lot_id: Option<i64>,
+    /// 検査日時（ISO8601形式）
+    pub inspected_at: String,
+    /// 検査時間（秒）
+    pub duration_sec: i32,
+    /// 総サンプル数
+    pub sample_count: i32,
+    /// RTK FIX率 (0.0-1.0)
+    pub rtk_fix_rate: f64,
+    /// RTK FIX時間（ms）。FIXしなかった場合はNone
+    pub rtk_fix_time_ms: Option<i32>,
+    /// L2受信率（平均）(0.0-1.0)
+    pub l2_reception_rate: f64,
+    /// L1最小C/N0（dBHz）
+    pub l1_min_cno: f64,
+    /// 総合判定（合格=true）
+    pub is_pass: bool,
+    /// L1受信感度判定（≥30dBHz）
+    pub l1_cno_pass: bool,
+    /// L2受信率判定（≥50%）
+    pub l2_rate_pass: bool,
+    /// RTK FIX時間判定（≤30秒）
+    pub rtk_fix_time_pass: bool,
+    /// RTK FIX率判定（>95%）
+    pub rtk_fix_rate_pass: bool,
+    /// 不合格理由（JSONエンコード）
+    pub failure_reasons: Option<String>,
+}
+
+impl OutdoorInspectionResult {
+    pub fn new(inspected_at: String, duration_sec: i32, sample_count: i32) -> Self {
+        Self {
+            id: None,
+            device_id: None,
+            lot_id: None,
+            inspected_at,
+            duration_sec,
+            sample_count,
+            rtk_fix_rate: 0.0,
+            rtk_fix_time_ms: None,
+            l2_reception_rate: 0.0,
+            l1_min_cno: 0.0,
+            is_pass: false,
+            l1_cno_pass: false,
+            l2_rate_pass: false,
+            rtk_fix_time_pass: false,
+            rtk_fix_rate_pass: false,
+            failure_reasons: None,
+        }
+    }
+
+    pub fn with_device(mut self, device_id: i64) -> Self {
+        self.device_id = Some(device_id);
+        self
+    }
+
+    pub fn with_lot(mut self, lot_id: i64) -> Self {
+        self.lot_id = Some(lot_id);
+        self
+    }
+
+    pub fn with_metrics(
+        mut self,
+        rtk_fix_rate: f64,
+        rtk_fix_time_ms: Option<i32>,
+        l2_reception_rate: f64,
+        l1_min_cno: f64,
+    ) -> Self {
+        self.rtk_fix_rate = rtk_fix_rate;
+        self.rtk_fix_time_ms = rtk_fix_time_ms;
+        self.l2_reception_rate = l2_reception_rate;
+        self.l1_min_cno = l1_min_cno;
+        self
+    }
+
+    pub fn with_judgment(
+        mut self,
+        is_pass: bool,
+        l1_cno_pass: bool,
+        l2_rate_pass: bool,
+        rtk_fix_time_pass: bool,
+        rtk_fix_rate_pass: bool,
+        failure_reasons: Option<String>,
+    ) -> Self {
+        self.is_pass = is_pass;
+        self.l1_cno_pass = l1_cno_pass;
+        self.l2_rate_pass = l2_rate_pass;
+        self.rtk_fix_time_pass = rtk_fix_time_pass;
+        self.rtk_fix_rate_pass = rtk_fix_rate_pass;
+        self.failure_reasons = failure_reasons;
+        self
+    }
+}
+
 /// リポジトリエラー
 #[derive(Debug)]
 pub enum RepositoryError {
