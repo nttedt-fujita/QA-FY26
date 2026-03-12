@@ -104,3 +104,44 @@
 - 型定義、集計関数（TDD）、Hook作成
 
 ---
+
+## Session 124 (2026-03-12)
+
+**概要**: Phase 1 — サンプル蓄積・集計の実装（計画通り完了）
+
+**実施内容**:
+1. **型定義の作成**
+   - `outdoor-inspection.ts` 新規作成
+   - サンプル、結果、判定の型を定義
+2. **集計関数の実装（TDD）**
+   - `outdoor-inspection-calc.ts` 新規作成
+   - RTK FIX率、L2受信率、合否判定など5関数
+   - 21テスト作成、全パス
+3. **Hookの作成**
+   - `useOutdoorInspection.ts` 新規作成
+   - 検査状態管理、サンプル蓄積、集計処理
+4. **屋外検査ページへの統合**
+   - Hook導入、結果表示追加
+   - パネルに `onSample` コールバック追加
+5. **テスト環境構築**
+   - Vitest導入
+6. **ADR作成**
+   - ADR-009: 集計処理をFEで実行する理由
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [types/outdoor-inspection.ts](../../prototype/m1-gnss/frontend/src/types/outdoor-inspection.ts) | 型定義 |
+| [lib/outdoor-inspection-calc.ts](../../prototype/m1-gnss/frontend/src/lib/outdoor-inspection-calc.ts) | 集計関数 |
+| [lib/outdoor-inspection-calc.test.ts](../../prototype/m1-gnss/frontend/src/lib/outdoor-inspection-calc.test.ts) | テスト |
+| [hooks/useOutdoorInspection.ts](../../prototype/m1-gnss/frontend/src/hooks/useOutdoorInspection.ts) | 検査Hook |
+| [ADR-009](../../docs/adr/m1/ADR-009-outdoor-inspection-fe-aggregation.md) | FE集計のADR |
+| [session124/session-summary.md](../session124/session-summary.md) | セッションサマリー |
+
+**進捗**: Phase 1完了、Phase 2（結果表示UI）も大部分完了
+
+**次セッション（Session 125）でやること**:
+- 全体設計レビュー（ER図作成、DB設計確認）
+- 余裕があればPhase 3（DB保存）着手
+
+---

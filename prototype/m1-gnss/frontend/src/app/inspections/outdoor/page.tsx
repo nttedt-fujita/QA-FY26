@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Device,
   Lot,
@@ -11,6 +11,7 @@ import { NavSigPanel } from "@/components/NavSigPanel";
 import { MonSpanPanel } from "@/components/MonSpanPanel";
 import { NavStatusPanel } from "@/components/NavStatusPanel";
 import { SkyPlotPanel } from "@/components/SkyPlotPanel";
+import { useOutdoorInspection } from "@/hooks/useOutdoorInspection";
 
 /**
  * 屋外検査実行画面
@@ -24,11 +25,12 @@ export default function OutdoorInspectionsPage() {
   const [selectedLotId, setSelectedLotId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // 検査制御
-  const [isInspecting, setIsInspecting] = useState(false);
+  // 検査時間設定
   const [inspectionDurationSec, setInspectionDurationSec] = useState(30);
-  const [remainingTime, setRemainingTime] = useState(0);
-  const inspectionTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 屋外検査Hook
+  const inspection = useOutdoorInspection();
+  const isInspecting = inspection.state === "running";
 
   // 接続中の装置を取得
   const connectedDevice = devices.find((d) => d.status === "connected");
@@ -57,44 +59,18 @@ export default function OutdoorInspectionsPage() {
 
   // 検査開始
   const handleStartInspection = () => {
-    setIsInspecting(true);
-    setRemainingTime(inspectionDurationSec);
-
-    // カウントダウン
-    inspectionTimerRef.current = setInterval(() => {
-      setRemainingTime((prev) => {
-        if (prev <= 1) {
-          // 検査終了
-          if (inspectionTimerRef.current) {
-            clearInterval(inspectionTimerRef.current);
-            inspectionTimerRef.current = null;
-          }
-          setIsInspecting(false);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    inspection.start(inspectionDurationSec);
   };
 
   // 検査停止
   const handleStopInspection = () => {
-    if (inspectionTimerRef.current) {
-      clearInterval(inspectionTimerRef.current);
-      inspectionTimerRef.current = null;
-    }
-    setIsInspecting(false);
-    setRemainingTime(0);
+    inspection.stop();
   };
 
-  // ページ離脱時にタイマークリア
-  useEffect(() => {
-    return () => {
-      if (inspectionTimerRef.current) {
-        clearInterval(inspectionTimerRef.current);
-      }
-    };
-  }, []);
+  // 新規検査（リセット）
+  const handleNewInspection = () => {
+    inspection.reset();
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -185,7 +161,7 @@ export default function OutdoorInspectionsPage() {
                 value={inspectionDurationSec}
                 onChange={(e) => setInspectionDurationSec(Number(e.target.value))}
                 className="rounded border border-gray-300 p-2"
-                disabled={isInspecting}
+                disabled={inspection.state !== "idle"}
               >
                 <option value={30}>30秒</option>
                 <option value={60}>60秒</option>
@@ -194,8 +170,8 @@ export default function OutdoorInspectionsPage() {
               </select>
             </div>
 
-            {/* 開始/停止ボタン */}
-            {!isInspecting ? (
+            {/* 開始/停止/新規ボタン */}
+            {inspection.state === "idle" && (
               <button
                 onClick={handleStartInspection}
                 disabled={!connectedDevice}
@@ -203,7 +179,8 @@ export default function OutdoorInspectionsPage() {
               >
                 検査開始
               </button>
-            ) : (
+            )}
+            {inspection.state === "running" && (
               <button
                 onClick={handleStopInspection}
                 className="rounded bg-red-600 px-6 py-2 font-medium text-white hover:bg-red-700"
@@ -211,18 +188,109 @@ export default function OutdoorInspectionsPage() {
                 検査停止
               </button>
             )}
+            {inspection.state === "completed" && (
+              <button
+                onClick={handleNewInspection}
+                className="rounded bg-[#2e75b6] px-6 py-2 font-medium text-white hover:bg-[#245d92]"
+              >
+                新規検査
+              </button>
+            )}
 
-            {/* 残り時間 */}
+            {/* 残り時間/サンプル数 */}
             {isInspecting && (
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">残り:</span>
-                <span className="font-mono text-lg font-semibold text-blue-600">
-                  {remainingTime}秒
-                </span>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">残り:</span>
+                  <span className="font-mono text-lg font-semibold text-blue-600">
+                    {inspection.remainingTime}秒
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">サンプル:</span>
+                  <span className="font-mono text-lg font-semibold text-gray-700">
+                    {inspection.sampleCount}
+                  </span>
+                </div>
               </div>
             )}
           </div>
         </div>
+
+        {/* 検査結果（完了時のみ表示） */}
+        {inspection.state === "completed" && inspection.result && (
+          <div
+            className={`mb-6 rounded border p-4 ${
+              inspection.result.judgment.is_pass
+                ? "border-green-300 bg-green-50"
+                : "border-red-300 bg-red-50"
+            }`}
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="font-medium text-gray-700">検査結果</h3>
+              <span
+                className={`rounded px-3 py-1 text-lg font-bold ${
+                  inspection.result.judgment.is_pass
+                    ? "bg-green-500 text-white"
+                    : "bg-red-500 text-white"
+                }`}
+              >
+                {inspection.result.judgment.is_pass ? "合格" : "不合格"}
+              </span>
+            </div>
+
+            {/* 集計結果 */}
+            <div className="mb-4 grid gap-4 md:grid-cols-4">
+              <ResultItem
+                label="L1最小C/N0"
+                value={`${inspection.result.l1_min_cno.toFixed(1)} dBHz`}
+                pass={inspection.result.judgment.l1_cno_pass}
+                criteria="≥30 dBHz"
+              />
+              <ResultItem
+                label="L2受信率"
+                value={`${(inspection.result.l2_reception_rate * 100).toFixed(1)}%`}
+                pass={inspection.result.judgment.l2_rate_pass}
+                criteria="≥50%"
+              />
+              <ResultItem
+                label="RTK FIX時間"
+                value={
+                  inspection.result.rtk_fix_time_ms !== null
+                    ? `${(inspection.result.rtk_fix_time_ms / 1000).toFixed(1)}秒`
+                    : "FIXせず"
+                }
+                pass={inspection.result.judgment.rtk_fix_time_pass}
+                criteria="≤30秒"
+              />
+              <ResultItem
+                label="RTK FIX率"
+                value={`${(inspection.result.rtk_fix_rate * 100).toFixed(1)}%`}
+                pass={inspection.result.judgment.rtk_fix_rate_pass}
+                criteria=">95%"
+              />
+            </div>
+
+            {/* 不合格理由 */}
+            {!inspection.result.judgment.is_pass && (
+              <div className="rounded bg-red-100 p-3">
+                <div className="mb-1 text-sm font-medium text-red-700">
+                  不合格理由:
+                </div>
+                <ul className="list-inside list-disc text-sm text-red-600">
+                  {inspection.result.judgment.failure_reasons.map((reason, i) => (
+                    <li key={i}>{reason}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* サンプル数 */}
+            <div className="mt-4 text-sm text-gray-500">
+              サンプル数: {inspection.result.sample_count}
+            </div>
+          </div>
+        )}
 
         {/* 合格基準表示 */}
         <div className="mb-6 rounded border border-gray-200 bg-white p-4">
@@ -249,7 +317,10 @@ export default function OutdoorInspectionsPage() {
 
         {/* NAV-STATUS（Fix状態・TTFF）パネル */}
         <div className="mb-6">
-          <NavStatusPanel enabled={isInspecting && !!connectedDevice} />
+          <NavStatusPanel
+            enabled={isInspecting && !!connectedDevice}
+            onSample={inspection.addNavStatusSample}
+          />
         </div>
 
         {/* スカイプロット + NAV-SIG 横並び */}
@@ -257,7 +328,10 @@ export default function OutdoorInspectionsPage() {
           {/* スカイプロット（NAV-SAT） */}
           <SkyPlotPanel enabled={isInspecting && !!connectedDevice} />
           {/* NAV-SIG（衛星信号） */}
-          <NavSigPanel enabled={isInspecting && !!connectedDevice} />
+          <NavSigPanel
+            enabled={isInspecting && !!connectedDevice}
+            onSample={inspection.addNavSigSample}
+          />
         </div>
 
         {/* MON-SPAN（スペクトラム）パネル */}
@@ -272,6 +346,46 @@ export default function OutdoorInspectionsPage() {
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+/**
+ * 検査結果の各項目表示
+ */
+function ResultItem({
+  label,
+  value,
+  pass,
+  criteria,
+}: {
+  label: string;
+  value: string;
+  pass: boolean;
+  criteria: string;
+}) {
+  return (
+    <div
+      className={`rounded p-3 ${
+        pass ? "bg-green-100" : "bg-red-100"
+      }`}
+    >
+      <div className="text-sm text-gray-600">{label}</div>
+      <div
+        className={`text-lg font-semibold ${
+          pass ? "text-green-700" : "text-red-700"
+        }`}
+      >
+        {value}
+      </div>
+      <div className="text-xs text-gray-500">基準: {criteria}</div>
+      <div
+        className={`mt-1 text-sm font-medium ${
+          pass ? "text-green-600" : "text-red-600"
+        }`}
+      >
+        {pass ? "✓ 合格" : "× 不合格"}
+      </div>
     </div>
   );
 }
