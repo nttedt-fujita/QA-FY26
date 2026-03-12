@@ -154,3 +154,39 @@
 - または屋外でのRTK動作確認
 
 ---
+
+## Session 136 (2026-03-12)
+
+**概要**: device_id紐付け実装の調査・設計
+
+**実施内容**:
+1. **残タスク現在地確認**
+   - Session 131で整理した残タスクの進捗を確認
+   - 残り4タスク: device_id紐付け、自動保存、u-center照合、GGA正式実装
+2. **ドメインモデル確認**
+   - 26-outdoor-inspection-domain-model.md: `device_id` = 「装置画面で登録済みの場合」
+   - 19-gnss-unified-domain-model.md: シリアル番号で紐づけ
+3. **実装調査**
+   - `InspectionService::run_and_save` が屋内検査時にdeviceを登録（get_or_create）
+   - `serial_number` がUNIQUE制約でキー
+4. **DB現状確認**
+   - devices: 4件、UNIQUE制約あり
+   - indoor_inspections: 504件（テストデータ大量）
+   - outdoor_inspection_results: 1件（device_id=NULL）
+   - 問題: device_id=1のserial_numberが空文字
+
+**決定事項**:
+- device_id紐付けはバックエンドでserial_number→device_id解決
+- 次セッションでDBクリーンアップ + 実装
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session136/session-summary.md](../session136/session-summary.md) | セッションサマリー |
+| [session137/session-plan.md](../session137/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 137）でやること**:
+- DBクリーンアップ（異常データ削除）
+- device_id紐付け実装
+
+---
