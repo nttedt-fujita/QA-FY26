@@ -84,6 +84,33 @@ pub struct MonVer {
     pub extensions: Vec<String>,
 }
 
+impl MonVer {
+    /// extensionから FWVER を抽出する
+    ///
+    /// u-centerで表示される「FWVER=HPG 1.32」のような形式から
+    /// 「HPG 1.32」部分を取り出す。見つからなければNone。
+    pub fn fw_version(&self) -> Option<String> {
+        for ext in &self.extensions {
+            if let Some(value) = ext.strip_prefix("FWVER=") {
+                return Some(value.to_string());
+            }
+        }
+        None
+    }
+
+    /// extensionから PROTVER を抽出する
+    ///
+    /// 「PROTVER=27.31」のような形式から「27.31」を取り出す。
+    pub fn protocol_version(&self) -> Option<String> {
+        for ext in &self.extensions {
+            if let Some(value) = ext.strip_prefix("PROTVER=") {
+                return Some(value.to_string());
+            }
+        }
+        None
+    }
+}
+
 /// MON-VERメッセージをパースする
 pub fn parse(data: &[u8]) -> Result<MonVer, ParseError> {
     // 最小長チェック: header(2) + class(1) + id(1) + len(2) + payload(40) + checksum(2) = 48
