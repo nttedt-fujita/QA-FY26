@@ -11,7 +11,10 @@ export interface Device {
   path: string;
   vid: string | null;
   pid: string | null;
+  /** USBシリアル番号（FTDIチップ等）- 参考用 */
   serial_number: string | null;
+  /** F9Pチップのシリアル番号（UBX-SEC-UNIQID）- DB紐付け用 */
+  f9p_serial: string | null;
   status: string;
   baud_rate: number | null;
 }

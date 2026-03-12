@@ -193,7 +193,7 @@
 
 ## Session 137 (2026-03-12)
 
-**概要**: device_id紐付け実装
+**概要**: device_id紐付け実装 + シリアル番号混同バグ修正
 
 **実施内容**:
 1. **DBクリーンアップ**
@@ -205,15 +205,31 @@
    - `get_device_by_serial` で device_id 解決
 3. **FE: 保存時に serial_number を送信**
    - `saveResult` 引数を serialNumber に変更
-   - connectedDevice.serial_number を渡す
+4. **バグ発見: シリアル番号の混同**
+   - USBシリアル vs F9Pチップシリアルを混同していた
+   - DBにはF9Pチップシリアルが保存されていたが、接続時はUSBシリアルを取得していた
+5. **バグ修正: F9Pシリアル取得実装**
+   - `build_ubx_poll()` でUBX Pollコマンド生成
+   - `query_f9p_serial()` でSEC-UNIQIDをPoll → F9Pシリアル取得
+   - DeviceResponseに `f9p_serial` フィールド追加
+   - 保存時に `f9p_serial` を使用
 
-**作成ファイル**:
+**変更ファイル**:
 | ファイル | 内容 |
 |----------|------|
-| [session137/session-summary.md](../session137/session-summary.md) | セッションサマリー |
-| [session138/session-plan.md](../session138/session-plan.md) | 次セッション計画 |
+| [common.rs](../../prototype/m1-gnss/backend/src/ubx/common.rs) | build_ubx_poll追加 |
+| [manager.rs](../../prototype/m1-gnss/backend/src/device/manager.rs) | f9p_serial + query_f9p_serial |
+| [device_api.rs](../../prototype/m1-gnss/backend/src/web/device_api.rs) | f9p_serial in response |
+| [outdoor_inspection_api.rs](../../prototype/m1-gnss/backend/src/web/outdoor_inspection_api.rs) | serial_number追加 |
+| [api.ts](../../prototype/m1-gnss/frontend/src/lib/api.ts) | f9p_serial追加 |
+| [outdoor/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/outdoor/page.tsx) | f9p_serial送信 |
+
+**学び**:
+- USBシリアル（FTDIチップ）とF9Pチップシリアル（SEC-UNIQID）は別物
+- DB紐付けにはF9Pチップシリアルを使用する必要がある
 
 **次セッション（Session 138）でやること**:
 - 残タスク消化（自動保存 or u-center照合）
+- シリアル番号定義のドキュメント整備
 
 ---
