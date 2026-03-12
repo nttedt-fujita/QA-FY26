@@ -2,7 +2,7 @@
 //!
 //! GNSS装置の検出・接続・状態管理を行うマネージャー
 
-use log::{debug, info, trace, warn};
+use tracing::{debug, info, trace, warn};
 use std::io;
 
 use super::filter::{filter_gnss_ports, PortInfo};

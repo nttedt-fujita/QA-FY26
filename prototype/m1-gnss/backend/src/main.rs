@@ -2,6 +2,7 @@ use actix_cors::Cors;
 use actix_web::middleware::Logger;
 use actix_web::{web, App, HttpResponse, HttpServer, Responder};
 use serde::Serialize;
+use tracing_subscriber::{fmt, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 
 use m1_gnss::web::device_api::{self, AppState};
 use m1_gnss::web::lot_api;
@@ -59,11 +60,38 @@ async fn gnss_status() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    // ログ初期化
-    env_logger::init_from_env(env_logger::Env::default().default_filter_or("info"));
+    // ログ初期化（コンソール + ファイル出力）
+    let log_dir = std::path::Path::new("logs");
+    std::fs::create_dir_all(log_dir)?;
 
-    log::info!("GNSS評価ツールを起動します...");
-    log::info!("http://localhost:8080 でアクセス可能");
+    let file_appender = tracing_appender::rolling::daily(log_dir, "gnss-backend.log");
+    let (non_blocking, _guard) = tracing_appender::non_blocking(file_appender);
+
+    // コンソール出力レイヤー
+    let console_layer = fmt::layer()
+        .with_target(true)
+        .with_level(true);
+
+    // ファイル出力レイヤー（JSON形式ではなく人間が読みやすい形式）
+    let file_layer = fmt::layer()
+        .with_writer(non_blocking)
+        .with_ansi(false)
+        .with_target(true)
+        .with_level(true);
+
+    // フィルター設定（RUST_LOG環境変数、デフォルトはinfo）
+    let filter = EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| EnvFilter::new("info"));
+
+    tracing_subscriber::registry()
+        .with(filter)
+        .with(console_layer)
+        .with(file_layer)
+        .init();
+
+    tracing::info!("GNSS評価ツールを起動します...");
+    tracing::info!("http://localhost:8080 でアクセス可能");
+    tracing::info!("ログファイル: logs/gnss-backend.log.YYYY-MM-DD");
 
     // アプリケーション状態（DeviceManagerを共有）
     let app_state = web::Data::new(AppState::new());

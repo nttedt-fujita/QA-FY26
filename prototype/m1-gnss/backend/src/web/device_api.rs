@@ -13,7 +13,7 @@ use crate::device::filter::PortInfo;
 use crate::device::manager::{DeviceManager, DeviceManagerError, SerialPortProvider};
 use crate::device::status::DeviceStatus;
 use crate::repository::SqliteRepository;
-use crate::ubx::cfg_valset::{disable_periodic_output, Layer};
+use crate::ubx::cfg_valset::{disable_periodic_output, set_uart1_nmea_output, Layer};
 use crate::ubx::ack;
 
 // ===========================================
@@ -270,16 +270,24 @@ pub async fn connect_device(
         Ok(baud_rate) => {
             // F9Pシリアル番号を取得（失敗してもconnectは成功扱い）
             if let Err(e) = manager.query_f9p_serial() {
-                log::warn!("F9Pシリアル番号の取得に失敗: {}", e);
+                tracing::warn!("F9Pシリアル番号の取得に失敗: {}", e);
             }
 
             // 定期出力を無効化（ポーリング専用）
             // Session 145: 定期出力とポーリングの混在問題を修正
             // 統合APIは順次ポーリングで動作するため、定期出力は不要
             if let Err(e) = send_disable_periodic_output(&mut manager) {
-                log::warn!("定期出力無効化に失敗: {}", e);
+                tracing::warn!("定期出力無効化に失敗: {}", e);
             } else {
-                log::debug!("定期出力を無効化しました");
+                tracing::debug!("定期出力を無効化しました");
+            }
+
+            // NMEA出力を無効化
+            // Session 146: NMEAデータがUBXポーリングを妨害する問題を修正
+            if let Err(e) = send_disable_nmea_output(&mut manager) {
+                tracing::warn!("NMEA出力無効化に失敗: {}", e);
+            } else {
+                tracing::debug!("NMEA出力を無効化しました");
             }
 
             HttpResponse::Ok().json(ConnectResponse {
@@ -375,19 +383,60 @@ fn send_disable_periodic_output<P: SerialPortProvider>(
     let ack_result = ack::parse_ack(&response);
     match ack_result {
         ack::AckResult::Ack { .. } => {
-            log::debug!("CFG-VALSET ACK received");
+            tracing::debug!("CFG-VALSET ACK received");
             Ok(())
         }
         ack::AckResult::Nak { .. } => {
-            log::warn!("CFG-VALSET NAK received");
+            tracing::warn!("CFG-VALSET NAK received");
             Err(DeviceManagerError::IoError(std::io::Error::new(
                 std::io::ErrorKind::Other,
                 "CFG-VALSET rejected by device",
             )))
         }
         _ => {
-            log::warn!("Unexpected response to CFG-VALSET: {:?}", ack_result);
+            tracing::warn!("Unexpected response to CFG-VALSET: {:?}", ack_result);
             // ACK以外の応答も許容（定期出力が始まるとすぐにデータが来る）
+            Ok(())
+        }
+    }
+}
+
+/// NMEA出力を無効化
+///
+/// CFG-VALSETを送信して、UART1のNMEA出力を停止する
+/// Session 146: NMEAデータがUBXポーリングを妨害する問題を修正
+fn send_disable_nmea_output<P: SerialPortProvider>(
+    manager: &mut DeviceManager<P>,
+) -> Result<(), DeviceManagerError> {
+    // NMEA出力を無効化
+    let msg = set_uart1_nmea_output(false, Layer::Ram);
+
+    // バッファをクリア
+    manager.drain_buffer()?;
+
+    // 送信
+    manager.send_ubx(&msg)?;
+
+    // ACK待ち
+    std::thread::sleep(Duration::from_millis(50));
+    let response = manager.receive_ubx(Duration::from_secs(1))?;
+
+    // ACK/NAK確認
+    let ack_result = ack::parse_ack(&response);
+    match ack_result {
+        ack::AckResult::Ack { .. } => {
+            tracing::debug!("NMEA OFF CFG-VALSET ACK received");
+            Ok(())
+        }
+        ack::AckResult::Nak { .. } => {
+            tracing::warn!("NMEA OFF CFG-VALSET NAK received");
+            Err(DeviceManagerError::IoError(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "CFG-VALSET rejected by device",
+            )))
+        }
+        _ => {
+            tracing::warn!("Unexpected response to NMEA OFF CFG-VALSET: {:?}", ack_result);
             Ok(())
         }
     }

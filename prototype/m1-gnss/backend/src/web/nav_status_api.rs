@@ -180,7 +180,7 @@ pub async fn get_nav_status(data: web::Data<AppState>) -> impl Responder {
                             pos.lat = pvt.lat;
                             pos.lon = pvt.lon;
                             pos.valid = true;
-                            log::debug!("[NAV-STATUS] 位置更新: lat={}, lon={}", pvt.lat, pvt.lon);
+                            tracing::debug!("[NAV-STATUS] 位置更新: lat={}, lon={}", pvt.lat, pvt.lon);
                         }
                     }
                 }
