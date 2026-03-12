@@ -425,7 +425,9 @@ impl<P: SerialPortProvider> DeviceManager<P> {
 
             // 蓄積データから B5 62 を探す
             if let Some(ubx_frame) = Self::extract_ubx_frame(&accumulated) {
-                debug!("receive_ubx: UBXフレーム抽出成功（{}バイト）", ubx_frame.len());
+                let class = ubx_frame.get(2).copied().unwrap_or(0);
+                let id = ubx_frame.get(3).copied().unwrap_or(0);
+                debug!("receive_ubx: UBXフレーム抽出成功（{}バイト, Class=0x{:02X}, ID=0x{:02X}）", ubx_frame.len(), class, id);
 
                 // 蓄積データにUBX以外のデータがあった場合、それをログ出力（仮説検証用）
                 if let Some(sync_pos) = accumulated.windows(2).position(|w| w == [0xB5, 0x62]) {
