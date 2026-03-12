@@ -1,34 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { NavSigResponse, NavSignal, getNavSig } from "@/lib/api";
+import { NavSigResponse, NavSignal } from "@/lib/api";
 
 // ADR-008: L2受信率50%以上で合格
 const L2_RECEPTION_THRESHOLD = 0.5;
-
-/**
- * GNSS IDを名称に変換
- */
-function gnssIdToName(gnssId: number): string {
-  const mapping: Record<number, string> = {
-    0: "GPS",
-    1: "SBAS",
-    2: "Galileo",
-    3: "BeiDou",
-    5: "QZSS",
-    6: "GLONASS",
-  };
-  return mapping[gnssId] ?? `Unknown(${gnssId})`;
-}
-
-/**
- * 信号帯域を表示用文字列に変換
- */
-function getBandLabel(signal: NavSignal): string {
-  if (signal.is_l1) return "L1";
-  if (signal.is_l2) return "L2";
-  return "-";
-}
 
 /**
  * C/N0値に応じた色クラスを返す
@@ -59,17 +34,14 @@ function getCnoBarColorClass(cno: number): string {
 }
 
 interface NavSigPanelProps {
-  /** ポーリング有効フラグ（装置接続時のみtrue） */
-  enabled: boolean;
-  /** ポーリング間隔（ミリ秒） */
-  pollIntervalMs?: number;
-  /** サンプル取得時のコールバック（屋外検査用） */
-  onSample?: (sample: {
-    gps_visible_count: number;
-    gps_l2_reception_count: number;
-    gps_l2_reception_rate: number;
-    min_l1_cno: number;
-  }) => void;
+  /** NAV-SIGデータ（統合APIから渡される） */
+  data: NavSigResponse | null;
+  /** エラーメッセージ */
+  error?: string | null;
+  /** 読み込み中フラグ */
+  isLoading?: boolean;
+  /** 装置接続フラグ */
+  isConnected?: boolean;
 }
 
 /**
@@ -80,68 +52,11 @@ interface NavSigPanelProps {
  * - 合格/不合格表示
  */
 export function NavSigPanel({
-  enabled,
-  pollIntervalMs = 1000,
-  onSample,
+  data,
+  error,
+  isLoading = false,
+  isConnected = true,
 }: NavSigPanelProps) {
-  const [data, setData] = useState<NavSigResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // AbortController参照
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  // 初回取得 + ポーリング
-  useEffect(() => {
-    if (!enabled) {
-      setData(null);
-      setError(null);
-      return;
-    }
-
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getNavSig(controller.signal);
-        setData(res);
-        setError(null);
-        // サンプルコールバック（屋外検査用）
-        if (onSample) {
-          // GPS L1信号の最小C/N0を計算
-          const gpsL1Signals = res.signals.filter(
-            (s) => s.gnss_id === 0 && s.is_l1
-          );
-          const minL1Cno =
-            gpsL1Signals.length > 0
-              ? Math.min(...gpsL1Signals.map((s) => s.cno))
-              : 0;
-          onSample({
-            gps_visible_count: res.stats.gps_visible_count,
-            gps_l2_reception_count: res.stats.gps_l2_reception_count,
-            gps_l2_reception_rate: res.stats.gps_l2_reception_rate,
-            min_l1_cno: minL1Cno,
-          });
-        }
-      } catch (e) {
-        if (e instanceof Error && e.name === "AbortError") return;
-        setError(e instanceof Error ? e.message : "取得失敗");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, pollIntervalMs);
-
-    return () => {
-      clearInterval(interval);
-      controller.abort();
-    };
-  }, [enabled, pollIntervalMs, onSample]);
-
   // L1とL2で信号を分離（GPSのみ）
   const gpsL1Signals =
     data?.signals.filter((s) => s.gnss_id === 0 && s.is_l1) ?? [];
@@ -152,7 +67,7 @@ export function NavSigPanel({
   const l2Rate = data?.stats.gps_l2_reception_rate ?? 0;
   const isL2Pass = l2Rate >= L2_RECEPTION_THRESHOLD;
 
-  if (!enabled) {
+  if (!isConnected) {
     return (
       <div className="rounded border border-gray-200 bg-white p-4">
         <h3 className="mb-2 font-medium text-gray-700">衛星信号 (NAV-SIG)</h3>
@@ -179,58 +94,66 @@ export function NavSigPanel({
         )}
       </div>
 
-      {/* L2受信率ゲージ */}
-      <div className="mb-4">
-        <div className="mb-1 flex items-center justify-between">
-          <span className="text-sm text-gray-600">L2受信率</span>
-          <span
-            className={`text-sm font-semibold ${
-              isL2Pass ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {(l2Rate * 100).toFixed(0)}% ({data?.stats.gps_l2_reception_count ?? 0}/
-            {data?.stats.gps_visible_count ?? 0})
-            {isL2Pass ? " ✓ 合格" : " × 不合格"}
-          </span>
-        </div>
-        <div className="h-4 w-full overflow-hidden rounded bg-gray-200">
-          <div
-            className={`h-full transition-all duration-300 ${
-              isL2Pass ? "bg-green-500" : "bg-red-500"
-            }`}
-            style={{ width: `${l2Rate * 100}%` }}
-          />
-          {/* 50%基準線 */}
-          <div
-            className="absolute h-4 w-0.5 bg-gray-400"
-            style={{ left: "50%", marginTop: "-16px" }}
-          />
-        </div>
-        <div className="mt-1 flex justify-between text-xs text-gray-400">
-          <span>0%</span>
-          <span>50% (基準)</span>
-          <span>100%</span>
-        </div>
-      </div>
+      {data && (
+        <>
+          {/* L2受信率ゲージ */}
+          <div className="mb-4">
+            <div className="mb-1 flex items-center justify-between">
+              <span className="text-sm text-gray-600">L2受信率</span>
+              <span
+                className={`text-sm font-semibold ${
+                  isL2Pass ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {(l2Rate * 100).toFixed(0)}% ({data.stats.gps_l2_reception_count}/
+                {data.stats.gps_visible_count})
+                {isL2Pass ? " ✓ 合格" : " × 不合格"}
+              </span>
+            </div>
+            <div className="h-4 w-full overflow-hidden rounded bg-gray-200">
+              <div
+                className={`h-full transition-all duration-300 ${
+                  isL2Pass ? "bg-green-500" : "bg-red-500"
+                }`}
+                style={{ width: `${l2Rate * 100}%` }}
+              />
+              {/* 50%基準線 */}
+              <div
+                className="absolute h-4 w-0.5 bg-gray-400"
+                style={{ left: "50%", marginTop: "-16px" }}
+              />
+            </div>
+            <div className="mt-1 flex justify-between text-xs text-gray-400">
+              <span>0%</span>
+              <span>50% (基準)</span>
+              <span>100%</span>
+            </div>
+          </div>
 
-      {/* 信号テーブル */}
-      <div className="grid gap-4 md:grid-cols-2">
-        {/* L1信号 */}
-        <div>
-          <h4 className="mb-2 text-sm font-medium text-gray-600">
-            GPS L1 ({gpsL1Signals.length}衛星)
-          </h4>
-          <SignalTable signals={gpsL1Signals} />
-        </div>
+          {/* 信号テーブル */}
+          <div className="grid gap-4 md:grid-cols-2">
+            {/* L1信号 */}
+            <div>
+              <h4 className="mb-2 text-sm font-medium text-gray-600">
+                GPS L1 ({gpsL1Signals.length}衛星)
+              </h4>
+              <SignalTable signals={gpsL1Signals} />
+            </div>
 
-        {/* L2信号 */}
-        <div>
-          <h4 className="mb-2 text-sm font-medium text-gray-600">
-            GPS L2 ({gpsL2Signals.length}衛星)
-          </h4>
-          <SignalTable signals={gpsL2Signals} />
-        </div>
-      </div>
+            {/* L2信号 */}
+            <div>
+              <h4 className="mb-2 text-sm font-medium text-gray-600">
+                GPS L2 ({gpsL2Signals.length}衛星)
+              </h4>
+              <SignalTable signals={gpsL2Signals} />
+            </div>
+          </div>
+        </>
+      )}
+
+      {!data && !error && (
+        <div className="text-gray-400">データなし</div>
+      )}
     </div>
   );
 }

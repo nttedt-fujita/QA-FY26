@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Device,
   Lot,
@@ -12,6 +12,7 @@ import { MonSpanPanel } from "@/components/MonSpanPanel";
 import { NavStatusPanel } from "@/components/NavStatusPanel";
 import { SkyPlotPanel } from "@/components/SkyPlotPanel";
 import { useOutdoorInspection } from "@/hooks/useOutdoorInspection";
+import { useGnssState } from "@/hooks/useGnssState";
 
 /**
  * 屋外検査実行画面
@@ -37,6 +38,68 @@ export default function OutdoorInspectionsPage() {
 
   // 選択中のロットを取得
   const selectedLot = lots.find((l) => l.id === selectedLotId);
+
+  // 統合API（検査中のみポーリング）
+  const gnssState = useGnssState({
+    enabled: isInspecting && !!connectedDevice,
+    pollIntervalMs: 1000,
+  });
+
+  // 前回のデータを記録（重複サンプル防止）
+  const lastNavStatusRef = useRef<number | null>(null);
+  const lastNavSigRef = useRef<number | null>(null);
+
+  // データ変化時にサンプルを追加
+  useEffect(() => {
+    if (!isInspecting || !gnssState.data) return;
+
+    // NAV-STATUSサンプル追加
+    if (gnssState.data.nav_status) {
+      const ns = gnssState.data.nav_status;
+      // msssで重複チェック（同じデータを複数回追加しない）
+      if (lastNavStatusRef.current !== ns.msss) {
+        lastNavStatusRef.current = ns.msss;
+        inspection.addNavStatusSample({
+          gps_fix: ns.gps_fix,
+          carr_soln: ns.carr_soln,
+          msss: ns.msss,
+          ttff: ns.ttff,
+        });
+      }
+    }
+
+    // NAV-SIGサンプル追加
+    if (gnssState.data.nav_sig) {
+      const sig = gnssState.data.nav_sig;
+      // gps_visible_count + gps_l2_reception_countで簡易重複チェック
+      const sigKey = sig.stats.gps_visible_count * 1000 + sig.stats.gps_l2_reception_count;
+      if (lastNavSigRef.current !== sigKey) {
+        lastNavSigRef.current = sigKey;
+        // GPS L1信号の最小C/N0を計算
+        const gpsL1Signals = sig.signals.filter(
+          (s) => s.gnss_id === 0 && s.is_l1
+        );
+        const minL1Cno =
+          gpsL1Signals.length > 0
+            ? Math.min(...gpsL1Signals.map((s) => s.cno))
+            : 0;
+        inspection.addNavSigSample({
+          gps_visible_count: sig.stats.gps_visible_count,
+          gps_l2_reception_count: sig.stats.gps_l2_reception_count,
+          gps_l2_reception_rate: sig.stats.gps_l2_reception_rate,
+          min_l1_cno: minL1Cno,
+        });
+      }
+    }
+  }, [gnssState.data, isInspecting, inspection]);
+
+  // 検査開始時にrefをリセット
+  useEffect(() => {
+    if (inspection.state === "idle") {
+      lastNavStatusRef.current = null;
+      lastNavSigRef.current = null;
+    }
+  }, [inspection.state]);
 
   // データ取得
   const fetchData = useCallback(async () => {
@@ -357,25 +420,39 @@ export default function OutdoorInspectionsPage() {
         {/* NAV-STATUS（Fix状態・TTFF）パネル */}
         <div className="mb-6">
           <NavStatusPanel
-            enabled={isInspecting && !!connectedDevice}
-            onSample={inspection.addNavStatusSample}
+            data={gnssState.data?.nav_status ?? null}
+            error={gnssState.error}
+            isLoading={gnssState.isLoading}
+            isConnected={!!connectedDevice}
           />
         </div>
 
         {/* スカイプロット + NAV-SIG 横並び */}
         <div className="mb-6 grid gap-4 md:grid-cols-2">
           {/* スカイプロット（NAV-SAT） */}
-          <SkyPlotPanel enabled={isInspecting && !!connectedDevice} />
+          <SkyPlotPanel
+            data={gnssState.data?.nav_sat ?? null}
+            error={gnssState.error}
+            isLoading={gnssState.isLoading}
+            isConnected={!!connectedDevice}
+          />
           {/* NAV-SIG（衛星信号） */}
           <NavSigPanel
-            enabled={isInspecting && !!connectedDevice}
-            onSample={inspection.addNavSigSample}
+            data={gnssState.data?.nav_sig ?? null}
+            error={gnssState.error}
+            isLoading={gnssState.isLoading}
+            isConnected={!!connectedDevice}
           />
         </div>
 
         {/* MON-SPAN（スペクトラム）パネル */}
         <div className="mb-6">
-          <MonSpanPanel enabled={isInspecting && !!connectedDevice} />
+          <MonSpanPanel
+            data={gnssState.data?.mon_span ?? null}
+            error={gnssState.error}
+            isLoading={gnssState.isLoading}
+            isConnected={!!connectedDevice}
+          />
         </div>
 
         {/* エラー表示 */}

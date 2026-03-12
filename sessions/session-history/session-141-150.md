@@ -117,3 +117,43 @@
 - FE側を統合APIに移行
 
 ---
+
+## Session 144 (2026-03-12)
+
+**概要**: FE側を統合API (`/api/gnss-state`) に移行
+
+**実施内容**:
+1. **統合API用の型定義・関数追加** (`lib/api.ts`)
+   - `GnssStateResponse`, `NavPvtResponse`, `MonRfResponse` 等
+   - `getGnssState()` 関数
+2. **統合API用hook作成** (`hooks/useGnssState.ts`)
+   - ポーリングロジック集約
+3. **各パネルのprops変更**
+   - 自前fetch削除 → `data` props受け取り形式
+   - NavStatusPanel, SkyPlotPanel, MonSpanPanel, NavSigPanel
+4. **屋外検査画面の統合API対応**
+   - `useGnssState` hookでポーリング
+   - 各パネルにデータを渡す
+
+**決定事項**:
+| 項目 | 決定 |
+|------|------|
+| パネルの責務 | 表示専用（fetchしない） |
+| ポーリング | 親コンポーネントで統合API 1回 |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [api.ts](../../prototype/m1-gnss/frontend/src/lib/api.ts) | 統合API型定義・関数追加 |
+| [useGnssState.ts](../../prototype/m1-gnss/frontend/src/hooks/useGnssState.ts) | 新規hook |
+| [NavStatusPanel.tsx](../../prototype/m1-gnss/frontend/src/components/NavStatusPanel.tsx) | data props形式に変更 |
+| [SkyPlotPanel.tsx](../../prototype/m1-gnss/frontend/src/components/SkyPlotPanel.tsx) | data props形式に変更 |
+| [MonSpanPanel.tsx](../../prototype/m1-gnss/frontend/src/components/MonSpanPanel.tsx) | data props形式に変更 |
+| [NavSigPanel.tsx](../../prototype/m1-gnss/frontend/src/components/NavSigPanel.tsx) | data props形式に変更 |
+| [outdoor/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/outdoor/page.tsx) | 統合API対応 |
+
+**次セッション（Session 145）でやること**:
+- 実機接続での動作確認
+- 問題があれば修正
+
+---
