@@ -367,7 +367,8 @@ fn send_disable_periodic_output<P: SerialPortProvider>(
     manager: &mut DeviceManager<P>,
 ) -> Result<(), DeviceManagerError> {
     // 全メッセージの定期出力を無効化（レート=0）
-    let msg = disable_periodic_output(Layer::Ram);
+    // Session 149: BBRに書き込んで不揮発性に
+    let msg = disable_periodic_output(Layer::Bbr);
 
     // バッファをクリア
     manager.drain_buffer()?;
