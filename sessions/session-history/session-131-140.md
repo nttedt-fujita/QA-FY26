@@ -270,3 +270,39 @@
 - IOエラーがまだ発生するか確認
 
 ---
+
+## Session 139 (2026-03-12)
+
+**概要**: API並行リクエスト問題の調査 → Periodic Output採用を決定
+
+**実施内容**:
+1. **API並行リクエスト問題の調査**
+   - 藤田さんがログを貼り付けて問題を指摘
+   - 複数APIが同時にポーリング → パースエラー多発 → 500エラー
+2. **原因特定**
+   - 各FEパネルが独立したsetIntervalでポーリング（1秒〜5秒ごと）
+   - シリアルポートは1チャネル → 複数ポーリングで応答が混在
+3. **解決策の検討**
+   - FE側でシーケンシャル化、BE側で統合API、Periodic Outputの3案
+4. **結論: Periodic Output（定期出力）を採用**
+   - u-blox仕様書から「Periodic/polled」タイプを確認
+   - CFG-MSGOUT設定で定期出力に設定可能
+   - 次セッションでエビデンスを詳細確認
+
+**決定事項**:
+| 項目 | 決定 |
+|------|------|
+| API並行問題の解決策 | Periodic Output（定期出力）を採用 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session139/session-summary.md](../session139/session-summary.md) | セッションサマリー |
+| [session140/session-plan.md](../session140/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 140）でやること**:
+- u-blox仕様書でPeriodic Outputのエビデンス詳細確認
+- CFG-MSGOUT設定の仕様確認
+- Periodic Output実装の設計
+
+---
