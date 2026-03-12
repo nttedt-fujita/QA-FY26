@@ -16,8 +16,13 @@ import {
 
 /**
  * 検査状態
+ * - idle: 待機中
+ * - starting: 検査開始処理中（ボタン連打防止）
+ * - running: 検査実行中
+ * - completing: 終了処理中（集計・保存準備）
+ * - completed: 完了
  */
-export type InspectionState = "idle" | "running" | "completed";
+export type InspectionState = "idle" | "starting" | "running" | "completing" | "completed";
 
 /**
  * 検査結果（簡易版、DB保存前）
@@ -128,14 +133,23 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
-    setState("completed");
+    // 終了処理中状態に遷移（UIで「集計中...」表示）
+    setState("completing");
     setRemainingTime(0);
     const summary = aggregate();
     setResult(summary);
+    // 集計完了後に完了状態へ
+    setState("completed");
   }, [aggregate]);
 
   // 検査開始
   const start = useCallback((durationSec: number) => {
+    // 重複防止: idle状態でなければ開始しない
+    if (state !== "idle") return;
+
+    // 開始処理中状態に遷移（ボタン連打防止）
+    setState("starting");
+
     // リセット
     setNavStatusSamples([]);
     setNavSigSamples([]);
@@ -145,21 +159,25 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     setSavedId(null);
     startTimeRef.current = Date.now();
     durationSecRef.current = durationSec;
-    setState("running");
-    setRemainingTime(durationSec);
 
-    // カウントダウン
-    timerRef.current = setInterval(() => {
-      setRemainingTime((prev) => {
-        if (prev <= 1) {
-          // ここで直接finishInspectionを呼ぶと状態が古い可能性があるので、
-          // useEffectで監視する
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  }, []);
+    // 少し遅延してrunning状態に遷移（UIの状態遷移を明確化）
+    setTimeout(() => {
+      setState("running");
+      setRemainingTime(durationSec);
+
+      // カウントダウン
+      timerRef.current = setInterval(() => {
+        setRemainingTime((prev) => {
+          if (prev <= 1) {
+            // ここで直接finishInspectionを呼ぶと状態が古い可能性があるので、
+            // useEffectで監視する
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }, 100);
+  }, [state]);
 
   // remainingTimeが0になったら終了
   useEffect(() => {
@@ -170,8 +188,10 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
 
   // 検査停止（手動）
   const stop = useCallback(() => {
+    // running状態でなければ停止しない
+    if (state !== "running") return;
     finishInspection();
-  }, [finishInspection]);
+  }, [state, finishInspection]);
 
   // リセット
   const reset = useCallback(() => {
