@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { NavStatusResponse, getNavStatus } from "@/lib/api";
 
 /**
@@ -102,6 +102,9 @@ export function NavStatusPanel({
     }
   }, [enabled]);
 
+  // AbortController参照
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   // 初回取得 + ポーリング
   useEffect(() => {
     if (!enabled) {
@@ -110,9 +113,17 @@ export function NavStatusPanel({
       return;
     }
 
+    // AbortController作成
+    abortControllerRef.current = new AbortController();
+
     fetchData();
     const interval = setInterval(fetchData, pollIntervalMs);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      // ページ遷移時にリクエストをキャンセル
+      abortControllerRef.current?.abort();
+    };
   }, [enabled, pollIntervalMs, fetchData]);
 
   if (!enabled) {
