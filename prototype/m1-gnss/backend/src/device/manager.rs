@@ -306,6 +306,21 @@ impl<P: SerialPortProvider> DeviceManager<P> {
         Ok(())
     }
 
+    /// データを書き込む（RTCM転送用）
+    ///
+    /// NTRIPサーバーから受信したRTCMデータをZED-F9Pに転送する際に使用。
+    /// send_ubxと異なり、書き込んだバイト数を返す。
+    pub fn write_data(&mut self, data: &[u8]) -> Result<usize, DeviceManagerError> {
+        let port = self
+            .connected_port
+            .as_mut()
+            .ok_or(DeviceManagerError::NotConnected)?;
+
+        let written = port.write(data)?;
+        trace!("write_data: {}バイト書き込み", written);
+        Ok(written)
+    }
+
     /// UBXメッセージを受信
     ///
     /// 受信データから `B5 62` を探し、UBXフレームのみを抽出して返す。

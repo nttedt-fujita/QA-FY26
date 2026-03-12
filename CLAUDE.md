@@ -116,6 +116,7 @@
 | [ADR-008](docs/adr/m1/ADR-008-outdoor-inspection-criteria.md) | 屋外検査の合格基準 | 屋外検査ツール | 承認済み |
 | [ADR-009](docs/adr/m1/ADR-009-outdoor-inspection-fe-aggregation.md) | 屋外検査の集計処理をFEで実行 | FE/BE責務分担 | 承認済み |
 | [ADR-010](docs/adr/m1/ADR-010-api-test-strategy.md) | APIテスト戦略（統合テストで検証） | テスト方針 | 承認済み |
+| [ADR-011](docs/adr/m1/ADR-011-ntrip-implementation.md) | NTRIP実装方式（独自実装を採用） | NTRIPクライアント | 承認済み |
 
 ### 共通（ミッション横断）
 

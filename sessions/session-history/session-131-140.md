@@ -61,3 +61,34 @@
 - NTRIPクライアント実装（バックエンド側）
 
 ---
+
+## Session 133 (2026-03-12)
+
+**概要**: NTRIPクライアント実装（独自実装を採用）
+
+**実施内容**:
+1. **ntrip-clientクレート調査・不採用**
+   - RTCMパース済みデータを返すため、生バイト転送に不向き
+   - ADR-011を作成して判断を記録
+2. **NTRIP API独自実装**
+   - TCP + HTTP/1.0ベースのNTRIP Rev1プロトコルを直接実装
+   - POST /api/ntrip/connect, disconnect, GET /status
+3. **DeviceManagerにwrite_data追加**
+   - RTCM転送用メソッド
+4. **TDDスキルでレビュー**
+   - テーブルテスト形式未使用の指摘
+   - APIハンドラーテスト欠落の指摘
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ntrip_api.rs](../../prototype/m1-gnss/backend/src/web/ntrip_api.rs) | NTRIP API実装 |
+| [ADR-011-ntrip-implementation.md](../../docs/adr/m1/ADR-011-ntrip-implementation.md) | ntrip-client不採用のADR |
+| [session133/session-summary.md](../session133/session-summary.md) | セッションサマリー |
+| [session134/session-plan.md](../session134/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 134）でやること**:
+- テストをテーブルテスト形式に書き直す
+- フロントエンドに接続/切断ボタン追加
+
+---
