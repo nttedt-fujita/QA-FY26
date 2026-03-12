@@ -62,7 +62,7 @@
 |----------|------|
 | [inspections/indoor/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/indoor/page.tsx) | 屋内検査ページ |
 | [inspections/outdoor/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/outdoor/page.tsx) | 屋外検査ページ |
-| [tdd-review-result.md](../session122/tdd-review-result.md) | TDDレビュー結果 |
+| [25-tdd-review-result.md](../../docs/missions/m1-sensor-evaluation/gnss/25-tdd-review-result.md) | TDDレビュー結果 |
 | [architecture-nextjs-rust.md](../../docs/missions/m1-sensor-evaluation/gnss/architecture-nextjs-rust.md) | Next.js/Rustアーキテクチャ解説 |
 
 **次セッション（Session 123）でやること**:
@@ -94,10 +94,11 @@
 **作成ファイル**:
 | ファイル | 内容 |
 |----------|------|
-| [remaining-tasks.md](../session123/remaining-tasks.md) | 残タスク一覧 |
-| [outdoor-inspection-domain-model.md](../session123/outdoor-inspection-domain-model.md) | ドメインモデル設計 |
-| [rtk-implementation-plan.md](../session123/rtk-implementation-plan.md) | 実装計画 |
+| [23-outdoor-inspection-domain-model.md](../../docs/missions/m1-sensor-evaluation/gnss/23-outdoor-inspection-domain-model.md) | ドメインモデル設計 |
+| [24-outdoor-inspection-implementation-plan.md](../../docs/missions/m1-sensor-evaluation/gnss/24-outdoor-inspection-implementation-plan.md) | 実装計画 |
 | [session124/session-plan.md](../session124/session-plan.md) | 次セッション計画 |
+
+**削除**: remaining-tasks.md（Session 125で実装計画に吸収済みとして削除）
 
 **次セッション（Session 124）でやること**:
 - Phase 1: サンプル蓄積・集計の実装
@@ -143,5 +144,83 @@
 **次セッション（Session 125）でやること**:
 - 全体設計レビュー（ER図作成、DB設計確認）
 - 余裕があればPhase 3（DB保存）着手
+
+---
+
+## Session 125 (2026-03-12)
+
+**概要**: 全体状況のおさらい、ER図作成、DB設計確認、ドキュメント整理
+
+**実施内容**:
+1. **全体状況のおさらい**
+   - ADR-008との整合性: ✅ 完全一致（4項目の合格基準）
+   - 集計関数・型定義: ✅ 実装済み
+   - DBスキーマ: ⚠️ outdoor_inspection_results テーブル未作成
+   - RTK補正サービス: ⚠️ 未実装
+2. **ER図の作成**
+   - Draw.io形式でER図作成 → docs/に配置（実装完了後に更新予定）
+   - マスタ、屋内検査、屋外検査結果（新規）、計測・時系列を色分け
+3. **DB設計の最終確認**
+   - Session 123で設計したスキーマを確認
+   - 改善提案: インデックス追加、updated_at追加
+4. **ドキュメント整理（sessions/ → docs/）**
+   - Session 122-123のドキュメントを正式配置
+
+**移動ファイル**:
+| 移動元 | 移動先 |
+|--------|--------|
+| session125/gnss-er-diagram.drawio | docs/missions/m1-sensor-evaluation/gnss/ |
+| session123/outdoor-inspection-domain-model.md | docs/（23番） |
+| session123/rtk-implementation-plan.md | docs/（24番） |
+| session122/tdd-review-result.md | docs/（25番） |
+
+**削除ファイル**: session123/remaining-tasks.md（実装計画に吸収済み）
+
+**次セッション（Session 126）でやること**:
+- **ドキュメント整理計画**（Phase 3より優先）
+  - docs/の全体構造設計
+  - サブディレクトリ化
+  - インデックス整理
+
+---
+
+## Session 126 (2026-03-12)
+
+**概要**: ドキュメント整理計画の策定（EARS, MECE使用）
+
+**実施内容**:
+1. **要求の整理（EARS）**
+   - N1: 車輪の再発明を防ぐ
+   - N2: 調査・決定の見落としを防ぐ
+   - N3: ドキュメントを探しやすくする
+   - N4: 計画的な作業
+2. **現状の問題点整理**
+   - 番号重複（23番が2つ）
+   - README未登録ファイル
+   - sessions/に置き去りドキュメント（149件、M1関連7件）
+   - トレーサビリティ不足（出典が不明）
+3. **改善案の設計（MECE）**
+   - 構造、インデックス、既存整理、運用の4軸
+4. **M1-GNSS置き去りドキュメントの行き先決定**
+   - 7件の移動/削除先を計画
+5. **運用ルールの策定**
+   - 即時処理、出典必須、README即時更新、作業中の明示
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [documentation-improvement-plan.md](../session126/documentation-improvement-plan.md) | ドキュメント整理計画書 |
+| [session126/session-summary.md](../session126/session-summary.md) | セッションサマリー |
+| [session127/session-plan.md](../session127/session-plan.md) | 次セッション計画 |
+
+**決定事項**:
+- サブディレクトリ化は実施しない（番号順で管理可能）
+- M1-GNSS関連のみ優先整理、古いものは必要時に都度対処
+- 運用ルールを定義し、今後のメンテナンスを最小化
+
+**次セッション（Session 127）でやること**:
+- docs/gnss/ の番号振り直し（4ファイル）
+- sessions/ の置き去りドキュメント整理（7件）
+- README.md の更新（チェックリスト追加）
 
 ---
