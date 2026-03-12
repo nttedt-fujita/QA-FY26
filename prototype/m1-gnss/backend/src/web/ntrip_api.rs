@@ -19,6 +19,7 @@ use std::sync::Arc;
 use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};
 use tokio::net::TcpStream;
 use tokio::sync::{broadcast, Mutex as TokioMutex};
+use tokio::time::{interval, Duration};
 
 use super::device_api::AppState;
 
@@ -195,6 +196,30 @@ fn base64_encode(input: &str) -> String {
         i += 3;
     }
     result
+}
+
+/// GGAセンテンスを生成（テスト用固定位置）
+///
+/// VRS型NTRIPサービスでは、クライアントが位置情報を送信する必要がある。
+/// 現在は東京近辺の固定座標を使用（テスト用）。
+fn generate_gga_sentence() -> String {
+    use chrono::Utc;
+
+    let now = Utc::now();
+    let time_str = now.format("%H%M%S.00").to_string();
+
+    // 東京近辺の座標（テスト用固定値）
+    // 緯度: 35.6762° N → 3540.572 (DDMM.MMM形式)
+    // 経度: 139.6503° E → 13939.018 (DDDMM.MMM形式)
+    let gga_body = format!(
+        "GPGGA,{},3540.5720,N,13939.0180,E,1,08,1.0,50.0,M,0.0,M,,",
+        time_str
+    );
+
+    // チェックサム計算（$と*の間のXOR）
+    let checksum: u8 = gga_body.bytes().fold(0, |acc, b| acc ^ b);
+
+    format!("${gga_body}*{checksum:02X}\r\n")
 }
 
 /// NTRIPサーバーに接続
@@ -393,8 +418,19 @@ pub async fn connect_ntrip(
     let ntrip_state_clone = ntrip_state.clone();
     let app_state_clone = app_state.clone();
     tokio::spawn(async move {
-        let mut stream = stream;
+        // ストリームを読み書き分割
+        let (mut reader, mut writer) = tokio::io::split(stream);
         let mut buf = [0u8; 4096];
+
+        // GGA定期送信タイマー（10秒間隔）
+        let mut gga_interval = interval(Duration::from_secs(10));
+
+        // 接続直後に最初のGGAを送信
+        let initial_gga = generate_gga_sentence();
+        log::info!("[NTRIP] 初回GGA送信: {}", initial_gga.trim());
+        if let Err(e) = writer.write_all(initial_gga.as_bytes()).await {
+            log::error!("[NTRIP] 初回GGA送信失敗: {}", e);
+        }
 
         loop {
             tokio::select! {
@@ -403,8 +439,16 @@ pub async fn connect_ntrip(
                     log::info!("NTRIP切断シグナルを受信");
                     break;
                 }
+                // GGA定期送信（10秒ごと）
+                _ = gga_interval.tick() => {
+                    let gga = generate_gga_sentence();
+                    log::debug!("[NTRIP] GGA送信: {}", gga.trim());
+                    if let Err(e) = writer.write_all(gga.as_bytes()).await {
+                        log::warn!("[NTRIP] GGA送信失敗: {}", e);
+                    }
+                }
                 // RTCMデータ受信
-                result = stream.read(&mut buf) => {
+                result = reader.read(&mut buf) => {
                     match result {
                         Ok(0) => {
                             // 接続終了

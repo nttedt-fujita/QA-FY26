@@ -125,3 +125,32 @@
 - または残タスクの優先度確認
 
 ---
+
+## Session 135 (2026-03-12)
+
+**概要**: NTRIP接続テスト（別ネットワーク）+ GGA送信機能追加
+
+**実施内容**:
+1. **NTRIP自動切断の原因調査**
+   - 原因: VRS型NTRIPサービスではGGAセンテンス送信が必須
+   - 仕様書確認: 21-ntrip-protocol-spec.md 5.4節
+2. **固定位置GGA送信機能を追加**
+   - `generate_gga_sentence()` 関数追加
+   - 接続直後に初回GGA送信 + 10秒間隔で定期送信
+   - TcpStreamを読み書き分割（tokio::io::split）
+3. **動作確認**
+   - モバイル回線でNTRIP接続成功
+   - RTCMデータ受信継続を確認
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ntrip_api.rs](../../prototype/m1-gnss/backend/src/web/ntrip_api.rs) | GGA送信機能追加 |
+| [session135/session-summary.md](../session135/session-summary.md) | セッションサマリー |
+| [session136/session-plan.md](../session136/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 136）でやること**:
+- device_id紐付け実装
+- または屋外でのRTK動作確認
+
+---
