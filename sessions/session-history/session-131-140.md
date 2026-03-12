@@ -34,3 +34,30 @@
 - NTRIP認証設定画面の実装
 
 ---
+
+## Session 132 (2026-03-12)
+
+**概要**: NTRIP認証設定画面の実装
+
+**実施内容**:
+1. **NTRIP仕様確認**
+   - 20-ntrip-rtk-implementation.md, 21-ntrip-protocol-spec.md, 22-rtk-configuration.md を確認
+   - 設定項目を洗い出し
+2. **設定画面実装**
+   - ナビゲーションに「設定」タブ追加
+   - `/settings` ページ作成
+   - ローカルストレージへの保存/読み込み
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [Navigation.tsx](../../prototype/m1-gnss/frontend/src/components/Navigation.tsx) | 「設定」タブ追加 |
+| [ntrip-settings.ts](../../prototype/m1-gnss/frontend/src/lib/ntrip-settings.ts) | 型定義・ローカルストレージ操作 |
+| [settings/page.tsx](../../prototype/m1-gnss/frontend/src/app/settings/page.tsx) | NTRIP設定画面 |
+| [session132/session-summary.md](../session132/session-summary.md) | セッションサマリー |
+| [session133/session-plan.md](../session133/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 133）でやること**:
+- NTRIPクライアント実装（バックエンド側）
+
+---
