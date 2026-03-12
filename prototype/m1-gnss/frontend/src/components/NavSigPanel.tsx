@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavSigResponse, NavSignal, getNavSig } from "@/lib/api";
 
 // ADR-008: L2受信率50%以上で合格
@@ -80,22 +80,6 @@ export function NavSigPanel({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // データ取得
-  const fetchData = useCallback(async () => {
-    if (!enabled) return;
-
-    setIsLoading(true);
-    try {
-      const res = await getNavSig();
-      setData(res);
-      setError(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "取得失敗");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [enabled]);
-
   // AbortController参照
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -107,16 +91,31 @@ export function NavSigPanel({
       return;
     }
 
-    abortControllerRef.current = new AbortController();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const res = await getNavSig(controller.signal);
+        setData(res);
+        setError(null);
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return;
+        setError(e instanceof Error ? e.message : "取得失敗");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
     fetchData();
     const interval = setInterval(fetchData, pollIntervalMs);
 
     return () => {
       clearInterval(interval);
-      abortControllerRef.current?.abort();
+      controller.abort();
     };
-  }, [enabled, pollIntervalMs, fetchData]);
+  }, [enabled, pollIntervalMs]);
 
   // L1とL2で信号を分離（GPSのみ）
   const gpsL1Signals =

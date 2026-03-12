@@ -296,8 +296,8 @@ export interface NavSigResponse {
 /**
  * NAV-SIG（衛星信号情報）を取得
  */
-export async function getNavSig(): Promise<NavSigResponse> {
-  const res = await fetch(`${API_BASE}/api/nav-sig`);
+export async function getNavSig(signal?: AbortSignal): Promise<NavSigResponse> {
+  const res = await fetch(`${API_BASE}/api/nav-sig`, { signal });
   if (!res.ok) {
     const error: ErrorResponse = await res.json();
     throw new Error(error.error);
@@ -332,8 +332,8 @@ export interface MonSpanResponse {
 /**
  * MON-SPAN（スペクトラム情報）を取得
  */
-export async function getMonSpan(): Promise<MonSpanResponse> {
-  const res = await fetch(`${API_BASE}/api/mon-span`);
+export async function getMonSpan(signal?: AbortSignal): Promise<MonSpanResponse> {
+  const res = await fetch(`${API_BASE}/api/mon-span`, { signal });
   if (!res.ok) {
     const error: ErrorResponse = await res.json();
     throw new Error(error.error);
@@ -362,8 +362,8 @@ export interface NavStatusResponse {
 /**
  * NAV-STATUS（Fix状態・TTFF）を取得
  */
-export async function getNavStatus(): Promise<NavStatusResponse> {
-  const res = await fetch(`${API_BASE}/api/nav-status`);
+export async function getNavStatus(signal?: AbortSignal): Promise<NavStatusResponse> {
+  const res = await fetch(`${API_BASE}/api/nav-status`, { signal });
   if (!res.ok) {
     const error: ErrorResponse = await res.json();
     throw new Error(error.error);
@@ -422,8 +422,8 @@ export interface NavSatResponse {
 /**
  * NAV-SAT（衛星情報）を取得
  */
-export async function getNavSat(): Promise<NavSatResponse> {
-  const res = await fetch(`${API_BASE}/api/nav-sat`);
+export async function getNavSat(signal?: AbortSignal): Promise<NavSatResponse> {
+  const res = await fetch(`${API_BASE}/api/nav-sat`, { signal });
   if (!res.ok) {
     const error: ErrorResponse = await res.json();
     throw new Error(error.error);
