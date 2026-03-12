@@ -172,3 +172,35 @@
 - MON-SPANパーサー実装、または屋内/屋外検査ページ分離
 
 ---
+
+## Session 116 (2026-03-12)
+
+**概要**: MON-SPANパーサー実装
+
+**実施内容**:
+1. **MON-SPANパーサー実装**
+   - `mon_span.rs` 新規作成
+   - mon_rf.rsと同じパターンで実装
+   - 8テスト全パス
+2. **TDDレビューによるヌケ補完**
+   - span/res/center抽出の検証追加
+   - avg_amplitude()ヘルパーのテスト追加
+3. **ドキュメント化**
+   - 振る舞い・テストリストを仕様書にまとめた
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [mon_span.rs](../../prototype/m1-gnss/backend/src/ubx/mon_span.rs) | MON-SPANパーサー |
+| [session116/mon-span-parser-spec.md](../session116/mon-span-parser-spec.md) | パーサー仕様書 |
+| [session116/session-summary.md](../session116/session-summary.md) | セッションサマリー |
+| [session117/session-plan.md](../session117/session-plan.md) | 次セッション計画 |
+
+**決定事項**:
+- MON-SPANパーサーはmon_rf.rsと同じパターンで実装
+- テストはテーブルテスト形式で統一
+
+**次セッション（Session 117）でやること**:
+- MON-SPAN API/FE連携、または屋内/屋外検査ページ分離
+
+---
