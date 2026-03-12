@@ -63,6 +63,13 @@ interface NavSigPanelProps {
   enabled: boolean;
   /** ポーリング間隔（ミリ秒） */
   pollIntervalMs?: number;
+  /** サンプル取得時のコールバック（屋外検査用） */
+  onSample?: (sample: {
+    gps_visible_count: number;
+    gps_l2_reception_count: number;
+    gps_l2_reception_rate: number;
+    min_l1_cno: number;
+  }) => void;
 }
 
 /**
@@ -75,6 +82,7 @@ interface NavSigPanelProps {
 export function NavSigPanel({
   enabled,
   pollIntervalMs = 1000,
+  onSample,
 }: NavSigPanelProps) {
   const [data, setData] = useState<NavSigResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -100,6 +108,23 @@ export function NavSigPanel({
         const res = await getNavSig(controller.signal);
         setData(res);
         setError(null);
+        // サンプルコールバック（屋外検査用）
+        if (onSample) {
+          // GPS L1信号の最小C/N0を計算
+          const gpsL1Signals = res.signals.filter(
+            (s) => s.gnss_id === 0 && s.is_l1
+          );
+          const minL1Cno =
+            gpsL1Signals.length > 0
+              ? Math.min(...gpsL1Signals.map((s) => s.cno))
+              : 0;
+          onSample({
+            gps_visible_count: res.stats.gps_visible_count,
+            gps_l2_reception_count: res.stats.gps_l2_reception_count,
+            gps_l2_reception_rate: res.stats.gps_l2_reception_rate,
+            min_l1_cno: minL1Cno,
+          });
+        }
       } catch (e) {
         if (e instanceof Error && e.name === "AbortError") return;
         setError(e instanceof Error ? e.message : "取得失敗");
@@ -115,7 +140,7 @@ export function NavSigPanel({
       clearInterval(interval);
       controller.abort();
     };
-  }, [enabled, pollIntervalMs]);
+  }, [enabled, pollIntervalMs, onSample]);
 
   // L1とL2で信号を分離（GPSのみ）
   const gpsL1Signals =

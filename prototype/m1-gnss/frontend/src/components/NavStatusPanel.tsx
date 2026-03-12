@@ -69,6 +69,13 @@ interface NavStatusPanelProps {
   enabled: boolean;
   /** ポーリング間隔（ミリ秒） */
   pollIntervalMs?: number;
+  /** サンプル取得時のコールバック（屋外検査用） */
+  onSample?: (sample: {
+    gps_fix: number;
+    carr_soln: number;
+    msss: number;
+    ttff: number;
+  }) => void;
 }
 
 /**
@@ -81,6 +88,7 @@ interface NavStatusPanelProps {
 export function NavStatusPanel({
   enabled,
   pollIntervalMs = 1000,
+  onSample,
 }: NavStatusPanelProps) {
   const [data, setData] = useState<NavStatusResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -107,6 +115,15 @@ export function NavStatusPanel({
         const res = await getNavStatus(controller.signal);
         setData(res);
         setError(null);
+        // サンプルコールバック（屋外検査用）
+        if (onSample) {
+          onSample({
+            gps_fix: res.gps_fix,
+            carr_soln: res.carr_soln,
+            msss: res.msss,
+            ttff: res.ttff,
+          });
+        }
       } catch (e) {
         // AbortErrorは無視
         if (e instanceof Error && e.name === "AbortError") return;
@@ -123,7 +140,7 @@ export function NavStatusPanel({
       clearInterval(interval);
       controller.abort();
     };
-  }, [enabled, pollIntervalMs]);
+  }, [enabled, pollIntervalMs, onSample]);
 
   if (!enabled) {
     return (
