@@ -57,7 +57,7 @@ export interface UseOutdoorInspectionReturn {
   start: (durationSec: number) => void;
   stop: () => void;
   reset: () => void;
-  saveResult: (deviceId?: number, lotId?: number) => Promise<void>;
+  saveResult: (serialNumber?: string, lotId?: number) => Promise<void>;
 
   // サンプル追加（パネルから呼び出される）
   addNavStatusSample: (sample: Omit<NavStatusSample, "timestamp">) => void;
@@ -193,7 +193,7 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
 
   // 結果保存
   const saveResult = useCallback(
-    async (deviceId?: number, lotId?: number) => {
+    async (serialNumber?: string, lotId?: number) => {
       if (state !== "completed" || !result) {
         setSaveError("検査が完了していません");
         return;
@@ -211,7 +211,7 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              device_id: deviceId ?? null,
+              serial_number: serialNumber ?? null,
               lot_id: lotId ?? null,
               inspected_at: new Date(startTimeRef.current).toISOString(),
               duration_sec: durationSecRef.current,

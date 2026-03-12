@@ -17,7 +17,9 @@ use super::device_api::{AppState, ErrorResponse};
 /// 検査結果保存リクエスト
 #[derive(Debug, Deserialize)]
 pub struct SaveOutdoorResultRequest {
-    /// デバイスID（任意）
+    /// シリアル番号（device_id解決用）
+    pub serial_number: Option<String>,
+    /// デバイスID（任意、serial_numberがあれば上書き）
     pub device_id: Option<i64>,
     /// ロットID（任意）
     pub lot_id: Option<i64>,
@@ -126,6 +128,27 @@ pub async fn save_outdoor_result(
         }
     };
 
+    // serial_number から device_id を解決
+    let resolved_device_id = if let Some(serial) = &body.serial_number {
+        match repo.get_device_by_serial(serial) {
+            Ok(device) => device.id,
+            Err(crate::repository::RepositoryError::NotFound(_)) => {
+                return HttpResponse::BadRequest().json(ErrorResponse {
+                    error: format!("装置が見つかりません: serial_number={}。先に屋内検査を実行してください。", serial),
+                    code: "DEVICE_NOT_FOUND".to_string(),
+                })
+            }
+            Err(e) => {
+                return HttpResponse::InternalServerError().json(ErrorResponse {
+                    error: e.to_string(),
+                    code: "DB_ERROR".to_string(),
+                })
+            }
+        }
+    } else {
+        body.device_id
+    };
+
     // failure_reasons を JSON文字列に変換
     let failure_reasons_json = body.failure_reasons
         .as_ref()
@@ -152,7 +175,7 @@ pub async fn save_outdoor_result(
         failure_reasons_json,
     );
 
-    if let Some(device_id) = body.device_id {
+    if let Some(device_id) = resolved_device_id {
         result = result.with_device(device_id);
     }
     if let Some(lot_id) = body.lot_id {
