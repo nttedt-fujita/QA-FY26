@@ -72,12 +72,15 @@ ADRはミッション別に配置: `adr/{m1,m3,common}/`
 
 ### M1-B: GNSS評価
 
+**最新ドキュメント**: **[gnss/README.md](missions/m1-sensor-evaluation/gnss/README.md)** — チェックリスト付きの全体インデックス
+
 | ドキュメント | 内容 | Session |
 |-------------|------|---------|
+| [gnss/README.md](missions/m1-sensor-evaluation/gnss/README.md) | **GNSS評価ドキュメントインデックス（最新）** | Session 127 |
 | [gnss-hearing-items.md](../sessions/session12/gnss-hearing-items.md) | 小板橋さん向けGNSSヒアリング項目（16問） | Session 12 |
 | [missions/m1-sensor-evaluation/README.md](missions/m1-sensor-evaluation/README.md) | M1詳細（指標・試験方法・規格） | Session 2 |
 
-**現状**: 小板橋さんが既存知見を持っている。ヒアリング待ち。
+**現状**: Phase 3実装中（屋外検査機能）。Session 106〜で開発進行中。
 
 ### M2: 点群データ検証
 
