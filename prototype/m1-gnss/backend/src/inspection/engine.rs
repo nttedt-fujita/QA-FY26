@@ -119,26 +119,8 @@ impl InspectionEngine {
             results.push(result);
         }
 
-        // NMEA出力をON（元に戻す、成功/失敗に関わらず実行）
-        info!("[NMEA制御] ON送信開始");
-        let nmea_on_msg = set_uart1_nmea_output(true, Layer::Ram);
-        if let Err(e) = manager.send_ubx(&nmea_on_msg) {
-            warn!("[NMEA制御] ON送信エラー: {}", e);
-        } else {
-            // ACK-ACKを待つ（次回検査でACK-ACKが遅れて届くのを防ぐ）
-            debug!("[NMEA制御] ACK待機開始（500ms timeout）");
-            match manager.wait_for_ack(0x06, 0x8A, std::time::Duration::from_millis(500)) {
-                Ok(true) => {
-                    info!("[NMEA制御] ACK-ACK受信、NMEA ON適用完了");
-                }
-                Ok(false) => {
-                    warn!("[NMEA制御] ACK-NAK受信（設定失敗）");
-                }
-                Err(e) => {
-                    warn!("[NMEA制御] ACK待機エラー: {}", e);
-                }
-            }
-        }
+        // Session 147: NMEA ONに戻さない（屋外検査でNMEAが邪魔するため）
+        // 屋内検査・屋外検査ともにNMEA OFFのまま動作する
 
         // TODO: 状態をConnectedに戻す
 
@@ -1055,9 +1037,10 @@ mod tests {
         );
     }
 
-    /// H3: 検査終了時にNMEA ONが送信される（2つのCFG-VALSETがある）
+    /// H3: 検査終了時にNMEA ONを送信しない（Session 147で変更）
+    /// CFG-VALSETは1回だけ（NMEA OFFのみ）
     #[test]
-    fn test_h3_nmea_on_sent_at_end() {
+    fn test_h3_nmea_off_only() {
         let items = vec![InspectionItem::new(ItemType::Connectivity)];
 
         let provider = MockProvider::new()
@@ -1074,11 +1057,11 @@ mod tests {
 
         let data = write_data.lock().unwrap();
 
-        // CFG-VALSETが2回送信される（OFF + ON）
+        // CFG-VALSETは1回だけ（NMEA OFFのみ、ONは送信しない）
         let cfg_valset_count = data.windows(4)
             .filter(|w| w[0] == 0xB5 && w[1] == 0x62 && w[2] == 0x06 && w[3] == 0x8A)
             .count();
 
-        assert_eq!(cfg_valset_count, 2, "CFG-VALSETが2回送信されていない（OFF + ON）");
+        assert_eq!(cfg_valset_count, 1, "CFG-VALSETが1回送信されていない（OFFのみ）");
     }
 }
