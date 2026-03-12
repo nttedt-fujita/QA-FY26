@@ -28,7 +28,8 @@ macro_rules! poll_and_parse {
                 return Err(format!("{}: 送信エラー - {}", $name, e));
             }
             std::thread::sleep(std::time::Duration::from_millis(50));
-            let raw = match $manager.receive_ubx(std::time::Duration::from_millis(500)) {
+            // Session 152: NAV-STATUS/MON-SPANは1秒以上かかるため2秒に延長
+            let raw = match $manager.receive_ubx(std::time::Duration::from_millis(2000)) {
                 Ok(r) => r,
                 Err(crate::device::manager::DeviceManagerError::Timeout) => {
                     return Err(format!("{}: タイムアウト", $name));
