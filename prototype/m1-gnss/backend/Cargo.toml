@@ -36,6 +36,9 @@ rusqlite = { version = "0.31", features = ["bundled"] }
 # 日時
 chrono = { version = "0.4", features = ["serde"] }
 
+# NTRIP/RTK（独自実装 - ntrip-clientはRTCMパース済みデータを返すため不使用）
+# 参照: docs/adr/m1/ADR-011-ntrip-implementation.md
+
 [dev-dependencies]
 # テスト用
 tokio-test = "0.4"

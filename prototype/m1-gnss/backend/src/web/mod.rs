@@ -10,3 +10,4 @@ pub mod nav_sat_api;
 pub mod nav_sig_api;
 pub mod mon_span_api;
 pub mod nav_status_api;
+pub mod ntrip_api;

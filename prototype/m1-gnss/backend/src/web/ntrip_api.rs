@@ -1,0 +1,504 @@
+//! NTRIP API
+//!
+//! - POST /api/ntrip/connect - NTRIP接続開始
+//! - POST /api/ntrip/disconnect - NTRIP切断
+//! - GET /api/ntrip/status - 接続状態取得
+//!
+//! ## 設計判断
+//!
+//! ntrip-clientクレートを検討したが、以下の理由で独自実装を採用:
+//! - ntrip-clientはRTCMパース済みデータ(rtcm_rs::Message)を返す
+//! - ZED-F9Pには生のRTCMバイナリをそのまま転送する必要がある
+//! - 独自実装でHTTP/1.0ベースのNTRIP Rev1プロトコルを直接実装
+//!
+//! 参照: docs/adr/m1/ADR-011-ntrip-implementation.md (要作成)
+
+use actix_web::{web, HttpResponse, Responder};
+use serde::{Deserialize, Serialize};
+use std::sync::Arc;
+use tokio::io::{AsyncBufReadExt, AsyncReadExt, AsyncWriteExt, BufReader};
+use tokio::net::TcpStream;
+use tokio::sync::{broadcast, Mutex as TokioMutex};
+
+use super::device_api::AppState;
+
+// ===========================================
+// リクエスト/レスポンス型
+// ===========================================
+
+/// NTRIP接続リクエスト
+#[derive(Debug, Deserialize)]
+pub struct NtripConnectRequest {
+    /// キャスターURL（例: ntrip.jenoba.jp）
+    pub caster_url: String,
+    /// ポート（例: 2101）
+    pub port: u16,
+    /// マウントポイント（例: TOKYO_RTCM3）
+    pub mountpoint: String,
+    /// ユーザー名
+    pub username: String,
+    /// パスワード
+    pub password: String,
+}
+
+/// NTRIP接続状態
+#[derive(Debug, Clone, Serialize, PartialEq)]
+pub enum NtripConnectionState {
+    /// 未接続
+    Disconnected,
+    /// 接続中
+    Connecting,
+    /// 接続済み
+    Connected,
+    /// エラー
+    Error(String),
+}
+
+/// NTRIP状態レスポンス
+#[derive(Debug, Serialize)]
+pub struct NtripStatusResponse {
+    /// 接続状態
+    pub state: NtripConnectionState,
+    /// 受信バイト数
+    pub bytes_received: u64,
+    /// ZED-F9Pへの転送バイト数
+    pub bytes_forwarded: u64,
+    /// 最後のエラー（あれば）
+    pub last_error: Option<String>,
+}
+
+/// エラーレスポンス
+#[derive(Debug, Serialize)]
+pub struct NtripErrorResponse {
+    pub error: String,
+    pub code: String,
+}
+
+// ===========================================
+// NTRIP接続管理
+// ===========================================
+
+/// NTRIP接続マネージャー
+///
+/// NTRIPサーバーからRTCMデータを受信し、ZED-F9Pに転送する
+pub struct NtripManager {
+    /// 接続状態
+    state: NtripConnectionState,
+    /// 受信バイト数
+    bytes_received: u64,
+    /// 転送バイト数
+    bytes_forwarded: u64,
+    /// 最後のエラー
+    last_error: Option<String>,
+    /// 切断シグナル送信側
+    exit_tx: Option<broadcast::Sender<()>>,
+}
+
+impl NtripManager {
+    pub fn new() -> Self {
+        Self {
+            state: NtripConnectionState::Disconnected,
+            bytes_received: 0,
+            bytes_forwarded: 0,
+            last_error: None,
+            exit_tx: None,
+        }
+    }
+
+    pub fn state(&self) -> &NtripConnectionState {
+        &self.state
+    }
+
+    pub fn set_state(&mut self, state: NtripConnectionState) {
+        self.state = state;
+    }
+
+    pub fn set_exit_tx(&mut self, tx: broadcast::Sender<()>) {
+        self.exit_tx = Some(tx);
+    }
+
+    pub fn take_exit_tx(&mut self) -> Option<broadcast::Sender<()>> {
+        self.exit_tx.take()
+    }
+
+    pub fn add_bytes_received(&mut self, bytes: u64) {
+        self.bytes_received += bytes;
+    }
+
+    pub fn add_bytes_forwarded(&mut self, bytes: u64) {
+        self.bytes_forwarded += bytes;
+    }
+
+    pub fn set_last_error(&mut self, error: String) {
+        self.last_error = Some(error);
+    }
+
+    pub fn status(&self) -> NtripStatusResponse {
+        NtripStatusResponse {
+            state: self.state.clone(),
+            bytes_received: self.bytes_received,
+            bytes_forwarded: self.bytes_forwarded,
+            last_error: self.last_error.clone(),
+        }
+    }
+
+    pub fn reset_stats(&mut self) {
+        self.bytes_received = 0;
+        self.bytes_forwarded = 0;
+        self.last_error = None;
+    }
+}
+
+impl Default for NtripManager {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+/// NTRIP状態を保持する共有状態
+pub type SharedNtripManager = Arc<TokioMutex<NtripManager>>;
+
+// ===========================================
+// NTRIP接続処理
+// ===========================================
+
+/// Base64エンコード（Basic認証用）
+fn base64_encode(input: &str) -> String {
+    const ALPHABET: &[u8] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    let bytes = input.as_bytes();
+    let mut result = String::with_capacity((bytes.len() + 2) / 3 * 4);
+    let mut i = 0;
+
+    while i < bytes.len() {
+        let b0 = bytes[i];
+        let b1 = bytes.get(i + 1).copied().unwrap_or(0);
+        let b2 = bytes.get(i + 2).copied().unwrap_or(0);
+
+        let n = ((b0 as u32) << 16) | ((b1 as u32) << 8) | (b2 as u32);
+
+        result.push(ALPHABET[((n >> 18) & 0x3F) as usize] as char);
+        result.push(ALPHABET[((n >> 12) & 0x3F) as usize] as char);
+
+        if i + 1 < bytes.len() {
+            result.push(ALPHABET[((n >> 6) & 0x3F) as usize] as char);
+        } else {
+            result.push('=');
+        }
+
+        if i + 2 < bytes.len() {
+            result.push(ALPHABET[(n & 0x3F) as usize] as char);
+        } else {
+            result.push('=');
+        }
+
+        i += 3;
+    }
+    result
+}
+
+/// NTRIPサーバーに接続
+///
+/// NTRIP Rev1プロトコル（HTTP/1.0ベース）を使用。
+/// 参照: docs/missions/m1-sensor-evaluation/gnss/20-ntrip-rtk-implementation.md
+async fn connect_to_ntrip(
+    caster_url: &str,
+    port: u16,
+    mountpoint: &str,
+    username: &str,
+    password: &str,
+) -> Result<TcpStream, String> {
+    // TCP接続
+    let addr = format!("{}:{}", caster_url, port);
+    let mut stream = TcpStream::connect(&addr)
+        .await
+        .map_err(|e| format!("TCP接続失敗: {}", e))?;
+
+    // NTRIP Rev1リクエストを送信
+    // User-Agentは "NTRIP" で始める必要がある（仕様書 5.1節）
+    let auth = base64_encode(&format!("{}:{}", username, password));
+    let request = format!(
+        "GET /{} HTTP/1.0\r\n\
+         User-Agent: NTRIP GnssEvalTool/1.0\r\n\
+         Authorization: Basic {}\r\n\
+         \r\n",
+        mountpoint, auth
+    );
+
+    stream
+        .write_all(request.as_bytes())
+        .await
+        .map_err(|e| format!("リクエスト送信失敗: {}", e))?;
+
+    // レスポンスを読む（最初の行だけ確認）
+    let mut reader = BufReader::new(&mut stream);
+    let mut response_line = String::new();
+    reader
+        .read_line(&mut response_line)
+        .await
+        .map_err(|e| format!("レスポンス読み取り失敗: {}", e))?;
+
+    // NTRIP Rev1: "ICY 200 OK" または HTTP/1.x 200 OK
+    if response_line.contains("200") {
+        // ヘッダーの残りを読み捨てる（空行まで）
+        loop {
+            let mut line = String::new();
+            let bytes_read = reader
+                .read_line(&mut line)
+                .await
+                .map_err(|e| format!("ヘッダー読み取り失敗: {}", e))?;
+            if bytes_read == 0 || line.trim().is_empty() {
+                break;
+            }
+        }
+        Ok(stream)
+    } else if response_line.contains("401") {
+        Err("認証失敗 (401 Unauthorized)".to_string())
+    } else if response_line.contains("404") {
+        Err("マウントポイントが見つかりません (404)".to_string())
+    } else {
+        Err(format!("予期しないレスポンス: {}", response_line.trim()))
+    }
+}
+
+// ===========================================
+// APIハンドラー
+// ===========================================
+
+/// POST /api/ntrip/connect - NTRIP接続開始
+pub async fn connect_ntrip(
+    ntrip_state: web::Data<SharedNtripManager>,
+    app_state: web::Data<AppState>,
+    req: web::Json<NtripConnectRequest>,
+) -> impl Responder {
+    // 現在の状態を確認
+    {
+        let manager = ntrip_state.lock().await;
+        if matches!(
+            manager.state(),
+            NtripConnectionState::Connected | NtripConnectionState::Connecting
+        ) {
+            return HttpResponse::Conflict().json(NtripErrorResponse {
+                error: "既にNTRIP接続中です。切断してから再接続してください".to_string(),
+                code: "ALREADY_CONNECTED".to_string(),
+            });
+        }
+    }
+
+    // 状態を「接続中」に変更
+    {
+        let mut manager = ntrip_state.lock().await;
+        manager.set_state(NtripConnectionState::Connecting);
+        manager.reset_stats();
+    }
+
+    // NTRIPサーバーに接続
+    let stream = match connect_to_ntrip(
+        &req.caster_url,
+        req.port,
+        &req.mountpoint,
+        &req.username,
+        &req.password,
+    )
+    .await
+    {
+        Ok(s) => s,
+        Err(e) => {
+            let mut manager = ntrip_state.lock().await;
+            manager.set_state(NtripConnectionState::Error(e.clone()));
+            manager.set_last_error(e.clone());
+            return HttpResponse::BadRequest().json(NtripErrorResponse {
+                error: e,
+                code: "NTRIP_CONNECT_ERROR".to_string(),
+            });
+        }
+    };
+
+    // 切断シグナル用チャンネル
+    let (exit_tx, mut exit_rx) = broadcast::channel::<()>(1);
+
+    // 状態にexit_txを保存
+    {
+        let mut manager = ntrip_state.lock().await;
+        manager.set_exit_tx(exit_tx);
+        manager.set_state(NtripConnectionState::Connected);
+    }
+
+    // RTCMデータ受信・転送タスクをスポーン
+    let ntrip_state_clone = ntrip_state.clone();
+    let app_state_clone = app_state.clone();
+    tokio::spawn(async move {
+        let mut stream = stream;
+        let mut buf = [0u8; 4096];
+
+        loop {
+            tokio::select! {
+                // 切断シグナル
+                _ = exit_rx.recv() => {
+                    log::info!("NTRIP切断シグナルを受信");
+                    break;
+                }
+                // RTCMデータ受信
+                result = stream.read(&mut buf) => {
+                    match result {
+                        Ok(0) => {
+                            // 接続終了
+                            log::info!("NTRIPサーバーが接続を閉じました");
+                            let mut manager = ntrip_state_clone.lock().await;
+                            manager.set_state(NtripConnectionState::Disconnected);
+                            break;
+                        }
+                        Ok(n) => {
+                            // RTCMデータを受信
+                            let rtcm_data = &buf[..n];
+
+                            // 統計更新
+                            {
+                                let mut manager = ntrip_state_clone.lock().await;
+                                manager.add_bytes_received(n as u64);
+                            }
+
+                            // ZED-F9Pに転送（DeviceManagerを使用）
+                            let forwarded = {
+                                let mut device_manager = match app_state_clone.device_manager.lock() {
+                                    Ok(m) => m,
+                                    Err(_) => {
+                                        log::error!("DeviceManagerのロック取得に失敗");
+                                        continue;
+                                    }
+                                };
+
+                                // シリアルポートに書き込み
+                                match device_manager.write_data(rtcm_data) {
+                                    Ok(written) => {
+                                        log::debug!("RTCM転送: {} bytes", written);
+                                        written as u64
+                                    }
+                                    Err(e) => {
+                                        log::warn!("RTCM転送失敗: {}", e);
+                                        0
+                                    }
+                                }
+                            };
+
+                            // 統計更新（転送成功分）
+                            if forwarded > 0 {
+                                let mut manager = ntrip_state_clone.lock().await;
+                                manager.add_bytes_forwarded(forwarded);
+                            }
+                        }
+                        Err(e) => {
+                            log::error!("RTCMデータ受信エラー: {}", e);
+                            let mut manager = ntrip_state_clone.lock().await;
+                            manager.set_state(NtripConnectionState::Error(e.to_string()));
+                            manager.set_last_error(e.to_string());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        log::info!("NTRIPストリームタスクが終了しました");
+    });
+
+    HttpResponse::Ok().json(serde_json::json!({
+        "message": format!("NTRIP接続を開始しました: {}:{}/{}", req.caster_url, req.port, req.mountpoint),
+        "state": "Connected"
+    }))
+}
+
+/// POST /api/ntrip/disconnect - NTRIP切断
+pub async fn disconnect_ntrip(ntrip_state: web::Data<SharedNtripManager>) -> impl Responder {
+    let mut manager = ntrip_state.lock().await;
+
+    // 接続状態を確認
+    if !matches!(
+        manager.state(),
+        NtripConnectionState::Connected | NtripConnectionState::Connecting
+    ) {
+        return HttpResponse::BadRequest().json(NtripErrorResponse {
+            error: "NTRIPは接続されていません".to_string(),
+            code: "NOT_CONNECTED".to_string(),
+        });
+    }
+
+    // 切断シグナルを送信
+    if let Some(exit_tx) = manager.take_exit_tx() {
+        let _ = exit_tx.send(());
+    }
+
+    manager.set_state(NtripConnectionState::Disconnected);
+
+    HttpResponse::Ok().json(serde_json::json!({
+        "message": "NTRIP接続を切断しました"
+    }))
+}
+
+/// GET /api/ntrip/status - 接続状態取得
+pub async fn get_ntrip_status(ntrip_state: web::Data<SharedNtripManager>) -> impl Responder {
+    let manager = ntrip_state.lock().await;
+    HttpResponse::Ok().json(manager.status())
+}
+
+/// APIルートを設定
+pub fn configure(cfg: &mut web::ServiceConfig) {
+    cfg.service(
+        web::scope("/api/ntrip")
+            .route("/connect", web::post().to(connect_ntrip))
+            .route("/disconnect", web::post().to(disconnect_ntrip))
+            .route("/status", web::get().to(get_ntrip_status)),
+    );
+}
+
+// ===========================================
+// テスト
+// ===========================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_ntrip_manager_new() {
+        let manager = NtripManager::new();
+        assert_eq!(*manager.state(), NtripConnectionState::Disconnected);
+        assert_eq!(manager.bytes_received, 0);
+        assert_eq!(manager.bytes_forwarded, 0);
+    }
+
+    #[test]
+    fn test_ntrip_manager_stats() {
+        let mut manager = NtripManager::new();
+        manager.add_bytes_received(100);
+        manager.add_bytes_forwarded(100);
+
+        let status = manager.status();
+        assert_eq!(status.bytes_received, 100);
+        assert_eq!(status.bytes_forwarded, 100);
+    }
+
+    #[test]
+    fn test_ntrip_manager_reset() {
+        let mut manager = NtripManager::new();
+        manager.add_bytes_received(100);
+        manager.set_last_error("test error".to_string());
+
+        manager.reset_stats();
+
+        let status = manager.status();
+        assert_eq!(status.bytes_received, 0);
+        assert_eq!(status.last_error, None);
+    }
+
+    #[test]
+    fn test_base64_encode() {
+        // "Aladdin:open sesame" -> "QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+        assert_eq!(
+            base64_encode("Aladdin:open sesame"),
+            "QWxhZGRpbjpvcGVuIHNlc2FtZQ=="
+        );
+        // "user:pass" -> "dXNlcjpwYXNz"
+        assert_eq!(base64_encode("user:pass"), "dXNlcjpwYXNz");
+    }
+}
