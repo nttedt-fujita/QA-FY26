@@ -307,7 +307,7 @@ export default function OutdoorInspectionsPage() {
                 <button
                   onClick={() =>
                     inspection.saveResult(
-                      connectedDevice?.serial_number ?? undefined,
+                      connectedDevice?.f9p_serial ?? undefined,
                       selectedLotId ?? undefined
                     )
                   }

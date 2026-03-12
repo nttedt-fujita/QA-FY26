@@ -21,6 +21,25 @@ pub fn calculate_checksum(data: &[u8]) -> (u8, u8) {
     (ck_a, ck_b)
 }
 
+/// UBX Pollコマンドを構築（空のペイロード）
+///
+/// 指定されたClass/IDに対するPoll（問い合わせ）コマンドを生成する。
+/// 例: SEC-UNIQID poll = build_ubx_poll(0x27, 0x03)
+pub fn build_ubx_poll(class: u8, id: u8) -> Vec<u8> {
+    let payload: &[u8] = &[];
+    let payload_len: u16 = 0;
+
+    let mut frame = vec![UBX_SYNC_1, UBX_SYNC_2, class, id];
+    frame.extend_from_slice(&payload_len.to_le_bytes());
+    frame.extend_from_slice(payload);
+
+    let (ck_a, ck_b) = calculate_checksum(&frame[2..]);
+    frame.push(ck_a);
+    frame.push(ck_b);
+
+    frame
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

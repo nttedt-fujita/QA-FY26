@@ -26,8 +26,10 @@ pub struct DeviceResponse {
     pub vid: Option<String>,
     /// Product ID（16進表記）
     pub pid: Option<String>,
-    /// シリアル番号
+    /// USBシリアル番号（FTDIチップ等）- 参考用
     pub serial_number: Option<String>,
+    /// F9Pチップのシリアル番号（UBX-SEC-UNIQID）- DB紐付け用
+    pub f9p_serial: Option<String>,
     /// 状態
     pub status: String,
     /// ボーレート（接続時のみ）
@@ -36,12 +38,18 @@ pub struct DeviceResponse {
 
 impl DeviceResponse {
     /// PortInfoとDeviceStatusからAPIレスポンス用に変換
-    pub fn from_port_info(port: &PortInfo, status: &DeviceStatus, baud_rate: Option<u32>) -> Self {
+    pub fn from_port_info(
+        port: &PortInfo,
+        status: &DeviceStatus,
+        baud_rate: Option<u32>,
+        f9p_serial: Option<String>,
+    ) -> Self {
         Self {
             path: port.path.clone(),
             vid: port.vid.map(|v| format!("{:04X}", v)),
             pid: port.pid.map(|p| format!("{:04X}", p)),
             serial_number: port.serial_number.clone(),
+            f9p_serial,
             status: status.to_string(),
             baud_rate,
         }
@@ -191,17 +199,16 @@ pub async fn list_devices(data: web::Data<AppState>) -> impl Responder {
         Ok(devices) => {
             let connected_device = manager.get_connected_device();
             let detected_baud_rate = manager.detected_baud_rate();
+            let f9p_serial = manager.f9p_serial().map(|s| s.to_string());
 
             let response: Vec<DeviceResponse> = devices
                 .iter()
                 .map(|d| {
-                    // 接続中のデバイスにはボーレートを含める
-                    let baud_rate = if connected_device.map(|c| c.port.path.as_str()) == Some(&d.port.path) {
-                        detected_baud_rate
-                    } else {
-                        None
-                    };
-                    DeviceResponse::from_port_info(&d.port, &d.status, baud_rate)
+                    // 接続中のデバイスにはボーレートとF9Pシリアルを含める
+                    let is_connected = connected_device.map(|c| c.port.path.as_str()) == Some(&d.port.path);
+                    let baud_rate = if is_connected { detected_baud_rate } else { None };
+                    let device_f9p_serial = if is_connected { f9p_serial.clone() } else { None };
+                    DeviceResponse::from_port_info(&d.port, &d.status, baud_rate, device_f9p_serial)
                 })
                 .collect();
 
@@ -245,11 +252,18 @@ pub async fn connect_device(
 
     // 自動検出で接続
     match manager.connect_auto_detect(&port_path) {
-        Ok(baud_rate) => HttpResponse::Ok().json(ConnectResponse {
-            path: port_path,
-            baud_rate,
-            message: format!("接続成功（ボーレート: {} bps）", baud_rate),
-        }),
+        Ok(baud_rate) => {
+            // F9Pシリアル番号を取得（失敗してもconnectは成功扱い）
+            if let Err(e) = manager.query_f9p_serial() {
+                log::warn!("F9Pシリアル番号の取得に失敗: {}", e);
+            }
+
+            HttpResponse::Ok().json(ConnectResponse {
+                path: port_path,
+                baud_rate,
+                message: format!("接続成功（ボーレート: {} bps）", baud_rate),
+            })
+        }
         Err(e) => {
             let code = match &e {
                 DeviceManagerError::PortNotFound(_) => "PORT_NOT_FOUND",

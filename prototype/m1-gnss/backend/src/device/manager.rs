@@ -23,6 +23,8 @@ pub enum DeviceManagerError {
     Timeout,
     /// IOエラー
     IoError(io::Error),
+    /// プロトコルエラー
+    ProtocolError(String),
 }
 
 impl std::fmt::Display for DeviceManagerError {
@@ -34,6 +36,7 @@ impl std::fmt::Display for DeviceManagerError {
             DeviceManagerError::NotConnected => write!(f, "未接続です"),
             DeviceManagerError::Timeout => write!(f, "タイムアウトしました"),
             DeviceManagerError::IoError(e) => write!(f, "IOエラー: {}", e),
+            DeviceManagerError::ProtocolError(msg) => write!(f, "プロトコルエラー: {}", msg),
         }
     }
 }
@@ -105,6 +108,8 @@ pub struct DeviceManager<P: SerialPortProvider> {
     baud_rate: u32,
     /// 自動検出で検出されたボーレート
     detected_baud_rate: Option<u32>,
+    /// F9Pチップのシリアル番号（UBX-SEC-UNIQIDで取得）
+    f9p_serial: Option<String>,
 }
 
 impl<P: SerialPortProvider> DeviceManager<P> {
@@ -117,6 +122,7 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             connected_device_index: None,
             baud_rate: DEFAULT_BAUD_RATE,
             detected_baud_rate: None,
+            f9p_serial: None,
         }
     }
 
@@ -129,6 +135,7 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             connected_device_index: None,
             baud_rate,
             detected_baud_rate: None,
+            f9p_serial: None,
         }
     }
 
@@ -284,8 +291,46 @@ impl<P: SerialPortProvider> DeviceManager<P> {
         self.connected_port = None;
         self.connected_device_index = None;
         self.detected_baud_rate = None;
+        self.f9p_serial = None;
 
         Ok(())
+    }
+
+    /// F9Pチップのシリアル番号を取得（UBX-SEC-UNIQID）
+    ///
+    /// 接続後に呼び出すことで、F9Pチップ固有のシリアル番号を取得する。
+    /// USBデバイスのシリアル番号とは異なる。
+    pub fn query_f9p_serial(&mut self) -> Result<String, DeviceManagerError> {
+        use crate::ubx::common::build_ubx_poll;
+        use crate::ubx::sec_uniqid;
+        use std::time::Duration;
+
+        // SEC-UNIQID poll コマンド: 0xB5 0x62 0x27 0x03 0x00 0x00 + checksum
+        let poll_request = build_ubx_poll(0x27, 0x03);
+
+        // 送信
+        self.send_ubx(&poll_request)?;
+
+        // 応答を待つ（500ms）
+        let response = self.receive_ubx(Duration::from_millis(500))?;
+
+        // パース
+        match sec_uniqid::parse(&response) {
+            Ok(result) => {
+                let serial = result.unique_id_hex();
+                self.f9p_serial = Some(serial.clone());
+                Ok(serial)
+            }
+            Err(e) => Err(DeviceManagerError::ProtocolError(format!(
+                "SEC-UNIQID parse error: {}",
+                e
+            ))),
+        }
+    }
+
+    /// F9Pチップのシリアル番号を取得（キャッシュ済み）
+    pub fn f9p_serial(&self) -> Option<&str> {
+        self.f9p_serial.as_deref()
     }
 
     /// 接続中のデバイスの状態を取得
