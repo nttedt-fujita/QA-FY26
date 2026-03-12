@@ -298,3 +298,31 @@
   - `~/.claude/rules/14-document-management.md` 新規作成
 
 ---
+
+## Session 129 (2026-03-12)
+
+**概要**: ドキュメント整理ルール化 + 出典チェック
+
+**実施内容**:
+1. **session-managementスキルの計画テンプレート更新**
+   - 「セッション計画の必須要素」セクション追加
+   - 「読むべきファイル」カラム必須化
+2. **ドキュメント管理ルール新規作成**
+   - `~/.claude/rules/14-document-management.md` 新規作成
+   - 出典必須、番号採番、即時処理、二重管理禁止
+3. **documentation-improvement-plan.md 削除**
+   - ルール化完了により不要に
+4. **gnss/ 配下の出典チェック**
+   - 35ファイル確認、全て出典情報あり
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| ~/.claude/skills/session-management/SKILL.md | 計画テンプレート追加 |
+| ~/.claude/rules/14-document-management.md | 新規作成 |
+| docs/documentation-improvement-plan.md | 削除 |
+
+**次セッション（Session 130）でやること**:
+- M1-GNSS実装の続き（屋外検査Phase 3: DB保存）
+
+---
