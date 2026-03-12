@@ -14,15 +14,26 @@ const CFG_CLASS: u8 = 0x06;
 const CFG_VALSET_ID: u8 = 0x8A;
 
 /// 設定レイヤー
+///
+/// u-blox F9P の設定レイヤーは以下の通り:
+/// - RAM: 即座に有効。電源OFFで消える
+/// - BBR: 電源再投入時に有効になる。バッテリバックアップで保持
+/// - Flash: 完全不揮発性
+///
+/// **重要**: BBRのみへの書き込みは電源再投入まで有効にならない。
+/// 即座に有効にしたい場合は `RamAndBbr` を使用すること。
 #[derive(Debug, Clone, Copy, PartialEq)]
 #[repr(u8)]
 pub enum Layer {
-    /// RAM（揮発性、電源OFFで消える）
+    /// RAM（揮発性、電源OFFで消える）- 即座に有効
     Ram = 0x01,
-    /// BBR（バッテリバックアップRAM）
+    /// BBR（バッテリバックアップRAM）- 電源再投入時に有効
     Bbr = 0x02,
     /// Flash（不揮発性）
     Flash = 0x04,
+    /// RAM + BBR（即座に有効 + 再起動後も有効）
+    /// Session 151: BBRのみでは即座に有効にならないため追加
+    RamAndBbr = 0x03,
 }
 
 /// CFG-UART1OUTPROT-NMEA のキーID
