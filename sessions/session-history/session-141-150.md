@@ -87,3 +87,33 @@
 - main.rsにAPI登録
 
 ---
+
+## Session 143 (2026-03-12)
+
+**概要**: 統合API実装（BE側完了）
+
+**実施内容**:
+1. REST API vs GraphQL 解説（RESTで十分と判断）
+2. 統合API (`GET /api/gnss-state`) 実装
+   - 6メッセージを順次取得
+   - 部分失敗対応（errors配列）
+   - マクロ `poll_and_parse!` で重複削減
+3. main.rsにAPI登録
+
+**決定事項**:
+| 項目 | 決定 |
+|------|------|
+| API方式 | REST（GraphQL不採用） |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [gnss_state_api.rs](../../prototype/m1-gnss/backend/src/web/gnss_state_api.rs) | 統合API実装 |
+
+**残った課題**:
+- FE側が未対応（個別API並行呼び出しでポーリング競合発生）
+
+**次セッション（Session 144）でやること**:
+- FE側を統合APIに移行
+
+---
