@@ -7,6 +7,7 @@ const tabs = [
   { href: "/lots", label: "ロット" },
   { href: "/devices", label: "装置" },
   { href: "/inspections", label: "検査" },
+  { href: "/settings", label: "設定" },
 ];
 
 /**
