@@ -115,8 +115,13 @@
 | [ntrip_api.rs](../../prototype/m1-gnss/backend/src/web/ntrip_api.rs) | テーブルテスト形式 + API統合テスト |
 | [settings/page.tsx](../../prototype/m1-gnss/frontend/src/app/settings/page.tsx) | NTRIP接続/切断ボタン追加 |
 
+**追加対応**:
+- NTRIPデバッグログ強化（タイムアウト、DNS解決ログ追加）
+- 接続テスト実施 → DNS解決成功、TCP接続タイムアウト
+- 原因: 会社ネットワークがポート2101をブロックの可能性
+
 **次セッション（Session 135）でやること**:
-- 実機でのNTRIP接続テスト
+- 別ネットワーク（モバイル回線等）でNTRIP接続テスト
 - または残タスクの優先度確認
 
 ---
