@@ -326,3 +326,36 @@
 - M1-GNSS実装の続き（屋外検査Phase 3: DB保存）
 
 ---
+
+## Session 130 (2026-03-12)
+
+**概要**: 屋外検査Phase 3（DB保存）実装完了
+
+**実施内容**:
+1. **バックエンド実装**
+   - `OutdoorInspectionResult` 型定義追加
+   - `outdoor_inspection_results` テーブル作成＋CRUD
+   - `POST/GET /api/outdoor-inspection-results` API追加
+   - 5テスト追加、209テスト全パス
+2. **フロントエンド実装**
+   - `useOutdoorInspection` に保存機能追加（saveResult, saveState）
+   - 屋外検査ページに保存ボタン追加
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [outdoor_inspection_api.rs](../../prototype/m1-gnss/backend/src/web/outdoor_inspection_api.rs) | 屋外検査API |
+| [session130/session-summary.md](../session130/session-summary.md) | セッションサマリー |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| repository/types.rs | OutdoorInspectionResult追加 |
+| repository/sqlite.rs | テーブル＋CRUD＋テスト |
+| hooks/useOutdoorInspection.ts | 保存機能追加 |
+| inspections/outdoor/page.tsx | 保存ボタン追加 |
+
+**次セッション（Session 131）でやること**:
+- Phase 4: 検証・報告準備（u-center照合、報告資料作成）
+
+---

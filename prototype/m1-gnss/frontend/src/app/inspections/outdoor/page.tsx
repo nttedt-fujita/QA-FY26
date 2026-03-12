@@ -285,9 +285,45 @@ export default function OutdoorInspectionsPage() {
               </div>
             )}
 
-            {/* サンプル数 */}
-            <div className="mt-4 text-sm text-gray-500">
-              サンプル数: {inspection.result.sample_count}
+            {/* サンプル数と保存ボタン */}
+            <div className="mt-4 flex items-center justify-between">
+              <div className="text-sm text-gray-500">
+                サンプル数: {inspection.result.sample_count}
+              </div>
+              <div className="flex items-center gap-4">
+                {/* 保存状態表示 */}
+                {inspection.saveState === "saved" && (
+                  <span className="text-sm text-green-600">
+                    ✓ 保存済み (ID: {inspection.savedId})
+                  </span>
+                )}
+                {inspection.saveState === "error" && (
+                  <span className="text-sm text-red-600">
+                    × {inspection.saveError}
+                  </span>
+                )}
+
+                {/* 保存ボタン */}
+                <button
+                  onClick={() =>
+                    inspection.saveResult(
+                      undefined, // device_idは未対応（将来的にDB装置と紐付け）
+                      selectedLotId ?? undefined
+                    )
+                  }
+                  disabled={
+                    inspection.saveState === "saving" ||
+                    inspection.saveState === "saved"
+                  }
+                  className="rounded bg-[#2e75b6] px-4 py-2 text-sm font-medium text-white hover:bg-[#245d92] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {inspection.saveState === "saving"
+                    ? "保存中..."
+                    : inspection.saveState === "saved"
+                    ? "保存済み"
+                    : "結果を保存"}
+                </button>
+              </div>
             </div>
           </div>
         )}

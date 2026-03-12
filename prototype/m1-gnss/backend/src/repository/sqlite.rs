@@ -6,7 +6,7 @@
 use rusqlite::{Connection, params};
 use super::{
     Device, IndoorInspection, InspectionItemName, InspectionItemResult,
-    Lot, RepositoryError, Verdict,
+    Lot, OutdoorInspectionResult, RepositoryError, Verdict,
 };
 
 /// SQLiteリポジトリ
@@ -98,6 +98,42 @@ impl SqliteRepository {
                 created_at TEXT NOT NULL DEFAULT (datetime('now')),
                 FOREIGN KEY (inspection_id) REFERENCES indoor_inspections(id)
             )",
+            [],
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        // outdoor_inspection_results（屋外検査結果）
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS outdoor_inspection_results (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                device_id INTEGER REFERENCES devices(id),
+                lot_id INTEGER REFERENCES lots(id),
+                inspected_at TEXT NOT NULL,
+                duration_sec INTEGER NOT NULL,
+                sample_count INTEGER NOT NULL,
+                rtk_fix_rate REAL NOT NULL,
+                rtk_fix_time_ms INTEGER,
+                l2_reception_rate REAL NOT NULL,
+                l1_min_cno REAL NOT NULL,
+                is_pass INTEGER NOT NULL,
+                l1_cno_pass INTEGER NOT NULL,
+                l2_rate_pass INTEGER NOT NULL,
+                rtk_fix_time_pass INTEGER NOT NULL,
+                rtk_fix_rate_pass INTEGER NOT NULL,
+                failure_reasons TEXT,
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+            )",
+            [],
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        // インデックス追加（検索高速化）
+        self.conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_outdoor_results_device ON outdoor_inspection_results(device_id)",
+            [],
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        self.conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_outdoor_results_lot ON outdoor_inspection_results(lot_id)",
             [],
         ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
 
@@ -461,6 +497,154 @@ impl SqliteRepository {
         }
         Ok(result)
     }
+
+    // ===========================================
+    // OutdoorInspectionResult CRUD
+    // ===========================================
+
+    /// 屋外検査結果を保存
+    pub fn insert_outdoor_inspection_result(&self, result: &OutdoorInspectionResult) -> Result<i64, RepositoryError> {
+        self.conn.execute(
+            "INSERT INTO outdoor_inspection_results (
+                device_id, lot_id, inspected_at, duration_sec, sample_count,
+                rtk_fix_rate, rtk_fix_time_ms, l2_reception_rate, l1_min_cno,
+                is_pass, l1_cno_pass, l2_rate_pass, rtk_fix_time_pass, rtk_fix_rate_pass,
+                failure_reasons
+            ) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15)",
+            params![
+                result.device_id,
+                result.lot_id,
+                result.inspected_at,
+                result.duration_sec,
+                result.sample_count,
+                result.rtk_fix_rate,
+                result.rtk_fix_time_ms,
+                result.l2_reception_rate,
+                result.l1_min_cno,
+                result.is_pass as i32,
+                result.l1_cno_pass as i32,
+                result.l2_rate_pass as i32,
+                result.rtk_fix_time_pass as i32,
+                result.rtk_fix_rate_pass as i32,
+                result.failure_reasons,
+            ],
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        Ok(self.conn.last_insert_rowid())
+    }
+
+    /// 屋外検査結果をIDで取得
+    pub fn get_outdoor_inspection_result(&self, id: i64) -> Result<OutdoorInspectionResult, RepositoryError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT id, device_id, lot_id, inspected_at, duration_sec, sample_count,
+                    rtk_fix_rate, rtk_fix_time_ms, l2_reception_rate, l1_min_cno,
+                    is_pass, l1_cno_pass, l2_rate_pass, rtk_fix_time_pass, rtk_fix_rate_pass,
+                    failure_reasons
+             FROM outdoor_inspection_results WHERE id = ?1"
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        let result = stmt.query_row([id], |row| {
+            Ok(OutdoorInspectionResult {
+                id: Some(row.get(0)?),
+                device_id: row.get(1)?,
+                lot_id: row.get(2)?,
+                inspected_at: row.get(3)?,
+                duration_sec: row.get(4)?,
+                sample_count: row.get(5)?,
+                rtk_fix_rate: row.get(6)?,
+                rtk_fix_time_ms: row.get(7)?,
+                l2_reception_rate: row.get(8)?,
+                l1_min_cno: row.get(9)?,
+                is_pass: row.get::<_, i32>(10)? != 0,
+                l1_cno_pass: row.get::<_, i32>(11)? != 0,
+                l2_rate_pass: row.get::<_, i32>(12)? != 0,
+                rtk_fix_time_pass: row.get::<_, i32>(13)? != 0,
+                rtk_fix_rate_pass: row.get::<_, i32>(14)? != 0,
+                failure_reasons: row.get(15)?,
+            })
+        }).map_err(|e| match e {
+            rusqlite::Error::QueryReturnedNoRows => RepositoryError::NotFound(format!("OutdoorInspectionResult id={}", id)),
+            _ => RepositoryError::Sql(e.to_string()),
+        })?;
+
+        Ok(result)
+    }
+
+    /// 装置IDで屋外検査結果一覧を取得
+    pub fn get_outdoor_inspection_results_by_device(&self, device_id: i64) -> Result<Vec<OutdoorInspectionResult>, RepositoryError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT id, device_id, lot_id, inspected_at, duration_sec, sample_count,
+                    rtk_fix_rate, rtk_fix_time_ms, l2_reception_rate, l1_min_cno,
+                    is_pass, l1_cno_pass, l2_rate_pass, rtk_fix_time_pass, rtk_fix_rate_pass,
+                    failure_reasons
+             FROM outdoor_inspection_results WHERE device_id = ?1 ORDER BY inspected_at DESC"
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        let rows = stmt.query_map([device_id], |row| {
+            Ok(OutdoorInspectionResult {
+                id: Some(row.get(0)?),
+                device_id: row.get(1)?,
+                lot_id: row.get(2)?,
+                inspected_at: row.get(3)?,
+                duration_sec: row.get(4)?,
+                sample_count: row.get(5)?,
+                rtk_fix_rate: row.get(6)?,
+                rtk_fix_time_ms: row.get(7)?,
+                l2_reception_rate: row.get(8)?,
+                l1_min_cno: row.get(9)?,
+                is_pass: row.get::<_, i32>(10)? != 0,
+                l1_cno_pass: row.get::<_, i32>(11)? != 0,
+                l2_rate_pass: row.get::<_, i32>(12)? != 0,
+                rtk_fix_time_pass: row.get::<_, i32>(13)? != 0,
+                rtk_fix_rate_pass: row.get::<_, i32>(14)? != 0,
+                failure_reasons: row.get(15)?,
+            })
+        }).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        let mut results = Vec::new();
+        for row in rows {
+            results.push(row.map_err(|e| RepositoryError::Sql(e.to_string()))?);
+        }
+        Ok(results)
+    }
+
+    /// 全屋外検査結果を取得（最新順）
+    pub fn get_all_outdoor_inspection_results(&self) -> Result<Vec<OutdoorInspectionResult>, RepositoryError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT id, device_id, lot_id, inspected_at, duration_sec, sample_count,
+                    rtk_fix_rate, rtk_fix_time_ms, l2_reception_rate, l1_min_cno,
+                    is_pass, l1_cno_pass, l2_rate_pass, rtk_fix_time_pass, rtk_fix_rate_pass,
+                    failure_reasons
+             FROM outdoor_inspection_results ORDER BY inspected_at DESC"
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        let rows = stmt.query_map([], |row| {
+            Ok(OutdoorInspectionResult {
+                id: Some(row.get(0)?),
+                device_id: row.get(1)?,
+                lot_id: row.get(2)?,
+                inspected_at: row.get(3)?,
+                duration_sec: row.get(4)?,
+                sample_count: row.get(5)?,
+                rtk_fix_rate: row.get(6)?,
+                rtk_fix_time_ms: row.get(7)?,
+                l2_reception_rate: row.get(8)?,
+                l1_min_cno: row.get(9)?,
+                is_pass: row.get::<_, i32>(10)? != 0,
+                l1_cno_pass: row.get::<_, i32>(11)? != 0,
+                l2_rate_pass: row.get::<_, i32>(12)? != 0,
+                rtk_fix_time_pass: row.get::<_, i32>(13)? != 0,
+                rtk_fix_rate_pass: row.get::<_, i32>(14)? != 0,
+                failure_reasons: row.get(15)?,
+            })
+        }).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        let mut results = Vec::new();
+        for row in rows {
+            results.push(row.map_err(|e| RepositoryError::Sql(e.to_string()))?);
+        }
+        Ok(results)
+    }
 }
 
 #[cfg(test)]
@@ -750,5 +934,130 @@ mod tests {
 
         let results = repo.get_item_results_by_inspection(inspection_id).unwrap();
         assert_eq!(results.len(), 5);
+    }
+
+    // ===========================================
+    // OutdoorInspectionResult CRUDテスト
+    // ===========================================
+
+    #[test]
+    fn test_outdoor_result_insert_and_get() {
+        let repo = SqliteRepository::in_memory().unwrap();
+
+        let result = OutdoorInspectionResult::new(
+            "2026-03-12T10:30:00+09:00".to_string(),
+            30,
+            30,
+        )
+        .with_metrics(0.983, Some(8200), 0.68, 42.0)
+        .with_judgment(true, true, true, true, true, None);
+
+        let id = repo.insert_outdoor_inspection_result(&result).unwrap();
+        assert!(id > 0);
+
+        let loaded = repo.get_outdoor_inspection_result(id).unwrap();
+        assert_eq!(loaded.inspected_at, "2026-03-12T10:30:00+09:00");
+        assert_eq!(loaded.duration_sec, 30);
+        assert_eq!(loaded.sample_count, 30);
+        assert!((loaded.rtk_fix_rate - 0.983).abs() < 0.001);
+        assert_eq!(loaded.rtk_fix_time_ms, Some(8200));
+        assert!((loaded.l2_reception_rate - 0.68).abs() < 0.001);
+        assert!((loaded.l1_min_cno - 42.0).abs() < 0.001);
+        assert!(loaded.is_pass);
+        assert!(loaded.l1_cno_pass);
+        assert!(loaded.l2_rate_pass);
+        assert!(loaded.rtk_fix_time_pass);
+        assert!(loaded.rtk_fix_rate_pass);
+    }
+
+    #[test]
+    fn test_outdoor_result_with_device_and_lot() {
+        let repo = SqliteRepository::in_memory().unwrap();
+
+        // ロット・装置を作成
+        let lot_id = repo.insert_lot(&Lot::new("LOT-001".to_string())).unwrap();
+        let device_id = repo.insert_device(&Device::new("DEV-001".to_string()).with_lot(lot_id)).unwrap();
+
+        let result = OutdoorInspectionResult::new(
+            "2026-03-12T10:30:00+09:00".to_string(),
+            30,
+            30,
+        )
+        .with_device(device_id)
+        .with_lot(lot_id)
+        .with_metrics(0.80, None, 0.40, 25.0)
+        .with_judgment(
+            false,
+            false, // L1 < 30
+            false, // L2 < 50%
+            true,  // RTK FIX時間（FIXしなかったがタイムアウトしていない）
+            false, // RTK FIX率 < 95%
+            Some("[\"L1受信感度不足\",\"L2受信率不足\",\"RTK FIX率不足\"]".to_string()),
+        );
+
+        let id = repo.insert_outdoor_inspection_result(&result).unwrap();
+        let loaded = repo.get_outdoor_inspection_result(id).unwrap();
+
+        assert_eq!(loaded.device_id, Some(device_id));
+        assert_eq!(loaded.lot_id, Some(lot_id));
+        assert!(!loaded.is_pass);
+        assert!(!loaded.l1_cno_pass);
+        assert!(!loaded.l2_rate_pass);
+        assert!(loaded.rtk_fix_time_pass);
+        assert!(!loaded.rtk_fix_rate_pass);
+        assert!(loaded.failure_reasons.is_some());
+    }
+
+    #[test]
+    fn test_outdoor_result_get_by_device() {
+        let repo = SqliteRepository::in_memory().unwrap();
+
+        let device_id = repo.insert_device(&Device::new("DEV-001".to_string())).unwrap();
+
+        // 複数の検査結果を追加
+        for i in 0..3 {
+            let result = OutdoorInspectionResult::new(
+                format!("2026-03-12T10:{}:00+09:00", 30 + i),
+                30,
+                30,
+            )
+            .with_device(device_id)
+            .with_metrics(0.95, Some(5000), 0.60, 35.0)
+            .with_judgment(true, true, true, true, true, None);
+
+            repo.insert_outdoor_inspection_result(&result).unwrap();
+        }
+
+        let results = repo.get_outdoor_inspection_results_by_device(device_id).unwrap();
+        assert_eq!(results.len(), 3);
+    }
+
+    #[test]
+    fn test_outdoor_result_get_all() {
+        let repo = SqliteRepository::in_memory().unwrap();
+
+        // 2件追加
+        for i in 0..2 {
+            let result = OutdoorInspectionResult::new(
+                format!("2026-03-12T10:{}:00+09:00", 30 + i),
+                30,
+                30,
+            )
+            .with_metrics(0.95, Some(5000), 0.60, 35.0)
+            .with_judgment(true, true, true, true, true, None);
+
+            repo.insert_outdoor_inspection_result(&result).unwrap();
+        }
+
+        let all_results = repo.get_all_outdoor_inspection_results().unwrap();
+        assert_eq!(all_results.len(), 2);
+    }
+
+    #[test]
+    fn test_outdoor_result_not_found() {
+        let repo = SqliteRepository::in_memory().unwrap();
+
+        let result = repo.get_outdoor_inspection_result(999);
+        assert!(matches!(result, Err(RepositoryError::NotFound(_))));
     }
 }
