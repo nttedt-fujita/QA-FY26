@@ -204,3 +204,37 @@
 - MON-SPAN API/FE連携、または屋内/屋外検査ページ分離
 
 ---
+
+## Session 117 (2026-03-12)
+
+**概要**: MON-SPAN API実装 + 仕様確認プロセス問題発覚
+
+**実施内容**:
+1. **MON-SPAN API実装**
+   - `GET /api/mon-span` エンドポイント追加
+   - NAV-SIG APIと同じパターンで実装
+   - 6テスト全パス、全体186テストパス
+2. **問題発覚：仕様書を読まずに実装**
+   - PDFから抽出した仕様書（ubx-mon-messages.md）を確認せずに実装
+   - 既存コードのパターンを真似ただけだった
+   - Session 116も同様のアプローチだった可能性
+3. **仕様書との照合（事後確認）**
+   - ブロック構造、周波数計算式: 一致
+   - 結果的に正しかったが、プロセスに問題あり
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [mon_span_api.rs](../../prototype/m1-gnss/backend/src/web/mon_span_api.rs) | MON-SPAN API |
+| [session117/mon-span-api-design.md](../session117/mon-span-api-design.md) | API設計 |
+| [session117/session-summary.md](../session117/session-summary.md) | セッションサマリー |
+| [session118/session-plan.md](../session118/session-plan.md) | 次セッション計画 |
+
+**問題と対処**:
+- 「推測で進めない」ルール違反
+- 今後: 実装前に仕様書を必ず読む、読んだファイルを記録する
+
+**次セッション（Session 118）でやること**:
+- MON-SPAN FE実装、または屋内/屋外検査ページ分離
+
+---
