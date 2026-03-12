@@ -233,3 +233,40 @@
 - シリアル番号定義のドキュメント整備
 
 ---
+
+## Session 138 (2026-03-12)
+
+**概要**: 自動保存実装 + GGA正式実装（F9P位置を使用）
+
+**実施内容**:
+1. **自動保存の実装**
+   - 検査完了時に`useEffect`で自動保存
+   - 手動保存ボタン削除
+2. **GGA正式実装**
+   - AppStateに`current_position`フィールド追加
+   - NAV-STATUS APIでNAV-PVTも取得し位置更新
+   - NTRIP APIがcurrent_positionを参照してGGA生成
+3. **IOエラー調査（方針決定）**
+   - NTRIP仕様書確認（21-ntrip-protocol-spec.md）
+   - 固定位置問題 → 今回修正済み
+   - シリアルポート競合 → 次回実機確認で検証
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| outdoor/page.tsx | 自動保存useEffect追加、手動ボタン削除 |
+| device_api.rs | CurrentPosition構造体、AppStateにcurrent_position追加 |
+| nav_status_api.rs | NAV-PVT取得・位置更新処理追加 |
+| ntrip_api.rs | generate_gga_sentence(lat, lon)に変更 |
+| manager.rs | write_dataにエラーログ追加 |
+
+**残タスク**:
+1. IOエラー調査（次回実機確認）
+2. NTRIPライフサイクル整理
+3. u-center照合（最後）
+
+**次セッション（Session 139）でやること**:
+- 実機でGGA正式実装の動作確認
+- IOエラーがまだ発生するか確認
+
+---

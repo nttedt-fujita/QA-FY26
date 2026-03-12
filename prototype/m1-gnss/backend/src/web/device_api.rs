@@ -155,10 +155,21 @@ impl crate::device::manager::SerialPort for RealSerialPort {
     }
 }
 
+/// 現在位置（緯度、経度）
+#[derive(Debug, Clone, Copy, Default)]
+pub struct CurrentPosition {
+    pub lat: f64,
+    pub lon: f64,
+    /// 有効フラグ（NAV-PVTが取得できた場合にtrue）
+    pub valid: bool,
+}
+
 /// APIで共有するアプリケーション状態
 pub struct AppState {
     pub device_manager: Mutex<DeviceManager<RealSerialPortProvider>>,
     pub repository: Mutex<SqliteRepository>,
+    /// 現在位置（NTRIP GGA送信用）
+    pub current_position: Mutex<CurrentPosition>,
 }
 
 impl AppState {
@@ -169,6 +180,7 @@ impl AppState {
         Self {
             device_manager: Mutex::new(DeviceManager::new(RealSerialPortProvider)),
             repository: Mutex::new(repo),
+            current_position: Mutex::new(CurrentPosition::default()),
         }
     }
 }

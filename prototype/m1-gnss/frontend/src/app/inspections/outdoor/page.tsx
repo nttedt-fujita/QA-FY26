@@ -72,6 +72,27 @@ export default function OutdoorInspectionsPage() {
     inspection.reset();
   };
 
+  // 検査完了時に自動保存
+  useEffect(() => {
+    if (
+      inspection.state === "completed" &&
+      inspection.saveState === "idle" &&
+      inspection.result
+    ) {
+      inspection.saveResult(
+        connectedDevice?.f9p_serial ?? undefined,
+        selectedLotId ?? undefined
+      );
+    }
+  }, [
+    inspection.state,
+    inspection.saveState,
+    inspection.result,
+    inspection.saveResult,
+    connectedDevice?.f9p_serial,
+    selectedLotId,
+  ]);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ページタイトル */}
@@ -285,13 +306,16 @@ export default function OutdoorInspectionsPage() {
               </div>
             )}
 
-            {/* サンプル数と保存ボタン */}
+            {/* サンプル数と保存状態 */}
             <div className="mt-4 flex items-center justify-between">
               <div className="text-sm text-gray-500">
                 サンプル数: {inspection.result.sample_count}
               </div>
               <div className="flex items-center gap-4">
-                {/* 保存状態表示 */}
+                {/* 保存状態表示（自動保存） */}
+                {inspection.saveState === "saving" && (
+                  <span className="text-sm text-gray-600">保存中...</span>
+                )}
                 {inspection.saveState === "saved" && (
                   <span className="text-sm text-green-600">
                     ✓ 保存済み (ID: {inspection.savedId})
@@ -302,27 +326,6 @@ export default function OutdoorInspectionsPage() {
                     × {inspection.saveError}
                   </span>
                 )}
-
-                {/* 保存ボタン */}
-                <button
-                  onClick={() =>
-                    inspection.saveResult(
-                      connectedDevice?.f9p_serial ?? undefined,
-                      selectedLotId ?? undefined
-                    )
-                  }
-                  disabled={
-                    inspection.saveState === "saving" ||
-                    inspection.saveState === "saved"
-                  }
-                  className="rounded bg-[#2e75b6] px-4 py-2 text-sm font-medium text-white hover:bg-[#245d92] disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  {inspection.saveState === "saving"
-                    ? "保存中..."
-                    : inspection.saveState === "saved"
-                    ? "保存済み"
-                    : "結果を保存"}
-                </button>
               </div>
             </div>
           </div>

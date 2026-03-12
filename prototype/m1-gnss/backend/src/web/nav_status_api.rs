@@ -7,6 +7,7 @@ use serde::Serialize;
 use std::time::Duration;
 
 use crate::ubx::nav_status;
+use crate::ubx::nav_pvt;
 use super::device_api::{AppState, ErrorResponse};
 
 // ===========================================
@@ -71,6 +72,30 @@ fn calculate_checksum(data: &[u8]) -> (u8, u8) {
         ck_b = ck_b.wrapping_add(ck_a);
     }
     (ck_a, ck_b)
+}
+
+/// NAV-PVT poll リクエストを構築
+fn build_nav_pvt_poll() -> Vec<u8> {
+    // NAV-PVT poll: class=0x01, id=0x07, payload=empty
+    let class: u8 = 0x01;
+    let id: u8 = 0x07;
+    let payload: &[u8] = &[];
+    let len = payload.len() as u16;
+
+    let mut frame = vec![
+        0xB5, 0x62, // sync
+        class, id,
+        (len & 0xFF) as u8,
+        (len >> 8) as u8,
+    ];
+    frame.extend_from_slice(payload);
+
+    // チェックサム計算
+    let (ck_a, ck_b) = calculate_checksum(&frame[2..]);
+    frame.push(ck_a);
+    frame.push(ck_b);
+
+    frame
 }
 
 /// GET /api/nav-status - NAV-STATUS取得
@@ -140,6 +165,28 @@ pub async fn get_nav_status(data: web::Data<AppState>) -> impl Responder {
             });
         }
     };
+
+    // NAV-PVTも取得して位置を更新（NTRIP GGA送信用）
+    // エラーは無視（位置更新は任意）
+    if let Ok(()) = manager.drain_buffer() {
+        let poll_pvt = build_nav_pvt_poll();
+        if manager.send_ubx(&poll_pvt).is_ok() {
+            std::thread::sleep(Duration::from_millis(50));
+            if let Ok(pvt_response) = manager.receive_ubx(Duration::from_millis(500)) {
+                if let Ok(pvt) = nav_pvt::parse(&pvt_response) {
+                    // 位置が有効な場合のみ更新
+                    if pvt.fix_type >= 2 {
+                        if let Ok(mut pos) = data.current_position.lock() {
+                            pos.lat = pvt.lat;
+                            pos.lon = pvt.lon;
+                            pos.valid = true;
+                            log::debug!("[NAV-STATUS] 位置更新: lat={}, lon={}", pvt.lat, pvt.lon);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     // レスポンス構築
     HttpResponse::Ok().json(NavStatusResponse {
