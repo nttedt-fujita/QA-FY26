@@ -7,7 +7,7 @@ use actix_web::{web, HttpResponse, Responder};
 use serde::Serialize;
 
 use crate::ubx::{nav_pvt, nav_sat, nav_sig, nav_status, mon_span, mon_rf};
-use super::device_api::{AppState, ErrorResponse};
+use super::device_api::{AppState, ErrorResponse, send_disable_nmea_output};
 use super::nav_sat_api::{NavSatResponse, SatelliteInfoResponse, SatelliteStatsResponse, GnssCountsResponse};
 use super::nav_sig_api::{NavSigResponse, SignalInfoResponse, SignalStatsResponse};
 use super::mon_span_api::{MonSpanResponse, SpanBlockResponse};
@@ -159,6 +159,12 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
             error: "装置が接続されていません".to_string(),
             code: "DEVICE_NOT_CONNECTED".to_string(),
         });
+    }
+
+    // NMEA出力を無効化（屋外検査用）
+    // Session 147: 屋内検査終了後にNMEAがONに戻っている場合に備えて毎回送信
+    if let Err(e) = send_disable_nmea_output(&mut manager) {
+        tracing::warn!("NMEA OFF送信失敗（続行）: {}", e);
     }
 
     let mut response = GnssStateResponse {

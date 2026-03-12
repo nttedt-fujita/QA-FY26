@@ -405,7 +405,8 @@ fn send_disable_periodic_output<P: SerialPortProvider>(
 ///
 /// CFG-VALSETを送信して、UART1のNMEA出力を停止する
 /// Session 146: NMEAデータがUBXポーリングを妨害する問題を修正
-fn send_disable_nmea_output<P: SerialPortProvider>(
+/// Session 147: 統合APIからも呼び出せるようpubに変更
+pub fn send_disable_nmea_output<P: SerialPortProvider>(
     manager: &mut DeviceManager<P>,
 ) -> Result<(), DeviceManagerError> {
     // NMEA出力を無効化
