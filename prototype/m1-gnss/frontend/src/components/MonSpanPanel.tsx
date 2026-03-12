@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { MonSpanResponse, SpanBlock, getMonSpan } from "@/lib/api";
 
 // PGAゲインの基準値（dB）
@@ -82,6 +82,9 @@ export function MonSpanPanel({
     }
   }, [enabled]);
 
+  // AbortController参照
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   // 初回取得 + ポーリング
   useEffect(() => {
     if (!enabled) {
@@ -90,9 +93,15 @@ export function MonSpanPanel({
       return;
     }
 
+    abortControllerRef.current = new AbortController();
+
     fetchData();
     const interval = setInterval(fetchData, pollIntervalMs);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      abortControllerRef.current?.abort();
+    };
   }, [enabled, pollIntervalMs, fetchData]);
 
   // 全ブロックのPGA判定

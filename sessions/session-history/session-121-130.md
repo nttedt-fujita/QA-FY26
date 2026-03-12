@@ -36,3 +36,37 @@
 - 屋内/屋外検査ページ分離
 
 ---
+
+## Session 122 (2026-03-12)
+
+**概要**: TDDレビュー再実施 → 屋内/屋外検査ページ分離
+
+**実施内容**:
+1. **TDDレビュー再実施**
+   - TDDスキル・テストスタイルルールを読んでから実施
+   - nav_status.rs、nav_sat.rs: **良好**（テーブルテスト、should_succeed準拠）
+   - nav_status_api.rs: **許容**（統合テスト）
+2. **屋内/屋外検査ページ分離**
+   - `/inspections` → 検査種別選択
+   - `/inspections/indoor` → 屋内検査（5項目）
+   - `/inspections/outdoor` → 屋外検査（L2受信率、RTK FIX、MON-SPAN、スカイプロット）
+3. **ポーリングバグ修正**
+   - 各パネルにAbortController追加
+   - 屋外検査は「検査開始→指定時間→自動停止」に変更
+4. **ドキュメント化**
+   - TDDレビュー結果
+   - Next.js/Rustアーキテクチャ解説
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [inspections/indoor/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/indoor/page.tsx) | 屋内検査ページ |
+| [inspections/outdoor/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/outdoor/page.tsx) | 屋外検査ページ |
+| [tdd-review-result.md](../session122/tdd-review-result.md) | TDDレビュー結果 |
+| [architecture-nextjs-rust.md](../../docs/missions/m1-sensor-evaluation/gnss/architecture-nextjs-rust.md) | Next.js/Rustアーキテクチャ解説 |
+
+**次セッション（Session 123）でやること**:
+- 全体の作業整理・優先順位決め
+- RTK実装の計画
+
+---

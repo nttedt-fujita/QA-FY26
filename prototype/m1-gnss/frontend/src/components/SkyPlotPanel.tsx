@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { NavSatResponse, SatelliteInfo, getNavSat } from "@/lib/api";
 
 /**
@@ -206,6 +206,9 @@ export function SkyPlotPanel({
     }
   }, [enabled]);
 
+  // AbortController参照
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   // 初回取得 + ポーリング
   useEffect(() => {
     if (!enabled) {
@@ -214,9 +217,15 @@ export function SkyPlotPanel({
       return;
     }
 
+    abortControllerRef.current = new AbortController();
+
     fetchData();
     const interval = setInterval(fetchData, pollIntervalMs);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      abortControllerRef.current?.abort();
+    };
   }, [enabled, pollIntervalMs, fetchData]);
 
   if (!enabled) {

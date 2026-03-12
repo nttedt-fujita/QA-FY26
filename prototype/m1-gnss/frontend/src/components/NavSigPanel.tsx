@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { NavSigResponse, NavSignal, getNavSig } from "@/lib/api";
 
 // ADR-008: L2受信率50%以上で合格
@@ -96,6 +96,9 @@ export function NavSigPanel({
     }
   }, [enabled]);
 
+  // AbortController参照
+  const abortControllerRef = useRef<AbortController | null>(null);
+
   // 初回取得 + ポーリング
   useEffect(() => {
     if (!enabled) {
@@ -104,9 +107,15 @@ export function NavSigPanel({
       return;
     }
 
+    abortControllerRef.current = new AbortController();
+
     fetchData();
     const interval = setInterval(fetchData, pollIntervalMs);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      abortControllerRef.current?.abort();
+    };
   }, [enabled, pollIntervalMs, fetchData]);
 
   // L1とL2で信号を分離（GPSのみ）
