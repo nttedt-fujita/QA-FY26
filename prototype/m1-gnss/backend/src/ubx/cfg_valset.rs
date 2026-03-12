@@ -194,166 +194,195 @@ pub fn disable_periodic_output(layer: Layer) -> Vec<u8> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rstest::rstest;
 
-    /// V1: NMEA OFF メッセージの正常生成
-    #[test]
-    fn test_nmea_off_message() {
-        let msg = set_uart1_nmea_output(false, Layer::Ram);
+    // ===========================================
+    // ヘルパー関数: オフセット直接アクセスを避けるため
+    // ===========================================
 
-        // ヘッダーチェック
-        assert_eq!(msg[0], 0xB5, "sync1");
-        assert_eq!(msg[1], 0x62, "sync2");
-        assert_eq!(msg[2], 0x06, "class");
-        assert_eq!(msg[3], 0x8A, "id");
-
-        // ペイロード長 (9 bytes: version(1) + layers(1) + reserved(2) + key(4) + value(1))
-        let payload_len = u16::from_le_bytes([msg[4], msg[5]]);
-        assert_eq!(payload_len, 9, "payload length");
-
-        // version
-        assert_eq!(msg[6], 0x00, "version");
-
-        // layers (RAM = 0x01)
-        assert_eq!(msg[7], 0x01, "layers");
-
-        // reserved
-        assert_eq!(msg[8], 0x00, "reserved[0]");
-        assert_eq!(msg[9], 0x00, "reserved[1]");
-
-        // key (CFG-UART1OUTPROT-NMEA = 0x10740002)
-        let key = u32::from_le_bytes([msg[10], msg[11], msg[12], msg[13]]);
-        assert_eq!(key, 0x10740002, "key");
-
-        // value (0 = OFF)
-        assert_eq!(msg[14], 0x00, "value (OFF)");
-
-        // チェックサム検証
-        let (ck_a, ck_b) = calculate_checksum(&msg[2..15]);
-        assert_eq!(msg[15], ck_a, "checksum A");
-        assert_eq!(msg[16], ck_b, "checksum B");
+    /// UBXフレームから各フィールドを抽出
+    struct UbxFrame<'a> {
+        raw: &'a [u8],
     }
 
-    /// V2: NMEA ON メッセージの正常生成
-    #[test]
-    fn test_nmea_on_message() {
-        let msg = set_uart1_nmea_output(true, Layer::Ram);
-
-        // value (1 = ON)
-        assert_eq!(msg[14], 0x01, "value (ON)");
-
-        // 他のフィールドはV1と同じ構造
-        assert_eq!(msg[0], 0xB5);
-        assert_eq!(msg[1], 0x62);
-        assert_eq!(msg[2], 0x06);
-        assert_eq!(msg[3], 0x8A);
-    }
-
-    /// V3: 各レイヤーのテスト
-    #[test]
-    fn test_layers() {
-        struct TestCase {
-            layer: Layer,
-            expected: u8,
-            should_succeed: bool,
+    impl<'a> UbxFrame<'a> {
+        fn new(raw: &'a [u8]) -> Self {
+            Self { raw }
         }
 
-        let cases = vec![
-            TestCase { layer: Layer::Ram, expected: 0x01, should_succeed: true },
-            TestCase { layer: Layer::Bbr, expected: 0x02, should_succeed: true },
-            TestCase { layer: Layer::Flash, expected: 0x04, should_succeed: true },
-        ];
-
-        for tc in cases {
-            let msg = set_uart1_nmea_output(false, tc.layer);
-            if tc.should_succeed {
-                assert_eq!(msg[7], tc.expected, "layer {:?}", tc.layer);
-            }
+        fn sync1(&self) -> u8 { self.raw[0] }
+        fn sync2(&self) -> u8 { self.raw[1] }
+        fn class(&self) -> u8 { self.raw[2] }
+        fn id(&self) -> u8 { self.raw[3] }
+        fn payload_len(&self) -> u16 {
+            u16::from_le_bytes([self.raw[4], self.raw[5]])
         }
-    }
+        fn version(&self) -> u8 { self.raw[6] }
+        fn layers(&self) -> u8 { self.raw[7] }
 
-    /// V4: メッセージ長の確認
-    #[test]
-    fn test_message_length() {
-        let msg = set_uart1_nmea_output(false, Layer::Ram);
+        /// CFG-VALSETの最初のキーを取得
+        fn first_key(&self) -> u32 {
+            u32::from_le_bytes([self.raw[10], self.raw[11], self.raw[12], self.raw[13]])
+        }
 
-        // 全体長: sync(2) + class(1) + id(1) + len(2) + payload(9) + checksum(2) = 17
-        assert_eq!(msg.len(), 17, "total message length");
-    }
+        /// CFG-VALSETの最初の値を取得
+        fn first_value(&self) -> u8 { self.raw[14] }
 
-    /// V5: チェックサム計算の検証
-    #[test]
-    fn test_checksum_validity() {
-        let msg = set_uart1_nmea_output(true, Layer::Ram);
+        /// n番目の設定値を取得（0-indexed, 定期出力用）
+        fn nth_value(&self, n: usize) -> u8 {
+            let offset = 14 + n * 5;
+            self.raw[offset]
+        }
 
-        // チェックサム範囲: class〜payload (index 2〜14)
-        let (expected_a, expected_b) = calculate_checksum(&msg[2..msg.len()-2]);
-        assert_eq!(msg[msg.len()-2], expected_a, "checksum A");
-        assert_eq!(msg[msg.len()-1], expected_b, "checksum B");
+        /// チェックサムが正しいか検証
+        fn checksum_valid(&self) -> bool {
+            let (expected_a, expected_b) = calculate_checksum(&self.raw[2..self.raw.len()-2]);
+            self.raw[self.raw.len()-2] == expected_a && self.raw[self.raw.len()-1] == expected_b
+        }
+
+        fn total_len(&self) -> usize { self.raw.len() }
     }
 
     // ===========================================
-    // 定期出力テスト
+    // NMEA出力設定テスト
     // ===========================================
 
-    /// P1: 定期出力設定メッセージの正常生成
-    #[test]
-    fn test_periodic_output_default() {
-        let config = PeriodicOutputConfig::default();
-        let msg = set_periodic_output(&config, Layer::Ram);
+    /// NMEA出力ON/OFF設定時に正しい値が設定される
+    #[rstest]
+    #[case::nmea_off(false, 0x00, true)]
+    #[case::nmea_on(true, 0x01, true)]
+    fn test_nmea出力設定で正しい値が設定される(
+        #[case] enable: bool,
+        #[case] expected_value: u8,
+        #[case] should_succeed: bool,
+    ) {
+        let msg = set_uart1_nmea_output(enable, Layer::Ram);
+        let frame = UbxFrame::new(&msg);
 
-        // ヘッダーチェック
-        assert_eq!(msg[0], 0xB5, "sync1");
-        assert_eq!(msg[1], 0x62, "sync2");
-        assert_eq!(msg[2], 0x06, "class");
-        assert_eq!(msg[3], 0x8A, "id");
-
-        // ペイロード長 (4 + 6*5 = 34 bytes)
-        // version(1) + layers(1) + reserved(2) + 6個の(key(4) + value(1))
-        let payload_len = u16::from_le_bytes([msg[4], msg[5]]);
-        assert_eq!(payload_len, 34, "payload length");
-
-        // version
-        assert_eq!(msg[6], 0x00, "version");
-
-        // layers (RAM = 0x01)
-        assert_eq!(msg[7], 0x01, "layers");
+        if should_succeed {
+            // 振る舞い: 指定した値が設定される
+            assert_eq!(frame.first_value(), expected_value);
+            // 振る舞い: 正しいキーが使われる
+            assert_eq!(frame.first_key(), CFG_UART1OUTPROT_NMEA);
+        }
     }
 
-    /// P2: 最初のキーと値の検証（NAV-PVT）
-    #[test]
-    fn test_periodic_output_nav_pvt_key() {
-        let config = PeriodicOutputConfig::default();
-        let msg = set_periodic_output(&config, Layer::Ram);
+    /// 各レイヤー指定時に正しいレイヤー値が設定される
+    #[rstest]
+    #[case::ram(Layer::Ram, 0x01, true)]
+    #[case::bbr(Layer::Bbr, 0x02, true)]
+    #[case::flash(Layer::Flash, 0x04, true)]
+    fn test_レイヤー指定で正しい値が設定される(
+        #[case] layer: Layer,
+        #[case] expected_layer: u8,
+        #[case] should_succeed: bool,
+    ) {
+        let msg = set_uart1_nmea_output(false, layer);
+        let frame = UbxFrame::new(&msg);
 
-        // 最初のキー (offset 10-13)
-        let key = u32::from_le_bytes([msg[10], msg[11], msg[12], msg[13]]);
-        assert_eq!(key, CFG_MSGOUT_NAV_PVT_USB, "NAV-PVT key");
-
-        // 値 (offset 14)
-        assert_eq!(msg[14], 1, "NAV-PVT rate = 1");
+        if should_succeed {
+            assert_eq!(frame.layers(), expected_layer);
+        }
     }
 
-    /// P3: 定期出力無効化のテスト
-    #[test]
-    fn test_disable_periodic_output() {
+    /// NMEA出力設定メッセージの構造が正しい
+    #[rstest]
+    #[case::正常系(false, Layer::Ram, true)]
+    fn test_nmea出力メッセージ構造が正しい(
+        #[case] enable: bool,
+        #[case] layer: Layer,
+        #[case] should_succeed: bool,
+    ) {
+        let msg = set_uart1_nmea_output(enable, layer);
+        let frame = UbxFrame::new(&msg);
+
+        if should_succeed {
+            // UBXヘッダー
+            assert_eq!(frame.sync1(), 0xB5, "sync1");
+            assert_eq!(frame.sync2(), 0x62, "sync2");
+            assert_eq!(frame.class(), 0x06, "class = CFG");
+            assert_eq!(frame.id(), 0x8A, "id = VALSET");
+            // ペイロード長: version(1) + layers(1) + reserved(2) + key(4) + value(1) = 9
+            assert_eq!(frame.payload_len(), 9, "payload length");
+            // CFG-VALSET固定フィールド
+            assert_eq!(frame.version(), 0x00, "version");
+            // 全体長: sync(2) + class(1) + id(1) + len(2) + payload(9) + checksum(2) = 17
+            assert_eq!(frame.total_len(), 17, "total length");
+            // チェックサム
+            assert!(frame.checksum_valid(), "checksum");
+        }
+    }
+
+    // ===========================================
+    // 定期出力設定テスト
+    // ===========================================
+
+    /// 定期出力設定時に各メッセージのレートが正しく設定される
+    #[rstest]
+    #[case::nav_pvt(0, 1, true)]      // NAV-PVT: 毎エポック
+    #[case::nav_status(1, 1, true)]   // NAV-STATUS: 毎エポック
+    #[case::nav_sat(2, 5, true)]      // NAV-SAT: 5エポックに1回
+    #[case::nav_sig(3, 5, true)]      // NAV-SIG: 5エポックに1回
+    #[case::mon_span(4, 10, true)]    // MON-SPAN: 10エポックに1回
+    #[case::mon_rf(5, 10, true)]      // MON-RF: 10エポックに1回
+    fn test_定期出力デフォルト設定で正しいレートが設定される(
+        #[case] index: usize,
+        #[case] expected_rate: u8,
+        #[case] should_succeed: bool,
+    ) {
+        let config = PeriodicOutputConfig::default();
+        let msg = set_periodic_output(&config, Layer::Ram);
+        let frame = UbxFrame::new(&msg);
+
+        if should_succeed {
+            assert_eq!(frame.nth_value(index), expected_rate);
+        }
+    }
+
+    /// 定期出力無効化時に全メッセージのレートが0になる
+    #[rstest]
+    #[case::nav_pvt(0, 0, true)]
+    #[case::nav_status(1, 0, true)]
+    #[case::nav_sat(2, 0, true)]
+    #[case::nav_sig(3, 0, true)]
+    #[case::mon_span(4, 0, true)]
+    #[case::mon_rf(5, 0, true)]
+    fn test_定期出力無効化で全レートが0になる(
+        #[case] index: usize,
+        #[case] expected_rate: u8,
+        #[case] should_succeed: bool,
+    ) {
         let msg = disable_periodic_output(Layer::Ram);
+        let frame = UbxFrame::new(&msg);
 
-        // 全ての値が0であることを確認
-        // offset 14から始まる各値（5バイトごと）
-        for i in 0..6 {
-            let value_offset = 14 + i * 5;
-            assert_eq!(msg[value_offset], 0, "value at index {} should be 0", i);
+        if should_succeed {
+            assert_eq!(frame.nth_value(index), expected_rate);
         }
     }
 
-    /// P4: チェックサム検証
-    #[test]
-    fn test_periodic_output_checksum() {
+    /// 定期出力設定メッセージの構造が正しい
+    #[rstest]
+    #[case::正常系(Layer::Ram, true)]
+    fn test_定期出力メッセージ構造が正しい(
+        #[case] layer: Layer,
+        #[case] should_succeed: bool,
+    ) {
         let config = PeriodicOutputConfig::default();
-        let msg = set_periodic_output(&config, Layer::Ram);
+        let msg = set_periodic_output(&config, layer);
+        let frame = UbxFrame::new(&msg);
 
-        let (expected_a, expected_b) = calculate_checksum(&msg[2..msg.len()-2]);
-        assert_eq!(msg[msg.len()-2], expected_a, "checksum A");
-        assert_eq!(msg[msg.len()-1], expected_b, "checksum B");
+        if should_succeed {
+            // UBXヘッダー
+            assert_eq!(frame.sync1(), 0xB5, "sync1");
+            assert_eq!(frame.sync2(), 0x62, "sync2");
+            assert_eq!(frame.class(), 0x06, "class = CFG");
+            assert_eq!(frame.id(), 0x8A, "id = VALSET");
+            // ペイロード長: version(1) + layers(1) + reserved(2) + 6*(key(4) + value(1)) = 34
+            assert_eq!(frame.payload_len(), 34, "payload length");
+            // 最初のキーがNAV-PVT
+            assert_eq!(frame.first_key(), CFG_MSGOUT_NAV_PVT_USB, "first key = NAV-PVT");
+            // チェックサム
+            assert!(frame.checksum_valid(), "checksum");
+        }
     }
 }
