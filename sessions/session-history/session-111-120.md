@@ -275,3 +275,46 @@
 - MON-SPAN FE実装（スペクトラム波形、PGAゲージ）
 
 ---
+
+## Session 119 (2026-03-12)
+
+**概要**: MON-SPAN FE実装
+
+**実施内容**:
+1. **仕様確認**（新ルール準拠）
+   - 23-mon-span-implementation.md確認
+   - mon_span_api.rsレスポンス形式確認
+2. **api.ts に MON-SPAN API追加**
+   - SpanBlock, MonSpanResponse型定義
+   - getMonSpan()関数
+3. **MonSpanPanel.tsx 新規作成**
+   - スペクトラム波形表示（SVG 256点）
+   - PGAゲージ（45dB基準）
+   - L1/L2ブロック別表示
+4. **実機テスト・調整**
+   - タイムアウト延長（1秒→3秒）
+   - ポーリング間隔延長（2秒→5秒）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [MonSpanPanel.tsx](../../prototype/m1-gnss/frontend/src/components/MonSpanPanel.tsx) | 新規作成 |
+| [api.ts](../../prototype/m1-gnss/frontend/src/lib/api.ts) | getMonSpan()追加 |
+| [session119/session-summary.md](../session119/session-summary.md) | セッションサマリー |
+| [session120/session-plan.md](../session120/session-plan.md) | 次セッション計画 |
+
+**確認結果**:
+- FEビルド: ✅ 成功
+- BEテスト: ✅ 186テスト全パス
+- 実機（室内）: ✅ 動作確認
+
+**Phase 1.5進捗**:
+- Step 1 NAV-SIG: ✅ 完了
+- Step 2 RTK FIX率: ❌ 未着手
+- Step 3 MON-SPAN: ✅ 完了
+
+**次セッション（Session 120）でやること**:
+- 屋外動作確認
+- TTFF測定・スカイプロット（優先）
+
+---
