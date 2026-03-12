@@ -318,3 +318,47 @@
 - TTFF測定・スカイプロット（優先）
 
 ---
+
+## Session 120 (2026-03-12)
+
+**概要**: TTFF測定機能実装（NAV-STATUS API + FEパネル）
+
+**実施内容**:
+1. **仕様確認**
+   - ttff-monrf-spec.md確認
+   - NAV-STATUS（0x01 0x03）のttffフィールド（offset 8、U4、ミリ秒）
+2. **既存コード確認**
+   - nav_status.rsに既にttffフィールド実装済み
+3. **NAV-STATUS API実装**
+   - `GET /api/nav-status` エンドポイント追加
+   - 6テスト追加、全192テスト合格
+4. **NavStatusPanel.tsx新規作成**
+   - TTFF表示（ミリ秒→分:秒.ミリ秒形式）
+   - Fix状態・RTK状態表示
+   - 起動からの経過時間表示
+5. **検査ページに統合**
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [nav_status_api.rs](../../prototype/m1-gnss/backend/src/web/nav_status_api.rs) | NAV-STATUS API |
+| [NavStatusPanel.tsx](../../prototype/m1-gnss/frontend/src/components/NavStatusPanel.tsx) | TTFF表示パネル |
+| [session120/session-summary.md](../session120/session-summary.md) | セッションサマリー |
+| [session121/session-plan.md](../session121/session-plan.md) | 次セッション計画 |
+
+**確認結果**:
+- BEテスト: ✅ 192テスト全パス
+- FEビルド: ✅ 成功
+
+**Phase 1.5進捗**:
+- Step 1 NAV-SIG: ✅ 完了
+- Step 2 RTK FIX率: ❌ 未着手
+- Step 3 MON-SPAN: ✅ 完了
+- TTFF: ✅ 完了
+- スカイプロット: ❌ 未着手
+
+**次セッション（Session 121）でやること**:
+- NAV-SATスカイプロット実装
+- 屋内/屋外検査ページ分離
+
+---

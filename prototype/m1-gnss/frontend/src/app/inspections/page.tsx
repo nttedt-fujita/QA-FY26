@@ -14,6 +14,7 @@ import {
 import { InspectionResult } from "@/components/InspectionResult";
 import { NavSigPanel } from "@/components/NavSigPanel";
 import { MonSpanPanel } from "@/components/MonSpanPanel";
+import { NavStatusPanel } from "@/components/NavStatusPanel";
 
 /**
  * 検査実行画面
@@ -161,6 +162,11 @@ export default function InspectionsPage() {
           >
             {isLoading ? "検査中..." : "検査開始"}
           </button>
+        </div>
+
+        {/* NAV-STATUS（Fix状態・TTFF）パネル */}
+        <div className="mb-6">
+          <NavStatusPanel enabled={!!connectedDevice} />
         </div>
 
         {/* NAV-SIG（衛星信号）パネル */}

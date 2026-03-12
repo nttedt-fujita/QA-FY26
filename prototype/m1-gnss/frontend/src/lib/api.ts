@@ -340,3 +340,33 @@ export async function getMonSpan(): Promise<MonSpanResponse> {
   }
   return res.json();
 }
+
+// ===========================================
+// NAV-STATUS API（Fix状態・TTFF）
+// ===========================================
+
+/**
+ * NAV-STATUSレスポンス
+ */
+export interface NavStatusResponse {
+  ttff: number;         // Time to First Fix (ms)
+  msss: number;         // 起動からの経過時間 (ms)
+  gps_fix: number;      // FIXタイプ（0=No fix, 2=2D, 3=3D）
+  gps_fix_ok: boolean;  // 位置・速度が有効か
+  is_fix_valid: boolean; // FIXが有効か
+  carr_soln: number;    // RTK状態（0=なし, 1=Float, 2=Fixed）
+  is_rtk_fixed: boolean;
+  is_rtk_float: boolean;
+}
+
+/**
+ * NAV-STATUS（Fix状態・TTFF）を取得
+ */
+export async function getNavStatus(): Promise<NavStatusResponse> {
+  const res = await fetch(`${API_BASE}/api/nav-status`);
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
