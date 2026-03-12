@@ -370,3 +370,63 @@ export async function getNavStatus(): Promise<NavStatusResponse> {
   }
   return res.json();
 }
+
+// ===========================================
+// NAV-SAT API（衛星情報・スカイプロット用）
+// ===========================================
+
+/**
+ * 衛星情報
+ */
+export interface SatelliteInfo {
+  gnss_id: number;     // 0=GPS, 1=SBAS, 2=Galileo, 3=BeiDou, 5=QZSS, 6=GLONASS
+  gnss_name: string;   // GNSS名
+  sv_id: number;       // 衛星番号
+  cno: number;         // C/N0 [dBHz]
+  elev: number;        // 仰角 [deg] (-90〜+90)
+  azim: number;        // 方位角 [deg] (0〜360)
+  is_used: boolean;    // ナビゲーションに使用中か
+  quality_ind: number; // 品質指標（0-7）
+  health: number;      // 健全性（0=unknown, 1=healthy, 2=unhealthy）
+}
+
+/**
+ * GNSS別衛星数
+ */
+export interface GnssCounts {
+  gps: number;
+  sbas: number;
+  galileo: number;
+  beidou: number;
+  qzss: number;
+  glonass: number;
+}
+
+/**
+ * 衛星統計情報
+ */
+export interface SatelliteStats {
+  total_count: number;
+  used_count: number;
+  gnss_counts: GnssCounts;
+}
+
+/**
+ * NAV-SATレスポンス
+ */
+export interface NavSatResponse {
+  satellites: SatelliteInfo[];
+  stats: SatelliteStats;
+}
+
+/**
+ * NAV-SAT（衛星情報）を取得
+ */
+export async function getNavSat(): Promise<NavSatResponse> {
+  const res = await fetch(`${API_BASE}/api/nav-sat`);
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
