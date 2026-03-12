@@ -7,3 +7,4 @@ pub mod lot_api;
 pub mod inspection_api;
 pub mod nav_sig_api;
 pub mod mon_span_api;
+pub mod nav_status_api;
