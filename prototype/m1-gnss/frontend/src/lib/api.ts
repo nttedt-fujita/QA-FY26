@@ -304,3 +304,39 @@ export async function getNavSig(): Promise<NavSigResponse> {
   }
   return res.json();
 }
+
+// ===========================================
+// MON-SPAN API（スペクトラム情報）
+// ===========================================
+
+/**
+ * スペクトラムブロック情報
+ */
+export interface SpanBlock {
+  spectrum: number[];  // 256点のスペクトラム振幅（dB）
+  span: number;        // 周波数スパン（Hz）
+  res: number;         // 周波数分解能（Hz）
+  center: number;      // 中心周波数（Hz）
+  pga: number;         // PGAゲイン（dB）
+  max_amplitude: number;  // スペクトラム最大値（dB）
+  avg_amplitude: number;  // スペクトラム平均値（dB）
+}
+
+/**
+ * MON-SPANレスポンス
+ */
+export interface MonSpanResponse {
+  blocks: SpanBlock[];
+}
+
+/**
+ * MON-SPAN（スペクトラム情報）を取得
+ */
+export async function getMonSpan(): Promise<MonSpanResponse> {
+  const res = await fetch(`${API_BASE}/api/mon-span`);
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}

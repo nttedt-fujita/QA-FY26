@@ -132,8 +132,8 @@ pub async fn get_mon_span(data: web::Data<AppState>) -> impl Responder {
     // 少し待機
     std::thread::sleep(Duration::from_millis(50));
 
-    // 応答受信
-    let response = match manager.receive_ubx(Duration::from_secs(1)) {
+    // 応答受信（MON-SPANは大きいので3秒待つ）
+    let response = match manager.receive_ubx(Duration::from_secs(3)) {
         Ok(r) => r,
         Err(crate::device::manager::DeviceManagerError::Timeout) => {
             return HttpResponse::GatewayTimeout().json(ErrorResponse {

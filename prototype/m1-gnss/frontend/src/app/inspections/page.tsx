@@ -13,6 +13,7 @@ import {
 } from "@/lib/api";
 import { InspectionResult } from "@/components/InspectionResult";
 import { NavSigPanel } from "@/components/NavSigPanel";
+import { MonSpanPanel } from "@/components/MonSpanPanel";
 
 /**
  * 検査実行画面
@@ -165,6 +166,11 @@ export default function InspectionsPage() {
         {/* NAV-SIG（衛星信号）パネル */}
         <div className="mb-6">
           <NavSigPanel enabled={!!connectedDevice} />
+        </div>
+
+        {/* MON-SPAN（スペクトラム）パネル */}
+        <div className="mb-6">
+          <MonSpanPanel enabled={!!connectedDevice} />
         </div>
 
         {/* エラー表示 */}
