@@ -7,11 +7,14 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde::Serialize;
 use std::sync::Mutex;
+use std::time::Duration;
 
 use crate::device::filter::PortInfo;
-use crate::device::manager::{DeviceManager, DeviceManagerError};
+use crate::device::manager::{DeviceManager, DeviceManagerError, SerialPortProvider};
 use crate::device::status::DeviceStatus;
 use crate::repository::SqliteRepository;
+use crate::ubx::cfg_valset::{set_periodic_output, PeriodicOutputConfig, Layer};
+use crate::ubx::ack;
 
 // ===========================================
 // API レスポンス型
@@ -270,6 +273,14 @@ pub async fn connect_device(
                 log::warn!("F9Pシリアル番号の取得に失敗: {}", e);
             }
 
+            // 定期出力を有効化
+            // Session 140: API並行問題対策
+            if let Err(e) = enable_periodic_output(&mut manager) {
+                log::warn!("定期出力設定に失敗: {}", e);
+            } else {
+                log::info!("定期出力を有効化しました");
+            }
+
             HttpResponse::Ok().json(ConnectResponse {
                 path: port_path,
                 baud_rate,
@@ -331,6 +342,52 @@ pub async fn disconnect_device(
                 DeviceManagerError::NotConnected => HttpResponse::BadRequest().json(response),
                 _ => HttpResponse::InternalServerError().json(response),
             }
+        }
+    }
+}
+
+// ===========================================
+// 定期出力設定
+// ===========================================
+
+/// 定期出力を有効化
+///
+/// CFG-VALSETを送信して、各メッセージの定期出力を設定する
+fn enable_periodic_output<P: SerialPortProvider>(
+    manager: &mut DeviceManager<P>,
+) -> Result<(), DeviceManagerError> {
+    // 設定値（デフォルト: NAV-PVT/STATUSは毎エポック、その他は低頻度）
+    let config = PeriodicOutputConfig::default();
+    let msg = set_periodic_output(&config, Layer::Ram);
+
+    // バッファをクリア
+    manager.drain_buffer()?;
+
+    // 送信
+    manager.send_ubx(&msg)?;
+
+    // ACK待ち
+    std::thread::sleep(Duration::from_millis(50));
+    let response = manager.receive_ubx(Duration::from_secs(1))?;
+
+    // ACK/NAK確認
+    let ack_result = ack::parse_ack(&response);
+    match ack_result {
+        ack::AckResult::Ack { .. } => {
+            log::debug!("CFG-VALSET ACK received");
+            Ok(())
+        }
+        ack::AckResult::Nak { .. } => {
+            log::warn!("CFG-VALSET NAK received");
+            Err(DeviceManagerError::IoError(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "CFG-VALSET rejected by device",
+            )))
+        }
+        _ => {
+            log::warn!("Unexpected response to CFG-VALSET: {:?}", ack_result);
+            // ACK以外の応答も許容（定期出力が始まるとすぐにデータが来る）
+            Ok(())
         }
     }
 }
