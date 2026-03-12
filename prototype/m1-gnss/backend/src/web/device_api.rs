@@ -13,7 +13,7 @@ use crate::device::filter::PortInfo;
 use crate::device::manager::{DeviceManager, DeviceManagerError, SerialPortProvider};
 use crate::device::status::DeviceStatus;
 use crate::repository::SqliteRepository;
-use crate::ubx::cfg_valset::{set_periodic_output, PeriodicOutputConfig, Layer};
+use crate::ubx::cfg_valset::{disable_periodic_output, Layer};
 use crate::ubx::ack;
 
 // ===========================================
@@ -273,12 +273,13 @@ pub async fn connect_device(
                 log::warn!("F9Pシリアル番号の取得に失敗: {}", e);
             }
 
-            // 定期出力を有効化
-            // Session 140: API並行問題対策
-            if let Err(e) = enable_periodic_output(&mut manager) {
-                log::warn!("定期出力設定に失敗: {}", e);
+            // 定期出力を無効化（ポーリング専用）
+            // Session 145: 定期出力とポーリングの混在問題を修正
+            // 統合APIは順次ポーリングで動作するため、定期出力は不要
+            if let Err(e) = send_disable_periodic_output(&mut manager) {
+                log::warn!("定期出力無効化に失敗: {}", e);
             } else {
-                log::info!("定期出力を有効化しました");
+                log::debug!("定期出力を無効化しました");
             }
 
             HttpResponse::Ok().json(ConnectResponse {
@@ -350,15 +351,15 @@ pub async fn disconnect_device(
 // 定期出力設定
 // ===========================================
 
-/// 定期出力を有効化
+/// 定期出力を無効化
 ///
-/// CFG-VALSETを送信して、各メッセージの定期出力を設定する
-fn enable_periodic_output<P: SerialPortProvider>(
+/// CFG-VALSETを送信して、各メッセージの定期出力を停止する
+/// 統合APIは順次ポーリングで動作するため、定期出力は不要
+fn send_disable_periodic_output<P: SerialPortProvider>(
     manager: &mut DeviceManager<P>,
 ) -> Result<(), DeviceManagerError> {
-    // 設定値（デフォルト: NAV-PVT/STATUSは毎エポック、その他は低頻度）
-    let config = PeriodicOutputConfig::default();
-    let msg = set_periodic_output(&config, Layer::Ram);
+    // 全メッセージの定期出力を無効化（レート=0）
+    let msg = disable_periodic_output(Layer::Ram);
 
     // バッファをクリア
     manager.drain_buffer()?;
