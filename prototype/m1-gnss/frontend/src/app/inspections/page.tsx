@@ -15,6 +15,7 @@ import { InspectionResult } from "@/components/InspectionResult";
 import { NavSigPanel } from "@/components/NavSigPanel";
 import { MonSpanPanel } from "@/components/MonSpanPanel";
 import { NavStatusPanel } from "@/components/NavStatusPanel";
+import { SkyPlotPanel } from "@/components/SkyPlotPanel";
 
 /**
  * 検査実行画面
@@ -169,8 +170,11 @@ export default function InspectionsPage() {
           <NavStatusPanel enabled={!!connectedDevice} />
         </div>
 
-        {/* NAV-SIG（衛星信号）パネル */}
-        <div className="mb-6">
+        {/* スカイプロット + NAV-SIG 横並び */}
+        <div className="mb-6 grid gap-4 md:grid-cols-2">
+          {/* スカイプロット（NAV-SAT） */}
+          <SkyPlotPanel enabled={!!connectedDevice} />
+          {/* NAV-SIG（衛星信号） */}
           <NavSigPanel enabled={!!connectedDevice} />
         </div>
 

@@ -6,6 +6,7 @@ use serde::Serialize;
 use m1_gnss::web::device_api::{self, AppState};
 use m1_gnss::web::lot_api;
 use m1_gnss::web::inspection_api;
+use m1_gnss::web::nav_sat_api;
 use m1_gnss::web::nav_sig_api;
 use m1_gnss::web::mon_span_api;
 use m1_gnss::web::nav_status_api;
@@ -78,6 +79,7 @@ async fn main() -> std::io::Result<()> {
             .configure(device_api::configure)
             .configure(lot_api::configure)
             .configure(inspection_api::configure)
+            .configure(nav_sat_api::configure)
             .configure(nav_sig_api::configure)
             .configure(mon_span_api::configure)
             .configure(nav_status_api::configure)

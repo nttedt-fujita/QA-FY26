@@ -10,6 +10,7 @@ pub mod mon_span;
 pub mod mon_ver;
 pub mod nav_dop;
 pub mod nav_pvt;
+pub mod nav_sat;
 pub mod nav_sig;
 pub mod nav_status;
 pub mod sec_uniqid;
