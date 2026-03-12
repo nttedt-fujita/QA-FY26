@@ -2,7 +2,7 @@
 //!
 //! GNSS装置の受入検査を実行するメインロジック
 
-use log::{debug, info, warn};
+use tracing::{debug, info, warn};
 
 use crate::device::manager::{DeviceManager, DeviceManagerError, SerialPortProvider};
 use crate::device::status::DeviceStatus;

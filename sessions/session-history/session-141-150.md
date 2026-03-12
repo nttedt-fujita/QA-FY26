@@ -189,3 +189,34 @@
 - ADR-012を更新（定期出力無効化の経緯を追記）
 
 ---
+
+## Session 146 (2026-03-12)
+
+**概要**: ログファイル出力設定 + NMEA出力無効化
+
+**実施内容**:
+1. **ログファイル出力を設定**
+   - `env_logger` → `tracing` + `tracing-subscriber` + `tracing-appender`
+   - 日次ローテーション、コンソール＋ファイル両方出力
+2. **動作確認で問題発見**
+   - 屋内検査後の屋外検査で統合APIが断続的に500エラー
+   - 原因: NMEAデータがUBXポーリングを妨害
+   - 屋内検査終了時にNMEA ONに戻していた
+3. **修正**
+   - デバイス接続時にNMEA出力もOFFにする
+   - `send_disable_nmea_output`関数を追加
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [Cargo.toml](../../prototype/m1-gnss/backend/Cargo.toml) | tracing関連クレート追加 |
+| [main.rs](../../prototype/m1-gnss/backend/src/main.rs) | ログ初期化をtracing-subscriberに変更 |
+| [device_api.rs](../../prototype/m1-gnss/backend/src/web/device_api.rs) | NMEA出力無効化を追加 |
+| [manager.rs](../../prototype/m1-gnss/backend/src/device/manager.rs) | log→tracing置き換え |
+| [engine.rs](../../prototype/m1-gnss/backend/src/inspection/engine.rs) | log→tracing置き換え |
+
+**次セッション（Session 147）でやること**:
+- NMEA OFF修正後の動作確認
+- ADR-012を更新
+
+---

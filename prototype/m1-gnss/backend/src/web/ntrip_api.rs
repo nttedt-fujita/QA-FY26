@@ -256,42 +256,42 @@ async fn connect_to_ntrip(
     const CONNECT_TIMEOUT: Duration = Duration::from_secs(10);
     const READ_TIMEOUT: Duration = Duration::from_secs(10);
 
-    log::info!("[NTRIP] ========== 接続開始 ==========");
-    log::info!("[NTRIP] キャスター: {}:{}", caster_url, port);
-    log::info!("[NTRIP] マウントポイント: {}", mountpoint);
-    log::info!("[NTRIP] ユーザー: {}", username);
+    tracing::info!("[NTRIP] ========== 接続開始 ==========");
+    tracing::info!("[NTRIP] キャスター: {}:{}", caster_url, port);
+    tracing::info!("[NTRIP] マウントポイント: {}", mountpoint);
+    tracing::info!("[NTRIP] ユーザー: {}", username);
 
     // DNS解決チェック
     let addr = format!("{}:{}", caster_url, port);
-    log::info!("[NTRIP] DNS解決中: {}", caster_url);
+    tracing::info!("[NTRIP] DNS解決中: {}", caster_url);
     match lookup_host(&addr).await {
         Ok(mut addrs) => {
             if let Some(resolved) = addrs.next() {
-                log::info!("[NTRIP] DNS解決成功: {} -> {}", caster_url, resolved);
+                tracing::info!("[NTRIP] DNS解決成功: {} -> {}", caster_url, resolved);
             } else {
-                log::error!("[NTRIP] DNS解決失敗: アドレスが見つかりません");
+                tracing::error!("[NTRIP] DNS解決失敗: アドレスが見つかりません");
                 return Err(format!("DNS解決失敗: {} のアドレスが見つかりません", caster_url));
             }
         }
         Err(e) => {
-            log::error!("[NTRIP] DNS解決失敗: {}", e);
+            tracing::error!("[NTRIP] DNS解決失敗: {}", e);
             return Err(format!("DNS解決失敗: {} - {}", caster_url, e));
         }
     }
 
-    log::info!("[NTRIP] TCP接続開始: {}", addr);
+    tracing::info!("[NTRIP] TCP接続開始: {}", addr);
 
     let mut stream = match timeout(CONNECT_TIMEOUT, TcpStream::connect(&addr)).await {
         Ok(Ok(s)) => {
-            log::info!("[NTRIP] TCP接続成功");
+            tracing::info!("[NTRIP] TCP接続成功");
             s
         }
         Ok(Err(e)) => {
-            log::error!("[NTRIP] TCP接続失敗: {}", e);
+            tracing::error!("[NTRIP] TCP接続失敗: {}", e);
             return Err(format!("TCP接続失敗: {}", e));
         }
         Err(_) => {
-            log::error!("[NTRIP] TCP接続タイムアウト ({}秒)", CONNECT_TIMEOUT.as_secs());
+            tracing::error!("[NTRIP] TCP接続タイムアウト ({}秒)", CONNECT_TIMEOUT.as_secs());
             return Err(format!("TCP接続タイムアウト ({}秒)", CONNECT_TIMEOUT.as_secs()));
         }
     };
@@ -307,18 +307,18 @@ async fn connect_to_ntrip(
         mountpoint, auth
     );
 
-    log::info!("[NTRIP] リクエスト送信: GET /{}", mountpoint);
-    log::debug!("[NTRIP] リクエスト全文:\n{}", request);
+    tracing::info!("[NTRIP] リクエスト送信: GET /{}", mountpoint);
+    tracing::debug!("[NTRIP] リクエスト全文:\n{}", request);
 
     stream
         .write_all(request.as_bytes())
         .await
         .map_err(|e| {
-            log::error!("[NTRIP] リクエスト送信失敗: {}", e);
+            tracing::error!("[NTRIP] リクエスト送信失敗: {}", e);
             format!("リクエスト送信失敗: {}", e)
         })?;
 
-    log::info!("[NTRIP] リクエスト送信完了、レスポンス待機中...");
+    tracing::info!("[NTRIP] リクエスト送信完了、レスポンス待機中...");
 
     // レスポンスを読む（タイムアウト付き）
     let mut reader = BufReader::new(&mut stream);
@@ -326,21 +326,21 @@ async fn connect_to_ntrip(
 
     match timeout(READ_TIMEOUT, reader.read_line(&mut response_line)).await {
         Ok(Ok(_)) => {
-            log::info!("[NTRIP] レスポンス受信: {}", response_line.trim());
+            tracing::info!("[NTRIP] レスポンス受信: {}", response_line.trim());
         }
         Ok(Err(e)) => {
-            log::error!("[NTRIP] レスポンス読み取り失敗: {}", e);
+            tracing::error!("[NTRIP] レスポンス読み取り失敗: {}", e);
             return Err(format!("レスポンス読み取り失敗: {}", e));
         }
         Err(_) => {
-            log::error!("[NTRIP] レスポンスタイムアウト ({}秒)", READ_TIMEOUT.as_secs());
+            tracing::error!("[NTRIP] レスポンスタイムアウト ({}秒)", READ_TIMEOUT.as_secs());
             return Err(format!("レスポンスタイムアウト ({}秒)", READ_TIMEOUT.as_secs()));
         }
     }
 
     // NTRIP Rev1: "ICY 200 OK" または HTTP/1.x 200 OK
     if response_line.contains("200") {
-        log::info!("[NTRIP] 接続成功 (200 OK)");
+        tracing::info!("[NTRIP] 接続成功 (200 OK)");
         // ヘッダーの残りを読み捨てる（空行まで）
         loop {
             let mut line = String::new();
@@ -351,18 +351,18 @@ async fn connect_to_ntrip(
             if bytes_read == 0 || line.trim().is_empty() {
                 break;
             }
-            log::debug!("[NTRIP] ヘッダー: {}", line.trim());
+            tracing::debug!("[NTRIP] ヘッダー: {}", line.trim());
         }
-        log::info!("[NTRIP] ヘッダー読み取り完了、RTCMストリーム開始");
+        tracing::info!("[NTRIP] ヘッダー読み取り完了、RTCMストリーム開始");
         Ok(stream)
     } else if response_line.contains("401") {
-        log::error!("[NTRIP] 認証失敗 (401)");
+        tracing::error!("[NTRIP] 認証失敗 (401)");
         Err("認証失敗 (401 Unauthorized)".to_string())
     } else if response_line.contains("404") {
-        log::error!("[NTRIP] マウントポイント不明 (404)");
+        tracing::error!("[NTRIP] マウントポイント不明 (404)");
         Err("マウントポイントが見つかりません (404)".to_string())
     } else {
-        log::error!("[NTRIP] 予期しないレスポンス: {}", response_line.trim());
+        tracing::error!("[NTRIP] 予期しないレスポンス: {}", response_line.trim());
         Err(format!("予期しないレスポンス: {}", response_line.trim()))
     }
 }
@@ -455,24 +455,24 @@ pub async fn connect_ntrip(
 
         // 接続直後に最初のGGAを送信
         let initial_gga = get_gga(&app_state_clone);
-        log::info!("[NTRIP] 初回GGA送信: {}", initial_gga.trim());
+        tracing::info!("[NTRIP] 初回GGA送信: {}", initial_gga.trim());
         if let Err(e) = writer.write_all(initial_gga.as_bytes()).await {
-            log::error!("[NTRIP] 初回GGA送信失敗: {}", e);
+            tracing::error!("[NTRIP] 初回GGA送信失敗: {}", e);
         }
 
         loop {
             tokio::select! {
                 // 切断シグナル
                 _ = exit_rx.recv() => {
-                    log::info!("NTRIP切断シグナルを受信");
+                    tracing::info!("NTRIP切断シグナルを受信");
                     break;
                 }
                 // GGA定期送信（10秒ごと）
                 _ = gga_interval.tick() => {
                     let gga = get_gga(&app_state_clone);
-                    log::debug!("[NTRIP] GGA送信: {}", gga.trim());
+                    tracing::debug!("[NTRIP] GGA送信: {}", gga.trim());
                     if let Err(e) = writer.write_all(gga.as_bytes()).await {
-                        log::warn!("[NTRIP] GGA送信失敗: {}", e);
+                        tracing::warn!("[NTRIP] GGA送信失敗: {}", e);
                     }
                 }
                 // RTCMデータ受信
@@ -480,7 +480,7 @@ pub async fn connect_ntrip(
                     match result {
                         Ok(0) => {
                             // 接続終了
-                            log::info!("NTRIPサーバーが接続を閉じました");
+                            tracing::info!("NTRIPサーバーが接続を閉じました");
                             let mut manager = ntrip_state_clone.lock().await;
                             manager.set_state(NtripConnectionState::Disconnected);
                             break;
@@ -500,7 +500,7 @@ pub async fn connect_ntrip(
                                 let mut device_manager = match app_state_clone.device_manager.lock() {
                                     Ok(m) => m,
                                     Err(_) => {
-                                        log::error!("DeviceManagerのロック取得に失敗");
+                                        tracing::error!("DeviceManagerのロック取得に失敗");
                                         continue;
                                     }
                                 };
@@ -508,11 +508,11 @@ pub async fn connect_ntrip(
                                 // シリアルポートに書き込み
                                 match device_manager.write_data(rtcm_data) {
                                     Ok(written) => {
-                                        log::debug!("RTCM転送: {} bytes", written);
+                                        tracing::debug!("RTCM転送: {} bytes", written);
                                         written as u64
                                     }
                                     Err(e) => {
-                                        log::warn!("RTCM転送失敗: {}", e);
+                                        tracing::warn!("RTCM転送失敗: {}", e);
                                         0
                                     }
                                 }
@@ -525,7 +525,7 @@ pub async fn connect_ntrip(
                             }
                         }
                         Err(e) => {
-                            log::error!("RTCMデータ受信エラー: {}", e);
+                            tracing::error!("RTCMデータ受信エラー: {}", e);
                             let mut manager = ntrip_state_clone.lock().await;
                             manager.set_state(NtripConnectionState::Error(e.to_string()));
                             manager.set_last_error(e.to_string());
@@ -536,7 +536,7 @@ pub async fn connect_ntrip(
             }
         }
 
-        log::info!("NTRIPストリームタスクが終了しました");
+        tracing::info!("NTRIPストリームタスクが終了しました");
     });
 
     HttpResponse::Ok().json(serde_json::json!({
