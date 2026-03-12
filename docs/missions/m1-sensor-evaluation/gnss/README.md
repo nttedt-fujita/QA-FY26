@@ -12,6 +12,7 @@
 
 | やること | まず見るもの |
 |----------|-------------|
+| **屋外検査を使う** | [31-outdoor-inspection-user-guide.md](31-outdoor-inspection-user-guide.md) |
 | UBXメッセージを実装する | [08-ubx-protocol-index.md](08-ubx-protocol-index.md) |
 | NAV-*を実装する | [ubx-nav-messages.md](ubx-nav-messages.md) |
 | MON-*を実装する | [ubx-mon-messages.md](ubx-mon-messages.md)、[23-mon-span-implementation.md](23-mon-span-implementation.md) |
@@ -112,6 +113,7 @@ Phase 4: 標準化
 | 28 | [28-tdd-review-result.md](28-tdd-review-result.md) | TDDレビュー結果 | 122 |
 | 29 | [29-architecture-nextjs-rust.md](29-architecture-nextjs-rust.md) | Next.js/Rustアーキテクチャ解説 | 122 |
 | 30 | [30-ttff-monrf-spec.md](30-ttff-monrf-spec.md) | TTFF・MON-RF仕様調査 | 111 |
+| 31 | [31-outdoor-inspection-user-guide.md](31-outdoor-inspection-user-guide.md) | 屋外検査ユーザーガイド | 131 |
 
 ### 図表
 
