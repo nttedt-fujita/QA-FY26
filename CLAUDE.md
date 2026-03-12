@@ -115,6 +115,7 @@
 | [ADR-007](docs/adr/m1/ADR-007-baud-rate-detection.md) | ボーレート自動検出方式 | DeviceManager | 承認済み |
 | [ADR-008](docs/adr/m1/ADR-008-outdoor-inspection-criteria.md) | 屋外検査の合格基準 | 屋外検査ツール | 承認済み |
 | [ADR-009](docs/adr/m1/ADR-009-outdoor-inspection-fe-aggregation.md) | 屋外検査の集計処理をFEで実行 | FE/BE責務分担 | 承認済み |
+| [ADR-010](docs/adr/m1/ADR-010-api-test-strategy.md) | APIテスト戦略（統合テストで検証） | テスト方針 | 承認済み |
 
 ### 共通（ミッション横断）
 
