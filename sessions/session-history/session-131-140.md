@@ -190,3 +190,30 @@
 - device_id紐付け実装
 
 ---
+
+## Session 137 (2026-03-12)
+
+**概要**: device_id紐付け実装
+
+**実施内容**:
+1. **DBクリーンアップ**
+   - devices id=1（空serial_number）を削除
+   - indoor_inspections device_id=1 の100件を削除
+   - outdoor_inspection_results テストデータ1件を削除
+2. **BE: 屋外検査保存APIに serial_number 追加**
+   - `SaveOutdoorResultRequest` に `serial_number` 追加
+   - `get_device_by_serial` で device_id 解決
+3. **FE: 保存時に serial_number を送信**
+   - `saveResult` 引数を serialNumber に変更
+   - connectedDevice.serial_number を渡す
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session137/session-summary.md](../session137/session-summary.md) | セッションサマリー |
+| [session138/session-plan.md](../session138/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 138）でやること**:
+- 残タスク消化（自動保存 or u-center照合）
+
+---

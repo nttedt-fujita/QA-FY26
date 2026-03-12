@@ -307,7 +307,7 @@ export default function OutdoorInspectionsPage() {
                 <button
                   onClick={() =>
                     inspection.saveResult(
-                      undefined, // device_idは未対応（将来的にDB装置と紐付け）
+                      connectedDevice?.serial_number ?? undefined,
                       selectedLotId ?? undefined
                     )
                   }
