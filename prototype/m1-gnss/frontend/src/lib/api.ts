@@ -433,3 +433,71 @@ export async function getNavSat(signal?: AbortSignal): Promise<NavSatResponse> {
   }
   return res.json();
 }
+
+// ===========================================
+// GNSS State API（統合API）
+// ===========================================
+
+/**
+ * NAV-PVTレスポンス
+ */
+export interface NavPvtResponse {
+  lat: number;
+  lon: number;
+  fix_type: number;
+  carr_soln: number;
+  num_sv: number;
+  h_acc: number;
+  v_acc: number;
+  is_rtk_fixed: boolean;
+  is_rtk_float: boolean;
+}
+
+/**
+ * MON-RFブロックレスポンス
+ */
+export interface RfBlockResponse {
+  block_id: number;
+  jamming_state: number;
+  ant_status: number;
+  ant_power: number;
+  noise_per_ms: number;
+  agc_cnt: number;
+  cw_suppression: number;
+  is_jamming_detected: boolean;
+  is_antenna_ok: boolean;
+}
+
+/**
+ * MON-RFレスポンス
+ */
+export interface MonRfResponse {
+  blocks: RfBlockResponse[];
+  has_jamming: boolean;
+  has_critical_jamming: boolean;
+}
+
+/**
+ * 統合APIレスポンス
+ */
+export interface GnssStateResponse {
+  nav_pvt: NavPvtResponse | null;
+  nav_status: NavStatusResponse | null;
+  nav_sat: NavSatResponse | null;
+  nav_sig: NavSigResponse | null;
+  mon_span: MonSpanResponse | null;
+  mon_rf: MonRfResponse | null;
+  errors: string[];
+}
+
+/**
+ * GNSS状態（統合API）を取得
+ */
+export async function getGnssState(signal?: AbortSignal): Promise<GnssStateResponse> {
+  const res = await fetch(`${API_BASE}/api/gnss-state`, { signal });
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}

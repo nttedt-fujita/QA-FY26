@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { NavStatusResponse, getNavStatus } from "@/lib/api";
+import { NavStatusResponse } from "@/lib/api";
 
 /**
  * Fix種別を表示用文字列に変換
@@ -65,17 +64,14 @@ function getFixBadgeClass(isFixValid: boolean, isRtkFixed: boolean, isRtkFloat: 
 }
 
 interface NavStatusPanelProps {
-  /** ポーリング有効フラグ（装置接続時のみtrue） */
-  enabled: boolean;
-  /** ポーリング間隔（ミリ秒） */
-  pollIntervalMs?: number;
-  /** サンプル取得時のコールバック（屋外検査用） */
-  onSample?: (sample: {
-    gps_fix: number;
-    carr_soln: number;
-    msss: number;
-    ttff: number;
-  }) => void;
+  /** NAV-STATUSデータ（統合APIから渡される） */
+  data: NavStatusResponse | null;
+  /** エラーメッセージ */
+  error?: string | null;
+  /** 読み込み中フラグ */
+  isLoading?: boolean;
+  /** 装置接続フラグ */
+  isConnected?: boolean;
 }
 
 /**
@@ -86,63 +82,12 @@ interface NavStatusPanelProps {
  * - Fix状態・RTK状態
  */
 export function NavStatusPanel({
-  enabled,
-  pollIntervalMs = 1000,
-  onSample,
+  data,
+  error,
+  isLoading = false,
+  isConnected = true,
 }: NavStatusPanelProps) {
-  const [data, setData] = useState<NavStatusResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // AbortController参照
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  // 初回取得 + ポーリング
-  useEffect(() => {
-    if (!enabled) {
-      setData(null);
-      setError(null);
-      return;
-    }
-
-    // AbortController作成
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getNavStatus(controller.signal);
-        setData(res);
-        setError(null);
-        // サンプルコールバック（屋外検査用）
-        if (onSample) {
-          onSample({
-            gps_fix: res.gps_fix,
-            carr_soln: res.carr_soln,
-            msss: res.msss,
-            ttff: res.ttff,
-          });
-        }
-      } catch (e) {
-        // AbortErrorは無視
-        if (e instanceof Error && e.name === "AbortError") return;
-        setError(e instanceof Error ? e.message : "取得失敗");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, pollIntervalMs);
-
-    return () => {
-      clearInterval(interval);
-      controller.abort();
-    };
-  }, [enabled, pollIntervalMs, onSample]);
-
-  if (!enabled) {
+  if (!isConnected) {
     return (
       <div className="rounded border border-gray-200 bg-white p-4">
         <h3 className="mb-2 font-medium text-gray-700">Fix状態・TTFF (NAV-STATUS)</h3>
@@ -210,7 +155,7 @@ export function NavStatusPanel({
             </span>
           </div>
 
-          {/* 詳細情報（折りたたみ可能にしても良い） */}
+          {/* 詳細情報 */}
           <div className="mt-4 rounded bg-gray-50 p-3">
             <div className="grid grid-cols-2 gap-2 text-sm">
               <div>
@@ -232,6 +177,10 @@ export function NavStatusPanel({
             </div>
           </div>
         </div>
+      )}
+
+      {!data && !error && (
+        <div className="text-gray-400">データなし</div>
       )}
     </div>
   );

@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { MonSpanResponse, SpanBlock, getMonSpan } from "@/lib/api";
+import { MonSpanResponse, SpanBlock } from "@/lib/api";
 
 // PGAゲインの基準値（dB）
 // - 正常機: 54dB程度
@@ -41,10 +40,14 @@ function getBlockName(centerHz: number): string {
 }
 
 interface MonSpanPanelProps {
-  /** ポーリング有効フラグ（装置接続時のみtrue） */
-  enabled: boolean;
-  /** ポーリング間隔（ミリ秒） */
-  pollIntervalMs?: number;
+  /** MON-SPANデータ（統合APIから渡される） */
+  data: MonSpanResponse | null;
+  /** エラーメッセージ */
+  error?: string | null;
+  /** 読み込み中フラグ */
+  isLoading?: boolean;
+  /** 装置接続フラグ */
+  isConnected?: boolean;
 }
 
 /**
@@ -55,58 +58,15 @@ interface MonSpanPanelProps {
  * - L1/L2別表示
  */
 export function MonSpanPanel({
-  enabled,
-  pollIntervalMs = 5000, // MON-SPANは取得に時間がかかるので5秒
+  data,
+  error,
+  isLoading = false,
+  isConnected = true,
 }: MonSpanPanelProps) {
-  const [data, setData] = useState<MonSpanResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // AbortController参照
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  // 初回取得 + ポーリング
-  useEffect(() => {
-    if (!enabled) {
-      setData(null);
-      setError(null);
-      return;
-    }
-
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        console.log("[MON-SPAN] fetching...");
-        const res = await getMonSpan(controller.signal);
-        console.log("[MON-SPAN] success:", res.blocks.length, "blocks");
-        setData(res);
-        setError(null);
-      } catch (e) {
-        if (e instanceof Error && e.name === "AbortError") return;
-        const msg = e instanceof Error ? e.message : "取得失敗";
-        console.error("[MON-SPAN] error:", msg);
-        setError(msg);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, pollIntervalMs);
-
-    return () => {
-      clearInterval(interval);
-      controller.abort();
-    };
-  }, [enabled, pollIntervalMs]);
-
   // 全ブロックのPGA判定
   const allPgaNormal = data?.blocks.every((b) => b.pga >= PGA_NORMAL_THRESHOLD) ?? false;
 
-  if (!enabled) {
+  if (!isConnected) {
     return (
       <div className="rounded border border-gray-200 bg-white p-4">
         <h3 className="mb-2 font-medium text-gray-700">スペクトラム (MON-SPAN)</h3>
@@ -153,6 +113,10 @@ export function MonSpanPanel({
       {data && data.blocks.map((block, idx) => (
         <SpanBlockCard key={idx} block={block} />
       ))}
+
+      {!data && !error && (
+        <div className="text-gray-400">データなし</div>
+      )}
     </div>
   );
 }

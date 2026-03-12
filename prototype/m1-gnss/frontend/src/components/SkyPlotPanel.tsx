@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { NavSatResponse, SatelliteInfo, getNavSat } from "@/lib/api";
+import { NavSatResponse, SatelliteInfo } from "@/lib/api";
 
 /**
  * GNSS別の色を返す
@@ -169,10 +168,14 @@ function SkyPlotSVG({ satellites, size = 300 }: SkyPlotSVGProps) {
 }
 
 interface SkyPlotPanelProps {
-  /** ポーリング有効フラグ */
-  enabled: boolean;
-  /** ポーリング間隔（ミリ秒） */
-  pollIntervalMs?: number;
+  /** NAV-SATデータ（統合APIから渡される） */
+  data: NavSatResponse | null;
+  /** エラーメッセージ */
+  error?: string | null;
+  /** 読み込み中フラグ */
+  isLoading?: boolean;
+  /** 装置接続フラグ */
+  isConnected?: boolean;
 }
 
 /**
@@ -183,51 +186,12 @@ interface SkyPlotPanelProps {
  * - C/N0で衛星の大きさを変化
  */
 export function SkyPlotPanel({
-  enabled,
-  pollIntervalMs = 2000,
+  data,
+  error,
+  isLoading = false,
+  isConnected = true,
 }: SkyPlotPanelProps) {
-  const [data, setData] = useState<NavSatResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // AbortController参照
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  // 初回取得 + ポーリング
-  useEffect(() => {
-    if (!enabled) {
-      setData(null);
-      setError(null);
-      return;
-    }
-
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getNavSat(controller.signal);
-        setData(res);
-        setError(null);
-      } catch (e) {
-        if (e instanceof Error && e.name === "AbortError") return;
-        setError(e instanceof Error ? e.message : "取得失敗");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, pollIntervalMs);
-
-    return () => {
-      clearInterval(interval);
-      controller.abort();
-    };
-  }, [enabled, pollIntervalMs]);
-
-  if (!enabled) {
+  if (!isConnected) {
     return (
       <div className="rounded border border-gray-200 bg-white p-4">
         <h3 className="mb-2 font-medium text-gray-700">スカイプロット (NAV-SAT)</h3>
@@ -307,6 +271,10 @@ export function SkyPlotPanel({
             </div>
           </div>
         </div>
+      )}
+
+      {!data && !error && (
+        <div className="text-gray-400">データなし</div>
       )}
     </div>
   );
