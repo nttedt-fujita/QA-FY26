@@ -70,3 +70,37 @@
 - RTK実装の計画
 
 ---
+
+## Session 123 (2026-03-12)
+
+**概要**: 全体の作業整理、検査結果のドメインモデリング、RTK実装計画
+
+**実施内容**:
+1. **残タスク一覧の作成**
+   - 屋外検査機能の残タスクを整理（P0〜P2）
+   - P0: 集計ロジック、合否判定
+   - P1: DB保存、u-center照合
+2. **検査結果のドメインモデル設計**
+   - サンプル蓄積はFE（React状態）
+   - 集計方法: RTK FIX率=サンプル比率、L2受信率=平均、L1 C/N0=最小
+   - DBスキーマ: `outdoor_inspection_results` 新規テーブル
+3. **RTK実装計画の策定**
+   - Phase 1: サンプル蓄積・集計（Session 124）
+   - Phase 2: 結果表示UI（Session 125）
+   - **全体設計レビュー**（Session 126）← 追加
+   - Phase 3: DB保存（Session 127）
+   - Phase 4: 検証・報告準備（Session 128）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [remaining-tasks.md](../session123/remaining-tasks.md) | 残タスク一覧 |
+| [outdoor-inspection-domain-model.md](../session123/outdoor-inspection-domain-model.md) | ドメインモデル設計 |
+| [rtk-implementation-plan.md](../session123/rtk-implementation-plan.md) | 実装計画 |
+| [session124/session-plan.md](../session124/session-plan.md) | 次セッション計画 |
+
+**次セッション（Session 124）でやること**:
+- Phase 1: サンプル蓄積・集計の実装
+- 型定義、集計関数（TDD）、Hook作成
+
+---
