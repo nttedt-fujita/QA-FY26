@@ -54,6 +54,16 @@ export default function OutdoorInspectionsPage() {
   useEffect(() => {
     if (!isInspecting || !gnssState.data) return;
 
+    // スナップショット追加（生データ保存用）
+    // NAV-STATUSの変化でスナップショットを取得（1秒に1回程度）
+    if (gnssState.data.nav_status) {
+      const ns = gnssState.data.nav_status;
+      if (lastNavStatusRef.current !== ns.msss) {
+        // NAV-STATUSが変化したタイミングでスナップショット保存
+        inspection.addSnapshot(gnssState.data);
+      }
+    }
+
     // NAV-STATUSサンプル追加
     if (gnssState.data.nav_status) {
       const ns = gnssState.data.nav_status;
