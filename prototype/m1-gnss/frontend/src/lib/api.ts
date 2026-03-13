@@ -501,3 +501,78 @@ export async function getGnssState(signal?: AbortSignal): Promise<GnssStateRespo
   }
   return res.json();
 }
+
+// ===========================================
+// 屋外検査結果API
+// ===========================================
+
+/**
+ * 屋外検査結果
+ */
+export interface OutdoorInspectionResult {
+  id: number;
+  device_id: number | null;
+  lot_id: number | null;
+  inspected_at: string;
+  duration_sec: number;
+  sample_count: number;
+  rtk_fix_rate: number;
+  rtk_fix_time_ms: number | null;
+  l2_reception_rate: number;
+  l1_min_cno: number;
+  is_pass: boolean;
+  l1_cno_pass: boolean;
+  l2_rate_pass: boolean;
+  rtk_fix_time_pass: boolean;
+  rtk_fix_rate_pass: boolean;
+  failure_reasons: string[];
+  created_at: string;
+}
+
+/**
+ * 屋外検査結果一覧レスポンス
+ */
+export interface OutdoorResultListResponse {
+  results: OutdoorInspectionResult[];
+}
+
+/**
+ * スナップショット
+ */
+export interface OutdoorInspectionSnapshot {
+  id: number;
+  timestamp_ms: number;
+  data: GnssStateResponse;
+}
+
+/**
+ * スナップショット一覧レスポンス
+ */
+export interface OutdoorSnapshotsResponse {
+  inspection_id: number;
+  snapshots: OutdoorInspectionSnapshot[];
+}
+
+/**
+ * 屋外検査結果一覧を取得
+ */
+export async function listOutdoorResults(): Promise<OutdoorResultListResponse> {
+  const res = await fetch(`${API_BASE}/api/outdoor-inspection-results`);
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
+
+/**
+ * 屋外検査結果のスナップショットを取得
+ */
+export async function getOutdoorSnapshots(inspectionId: number): Promise<OutdoorSnapshotsResponse> {
+  const res = await fetch(`${API_BASE}/api/outdoor-inspection-results/${inspectionId}/snapshots`);
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}

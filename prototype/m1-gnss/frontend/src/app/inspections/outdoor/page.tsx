@@ -144,6 +144,7 @@ export default function OutdoorInspectionsPage() {
     if (gnssState.data) {
       let navStatusSample = null;
       let navSigSample = null;
+      let snapshotData = null;
 
       if (gnssState.data.nav_status) {
         const ns = gnssState.data.nav_status;
@@ -154,6 +155,8 @@ export default function OutdoorInspectionsPage() {
             msss: ns.msss,
             ttff: ns.ttff,
           };
+          // スナップショットもNavStatusと同じ条件で追加
+          snapshotData = gnssState.data;
         }
       }
 
@@ -177,8 +180,8 @@ export default function OutdoorInspectionsPage() {
         }
       }
 
-      // 最終サンプル追加
-      inspection.addFinalSample(navStatusSample, navSigSample, gnssState.data);
+      // 最終サンプル追加（スナップショットも重複チェック済み）
+      inspection.addFinalSample(navStatusSample, navSigSample, snapshotData);
     }
 
     // 集計完了
@@ -256,12 +259,20 @@ export default function OutdoorInspectionsPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold text-gray-800">屋外検査</h1>
-            <a
-              href="/inspections/indoor"
-              className="text-blue-600 hover:underline text-sm"
-            >
-              ← 屋内検査へ
-            </a>
+            <div className="flex items-center gap-4">
+              <a
+                href="/inspections/history"
+                className="text-blue-600 hover:underline text-sm"
+              >
+                履歴再生
+              </a>
+              <a
+                href="/inspections/indoor"
+                className="text-blue-600 hover:underline text-sm"
+              >
+                ← 屋内検査へ
+              </a>
+            </div>
           </div>
           <p className="text-sm text-gray-500 mt-1">
             L2受信率、RTK FIX率、MON-SPAN、スカイプロット

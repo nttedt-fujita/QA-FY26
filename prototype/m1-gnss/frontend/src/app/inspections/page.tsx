@@ -22,7 +22,7 @@ export default function InspectionsIndexPage() {
 
       {/* メインコンテンツ */}
       <main className="container mx-auto px-4 py-8">
-        <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
+        <div className="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
           {/* 屋内検査 */}
           <Link
             href="/inspections/indoor"
@@ -67,6 +67,29 @@ export default function InspectionsIndexPage() {
                 <li>• RTK FIX時間 ≤30秒</li>
                 <li>• RTK FIX率 &gt;95%</li>
                 <li>• MON-SPAN（スペクトラム）</li>
+              </ul>
+            </div>
+          </Link>
+
+          {/* 履歴再生 */}
+          <Link
+            href="/inspections/history"
+            className="block rounded-lg border-2 border-gray-200 bg-white p-6 hover:border-blue-400 hover:shadow-md transition-all"
+          >
+            <div className="mb-4 text-4xl">📊</div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              履歴再生
+            </h2>
+            <p className="text-gray-600 text-sm mb-4">
+              過去の屋外検査データを再生表示します。
+            </p>
+            <div className="text-sm text-gray-500">
+              <div className="font-medium mb-1">機能：</div>
+              <ul className="space-y-1">
+                <li>• 検査結果の確認</li>
+                <li>• スナップショット再生</li>
+                <li>• スカイプロット表示</li>
+                <li>• スペクトラム表示</li>
               </ul>
             </div>
           </Link>
