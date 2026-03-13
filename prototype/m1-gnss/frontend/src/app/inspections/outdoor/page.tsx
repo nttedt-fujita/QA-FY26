@@ -84,6 +84,15 @@ export default function OutdoorInspectionsPage() {
           gpsL1Signals.length > 0
             ? Math.min(...gpsL1Signals.map((s) => s.cno))
             : 0;
+
+        // デバッグ: GPS L1信号の詳細をログ出力
+        console.log("[DEBUG] NAV-SIG signals:", sig.signals.length, "total");
+        console.log("[DEBUG] GPS L1 signals:", gpsL1Signals.length, "found");
+        if (gpsL1Signals.length > 0) {
+          console.log("[DEBUG] GPS L1 cno values:", gpsL1Signals.map((s) => s.cno));
+        }
+        console.log("[DEBUG] minL1Cno:", minL1Cno);
+
         inspection.addNavSigSample({
           gps_visible_count: sig.stats.gps_visible_count,
           gps_l2_reception_count: sig.stats.gps_l2_reception_count,
