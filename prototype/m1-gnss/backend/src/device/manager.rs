@@ -3,7 +3,9 @@
 //! GNSS装置の検出・接続・状態管理を行うマネージャー
 
 use tracing::{debug, info, trace, warn};
-use std::io;
+use std::io::{self, Read, Write};
+// Session 163: serialportクレートの標準トレイトを再エクスポート
+pub use serialport::SerialPort;
 
 use super::filter::{filter_gnss_ports, PortInfo};
 use super::status::DeviceStatus;
@@ -49,6 +51,12 @@ impl From<io::Error> for DeviceManagerError {
     }
 }
 
+impl From<serialport::Error> for DeviceManagerError {
+    fn from(e: serialport::Error) -> Self {
+        DeviceManagerError::IoError(io::Error::new(io::ErrorKind::Other, e.description))
+    }
+}
+
 /// デバイス情報
 #[derive(Debug, Clone)]
 pub struct Device {
@@ -69,19 +77,7 @@ pub trait SerialPortProvider {
     fn open(&self, path: &str, baud_rate: u32) -> Result<Box<dyn SerialPort>, DeviceManagerError>;
 }
 
-/// シリアルポートトレイト
-///
-/// `Send`を要求するのはActix-webのスレッド間共有のため
-pub trait SerialPort: Send {
-    /// データを書き込む
-    fn write(&mut self, data: &[u8]) -> Result<usize, io::Error>;
-
-    /// データを読み込む
-    fn read(&mut self, buf: &mut [u8]) -> Result<usize, io::Error>;
-
-    /// 読み込みタイムアウトを設定
-    fn set_timeout(&mut self, timeout: std::time::Duration) -> Result<(), io::Error>;
-}
+// Session 163: 独自SerialPortトレイトを削除し、serialportクレートの標準トレイトを使用
 
 /// デフォルトボーレート（u-blox F9P）
 pub const DEFAULT_BAUD_RATE: u32 = 115200;
@@ -346,9 +342,28 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             .as_mut()
             .ok_or(DeviceManagerError::NotConnected)?;
 
-        let written = port.write(data)?;
-        trace!("send_ubx: {}バイト書き込み", written);
-        Ok(())
+        // Session 163: デバッグログ追加（送信タイムアウト調査）
+        let bytes_to_read = port.bytes_to_read().unwrap_or(0);
+        let bytes_to_write = port.bytes_to_write().unwrap_or(0);
+        debug!(
+            "[send_ubx] 開始: データ{}bytes, 受信バッファ{}bytes, 送信バッファ{}bytes",
+            data.len(), bytes_to_read, bytes_to_write
+        );
+
+        let start = std::time::Instant::now();
+        match port.write(data) {
+            Ok(written) => {
+                debug!("[send_ubx] 成功: {}bytes書き込み ({}ms)", written, start.elapsed().as_millis());
+                Ok(())
+            }
+            Err(e) => {
+                warn!(
+                    "[send_ubx] 失敗: {} ({}ms), 受信バッファ{}bytes, 送信バッファ{}bytes",
+                    e, start.elapsed().as_millis(), bytes_to_read, bytes_to_write
+                );
+                Err(DeviceManagerError::IoError(e))
+            }
+        }
     }
 
     /// データを書き込む（RTCM転送用）
