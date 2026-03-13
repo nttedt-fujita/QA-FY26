@@ -195,10 +195,19 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
         });
     }
 
-    // Session 161: ロック取得直後にシリアルポート安定化待機
-    // 仮説: NTRIP RTCMデータ送信直後はシリアルポートがまだ処理中でタイムアウトする
-    // Session 162: 50msでは不十分だったため100msに延長
-    let stabilize_delay_ms = 100;
+    // Session 163: ロック取得直後にバッファをドレイン
+    // 理由: NTRIP転送直後はバッファに未処理データが残っている可能性がある
+    //       待機時間を伸ばしても効果なし → ドレインで読み捨てる
+    let drain_start = std::time::Instant::now();
+    tracing::debug!("[GNSS-STATE] ロック取得後ドレイン開始");
+    if let Err(e) = manager.drain_buffer() {
+        tracing::warn!("[GNSS-STATE] ドレインエラー（続行）: {} ({}ms)", e, drain_start.elapsed().as_millis());
+    } else {
+        tracing::debug!("[GNSS-STATE] ドレイン完了 ({}ms)", drain_start.elapsed().as_millis());
+    }
+
+    // Session 163: ドレイン後の安定化待機（効果確認のため200ms維持）
+    let stabilize_delay_ms = 200;
     tracing::debug!("[GNSS-STATE] シリアルポート安定化待機: {}ms", stabilize_delay_ms);
     std::thread::sleep(std::time::Duration::from_millis(stabilize_delay_ms));
     tracing::debug!("[GNSS-STATE] 安定化待機完了");

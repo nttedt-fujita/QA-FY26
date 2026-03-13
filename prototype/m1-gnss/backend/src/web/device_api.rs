@@ -117,6 +117,7 @@ impl crate::device::manager::SerialPortProvider for RealSerialPortProvider {
         path: &str,
         baud_rate: u32,
     ) -> Result<Box<dyn crate::device::manager::SerialPort>, DeviceManagerError> {
+        // Session 163: RealSerialPortラッパーを削除し、serialportクレートのBoxを直接返す
         let port = serialport::new(path, baud_rate)
             .timeout(std::time::Duration::from_millis(100))
             .open()
@@ -133,28 +134,7 @@ impl crate::device::manager::SerialPortProvider for RealSerialPortProvider {
                 )),
             })?;
 
-        Ok(Box::new(RealSerialPort { port }))
-    }
-}
-
-/// シリアルポート実装（本番用）
-struct RealSerialPort {
-    port: Box<dyn serialport::SerialPort>,
-}
-
-impl crate::device::manager::SerialPort for RealSerialPort {
-    fn write(&mut self, data: &[u8]) -> Result<usize, std::io::Error> {
-        std::io::Write::write(&mut self.port, data)
-    }
-
-    fn read(&mut self, buf: &mut [u8]) -> Result<usize, std::io::Error> {
-        std::io::Read::read(&mut self.port, buf)
-    }
-
-    fn set_timeout(&mut self, timeout: std::time::Duration) -> Result<(), std::io::Error> {
-        self.port.set_timeout(timeout).map_err(|e| {
-            std::io::Error::new(std::io::ErrorKind::Other, e.description)
-        })
+        Ok(port)
     }
 }
 
