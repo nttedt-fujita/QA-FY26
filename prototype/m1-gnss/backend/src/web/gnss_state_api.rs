@@ -20,41 +20,36 @@ use super::mon_span_api::{MonSpanResponse, SpanBlockResponse};
 macro_rules! poll_and_parse {
     ($manager:expr, $class:expr, $id:expr, $name:expr, $parser:expr) => {{
         (|| -> Result<_, String> {
-            let step_start = std::time::Instant::now();
-
             // ドレイン
-            tracing::debug!("[GNSS-STATE:{}] drain開始", $name);
             if let Err(e) = $manager.drain_buffer() {
                 return Err(format!("{}: バッファクリアエラー - {}", $name, e));
             }
-            tracing::debug!("[GNSS-STATE:{}] drain完了 ({}ms)", $name, step_start.elapsed().as_millis());
 
             // 送信
             let poll_msg = build_poll($class, $id);
-            let send_start = std::time::Instant::now();
-            tracing::debug!("[GNSS-STATE:{}] 送信開始 ({}bytes)", $name, poll_msg.len());
             if let Err(e) = $manager.send_ubx(&poll_msg) {
-                tracing::error!("[GNSS-STATE:{}] 送信失敗: {} ({}ms)", $name, e, send_start.elapsed().as_millis());
+                tracing::error!("[GNSS-STATE:{}] 送信失敗: {}", $name, e);
                 return Err(format!("{}: 送信エラー - {}", $name, e));
             }
-            tracing::debug!("[GNSS-STATE:{}] 送信完了 ({}ms)", $name, send_start.elapsed().as_millis());
 
+            // 送信後待機（50ms固定）- 現状把握用ログ
+            let bytes_before = $manager.get_bytes_to_write().unwrap_or(0);
             std::thread::sleep(std::time::Duration::from_millis(50));
+            let bytes_after = $manager.get_bytes_to_write().unwrap_or(0);
+            tracing::debug!(
+                "[GNSS-STATE:{}] 50ms待機: 送信前{}bytes → 送信後{}bytes（排出{}bytes）",
+                $name, bytes_before, bytes_after, bytes_before.saturating_sub(bytes_after)
+            );
 
-            // Session 152: NAV-STATUS/MON-SPANは1秒以上かかるため2秒に延長
-            let recv_start = std::time::Instant::now();
-            tracing::debug!("[GNSS-STATE:{}] 受信待機開始", $name);
+            // 受信（タイムアウト2秒）
             let raw = match $manager.receive_ubx(std::time::Duration::from_millis(2000)) {
-                Ok(r) => {
-                    tracing::debug!("[GNSS-STATE:{}] 受信成功 ({}bytes, {}ms)", $name, r.len(), recv_start.elapsed().as_millis());
-                    r
-                }
+                Ok(r) => r,
                 Err(crate::device::manager::DeviceManagerError::Timeout) => {
-                    tracing::warn!("[GNSS-STATE:{}] 受信タイムアウト ({}ms)", $name, recv_start.elapsed().as_millis());
+                    tracing::warn!("[GNSS-STATE:{}] 受信タイムアウト", $name);
                     return Err(format!("{}: タイムアウト", $name));
                 }
                 Err(e) => {
-                    tracing::error!("[GNSS-STATE:{}] 受信エラー: {} ({}ms)", $name, e, recv_start.elapsed().as_millis());
+                    tracing::error!("[GNSS-STATE:{}] 受信エラー: {}", $name, e);
                     return Err(format!("{}: 受信エラー - {}", $name, e));
                 }
             };
@@ -195,77 +190,37 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
         });
     }
 
-    // Session 163: ロック取得直後にバッファをドレイン
-    // 理由: NTRIP転送直後はバッファに未処理データが残っている可能性がある
-    //       待機時間を伸ばしても効果なし → ドレインで読み捨てる
-    let drain_start = std::time::Instant::now();
-    tracing::debug!("[GNSS-STATE] ロック取得後ドレイン開始");
+    // ロック取得直後にバッファをドレイン（NTRIP転送後の残データ対策）
     if let Err(e) = manager.drain_buffer() {
-        tracing::warn!("[GNSS-STATE] ドレインエラー（続行）: {} ({}ms)", e, drain_start.elapsed().as_millis());
-    } else {
-        tracing::debug!("[GNSS-STATE] ドレイン完了 ({}ms)", drain_start.elapsed().as_millis());
+        tracing::warn!("[GNSS-STATE] ドレインエラー（続行）: {}", e);
     }
 
-    // Session 168: バッファ空待ち（固定待機からポーリング方式に変更）
-    // - 送信バッファが空になるまで10ms間隔でポーリング
-    // - タイムアウト500ms（安全マージン）
-    // - エラー/タイムアウト時はwarnログを出して続行
+    // バッファ空待ち（送信バッファが空になるまでポーリング）
     let stabilize_start = std::time::Instant::now();
-    let timeout_ms = 500;
+    let timeout_ms: u128 = 500;
     let poll_interval_ms = 10;
 
-    let bytes_before = match manager.get_bytes_to_write() {
-        Ok(bytes) => bytes,
-        Err(e) => {
-            tracing::warn!("[GNSS-STATE] バッファ残量取得エラー（続行）: {}", e);
-            0
-        }
-    };
-    tracing::debug!(
-        "[GNSS-STATE] バッファ空待ち開始: 送信バッファ残量={}bytes, タイムアウト={}ms",
-        bytes_before, timeout_ms
-    );
-
-    // バッファが空になるまでポーリング
-    let mut timed_out = false;
-    while stabilize_start.elapsed().as_millis() < timeout_ms as u128 {
+    while stabilize_start.elapsed().as_millis() < timeout_ms {
         match manager.get_bytes_to_write() {
-            Ok(0) => break, // バッファ空 → 待機完了
-            Ok(_) => {
-                std::thread::sleep(std::time::Duration::from_millis(poll_interval_ms));
-            }
+            Ok(0) => break,
+            Ok(_) => std::thread::sleep(std::time::Duration::from_millis(poll_interval_ms)),
             Err(e) => {
                 tracing::warn!("[GNSS-STATE] バッファ残量取得エラー（続行）: {}", e);
                 break;
             }
         }
     }
-    if stabilize_start.elapsed().as_millis() >= timeout_ms as u128 {
-        timed_out = true;
-    }
-
-    let bytes_after = manager.get_bytes_to_write().unwrap_or(0);
-    let elapsed_ms = stabilize_start.elapsed().as_millis();
-    if timed_out {
+    if stabilize_start.elapsed().as_millis() >= timeout_ms {
+        let bytes_after = manager.get_bytes_to_write().unwrap_or(0);
         tracing::warn!(
-            "[GNSS-STATE] バッファ空待ちタイムアウト（続行）: 経過{}ms, 残量{}bytes",
-            elapsed_ms, bytes_after
-        );
-    } else {
-        tracing::debug!(
-            "[GNSS-STATE] バッファ空待ち完了: 経過{}ms, 排出{}bytes",
-            elapsed_ms, bytes_before.saturating_sub(bytes_after)
+            "[GNSS-STATE] バッファ空待ちタイムアウト（続行）: 残量{}bytes",
+            bytes_after
         );
     }
 
     // NMEA出力を無効化（屋外検査用）
-    // Session 147: 屋内検査終了後にNMEAがONに戻っている場合に備えて毎回送信
-    let nmea_start = std::time::Instant::now();
-    tracing::debug!("[GNSS-STATE] NMEA OFF送信開始");
     if let Err(e) = send_disable_nmea_output(&mut manager) {
-        tracing::warn!("[GNSS-STATE] NMEA OFF送信失敗（続行）: {} ({}ms)", e, nmea_start.elapsed().as_millis());
-    } else {
-        tracing::debug!("[GNSS-STATE] NMEA OFF送信成功 ({}ms)", nmea_start.elapsed().as_millis());
+        tracing::warn!("[GNSS-STATE] NMEA OFF送信失敗（続行）: {}", e);
     }
 
     let mut response = GnssStateResponse {
@@ -279,8 +234,6 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
     };
 
     // 6メッセージを順次取得
-    tracing::debug!("[GNSS-STATE] 6メッセージ取得開始");
-
     // NAV-PVT (class=0x01, id=0x07)
     let msg_start = std::time::Instant::now();
     match poll_and_parse!(manager, 0x01, 0x07, "NAV-PVT", |raw: &[u8]| -> Result<NavPvtResponse, Box<dyn std::error::Error>> {

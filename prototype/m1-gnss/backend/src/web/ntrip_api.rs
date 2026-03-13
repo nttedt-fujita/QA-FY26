@@ -518,9 +518,8 @@ pub async fn connect_ntrip(
                                         let write_ms = write_start.elapsed().as_millis();
                                         tracing::info!("[NTRIP-RTCM] 書込み完了: {} bytes ({}ms)", written, write_ms);
 
-                                        // 書き込み後にフラッシュ待機を追加（デバッグ用）
+                                        // 書き込み後にフラッシュ待機
                                         // ZED-F9Pがデータを処理するまでの時間を確保
-                                        // Session 160: 競合問題デバッグ
                                         let flush_delay_ms = 50;
                                         tracing::debug!("[NTRIP-RTCM] フラッシュ待機: {}ms", flush_delay_ms);
                                         std::thread::sleep(std::time::Duration::from_millis(flush_delay_ms));
