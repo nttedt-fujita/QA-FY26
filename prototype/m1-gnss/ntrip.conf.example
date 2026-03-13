@@ -1,0 +1,9 @@
+# NTRIP設定ファイル
+# このファイルをコピーして ntrip.conf を作成してください
+# cp ntrip.conf.example ntrip.conf
+
+NTRIP_CASTER=ntrip.example.jp
+NTRIP_PORT=2101
+NTRIP_MOUNT=MOUNTPOINT
+NTRIP_USER=username
+NTRIP_PASS=password

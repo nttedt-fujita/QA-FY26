@@ -270,3 +270,41 @@
 3. 問題切り分け
 
 ---
+
+## Session 158 (2026-03-13)
+
+**概要**: NTRIP + UBXポーリング テスト準備（デバッグログ・Makefileターゲット整備）
+
+**実施内容**:
+1. **APIエンドポイント確認**
+   - NTRIP API、統合API（gnss-state）の構成確認
+2. **デバッグログ追加**
+   - `ntrip_api.rs`: RTCM転送時のロック取得/解放タイミング
+   - `gnss_state_api.rs`: 各メッセージポーリングの所要時間
+3. **Makefileターゲット整備**
+   - `make rtk-log/rtk-start/rtk-poll/rtk-stop`
+4. **設定ファイル対応**
+   - `ntrip.conf` から認証情報を読み込む仕組み
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ntrip.conf.example](../../prototype/m1-gnss/ntrip.conf.example) | NTRIP設定テンプレート |
+| [tools/test-rtk-flow.sh](../../prototype/m1-gnss/tools/test-rtk-flow.sh) | RTK統合テストスクリプト |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [makefiles/api.mk](../../prototype/m1-gnss/makefiles/api.mk) | RTKデバッグテスト用ターゲット追加 |
+| [gnss_state_api.rs](../../prototype/m1-gnss/backend/src/web/gnss_state_api.rs) | デバッグログ追加 |
+| [ntrip_api.rs](../../prototype/m1-gnss/backend/src/web/ntrip_api.rs) | デバッグログ追加 |
+
+**残課題**:
+- 実機テスト未実施（準備のみ完了）
+
+**次セッション（Session 159）でやること**:
+1. ntrip.conf作成
+2. make rtk-start/rtk-poll/rtk-stop で実機テスト
+3. ログから問題特定
+
+---

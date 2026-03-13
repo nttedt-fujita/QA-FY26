@@ -144,9 +144,18 @@ fn build_poll(class: u8, id: u8) -> Vec<u8> {
 
 /// GET /api/gnss-state - 統合API
 pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
+    tracing::debug!("[GNSS-STATE] API呼び出し開始");
+    let api_start = std::time::Instant::now();
+
+    tracing::debug!("[GNSS-STATE] DeviceManagerロック取得開始...");
+    let lock_start = std::time::Instant::now();
     let mut manager = match data.device_manager.lock() {
-        Ok(m) => m,
+        Ok(m) => {
+            tracing::debug!("[GNSS-STATE] ロック取得成功 ({}ms)", lock_start.elapsed().as_millis());
+            m
+        }
         Err(_) => {
+            tracing::error!("[GNSS-STATE] ロック取得失敗（poisoned）");
             return HttpResponse::InternalServerError().json(ErrorResponse {
                 error: "内部エラー: ロック取得に失敗".to_string(),
                 code: "LOCK_ERROR".to_string(),
@@ -179,7 +188,10 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
     };
 
     // 6メッセージを順次取得
+    tracing::debug!("[GNSS-STATE] 6メッセージ取得開始");
+
     // NAV-PVT (class=0x01, id=0x07)
+    let msg_start = std::time::Instant::now();
     match poll_and_parse!(manager, 0x01, 0x07, "NAV-PVT", |raw: &[u8]| -> Result<NavPvtResponse, Box<dyn std::error::Error>> {
         let parsed = nav_pvt::parse(raw)?;
         Ok(NavPvtResponse {
@@ -194,11 +206,18 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
             is_rtk_float: parsed.is_rtk_float(),
         })
     }) {
-        Ok(r) => response.nav_pvt = Some(r),
-        Err(e) => response.errors.push(e),
+        Ok(r) => {
+            tracing::debug!("[GNSS-STATE] NAV-PVT成功 ({}ms)", msg_start.elapsed().as_millis());
+            response.nav_pvt = Some(r);
+        }
+        Err(e) => {
+            tracing::warn!("[GNSS-STATE] NAV-PVT失敗: {} ({}ms)", e, msg_start.elapsed().as_millis());
+            response.errors.push(e);
+        }
     }
 
     // NAV-STATUS (class=0x01, id=0x03)
+    let msg_start = std::time::Instant::now();
     match poll_and_parse!(manager, 0x01, 0x03, "NAV-STATUS", |raw: &[u8]| -> Result<NavStatusResponse, Box<dyn std::error::Error>> {
         let parsed = nav_status::parse(raw)?;
         Ok(NavStatusResponse {
@@ -212,11 +231,18 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
             is_rtk_float: parsed.is_rtk_float(),
         })
     }) {
-        Ok(r) => response.nav_status = Some(r),
-        Err(e) => response.errors.push(e),
+        Ok(r) => {
+            tracing::debug!("[GNSS-STATE] NAV-STATUS成功 ({}ms)", msg_start.elapsed().as_millis());
+            response.nav_status = Some(r);
+        }
+        Err(e) => {
+            tracing::warn!("[GNSS-STATE] NAV-STATUS失敗: {} ({}ms)", e, msg_start.elapsed().as_millis());
+            response.errors.push(e);
+        }
     }
 
     // NAV-SAT (class=0x01, id=0x35)
+    let msg_start = std::time::Instant::now();
     match poll_and_parse!(manager, 0x01, 0x35, "NAV-SAT", |raw: &[u8]| -> Result<NavSatResponse, Box<dyn std::error::Error>> {
         let parsed = nav_sat::parse(raw)?;
         let used_count = parsed.used_satellites().len();
@@ -237,11 +263,18 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
             parsed.satellites.iter().map(|s| s.into()).collect();
         Ok(NavSatResponse { satellites, stats })
     }) {
-        Ok(r) => response.nav_sat = Some(r),
-        Err(e) => response.errors.push(e),
+        Ok(r) => {
+            tracing::debug!("[GNSS-STATE] NAV-SAT成功 ({}ms)", msg_start.elapsed().as_millis());
+            response.nav_sat = Some(r);
+        }
+        Err(e) => {
+            tracing::warn!("[GNSS-STATE] NAV-SAT失敗: {} ({}ms)", e, msg_start.elapsed().as_millis());
+            response.errors.push(e);
+        }
     }
 
     // NAV-SIG (class=0x01, id=0x43)
+    let msg_start = std::time::Instant::now();
     match poll_and_parse!(manager, 0x01, 0x43, "NAV-SIG", |raw: &[u8]| -> Result<NavSigResponse, Box<dyn std::error::Error>> {
         let parsed = nav_sig::parse(raw)?;
         let gps_l1_visible: Vec<_> = parsed.signals.iter()
@@ -264,11 +297,18 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
             parsed.signals.iter().map(|s| s.into()).collect();
         Ok(NavSigResponse { signals, stats })
     }) {
-        Ok(r) => response.nav_sig = Some(r),
-        Err(e) => response.errors.push(e),
+        Ok(r) => {
+            tracing::debug!("[GNSS-STATE] NAV-SIG成功 ({}ms)", msg_start.elapsed().as_millis());
+            response.nav_sig = Some(r);
+        }
+        Err(e) => {
+            tracing::warn!("[GNSS-STATE] NAV-SIG失敗: {} ({}ms)", e, msg_start.elapsed().as_millis());
+            response.errors.push(e);
+        }
     }
 
     // MON-SPAN (class=0x0A, id=0x31)
+    let msg_start = std::time::Instant::now();
     match poll_and_parse!(manager, 0x0A, 0x31, "MON-SPAN", |raw: &[u8]| -> Result<MonSpanResponse, Box<dyn std::error::Error>> {
         let parsed = mon_span::parse(raw)?;
         let blocks: Vec<SpanBlockResponse> = parsed.blocks.iter().map(|b| {
@@ -284,11 +324,18 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
         }).collect();
         Ok(MonSpanResponse { blocks })
     }) {
-        Ok(r) => response.mon_span = Some(r),
-        Err(e) => response.errors.push(e),
+        Ok(r) => {
+            tracing::debug!("[GNSS-STATE] MON-SPAN成功 ({}ms)", msg_start.elapsed().as_millis());
+            response.mon_span = Some(r);
+        }
+        Err(e) => {
+            tracing::warn!("[GNSS-STATE] MON-SPAN失敗: {} ({}ms)", e, msg_start.elapsed().as_millis());
+            response.errors.push(e);
+        }
     }
 
     // MON-RF (class=0x0A, id=0x38)
+    let msg_start = std::time::Instant::now();
     match poll_and_parse!(manager, 0x0A, 0x38, "MON-RF", |raw: &[u8]| -> Result<MonRfResponse, Box<dyn std::error::Error>> {
         let parsed = mon_rf::parse(raw)?;
         let blocks: Vec<RfBlockResponse> = parsed.blocks.iter().map(|b| {
@@ -308,9 +355,18 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
         let has_critical_jamming = blocks.iter().any(|b| b.jamming_state == 3);
         Ok(MonRfResponse { blocks, has_jamming, has_critical_jamming })
     }) {
-        Ok(r) => response.mon_rf = Some(r),
-        Err(e) => response.errors.push(e),
+        Ok(r) => {
+            tracing::debug!("[GNSS-STATE] MON-RF成功 ({}ms)", msg_start.elapsed().as_millis());
+            response.mon_rf = Some(r);
+        }
+        Err(e) => {
+            tracing::warn!("[GNSS-STATE] MON-RF失敗: {} ({}ms)", e, msg_start.elapsed().as_millis());
+            response.errors.push(e);
+        }
     }
+
+    tracing::debug!("[GNSS-STATE] 全メッセージ取得完了 (総時間: {}ms, エラー数: {})",
+        api_start.elapsed().as_millis(), response.errors.len());
 
     // 全失敗チェック
     if response.nav_pvt.is_none()

@@ -497,25 +497,32 @@ pub async fn connect_ntrip(
 
                             // ZED-F9Pに転送（DeviceManagerを使用）
                             let forwarded = {
+                                tracing::debug!("[NTRIP-RTCM] ロック取得開始...");
+                                let lock_start = std::time::Instant::now();
                                 let mut device_manager = match app_state_clone.device_manager.lock() {
-                                    Ok(m) => m,
+                                    Ok(m) => {
+                                        tracing::debug!("[NTRIP-RTCM] ロック取得成功 ({}ms)", lock_start.elapsed().as_millis());
+                                        m
+                                    }
                                     Err(_) => {
-                                        tracing::error!("DeviceManagerのロック取得に失敗");
+                                        tracing::error!("[NTRIP-RTCM] ロック取得失敗（poisoned）");
                                         continue;
                                     }
                                 };
 
                                 // シリアルポートに書き込み
+                                let write_start = std::time::Instant::now();
                                 match device_manager.write_data(rtcm_data) {
                                     Ok(written) => {
-                                        tracing::debug!("RTCM転送: {} bytes", written);
+                                        tracing::debug!("[NTRIP-RTCM] 転送完了: {} bytes ({}ms)", written, write_start.elapsed().as_millis());
                                         written as u64
                                     }
                                     Err(e) => {
-                                        tracing::warn!("RTCM転送失敗: {}", e);
+                                        tracing::warn!("[NTRIP-RTCM] 転送失敗: {} ({}ms)", e, write_start.elapsed().as_millis());
                                         0
                                     }
                                 }
+                                // ロック解放はここでスコープ終了時に自動
                             };
 
                             // 統計更新（転送成功分）
