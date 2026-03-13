@@ -36,3 +36,29 @@
 3. 効果に応じた次アクション
 
 ---
+
+## Session 162 (2026-03-13)
+
+**概要**: NTRIP+UBX競合問題の対策検証と、Makeコマンド整理
+
+**実施内容**:
+1. **ログ分析**: 50ms安定化待機では不十分（5回中2回失敗）
+2. **安定化待機を100msに延長**: gnss_state_api.rs修正
+3. **Makeコマンド整理**: RTKに統一、3コマンド→1コマンドに
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [gnss_state_api.rs](../../prototype/m1-gnss/backend/src/web/gnss_state_api.rs) | 安定化待機50ms→100ms |
+| [api.mk](../../prototype/m1-gnss/makefiles/api.mk) | RTKコマンド整理 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session-summary.md](../session162/session-summary.md) | セッションサマリー |
+
+**次セッション（Session 163）でやること**:
+1. 100ms待機の効果検証
+2. まだ失敗するなら別アプローチ検討
+
+---
