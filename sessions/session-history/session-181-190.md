@@ -85,3 +85,37 @@
 **次セッション**: [session184/session-plan.md](../session184/session-plan.md) 参照
 
 ---
+
+## Session 184 (2026-03-13)
+
+**概要**: GNSSフィルタ連動機能の実装（Phase 1-3〜Phase 2）
+
+**実施内容**:
+1. Phase 1-3〜1-5: GNSSフィルタ共通化
+   - SkyPlotPanel.tsx をprops受け取りに変更
+   - NavSigPanel.tsx をprops受け取りに変更
+   - outdoor/page.tsx でフィルタ状態管理
+   - history/page.tsx も同様に修正
+2. Phase 2: GNSS×周波数帯統計テーブル追加
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session-summary.md](../session184/session-summary.md) | セッションサマリー |
+
+**変更ファイル**:
+- `components/SkyPlotPanel.tsx` - props受け取り、フィルタUI削除
+- `components/NavSigPanel.tsx` - props受け取り、GNSS×周波数帯統計追加
+- `app/inspections/outdoor/page.tsx` - フィルタ状態管理、GnssFilter配置
+- `app/inspections/history/page.tsx` - フィルタ状態管理、GnssFilter配置
+- `ADR-013` - ステータス更新（承認済み）
+
+**残った作業**:
+- Phase 3: MonSpanPanelとの連携（優先度低）
+- 実機での動作確認
+
+**次セッション**: [session185/session-plan.md](../session185/session-plan.md)
+- 衛星信号テーブルのUI改善（バーの上部にGNSS色でグルーピング）
+- L2受信率がGNSSフィルタに連動しない挙動の確認（GPS固定は仕様か？）
+
+---
