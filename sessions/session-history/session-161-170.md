@@ -321,3 +321,40 @@
 3. 現状把握→優先度整理→方針決定
 
 ---
+
+## Session 171 (2026-03-13)
+
+**概要**: ドキュメント整理・現状把握・優先度整理
+
+**実施内容**:
+1. **ドキュメント整理**
+   - Session 155-170のファイル整理
+   - PDF目次を統合して33番に配置
+   - 仕様抽出ファイルを34-36番として配置
+   - 計測ログ（解決済み）を削除
+2. **デバッグログのメンテナンス**
+   - gnss_state_api.rsの`info!` → `debug!` に変更
+3. **現状把握・優先度整理**
+   - Session 155-170で解決した問題を確認
+   - 次の作業としてRTK屋外テストを選択
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [33-toc-ublox-f9-interface-description.md](../../docs/missions/m1-sensor-evaluation/gnss/33-toc-ublox-f9-interface-description.md) | u-blox F9 HPG PDF目次 |
+| [34-ubx-mon-comms.md](../../docs/missions/m1-sensor-evaluation/gnss/34-ubx-mon-comms.md) | UBX-MON-COMMS仕様 |
+| [35-ubx-uart-config.md](../../docs/missions/m1-sensor-evaluation/gnss/35-ubx-uart-config.md) | CFG-UART1/2仕様 |
+| [36-ntrip-rtk-findings.md](../../docs/missions/m1-sensor-evaluation/gnss/36-ntrip-rtk-findings.md) | NTRIP/RTK調査まとめ |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [gnss_state_api.rs](../../prototype/m1-gnss/backend/src/web/gnss_state_api.rs) | ログレベル変更 |
+| [README.md](../../docs/missions/m1-sensor-evaluation/gnss/README.md) | 33-36番追加 |
+
+**次セッション（Session 172）でやること**:
+1. RTK屋外テスト実施
+2. テスト結果に応じた対応
+3. FE 30秒設定の見直し検討
+
+---

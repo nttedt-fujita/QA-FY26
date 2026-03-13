@@ -177,15 +177,14 @@ fn build_poll(class: u8, id: u8) -> Vec<u8> {
 
 /// GET /api/gnss-state - 統合API
 pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
-    tracing::info!("[GNSS-STATE] ========== API呼び出し開始 ==========");
+    tracing::debug!("[GNSS-STATE] API呼び出し開始");
     let api_start = std::time::Instant::now();
 
-    tracing::info!("[GNSS-STATE] DeviceManagerロック取得開始...");
     let lock_start = std::time::Instant::now();
     let mut manager = match data.device_manager.lock() {
         Ok(m) => {
             let lock_ms = lock_start.elapsed().as_millis();
-            tracing::info!("[GNSS-STATE] ロック取得成功 ({}ms)", lock_ms);
+            tracing::debug!("[GNSS-STATE] ロック取得 ({}ms)", lock_ms);
             if lock_ms > 100 {
                 tracing::warn!("[GNSS-STATE] ⚠️ ロック待機が長い！({}ms) - NTRIP転送と競合の可能性", lock_ms);
             }
