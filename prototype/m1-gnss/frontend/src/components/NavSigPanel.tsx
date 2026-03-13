@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { NavSigResponse, NavSignal } from "@/lib/api";
-import { GNSS_LIST } from "@/lib/gnss-constants";
+import { GNSS_LIST, getGnssColor, getGnssName } from "@/lib/gnss-constants";
 
 // ADR-008: L2受信率50%以上で合格
 const L2_RECEPTION_THRESHOLD = 0.5;
@@ -117,9 +117,21 @@ export function NavSigPanel({
     }).filter((s) => s.l1Count > 0 || s.l2Count > 0);
   }, [data]);
 
-  // L2受信率の判定
+  // L2受信率の判定（GPS固定、ADR-008）
   const l2Rate = data?.stats.gps_l2_reception_rate ?? 0;
   const isL2Pass = l2Rate >= L2_RECEPTION_THRESHOLD;
+
+  // 選択GNSSの合計L2受信率（参考表示用）
+  const selectedL2Stats = useMemo(() => {
+    const filtered = gnssFreqStats.filter((s) => selectedGnss.has(s.gnssId));
+    const totalL1 = filtered.reduce((sum, s) => sum + s.l1Count, 0);
+    const totalL2 = filtered.reduce((sum, s) => sum + s.l2Count, 0);
+    return {
+      l1Count: totalL1,
+      l2Count: totalL2,
+      rate: totalL1 > 0 ? totalL2 / totalL1 : 0,
+    };
+  }, [gnssFreqStats, selectedGnss]);
 
   if (!isConnected) {
     return (
@@ -182,6 +194,19 @@ export function NavSigPanel({
               <span>50% (基準)</span>
               <span>100%</span>
             </div>
+            {/* 選択GNSSの参考L2受信率 */}
+            {selectedL2Stats.l1Count > 0 && !selectedGnss.has(0) && (
+              <div className="mt-2 text-xs text-gray-500">
+                選択GNSS: {(selectedL2Stats.rate * 100).toFixed(0)}%
+                ({selectedL2Stats.l2Count}/{selectedL2Stats.l1Count})
+              </div>
+            )}
+            {selectedL2Stats.l1Count > 0 && selectedGnss.has(0) && selectedGnss.size > 1 && (
+              <div className="mt-2 text-xs text-gray-500">
+                選択GNSS合計: {(selectedL2Stats.rate * 100).toFixed(0)}%
+                ({selectedL2Stats.l2Count}/{selectedL2Stats.l1Count})
+              </div>
+            )}
           </div>
 
           {/* GNSS×周波数帯統計テーブル */}
@@ -314,46 +339,109 @@ export function NavSigPanel({
 }
 
 /**
- * 信号一覧テーブル
+ * GNSS別にグループ化した信号
+ */
+interface GnssGroup {
+  gnssId: number;
+  gnssName: string;
+  color: string;
+  signals: NavSignal[];
+}
+
+/**
+ * 信号一覧テーブル（GNSS別グルーピング）
  */
 function SignalTable({ signals }: { signals: NavSignal[] }) {
   if (signals.length === 0) {
     return <div className="text-sm text-gray-400">信号なし</div>;
   }
 
-  // C/N0降順でソート
-  const sorted = [...signals].sort((a, b) => b.cno - a.cno);
+  // GNSS別にグループ化し、各グループ内はC/N0降順でソート
+  const groups: GnssGroup[] = useMemo(() => {
+    const groupMap = new Map<number, NavSignal[]>();
+
+    for (const signal of signals) {
+      const existing = groupMap.get(signal.gnss_id);
+      if (existing) {
+        existing.push(signal);
+      } else {
+        groupMap.set(signal.gnss_id, [signal]);
+      }
+    }
+
+    // GNSS_LISTの順番でグループをソート
+    const gnssOrder = GNSS_LIST.map((g) => g.id);
+    const sortedGroups: GnssGroup[] = [];
+
+    for (const gnssId of gnssOrder) {
+      const groupSignals = groupMap.get(gnssId);
+      if (groupSignals && groupSignals.length > 0) {
+        // グループ内はC/N0降順でソート
+        groupSignals.sort((a, b) => b.cno - a.cno);
+        sortedGroups.push({
+          gnssId,
+          gnssName: getGnssName(gnssId),
+          color: getGnssColor(gnssId),
+          signals: groupSignals,
+        });
+      }
+    }
+
+    return sortedGroups;
+  }, [signals]);
 
   return (
     <div className="overflow-hidden rounded border border-gray-200">
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-gray-50">
+            <th className="w-1 px-0"></th>
             <th className="px-2 py-1 text-left">SV</th>
             <th className="px-2 py-1 text-right">C/N0</th>
             <th className="px-2 py-1 text-left">強度</th>
           </tr>
         </thead>
         <tbody>
-          {sorted.map((signal, idx) => (
-            <tr key={idx} className="border-t border-gray-100">
-              <td className="px-2 py-1 font-mono">{signal.sv_id}</td>
-              <td
-                className={`px-2 py-1 text-right font-mono ${getCnoColorClass(
-                  signal.cno
-                )}`}
+          {groups.map((group) => (
+            group.signals.map((signal, idx) => (
+              <tr
+                key={`${group.gnssId}-${signal.sv_id}`}
+                className={`border-t ${idx === 0 ? "border-gray-300" : "border-gray-100"}`}
               >
-                {signal.cno}
-              </td>
-              <td className="px-2 py-1">
-                <div className="h-2 w-full overflow-hidden rounded bg-gray-200">
-                  <div
-                    className={`h-full ${getCnoBarColorClass(signal.cno)}`}
-                    style={{ width: `${getCnoBarWidth(signal.cno)}%` }}
-                  />
-                </div>
-              </td>
-            </tr>
+                {/* GNSS色インジケーター */}
+                <td
+                  className="w-1 px-0"
+                  style={{ backgroundColor: group.color }}
+                  title={group.gnssName}
+                />
+                <td className="px-2 py-1 font-mono">
+                  {idx === 0 && (
+                    <span
+                      className="mr-1 text-xs font-medium"
+                      style={{ color: group.color }}
+                    >
+                      {group.gnssName}
+                    </span>
+                  )}
+                  {signal.sv_id}
+                </td>
+                <td
+                  className={`px-2 py-1 text-right font-mono ${getCnoColorClass(
+                    signal.cno
+                  )}`}
+                >
+                  {signal.cno}
+                </td>
+                <td className="px-2 py-1">
+                  <div className="h-2 w-full overflow-hidden rounded bg-gray-200">
+                    <div
+                      className={`h-full ${getCnoBarColorClass(signal.cno)}`}
+                      style={{ width: `${getCnoBarWidth(signal.cno)}%` }}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))
           ))}
         </tbody>
       </table>
