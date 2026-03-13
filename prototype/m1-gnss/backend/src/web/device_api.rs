@@ -253,6 +253,29 @@ pub async fn connect_device(
                 tracing::warn!("F9Pシリアル番号の取得に失敗: {}", e);
             }
 
+            // ボーレートを115200に統一（Session 165）
+            // 38400等で検出された場合、115200に変更してBBRに保存
+            // 一度変更すれば、次回以降は115200で検出される
+            use crate::device::manager::DEFAULT_BAUD_RATE;
+            let final_baud_rate = if baud_rate != DEFAULT_BAUD_RATE {
+                tracing::info!(
+                    "ボーレートを{}bps → {}bpsに変更します",
+                    baud_rate, DEFAULT_BAUD_RATE
+                );
+                match manager.upgrade_baud_rate(&port_path, DEFAULT_BAUD_RATE) {
+                    Ok(()) => {
+                        tracing::info!("ボーレート変更完了: {}bps", DEFAULT_BAUD_RATE);
+                        DEFAULT_BAUD_RATE
+                    }
+                    Err(e) => {
+                        tracing::warn!("ボーレート変更に失敗: {} (継続)", e);
+                        baud_rate // 変更失敗時は元のボーレートで継続
+                    }
+                }
+            } else {
+                baud_rate
+            };
+
             // 定期出力を無効化（ポーリング専用）
             // Session 145: 定期出力とポーリングの混在問題を修正
             // 統合APIは順次ポーリングで動作するため、定期出力は不要
@@ -272,8 +295,8 @@ pub async fn connect_device(
 
             HttpResponse::Ok().json(ConnectResponse {
                 path: port_path,
-                baud_rate,
-                message: format!("接続成功（ボーレート: {} bps）", baud_rate),
+                baud_rate: final_baud_rate,
+                message: format!("接続成功（ボーレート: {} bps）", final_baud_rate),
             })
         }
         Err(e) => {

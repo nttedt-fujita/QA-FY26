@@ -42,7 +42,7 @@ const CFG_UART1OUTPROT_NMEA: u32 = 0x10740002;
 
 /// CFG-UART1-BAUDRATE のキーID
 /// UART1のボーレート設定（U4型: 4バイト）
-/// 出典: u-blox F9 HPG 1.32 Interface Description (UBX-22008968) p.214
+/// 出典: u-blox F9 HPG 1.32 Interface Description (UBX-22008968) p.270
 pub const CFG_UART1_BAUDRATE: u32 = 0x40520001;
 
 // ===========================================

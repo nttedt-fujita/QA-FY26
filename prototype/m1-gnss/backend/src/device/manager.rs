@@ -273,6 +273,65 @@ impl<P: SerialPortProvider> DeviceManager<P> {
         Err(DeviceManagerError::Timeout)
     }
 
+    /// ボーレートを変更して再接続
+    ///
+    /// 現在のボーレートでCFG-VALSETを送信し、ポートを閉じてから
+    /// 新しいボーレートで再接続する。
+    ///
+    /// # Arguments
+    /// * `path` - ポートパス（再接続に必要）
+    /// * `target_baud` - 目標ボーレート（例: 115200）
+    ///
+    /// # Returns
+    /// * Ok(()) - 成功
+    /// * Err - 変更または再接続に失敗
+    pub fn upgrade_baud_rate(&mut self, path: &str, target_baud: u32) -> Result<(), DeviceManagerError> {
+        use crate::ubx::cfg_valset::{set_uart1_baudrate, Layer};
+        use std::time::Duration;
+
+        // 既に目標ボーレートなら何もしない
+        if self.baud_rate == target_baud {
+            debug!("upgrade_baud_rate: 既に{}bps、変更不要", target_baud);
+            return Ok(());
+        }
+
+        info!(
+            "upgrade_baud_rate: {}bps → {}bps に変更開始",
+            self.baud_rate, target_baud
+        );
+
+        // CFG-VALSET でボーレート変更コマンドを送信
+        // RAM + BBR に書き込み（即座に有効 + 再起動後も有効）
+        let cmd = set_uart1_baudrate(target_baud, Layer::RamAndBbr);
+        self.send_ubx(&cmd)?;
+
+        // ACKを待つ（設定が反映される前に届くはず）
+        // 失敗しても続行（既に通信が切れている可能性）
+        let _ = self.wait_for_ack(0x06, 0x8A, Duration::from_millis(100));
+
+        // 少し待ってからポートを閉じる（送信バッファ排出待ち）
+        std::thread::sleep(Duration::from_millis(100));
+
+        // 接続情報を保存
+        let device_index = self.connected_device_index;
+
+        // ポートを閉じる
+        self.connected_port = None;
+        debug!("upgrade_baud_rate: ポートを閉じた");
+
+        // 新しいボーレートで再接続
+        self.baud_rate = target_baud;
+        let port = self.provider.open(path, target_baud)?;
+
+        // 状態を復元
+        self.connected_port = Some(port);
+        self.connected_device_index = device_index;
+        self.detected_baud_rate = Some(target_baud);
+
+        info!("upgrade_baud_rate: {}bps で再接続完了", target_baud);
+        Ok(())
+    }
+
     /// 切断
     pub fn disconnect(&mut self) -> Result<(), DeviceManagerError> {
         if self.connected_port.is_none() {
