@@ -12,6 +12,8 @@ import { NavSigPanel } from "@/components/NavSigPanel";
 import { MonSpanPanel } from "@/components/MonSpanPanel";
 import { NavStatusPanel } from "@/components/NavStatusPanel";
 import { SkyPlotPanel } from "@/components/SkyPlotPanel";
+import { GnssFilter } from "@/components/GnssFilter";
+import { createAllGnssSet } from "@/lib/gnss-constants";
 
 /**
  * 検査履歴再生画面
@@ -26,6 +28,9 @@ export default function InspectionHistoryPage() {
   // スナップショット
   const [snapshots, setSnapshots] = useState<OutdoorInspectionSnapshot[]>([]);
   const [selectedSnapshotIndex, setSelectedSnapshotIndex] = useState(0);
+
+  // GNSSフィルタ状態
+  const [selectedGnss, setSelectedGnss] = useState<Set<number>>(createAllGnssSet);
 
   // ローディング・エラー
   const [isLoading, setIsLoading] = useState(false);
@@ -250,6 +255,14 @@ export default function InspectionHistoryPage() {
               />
             </div>
 
+            {/* GNSSフィルタ */}
+            <div className="mb-6 rounded border border-gray-200 bg-white p-4">
+              <GnssFilter
+                selectedGnss={selectedGnss}
+                onGnssChange={setSelectedGnss}
+              />
+            </div>
+
             {/* スカイプロット + NAV-SIG 横並び */}
             <div className="mb-6 grid gap-4 md:grid-cols-2">
               {/* スカイプロット（NAV-SAT） */}
@@ -258,6 +271,7 @@ export default function InspectionHistoryPage() {
                 error={null}
                 isLoading={false}
                 isConnected={true}
+                selectedGnss={selectedGnss}
               />
               {/* NAV-SIG（衛星信号） */}
               <NavSigPanel
@@ -265,6 +279,7 @@ export default function InspectionHistoryPage() {
                 error={null}
                 isLoading={false}
                 isConnected={true}
+                selectedGnss={selectedGnss}
               />
             </div>
 

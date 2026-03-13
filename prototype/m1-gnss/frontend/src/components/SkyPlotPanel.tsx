@@ -1,25 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { NavSatResponse, SatelliteInfo } from "@/lib/api";
-
-// GNSS定義（ID、名前、色）
-const GNSS_LIST = [
-  { id: 0, name: "GPS", color: "#3b82f6" },      // blue
-  { id: 2, name: "Galileo", color: "#f59e0b" },  // amber
-  { id: 3, name: "BeiDou", color: "#ef4444" },   // red
-  { id: 6, name: "GLONASS", color: "#06b6d4" },  // cyan
-  { id: 5, name: "QZSS", color: "#8b5cf6" },     // violet
-  { id: 1, name: "SBAS", color: "#22c55e" },     // green
-] as const;
-
-/**
- * GNSS別の色を返す
- */
-function getGnssColor(gnssId: number): string {
-  const gnss = GNSS_LIST.find((g) => g.id === gnssId);
-  return gnss?.color ?? "#6b7280"; // gray for unknown
-}
+import { GNSS_LIST, getGnssColor } from "@/lib/gnss-constants";
 
 /**
  * C/N0に基づいて衛星の大きさを返す
@@ -228,6 +211,8 @@ interface SkyPlotPanelProps {
   isLoading?: boolean;
   /** 装置接続フラグ */
   isConnected?: boolean;
+  /** 選択中のGNSS IDセット（親コンポーネントから渡される） */
+  selectedGnss: Set<number>;
 }
 
 /**
@@ -236,41 +221,20 @@ interface SkyPlotPanelProps {
  * - 極座標で衛星位置を表示
  * - GNSS種別で色分け
  * - C/N0で衛星の大きさを変化
- * - 凡例クリックでGNSSフィルタリング
+ * - selectedGnss propsでフィルタリング
  */
 export function SkyPlotPanel({
   data,
   error,
   isLoading = false,
   isConnected = true,
+  selectedGnss,
 }: SkyPlotPanelProps) {
-  // フィルタ状態: 表示するGNSS IDのセット（初期値: 全表示）
-  const [visibleGnss, setVisibleGnss] = useState<Set<number>>(
-    () => new Set(GNSS_LIST.map((g) => g.id))
-  );
-
   // GNSS別統計
   const gnssStats = useMemo(() => {
     if (!data) return [];
     return calculateGnssStats(data.satellites);
   }, [data]);
-
-  // フィルタ切り替え
-  const toggleGnss = (gnssId: number) => {
-    setVisibleGnss((prev) => {
-      const next = new Set(prev);
-      if (next.has(gnssId)) {
-        next.delete(gnssId);
-      } else {
-        next.add(gnssId);
-      }
-      return next;
-    });
-  };
-
-  // 全選択/全解除
-  const selectAll = () => setVisibleGnss(new Set(GNSS_LIST.map((g) => g.id)));
-  const selectNone = () => setVisibleGnss(new Set());
 
   if (!isConnected) {
     return (
@@ -304,63 +268,11 @@ export function SkyPlotPanel({
           {/* スカイプロットSVG */}
           <SkyPlotSVG
             satellites={data.satellites}
-            visibleGnss={visibleGnss}
+            visibleGnss={selectedGnss}
             size={280}
           />
 
-          {/* フィルタ凡例（クリック可能） */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">クリックでフィルタ:</span>
-              <div className="flex gap-2">
-                <button
-                  onClick={selectAll}
-                  className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-200"
-                >
-                  全表示
-                </button>
-                <button
-                  onClick={selectNone}
-                  className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600 hover:bg-gray-200"
-                >
-                  全非表示
-                </button>
-              </div>
-            </div>
-            <div className="flex flex-wrap justify-center gap-2">
-              {GNSS_LIST.map((gnss) => {
-                const isVisible = visibleGnss.has(gnss.id);
-                const stats = gnssStats.find((s) => s.gnssId === gnss.id);
-                const hasData = stats && stats.count > 0;
-
-                return (
-                  <button
-                    key={gnss.id}
-                    onClick={() => toggleGnss(gnss.id)}
-                    disabled={!hasData}
-                    className={`flex items-center gap-1 rounded px-2 py-1 text-xs transition-all ${
-                      !hasData
-                        ? "cursor-not-allowed opacity-30"
-                        : isVisible
-                          ? "bg-gray-100 hover:bg-gray-200"
-                          : "bg-gray-50 opacity-50 hover:opacity-75"
-                    }`}
-                  >
-                    <div
-                      className={`h-3 w-3 rounded-full ${!isVisible && hasData ? "opacity-30" : ""}`}
-                      style={{ backgroundColor: gnss.color }}
-                    />
-                    <span className="text-gray-600">{gnss.name}</span>
-                    {hasData && (
-                      <span className="font-mono text-gray-400">({stats.count})</span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* GNSS別詳細統計 */}
+          {/* GNSS別詳細統計（選択GNSSのみ表示） */}
           {gnssStats.length > 0 && (
             <div className="rounded bg-gray-50 p-3">
               <div className="mb-2 text-xs font-medium text-gray-600">GNSS別統計</div>
@@ -384,7 +296,7 @@ export function SkyPlotPanel({
                       <tr
                         key={stats.gnssId}
                         className={`border-t border-gray-200 ${
-                          !visibleGnss.has(stats.gnssId) ? "opacity-40" : ""
+                          !selectedGnss.has(stats.gnssId) ? "opacity-40" : ""
                         }`}
                       >
                         <td className="py-1">

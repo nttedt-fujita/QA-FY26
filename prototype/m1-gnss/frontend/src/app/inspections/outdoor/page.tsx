@@ -11,6 +11,8 @@ import { NavSigPanel } from "@/components/NavSigPanel";
 import { MonSpanPanel } from "@/components/MonSpanPanel";
 import { NavStatusPanel } from "@/components/NavStatusPanel";
 import { SkyPlotPanel } from "@/components/SkyPlotPanel";
+import { GnssFilter } from "@/components/GnssFilter";
+import { createAllGnssSet } from "@/lib/gnss-constants";
 import { useOutdoorInspection } from "@/hooks/useOutdoorInspection";
 import { useGnssState } from "@/hooks/useGnssState";
 
@@ -25,6 +27,9 @@ export default function OutdoorInspectionsPage() {
   const [devices, setDevices] = useState<Device[]>([]);
   const [selectedLotId, setSelectedLotId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // GNSSフィルタ状態（全GNSS選択で初期化）
+  const [selectedGnss, setSelectedGnss] = useState<Set<number>>(createAllGnssSet);
 
   // 検査時間設定
   const [inspectionDurationSec, setInspectionDurationSec] = useState(30);
@@ -559,6 +564,14 @@ export default function OutdoorInspectionsPage() {
           />
         </div>
 
+        {/* GNSSフィルタ */}
+        <div className="mb-6 rounded border border-gray-200 bg-white p-4">
+          <GnssFilter
+            selectedGnss={selectedGnss}
+            onGnssChange={setSelectedGnss}
+          />
+        </div>
+
         {/* スカイプロット + NAV-SIG 横並び */}
         <div className="mb-6 grid gap-4 md:grid-cols-2">
           {/* スカイプロット（NAV-SAT） */}
@@ -567,6 +580,7 @@ export default function OutdoorInspectionsPage() {
             error={gnssState.error}
             isLoading={gnssState.isLoading}
             isConnected={!!connectedDevice}
+            selectedGnss={selectedGnss}
           />
           {/* NAV-SIG（衛星信号） */}
           <NavSigPanel
@@ -574,6 +588,7 @@ export default function OutdoorInspectionsPage() {
             error={gnssState.error}
             isLoading={gnssState.isLoading}
             isConnected={!!connectedDevice}
+            selectedGnss={selectedGnss}
           />
         </div>
 
