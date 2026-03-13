@@ -231,3 +231,42 @@
 3. 設計判断（ADR-013が必要か）
 
 ---
+
+## Session 157 (2026-03-13)
+
+**概要**: NTRIP/RTK調査完了 + 方針転換（バックエンドAPIテストへ）
+
+**実施内容**:
+1. **全二重通信の追加調査**
+   - u-blox Interface Description p.270-274を抽出
+   - 「full duplex」直接記述なし、ただしCFG-UARTxINPROT/OUTPROTが独立設定 → 全二重前提
+2. **DeviceManager/NTRIP APIコード確認**
+   - ロックは`AppState`の`Mutex<DeviceManager>`で実現
+   - RTCM転送: 数msのロック保持、理論上は並行動作可能
+3. **要求の再確認**
+   - ユーザーの本来の問題: NTRIP接続後に屋外検査すると失敗
+   - 調査結果では「理論上は動くはず」だが、実際にはエラー発生
+   - 方針転換: バックエンドAPIだけでテストして問題を切り分ける
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ublox-uart-config.md](../session157/ublox-uart-config.md) | u-blox PDF p.270-274抽出 |
+
+**更新ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ntrip-rtk-spec-findings.md](../session156/ntrip-rtk-spec-findings.md) | 調査完了、追加調査結果反映 |
+
+**決定事項**:
+| 項目 | 決定 |
+|------|------|
+| 次のアプローチ | バックエンドAPIだけでNTRIP + UBXポーリングをテスト |
+| ADR-013 | 不要（問題特定が先） |
+
+**次セッション（Session 158）でやること**:
+1. バックエンドAPIテスト用Makefileターゲット作成
+2. 実機テスト（curlでNTRIP接続 + UBXポーリング）
+3. 問題切り分け
+
+---
