@@ -206,22 +206,57 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
         tracing::debug!("[GNSS-STATE] ドレイン完了 ({}ms)", drain_start.elapsed().as_millis());
     }
 
-    // Session 164: 送信バッファ排出待ち
-    // Session 166検証結果: 38400bpsでは200ms必要、100msでは失敗あり
-    // Session 167: 因果関係検証のため、待機前後のバッファ残量を計測
-    let bytes_before = manager.get_bytes_to_write().unwrap_or(0);
-    let stabilize_delay_ms = 100; // Session 167: 失敗ケース検証用に100msに設定
-    tracing::debug!(
-        "[GNSS-STATE] 安定化待機開始: {}ms, 送信バッファ残量: {}bytes",
-        stabilize_delay_ms, bytes_before
-    );
+    // Session 168: バッファ空待ち（固定待機からポーリング方式に変更）
+    // - 送信バッファが空になるまで10ms間隔でポーリング
+    // - タイムアウト500ms（安全マージン）
+    // - エラー/タイムアウト時はwarnログを出して続行
     let stabilize_start = std::time::Instant::now();
-    std::thread::sleep(std::time::Duration::from_millis(stabilize_delay_ms));
-    let bytes_after = manager.get_bytes_to_write().unwrap_or(0);
+    let timeout_ms = 500;
+    let poll_interval_ms = 10;
+
+    let bytes_before = match manager.get_bytes_to_write() {
+        Ok(bytes) => bytes,
+        Err(e) => {
+            tracing::warn!("[GNSS-STATE] バッファ残量取得エラー（続行）: {}", e);
+            0
+        }
+    };
     tracing::debug!(
-        "[GNSS-STATE] 安定化待機完了: 経過{}ms, 送信バッファ残量: {}bytes (排出: {}bytes)",
-        stabilize_start.elapsed().as_millis(), bytes_after, bytes_before.saturating_sub(bytes_after)
+        "[GNSS-STATE] バッファ空待ち開始: 送信バッファ残量={}bytes, タイムアウト={}ms",
+        bytes_before, timeout_ms
     );
+
+    // バッファが空になるまでポーリング
+    let mut timed_out = false;
+    while stabilize_start.elapsed().as_millis() < timeout_ms as u128 {
+        match manager.get_bytes_to_write() {
+            Ok(0) => break, // バッファ空 → 待機完了
+            Ok(_) => {
+                std::thread::sleep(std::time::Duration::from_millis(poll_interval_ms));
+            }
+            Err(e) => {
+                tracing::warn!("[GNSS-STATE] バッファ残量取得エラー（続行）: {}", e);
+                break;
+            }
+        }
+    }
+    if stabilize_start.elapsed().as_millis() >= timeout_ms as u128 {
+        timed_out = true;
+    }
+
+    let bytes_after = manager.get_bytes_to_write().unwrap_or(0);
+    let elapsed_ms = stabilize_start.elapsed().as_millis();
+    if timed_out {
+        tracing::warn!(
+            "[GNSS-STATE] バッファ空待ちタイムアウト（続行）: 経過{}ms, 残量{}bytes",
+            elapsed_ms, bytes_after
+        );
+    } else {
+        tracing::debug!(
+            "[GNSS-STATE] バッファ空待ち完了: 経過{}ms, 排出{}bytes",
+            elapsed_ms, bytes_before.saturating_sub(bytes_after)
+        );
+    }
 
     // NMEA出力を無効化（屋外検査用）
     // Session 147: 屋内検査終了後にNMEAがONに戻っている場合に備えて毎回送信

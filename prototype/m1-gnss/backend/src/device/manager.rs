@@ -80,7 +80,7 @@ pub trait SerialPortProvider {
 // Session 163: 独自SerialPortトレイトを削除し、serialportクレートの標準トレイトを使用
 
 /// デフォルトボーレート（u-blox F9P）
-pub const DEFAULT_BAUD_RATE: u32 = 38400; // Session 167: 失敗ケース検証用
+pub const DEFAULT_BAUD_RATE: u32 = 38400; // Session 168: バッファ空待ち検証用
 
 /// F9P評価ボードのボーレート（FTDI経由）
 pub const F9P_EVAL_BAUD_RATE: u32 = 38400;
