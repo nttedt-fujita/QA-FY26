@@ -32,14 +32,32 @@ macro_rules! poll_and_parse {
                 return Err(format!("{}: 送信エラー - {}", $name, e));
             }
 
-            // 送信後待機（50ms固定）- 現状把握用ログ
+            // 送信後バッファ空待ち（ポーリング）
+            let wait_start = std::time::Instant::now();
+            let timeout_ms: u128 = 10;
+            let poll_interval_ms = 1;
             let bytes_before = $manager.get_bytes_to_write().unwrap_or(0);
-            std::thread::sleep(std::time::Duration::from_millis(50));
+
+            while wait_start.elapsed().as_millis() < timeout_ms {
+                match $manager.get_bytes_to_write() {
+                    Ok(0) => break,
+                    Ok(_) => std::thread::sleep(std::time::Duration::from_millis(poll_interval_ms)),
+                    Err(_) => break,
+                }
+            }
+
+            let wait_elapsed = wait_start.elapsed();
             let bytes_after = $manager.get_bytes_to_write().unwrap_or(0);
             tracing::debug!(
-                "[GNSS-STATE:{}] 50ms待機: 送信前{}bytes → 送信後{}bytes（排出{}bytes）",
-                $name, bytes_before, bytes_after, bytes_before.saturating_sub(bytes_after)
+                "[GNSS-STATE:{}] バッファ空待ち: 残量{}→{}bytes, 待機{:?}",
+                $name, bytes_before, bytes_after, wait_elapsed
             );
+            if wait_elapsed.as_millis() >= timeout_ms {
+                tracing::warn!(
+                    "[GNSS-STATE:{}] バッファ空待ちタイムアウト: 残量{}bytes",
+                    $name, bytes_after
+                );
+            }
 
             // 受信（タイムアウト2秒）
             let raw = match $manager.receive_ubx(std::time::Duration::from_millis(2000)) {
