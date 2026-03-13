@@ -6,7 +6,7 @@
 use rusqlite::{Connection, params};
 use super::{
     Device, IndoorInspection, InspectionItemName, InspectionItemResult,
-    Lot, OutdoorInspectionResult, RepositoryError, Verdict,
+    Lot, OutdoorInspectionResult, OutdoorInspectionSnapshot, RepositoryError, Verdict,
 };
 
 /// SQLiteリポジトリ
@@ -134,6 +134,25 @@ impl SqliteRepository {
 
         self.conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_outdoor_results_lot ON outdoor_inspection_results(lot_id)",
+            [],
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        // outdoor_inspection_snapshots（屋外検査スナップショット）
+        // GnssStateResponseの時系列データをJSON形式で保存
+        self.conn.execute(
+            "CREATE TABLE IF NOT EXISTS outdoor_inspection_snapshots (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                inspection_id INTEGER NOT NULL,
+                timestamp_ms INTEGER NOT NULL,
+                snapshot_json TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT (datetime('now')),
+                FOREIGN KEY (inspection_id) REFERENCES outdoor_inspection_results(id)
+            )",
+            [],
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        self.conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_snapshots_inspection ON outdoor_inspection_snapshots(inspection_id)",
             [],
         ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
 
@@ -645,6 +664,57 @@ impl SqliteRepository {
         }
         Ok(results)
     }
+
+    // ===========================================
+    // OutdoorInspectionSnapshot CRUD
+    // ===========================================
+
+    /// スナップショットを一括保存
+    pub fn insert_outdoor_inspection_snapshots(
+        &self,
+        snapshots: &[OutdoorInspectionSnapshot],
+    ) -> Result<(), RepositoryError> {
+        for snapshot in snapshots {
+            self.conn.execute(
+                "INSERT INTO outdoor_inspection_snapshots (inspection_id, timestamp_ms, snapshot_json)
+                 VALUES (?1, ?2, ?3)",
+                params![
+                    snapshot.inspection_id,
+                    snapshot.timestamp_ms,
+                    snapshot.snapshot_json,
+                ],
+            ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+        }
+        Ok(())
+    }
+
+    /// 検査IDでスナップショット一覧を取得（時系列順）
+    pub fn get_outdoor_inspection_snapshots(
+        &self,
+        inspection_id: i64,
+    ) -> Result<Vec<OutdoorInspectionSnapshot>, RepositoryError> {
+        let mut stmt = self.conn.prepare(
+            "SELECT id, inspection_id, timestamp_ms, snapshot_json
+             FROM outdoor_inspection_snapshots
+             WHERE inspection_id = ?1
+             ORDER BY timestamp_ms ASC"
+        ).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        let rows = stmt.query_map([inspection_id], |row| {
+            Ok(OutdoorInspectionSnapshot {
+                id: Some(row.get(0)?),
+                inspection_id: row.get(1)?,
+                timestamp_ms: row.get(2)?,
+                snapshot_json: row.get(3)?,
+            })
+        }).map_err(|e| RepositoryError::Sql(e.to_string()))?;
+
+        let mut snapshots = Vec::new();
+        for row in rows {
+            snapshots.push(row.map_err(|e| RepositoryError::Sql(e.to_string()))?);
+        }
+        Ok(snapshots)
+    }
 }
 
 #[cfg(test)]
@@ -1059,5 +1129,68 @@ mod tests {
 
         let result = repo.get_outdoor_inspection_result(999);
         assert!(matches!(result, Err(RepositoryError::NotFound(_))));
+    }
+
+    // ===========================================
+    // OutdoorInspectionSnapshot テスト
+    // ===========================================
+
+    #[test]
+    fn test_snapshot_insert_and_get() {
+        let repo = SqliteRepository::in_memory().unwrap();
+
+        // 先に検査結果を作成
+        let result = OutdoorInspectionResult::new(
+            "2026-03-13T10:00:00+09:00".to_string(),
+            30,
+            30,
+        )
+        .with_metrics(0.95, Some(5000), 0.60, 35.0)
+        .with_judgment(true, true, true, true, true, None);
+
+        let inspection_id = repo.insert_outdoor_inspection_result(&result).unwrap();
+
+        // スナップショットを追加
+        let snapshots = vec![
+            OutdoorInspectionSnapshot::new(
+                inspection_id,
+                1710000000000,
+                r#"{"nav_pvt":{"fix_type":3}}"#.to_string(),
+            ),
+            OutdoorInspectionSnapshot::new(
+                inspection_id,
+                1710000001000,
+                r#"{"nav_pvt":{"fix_type":3}}"#.to_string(),
+            ),
+        ];
+
+        repo.insert_outdoor_inspection_snapshots(&snapshots).unwrap();
+
+        // 取得して確認
+        let loaded = repo.get_outdoor_inspection_snapshots(inspection_id).unwrap();
+        assert_eq!(loaded.len(), 2);
+        assert_eq!(loaded[0].timestamp_ms, 1710000000000);
+        assert_eq!(loaded[1].timestamp_ms, 1710000001000);
+        assert!(loaded[0].snapshot_json.contains("fix_type"));
+    }
+
+    #[test]
+    fn test_snapshot_empty_for_no_snapshots() {
+        let repo = SqliteRepository::in_memory().unwrap();
+
+        // 検査結果を作成（スナップショットなし）
+        let result = OutdoorInspectionResult::new(
+            "2026-03-13T10:00:00+09:00".to_string(),
+            30,
+            30,
+        )
+        .with_metrics(0.95, Some(5000), 0.60, 35.0)
+        .with_judgment(true, true, true, true, true, None);
+
+        let inspection_id = repo.insert_outdoor_inspection_result(&result).unwrap();
+
+        // スナップショット取得（空）
+        let loaded = repo.get_outdoor_inspection_snapshots(inspection_id).unwrap();
+        assert!(loaded.is_empty());
     }
 }
