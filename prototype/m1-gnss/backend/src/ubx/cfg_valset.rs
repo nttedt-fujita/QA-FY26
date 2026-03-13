@@ -40,6 +40,11 @@ pub enum Layer {
 /// NMEA出力プロトコルのON/OFF
 const CFG_UART1OUTPROT_NMEA: u32 = 0x10740002;
 
+/// CFG-UART1-BAUDRATE のキーID
+/// UART1のボーレート設定（U4型: 4バイト）
+/// 出典: u-blox F9 HPG 1.32 Interface Description (UBX-22008968) p.214
+pub const CFG_UART1_BAUDRATE: u32 = 0x40520001;
+
 // ===========================================
 // CFG-MSGOUT キーID（USB用）
 // 出典: u-blox F9 HPG 1.32 Interface Description (UBX-22008968) p.234-251
@@ -116,6 +121,41 @@ pub fn set_uart1_nmea_output(enable: bool, layer: Layer) -> Vec<u8> {
 
     // 値 (1 byte for L type)
     payload.push(value);
+
+    // フレーム構築
+    build_ubx_frame(CFG_CLASS, CFG_VALSET_ID, &payload)
+}
+
+/// UART1のボーレートを変更するCFG-VALSETメッセージを生成
+///
+/// # Arguments
+/// * `baud_rate` - ボーレート（例: 115200, 38400, 9600）
+/// * `layer` - 設定レイヤー（RAM/BBR/Flash）
+///
+/// # Returns
+/// 完全なUBXフレーム（ヘッダー + ペイロード + チェックサム）
+///
+/// # 注意
+/// - RAMに書き込むと即座に反映される
+/// - ホスト側も同じボーレートに変更してから再接続が必要
+pub fn set_uart1_baudrate(baud_rate: u32, layer: Layer) -> Vec<u8> {
+    // ペイロード構成:
+    // - version (1 byte): 0x00
+    // - layers (1 byte): レイヤービットマスク
+    // - reserved (2 bytes): 0x00, 0x00
+    // - cfgData (N bytes): キー(4bytes) + 値(4bytes for U4)
+
+    let mut payload = vec![
+        0x00,           // version
+        layer as u8,    // layers
+        0x00, 0x00,     // reserved
+    ];
+
+    // キー (little-endian)
+    payload.extend_from_slice(&CFG_UART1_BAUDRATE.to_le_bytes());
+
+    // 値 (4 bytes for U4 type)
+    payload.extend_from_slice(&baud_rate.to_le_bytes());
 
     // フレーム構築
     build_ubx_frame(CFG_CLASS, CFG_VALSET_ID, &payload)

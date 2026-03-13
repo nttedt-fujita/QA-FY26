@@ -206,8 +206,9 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
         tracing::debug!("[GNSS-STATE] ドレイン完了 ({}ms)", drain_start.elapsed().as_millis());
     }
 
-    // Session 163: ドレイン後の安定化待機（効果確認のため200ms維持）
-    let stabilize_delay_ms = 200;
+    // Session 164: 仮説検証 - 送信バッファ排出待ち時間が足りない？
+    // 200ms → 500ms に延長して失敗が解消されるか確認
+    let stabilize_delay_ms = 500;
     tracing::debug!("[GNSS-STATE] シリアルポート安定化待機: {}ms", stabilize_delay_ms);
     std::thread::sleep(std::time::Duration::from_millis(stabilize_delay_ms));
     tracing::debug!("[GNSS-STATE] 安定化待機完了");
