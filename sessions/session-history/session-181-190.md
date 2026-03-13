@@ -52,3 +52,36 @@
 - スカイプロットと衛星信号の紐付け（案A/B/C選択待ち）
 
 ---
+
+## Session 183 (2026-03-13)
+
+**概要**: GNSSフィルタ連動機能の設計・計画
+
+**実施内容**:
+1. 紐付け機能の要件整理
+   - 「どのGNSSが受信率に影響大きいか」を分析したい
+   - フィルタを切り替えて比較できるようにしたい
+2. ADR-013作成（GNSSフィルタ連動と周波数帯別統計表示）
+3. 実装計画書作成
+4. Phase 1-1, 1-2 実装開始
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ADR-013](../../docs/adr/m1/ADR-013-gnss-filter-linkage.md) | GNSSフィルタ連動の設計判断 |
+| [gnss-filter-linkage-plan.md](../session183/gnss-filter-linkage-plan.md) | 実装計画書 |
+| `lib/gnss-constants.ts` | GNSS定義の共通モジュール |
+| `components/GnssFilter.tsx` | GNSSフィルタコンポーネント |
+
+**変更ファイル**:
+- `CLAUDE.md` - ADR一覧にADR-013追加
+
+**残った作業**:
+- Phase 1-3: SkyPlotPanel.tsx をprops受け取りに変更
+- Phase 1-4: NavSigPanel.tsx をprops受け取りに変更
+- Phase 1-5: outdoor/page.tsx でフィルタ状態管理
+- Phase 2: NavSigPanelにGNSS×周波数帯統計追加
+
+**次セッション**: [session184/session-plan.md](../session184/session-plan.md) 参照
+
+---
