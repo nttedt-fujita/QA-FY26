@@ -129,7 +129,7 @@ export default function InspectionHistoryPage() {
             <option value="">検査を選択してください</option>
             {results.map((result) => (
               <option key={result.id} value={result.id}>
-                ID:{result.id} - {formatDateTime(result.inspected_at)} -{" "}
+                ID:{result.id} - {result.serial_number ? `S/N:${result.serial_number.slice(-8)}` : "S/N:未登録"} - {formatDateTime(result.inspected_at)} -{" "}
                 {result.is_pass ? "合格" : "不合格"} ({result.sample_count}サンプル)
               </option>
             ))}
@@ -146,7 +146,14 @@ export default function InspectionHistoryPage() {
             }`}
           >
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-medium text-gray-700">検査ID: {selectedResult.id}</h3>
+              <div>
+                <h3 className="font-medium text-gray-700">検査ID: {selectedResult.id}</h3>
+                {selectedResult.serial_number && (
+                  <p className="text-sm text-gray-500 font-mono">
+                    S/N: {selectedResult.serial_number}
+                  </p>
+                )}
+              </div>
               <span
                 className={`rounded px-3 py-1 font-bold ${
                   selectedResult.is_pass

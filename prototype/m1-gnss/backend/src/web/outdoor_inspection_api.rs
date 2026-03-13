@@ -67,6 +67,7 @@ pub struct SnapshotData {
 pub struct OutdoorResultResponse {
     pub id: i64,
     pub device_id: Option<i64>,
+    pub serial_number: Option<String>,
     pub lot_id: Option<i64>,
     pub inspected_at: String,
     pub duration_sec: i32,
@@ -109,7 +110,7 @@ pub struct SnapshotsListResponse {
 // ===========================================
 
 /// OutdoorInspectionResult を OutdoorResultResponse に変換
-fn to_response(result: &OutdoorInspectionResult) -> OutdoorResultResponse {
+fn to_response(result: &OutdoorInspectionResult, serial_number: Option<String>) -> OutdoorResultResponse {
     let failure_reasons = result.failure_reasons
         .as_ref()
         .map(|s| serde_json::from_str::<Vec<String>>(s).unwrap_or_default())
@@ -118,6 +119,7 @@ fn to_response(result: &OutdoorInspectionResult) -> OutdoorResultResponse {
     OutdoorResultResponse {
         id: result.id.unwrap_or(0),
         device_id: result.device_id,
+        serial_number,
         lot_id: result.lot_id,
         inspected_at: result.inspected_at.clone(),
         duration_sec: result.duration_sec,
@@ -231,7 +233,13 @@ pub async fn save_outdoor_result(
 
             // 保存したレコードを取得して返却
             match repo.get_outdoor_inspection_result(id) {
-                Ok(saved) => HttpResponse::Created().json(to_response(&saved)),
+                Ok(saved) => {
+                    // シリアル番号を取得
+                    let serial = saved.device_id.and_then(|did| {
+                        repo.get_device(did).ok().map(|d| d.serial_number)
+                    });
+                    HttpResponse::Created().json(to_response(&saved, serial))
+                }
                 Err(e) => HttpResponse::InternalServerError().json(ErrorResponse {
                     error: e.to_string(),
                     code: "DB_ERROR".to_string(),
@@ -260,7 +268,13 @@ pub async fn list_outdoor_results(data: web::Data<AppState>) -> impl Responder {
     match repo.get_all_outdoor_inspection_results() {
         Ok(results) => {
             let response_list: Vec<OutdoorResultResponse> = results.iter()
-                .map(to_response)
+                .map(|r| {
+                    // シリアル番号を取得
+                    let serial = r.device_id.and_then(|did| {
+                        repo.get_device(did).ok().map(|d| d.serial_number)
+                    });
+                    to_response(r, serial)
+                })
                 .collect();
 
             HttpResponse::Ok().json(OutdoorResultListResponse {
@@ -292,7 +306,13 @@ pub async fn get_outdoor_result(
     };
 
     match repo.get_outdoor_inspection_result(id) {
-        Ok(result) => HttpResponse::Ok().json(to_response(&result)),
+        Ok(result) => {
+            // シリアル番号を取得
+            let serial = result.device_id.and_then(|did| {
+                repo.get_device(did).ok().map(|d| d.serial_number)
+            });
+            HttpResponse::Ok().json(to_response(&result, serial))
+        }
         Err(crate::repository::RepositoryError::NotFound(_)) => {
             HttpResponse::NotFound().json(ErrorResponse {
                 error: format!("検査結果が見つかりません: id={}", id),
