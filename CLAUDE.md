@@ -37,6 +37,14 @@
    - M4関連: `docs/missions/m4-defect-db/`
    - ADR: `docs/adr/{m1,m3,common}/`
 
+## Makeコマンドを伝える際のルール
+
+**IMPORTANT - MUST**: Makeコマンドをユーザーに伝える前に、**必ず該当プロジェクトのMakefile/makefiles/*.mkを読むこと**。推測でコマンド名を伝えてはならない。
+
+例:
+- ❌ 「`make backend-dev`で起動」（推測）
+- ✅ Makefileを確認 → 「`make dev-backend`で起動」（確認済み）
+
 ## 藤田さんの担当ミッション
 
 1. AirGrow搭載センサーの定量的評価手法の策定（Lidar / GNSS）
