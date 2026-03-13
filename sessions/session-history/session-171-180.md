@@ -227,3 +227,37 @@
 2. スナップショット可視化: DBから取得したデータでスカイプロット再表示
 
 ---
+
+## Session 179 (2026-03-13)
+
+**概要**: レスポンス駆動ポーリング実装・検査終了タイミング改善
+
+**実施内容**:
+1. ポーリング方式を固定間隔→レスポンス駆動に変更
+2. 検査終了フローを分割（startCompleting/completeInspection）
+3. completing状態で最後のレスポンスを待つ処理を追加
+4. NTRIP-RTCMとのMutex競合対策（delayAfterResponseMs=1000）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session-summary.md](../session179/session-summary.md) | セッションサマリー |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| `hooks/useGnssState.ts` | レスポンス駆動ポーリング実装 |
+| `hooks/useOutdoorInspection.ts` | 検査終了フロー分割、addFinalSample追加 |
+| `app/inspections/outdoor/page.tsx` | completing状態で最後のレスポンス待ち |
+
+**技術的決定**:
+- レスポンス駆動: リクエスト完了後に次を送信（BEの処理速度に自動追従）
+- delayAfterResponseMs=1000: NTRIP-RTCMがロックを取得する隙間を確保
+- requestCountで最後のレスポンスを検知
+
+**次セッション（Session 180）でやること**:
+1. テスト結果の確認（ユーザー実施中）
+2. 問題があれば修正
+3. （余裕があれば）スナップショット可視化
+
+---
