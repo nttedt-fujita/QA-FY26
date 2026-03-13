@@ -187,6 +187,9 @@ interface GnssStats {
   avgCno: number | null;
   minCno: number | null;
   maxCno: number | null;
+  avgElev: number | null;
+  minElev: number | null;
+  maxElev: number | null;
 }
 
 function calculateGnssStats(satellites: SatelliteInfo[]): GnssStats[] {
@@ -194,6 +197,7 @@ function calculateGnssStats(satellites: SatelliteInfo[]): GnssStats[] {
     const sats = satellites.filter((s) => s.gnss_id === gnss.id && s.elev >= 0);
     const usedSats = sats.filter((s) => s.is_used);
     const cnoValues = sats.filter((s) => s.cno > 0).map((s) => s.cno);
+    const elevValues = sats.map((s) => s.elev);
 
     return {
       gnssId: gnss.id,
@@ -206,6 +210,11 @@ function calculateGnssStats(satellites: SatelliteInfo[]): GnssStats[] {
         : null,
       minCno: cnoValues.length > 0 ? Math.min(...cnoValues) : null,
       maxCno: cnoValues.length > 0 ? Math.max(...cnoValues) : null,
+      avgElev: elevValues.length > 0
+        ? elevValues.reduce((a, b) => a + b, 0) / elevValues.length
+        : null,
+      minElev: elevValues.length > 0 ? Math.min(...elevValues) : null,
+      maxElev: elevValues.length > 0 ? Math.max(...elevValues) : null,
     };
   }).filter((s) => s.count > 0); // 衛星がある GNSSのみ
 }
@@ -365,6 +374,9 @@ export function SkyPlotPanel({
                       <th className="pb-1 text-right">CNO平均</th>
                       <th className="pb-1 text-right">CNO最小</th>
                       <th className="pb-1 text-right">CNO最大</th>
+                      <th className="pb-1 text-right">仰角平均</th>
+                      <th className="pb-1 text-right">仰角最小</th>
+                      <th className="pb-1 text-right">仰角最大</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -394,6 +406,15 @@ export function SkyPlotPanel({
                         </td>
                         <td className="py-1 text-right font-mono">
                           {stats.maxCno !== null ? stats.maxCno : "-"}
+                        </td>
+                        <td className="py-1 text-right font-mono">
+                          {stats.avgElev !== null ? stats.avgElev.toFixed(0) + "°" : "-"}
+                        </td>
+                        <td className="py-1 text-right font-mono">
+                          {stats.minElev !== null ? stats.minElev + "°" : "-"}
+                        </td>
+                        <td className="py-1 text-right font-mono">
+                          {stats.maxElev !== null ? stats.maxElev + "°" : "-"}
                         </td>
                       </tr>
                     ))}
