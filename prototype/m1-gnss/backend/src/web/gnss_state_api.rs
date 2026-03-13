@@ -20,21 +20,41 @@ use super::mon_span_api::{MonSpanResponse, SpanBlockResponse};
 macro_rules! poll_and_parse {
     ($manager:expr, $class:expr, $id:expr, $name:expr, $parser:expr) => {{
         (|| -> Result<_, String> {
+            let step_start = std::time::Instant::now();
+
+            // ドレイン
+            tracing::debug!("[GNSS-STATE:{}] drain開始", $name);
             if let Err(e) = $manager.drain_buffer() {
                 return Err(format!("{}: バッファクリアエラー - {}", $name, e));
             }
+            tracing::debug!("[GNSS-STATE:{}] drain完了 ({}ms)", $name, step_start.elapsed().as_millis());
+
+            // 送信
             let poll_msg = build_poll($class, $id);
+            let send_start = std::time::Instant::now();
+            tracing::debug!("[GNSS-STATE:{}] 送信開始 ({}bytes)", $name, poll_msg.len());
             if let Err(e) = $manager.send_ubx(&poll_msg) {
+                tracing::error!("[GNSS-STATE:{}] 送信失敗: {} ({}ms)", $name, e, send_start.elapsed().as_millis());
                 return Err(format!("{}: 送信エラー - {}", $name, e));
             }
+            tracing::debug!("[GNSS-STATE:{}] 送信完了 ({}ms)", $name, send_start.elapsed().as_millis());
+
             std::thread::sleep(std::time::Duration::from_millis(50));
+
             // Session 152: NAV-STATUS/MON-SPANは1秒以上かかるため2秒に延長
+            let recv_start = std::time::Instant::now();
+            tracing::debug!("[GNSS-STATE:{}] 受信待機開始", $name);
             let raw = match $manager.receive_ubx(std::time::Duration::from_millis(2000)) {
-                Ok(r) => r,
+                Ok(r) => {
+                    tracing::debug!("[GNSS-STATE:{}] 受信成功 ({}bytes, {}ms)", $name, r.len(), recv_start.elapsed().as_millis());
+                    r
+                }
                 Err(crate::device::manager::DeviceManagerError::Timeout) => {
+                    tracing::warn!("[GNSS-STATE:{}] 受信タイムアウト ({}ms)", $name, recv_start.elapsed().as_millis());
                     return Err(format!("{}: タイムアウト", $name));
                 }
                 Err(e) => {
+                    tracing::error!("[GNSS-STATE:{}] 受信エラー: {} ({}ms)", $name, e, recv_start.elapsed().as_millis());
                     return Err(format!("{}: 受信エラー - {}", $name, e));
                 }
             };
@@ -144,14 +164,18 @@ fn build_poll(class: u8, id: u8) -> Vec<u8> {
 
 /// GET /api/gnss-state - 統合API
 pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
-    tracing::debug!("[GNSS-STATE] API呼び出し開始");
+    tracing::info!("[GNSS-STATE] ========== API呼び出し開始 ==========");
     let api_start = std::time::Instant::now();
 
-    tracing::debug!("[GNSS-STATE] DeviceManagerロック取得開始...");
+    tracing::info!("[GNSS-STATE] DeviceManagerロック取得開始...");
     let lock_start = std::time::Instant::now();
     let mut manager = match data.device_manager.lock() {
         Ok(m) => {
-            tracing::debug!("[GNSS-STATE] ロック取得成功 ({}ms)", lock_start.elapsed().as_millis());
+            let lock_ms = lock_start.elapsed().as_millis();
+            tracing::info!("[GNSS-STATE] ロック取得成功 ({}ms)", lock_ms);
+            if lock_ms > 100 {
+                tracing::warn!("[GNSS-STATE] ⚠️ ロック待機が長い！({}ms) - NTRIP転送と競合の可能性", lock_ms);
+            }
             m
         }
         Err(_) => {
@@ -173,8 +197,12 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
 
     // NMEA出力を無効化（屋外検査用）
     // Session 147: 屋内検査終了後にNMEAがONに戻っている場合に備えて毎回送信
+    let nmea_start = std::time::Instant::now();
+    tracing::debug!("[GNSS-STATE] NMEA OFF送信開始");
     if let Err(e) = send_disable_nmea_output(&mut manager) {
-        tracing::warn!("NMEA OFF送信失敗（続行）: {}", e);
+        tracing::warn!("[GNSS-STATE] NMEA OFF送信失敗（続行）: {} ({}ms)", e, nmea_start.elapsed().as_millis());
+    } else {
+        tracing::debug!("[GNSS-STATE] NMEA OFF送信成功 ({}ms)", nmea_start.elapsed().as_millis());
     }
 
     let mut response = GnssStateResponse {
