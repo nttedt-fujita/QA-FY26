@@ -197,7 +197,8 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
 
     // Session 161: ロック取得直後にシリアルポート安定化待機
     // 仮説: NTRIP RTCMデータ送信直後はシリアルポートがまだ処理中でタイムアウトする
-    let stabilize_delay_ms = 50;
+    // Session 162: 50msでは不十分だったため100msに延長
+    let stabilize_delay_ms = 100;
     tracing::debug!("[GNSS-STATE] シリアルポート安定化待機: {}ms", stabilize_delay_ms);
     std::thread::sleep(std::time::Duration::from_millis(stabilize_delay_ms));
     tracing::debug!("[GNSS-STATE] 安定化待機完了");

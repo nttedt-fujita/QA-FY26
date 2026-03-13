@@ -112,28 +112,25 @@ stress-clean:
 # ====================
 # 使い方:
 #   1. ntrip.conf を作成（cp ntrip.conf.example ntrip.conf）
-#   2. ターミナル1: make rtk-log
-#   3. ターミナル2: make rtk-start → make rtk-poll → make rtk-stop
+#   2. ターミナル1: make dev-backend（ログ表示）
+#   3. ターミナル2: make rtk-debug（接続+ポーリング一括）
+#
+# 個別操作:
+#   make rtk-connect    — デバイス接続 + NTRIP接続
+#   make rtk-poll       — ポーリング5回
+#   make rtk-disconnect — NTRIP切断
+#   make rtk-status     — NTRIP状態確認
 
-.PHONY: rtk-log rtk-start rtk-poll rtk-stop
+.PHONY: rtk-debug rtk-connect rtk-poll rtk-disconnect rtk-status
 
 # 設定ファイル読み込み
 -include ntrip.conf
 
-# ログファイル
-RTK_LOG := /tmp/m1-gnss-rtk-debug.log
-
-# バックエンドログ監視（別ターミナルで実行）
-rtk-log:
-	@echo "ログ監視開始: $(RTK_LOG)"
-	@echo "Ctrl+C で終了"
-	@touch $(RTK_LOG)
-	tail -f $(RTK_LOG) | grep --line-buffered -E '\[NTRIP|\[GNSS-STATE'
-
-# RTKテスト開始（バックエンド起動 + デバイス接続 + NTRIP接続）
-rtk-start:
+# RTKデバッグ一括実行（接続 + ポーリング）
+# ※事前に別ターミナルで make dev-backend を実行しておくこと
+rtk-debug:
 	@echo "=========================================="
-	@echo "  RTKテスト開始"
+	@echo "  RTKデバッグテスト"
 	@echo "=========================================="
 	@if [ -z "$(NTRIP_CASTER)" ]; then \
 		echo "❌ ntrip.conf が見つかりません"; \
@@ -141,24 +138,47 @@ rtk-start:
 		echo "  vim ntrip.conf"; \
 		exit 1; \
 	fi
-	@echo "[1/3] バックエンド起動..."
-	@pkill -f "target/debug/m1-gnss" 2>/dev/null || true
-	@cd backend && RUST_LOG=debug cargo run > $(RTK_LOG) 2>&1 &
-	@sleep 3
-	@curl -s $(API_URL)/health > /dev/null && echo "  ✅ バックエンド起動完了" || (echo "  ❌ 起動失敗"; exit 1)
 	@echo ""
-	@echo "[2/3] デバイス接続..."
+	@echo "[1/3] デバイス接続..."
+	@curl -s -X POST "$(API_URL)/api/devices/%2Fdev%2FttyUSB0/connect" | jq -r '.message // .error // "接続完了"'
+	@echo ""
+	@echo "[2/3] NTRIP接続..."
+	@curl -s -X POST $(API_URL)/api/ntrip/connect \
+		-H "Content-Type: application/json" \
+		-d '{"caster_url":"$(NTRIP_CASTER)","port":$(NTRIP_PORT),"mountpoint":"$(NTRIP_MOUNT)","username":"$(NTRIP_USER)","password":"$(NTRIP_PASS)"}' | jq -r '.message // .error // "接続完了"'
+	@echo ""
+	@echo "[3/3] ポーリング開始..."
+	@$(MAKE) -s rtk-poll
+
+# RTK接続（デバイス接続 + NTRIP接続）
+rtk-connect:
+	@echo "=========================================="
+	@echo "  RTK接続"
+	@echo "=========================================="
+	@if [ -z "$(NTRIP_CASTER)" ]; then \
+		echo "❌ ntrip.conf が見つかりません"; \
+		exit 1; \
+	fi
+	@echo "[1/2] デバイス接続..."
 	@curl -s -X POST "$(API_URL)/api/devices/%2Fdev%2FttyUSB0/connect" | jq .
 	@echo ""
-	@echo "[3/3] NTRIP接続..."
+	@echo "[2/2] NTRIP接続..."
 	@curl -s -X POST $(API_URL)/api/ntrip/connect \
 		-H "Content-Type: application/json" \
 		-d '{"caster_url":"$(NTRIP_CASTER)","port":$(NTRIP_PORT),"mountpoint":"$(NTRIP_MOUNT)","username":"$(NTRIP_USER)","password":"$(NTRIP_PASS)"}' | jq .
 	@echo ""
-	@echo "✅ RTKテスト準備完了"
-	@echo "  ログ監視: make rtk-log（別ターミナル）"
+	@echo "✅ RTK接続完了"
 	@echo "  ポーリング: make rtk-poll"
-	@echo "  終了: make rtk-stop"
+	@echo "  切断: make rtk-disconnect"
+
+# NTRIP切断
+rtk-disconnect:
+	@echo "NTRIP切断中..."
+	@curl -s -X POST $(API_URL)/api/ntrip/disconnect | jq .
+
+# NTRIP状態確認
+rtk-status:
+	@curl -s $(API_URL)/api/ntrip/status | jq .
 
 # gnss-stateポーリング（5回）
 rtk-poll:
@@ -206,41 +226,8 @@ rtk-stop:
 	@echo "  ログ: $(RTK_LOG)"
 
 # ====================
-# NTRIP API（個別操作）
+# 統合API
 # ====================
-
-# NTRIP設定（環境変数で指定）
-# export NTRIP_CASTER=ntrip.example.jp
-# export NTRIP_PORT=2101
-# export NTRIP_MOUNT=MOUNTPOINT
-# export NTRIP_USER=username
-# export NTRIP_PASS=password
-
-.PHONY: ntrip-connect ntrip-status ntrip-disconnect gnss-state ntrip-test
-
-# NTRIP接続
-ntrip-connect:
-ifndef NTRIP_CASTER
-	@echo "環境変数を設定してください:"
-	@echo "  export NTRIP_CASTER=ntrip.example.jp"
-	@echo "  export NTRIP_PORT=2101"
-	@echo "  export NTRIP_MOUNT=MOUNTPOINT"
-	@echo "  export NTRIP_USER=username"
-	@echo "  export NTRIP_PASS=password"
-else
-	@echo "NTRIP接続開始: $(NTRIP_CASTER):$(NTRIP_PORT)/$(NTRIP_MOUNT)"
-	@curl -s -X POST $(API_URL)/api/ntrip/connect \
-		-H "Content-Type: application/json" \
-		-d '{"caster_url":"$(NTRIP_CASTER)","port":$(NTRIP_PORT),"mountpoint":"$(NTRIP_MOUNT)","username":"$(NTRIP_USER)","password":"$(NTRIP_PASS)"}' | jq .
-endif
-
-# NTRIP状態確認
-ntrip-status:
-	@curl -s $(API_URL)/api/ntrip/status | jq .
-
-# NTRIP切断
-ntrip-disconnect:
-	@curl -s -X POST $(API_URL)/api/ntrip/disconnect | jq .
 
 # ====================
 # 統合API
