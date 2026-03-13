@@ -208,11 +208,20 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
 
     // Session 164: 送信バッファ排出待ち
     // Session 166検証結果: 38400bpsでは200ms必要、100msでは失敗あり
-    // 恒久対策検討まで500msを維持
-    let stabilize_delay_ms = 500;
-    tracing::debug!("[GNSS-STATE] シリアルポート安定化待機: {}ms", stabilize_delay_ms);
+    // Session 167: 因果関係検証のため、待機前後のバッファ残量を計測
+    let bytes_before = manager.get_bytes_to_write().unwrap_or(0);
+    let stabilize_delay_ms = 100; // Session 167: 失敗ケース検証用に100msに設定
+    tracing::debug!(
+        "[GNSS-STATE] 安定化待機開始: {}ms, 送信バッファ残量: {}bytes",
+        stabilize_delay_ms, bytes_before
+    );
+    let stabilize_start = std::time::Instant::now();
     std::thread::sleep(std::time::Duration::from_millis(stabilize_delay_ms));
-    tracing::debug!("[GNSS-STATE] 安定化待機完了");
+    let bytes_after = manager.get_bytes_to_write().unwrap_or(0);
+    tracing::debug!(
+        "[GNSS-STATE] 安定化待機完了: 経過{}ms, 送信バッファ残量: {}bytes (排出: {}bytes)",
+        stabilize_start.elapsed().as_millis(), bytes_after, bytes_before.saturating_sub(bytes_after)
+    );
 
     // NMEA出力を無効化（屋外検査用）
     // Session 147: 屋内検査終了後にNMEAがONに戻っている場合に備えて毎回送信
