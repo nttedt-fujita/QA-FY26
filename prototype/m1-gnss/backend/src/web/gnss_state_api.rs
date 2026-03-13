@@ -195,6 +195,13 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
         });
     }
 
+    // Session 161: ロック取得直後にシリアルポート安定化待機
+    // 仮説: NTRIP RTCMデータ送信直後はシリアルポートがまだ処理中でタイムアウトする
+    let stabilize_delay_ms = 50;
+    tracing::debug!("[GNSS-STATE] シリアルポート安定化待機: {}ms", stabilize_delay_ms);
+    std::thread::sleep(std::time::Duration::from_millis(stabilize_delay_ms));
+    tracing::debug!("[GNSS-STATE] 安定化待機完了");
+
     // NMEA出力を無効化（屋外検査用）
     // Session 147: 屋内検査終了後にNMEAがONに戻っている場合に備えて毎回送信
     let nmea_start = std::time::Instant::now();
