@@ -115,6 +115,15 @@ Phase 4: 標準化
 | 30 | [30-ttff-monrf-spec.md](30-ttff-monrf-spec.md) | TTFF・MON-RF仕様調査 | 111 |
 | 31 | [31-outdoor-inspection-user-guide.md](31-outdoor-inspection-user-guide.md) | 屋外検査ユーザーガイド | 131 |
 
+### PDF仕様抽出・調査（33-36）
+
+| # | ファイル | 内容 | 作成Session |
+|---|---------|------|------------|
+| 33 | [33-toc-ublox-f9-interface-description.md](33-toc-ublox-f9-interface-description.md) | u-blox F9 HPG 1.32 Interface Description 目次 | 171 |
+| 34 | [34-ubx-mon-comms.md](34-ubx-mon-comms.md) | UBX-MON-COMMS仕様（p.126-130） | 156 |
+| 35 | [35-ubx-uart-config.md](35-ubx-uart-config.md) | CFG-UART1/2仕様（p.270-274） | 157 |
+| 36 | [36-ntrip-rtk-findings.md](36-ntrip-rtk-findings.md) | NTRIP/RTK仕様調査まとめ | 156 |
+
 ### 図表
 
 | ファイル | 内容 |
@@ -139,3 +148,4 @@ Phase 4: 標準化
 - Session 18: Excel内の画像（スクショ）を読み取り、テキストでは得られなかった波形・グラフ・GCS画面を補完
 - Session 106〜: ツール実装（屋外検査機能）
 - Session 127: ドキュメント整理・番号振り直し
+- Session 171: PDF仕様抽出ドキュメント整理（33-36）
