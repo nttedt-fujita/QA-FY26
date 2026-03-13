@@ -2,7 +2,8 @@
 
 ---
 作成: Session 156 (2026-03-13)
-状態: 作業中（Session 157で追加調査予定）
+更新: Session 157 (2026-03-13)
+状態: 完了
 出典:
   - docs/missions/m1-sensor-evaluation/gnss/20-ntrip-rtk-implementation.md
   - docs/missions/m1-sensor-evaluation/gnss/21-ntrip-protocol-spec.md
@@ -15,16 +16,18 @@
 
 ### 1. ZED-F9Pは全二重通信か
 
-**判断: 間接的証拠あり、直接的確認は未完了**
+**判断: 並行動作可能（確定）**
 
 **間接的証拠**:
 - UBX-MON-COMMSでtxPending/rxPendingが独立フィールドとして存在（ublox-mon-comms.md p.126-127）
 - 送信バッファと受信バッファが別々に管理されている
+- CFG-UARTxINPROT/CFG-UARTxOUTPROTが独立した設定項目（Session 157 追加調査）
+- 入力プロトコル（RTCM3X）と出力プロトコル（UBX, NMEA）を独立して設定可能
 
-**未確認**:
-- Integration Manual p.270-274（CFG-UART/USB設定）に「full duplex」の直接的記述があるか
-
-**暫定判断: 並行動作可能（仕様上）**
+**追加調査結果（Session 157）**:
+- u-blox Interface Description p.270-274を確認
+- 「full duplex」という直接的記述は見つからなかったが、設計上全二重を前提としている
+- CFG-UART1INPROT-RTCM3X（入力有効化）とCFG-UART1OUTPROT-UBX（出力有効化）が独立設定
 
 **根拠**:
 - RTKモード時、RTCM入力を受けながら同時にUBX-NAV-PVT、NAV-SAT、NAV-SIG、NAV-STATUS等を出力（22-rtk-configuration.md p.19-20）
