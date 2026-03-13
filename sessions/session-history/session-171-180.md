@@ -86,3 +86,49 @@
 2. または: テストコード修正（serialport API対応）
 
 ---
+
+## Session 174 (2026-03-13)
+
+**概要**: 生データ保存機能 Phase 2（FE）実装
+
+**実施内容**:
+1. FE実装: `snapshots` state追加、`addSnapshot()`関数追加、`saveResult`でスナップショット送信
+2. NTRIP位置更新の修正: `gnss_state_api`がNAV-PVT取得成功時に`current_position`を更新
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| `hooks/useOutdoorInspection.ts` | スナップショット蓄積・送信 |
+| `app/inspections/outdoor/page.tsx` | useEffectでaddSnapshot()呼び出し |
+| `web/gnss_state_api.rs` | current_position更新 |
+
+---
+
+## Session 175 (2026-03-13)
+
+**概要**: 生データ保存動作確認 → 競合問題調査・方針検討
+
+**実施内容**:
+1. 屋外テスト実施: 検査10件、スナップショット15件保存
+2. **問題発覚**: 30秒検査で1-2回しかスナップショット取れない
+3. BEログ分析: 1回のAPI呼び出しに16秒（タイムアウト連発、NTRIP競合）
+4. 解決方針検討: 案A（読み書き分離）と案D（タイムアウト短縮）
+
+**重要な発見**:
+- gnss_state_apiとntrip_apiが同じMutexを取り合い
+- serialport v4の`try_clone()`で読み書き分離が可能
+
+**確認した1次情報**:
+| ファイル | 内容 |
+|----------|------|
+| gnss_state_api.rs:63 | タイムアウト2秒設定 |
+| gnss_state_api.rs:184 | ロック取得（読み込み側） |
+| ntrip_api.rs:502 | ロック取得（書き込み側） |
+| ADR-012 | 統合API採用経緯 |
+
+**次セッションでやること（KISS原則順）**:
+1. **案D（タイムアウト短縮）を先に検討** - 最もシンプルな解決策
+2. 案Dで不十分なら案A（try_clone）
+3. async化（mio-serial/tokio-serial）は最後の手段
+
+---
