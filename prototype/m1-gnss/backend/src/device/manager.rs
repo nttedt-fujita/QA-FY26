@@ -80,7 +80,7 @@ pub trait SerialPortProvider {
 // Session 163: 独自SerialPortトレイトを削除し、serialportクレートの標準トレイトを使用
 
 /// デフォルトボーレート（u-blox F9P）
-pub const DEFAULT_BAUD_RATE: u32 = 115200;
+pub const DEFAULT_BAUD_RATE: u32 = 38400; // Session 167: 失敗ケース検証用
 
 /// F9P評価ボードのボーレート（FTDI経由）
 pub const F9P_EVAL_BAUD_RATE: u32 = 38400;
@@ -695,6 +695,18 @@ impl<P: SerialPortProvider> DeviceManager<P> {
         }
 
         Ok(())
+    }
+
+    /// 送信バッファ残量を取得（デバッグ用）
+    ///
+    /// Session 167: 安定化待機時間の因果関係検証用
+    pub fn get_bytes_to_write(&self) -> Result<u32, DeviceManagerError> {
+        let port = self
+            .connected_port
+            .as_ref()
+            .ok_or(DeviceManagerError::NotConnected)?;
+
+        Ok(port.bytes_to_write().unwrap_or(0))
     }
 }
 
