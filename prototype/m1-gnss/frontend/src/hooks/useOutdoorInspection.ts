@@ -74,9 +74,20 @@ export interface UseOutdoorInspectionReturn {
   reset: () => void;
   saveResult: (serialNumber?: string, lotId?: number) => Promise<void>;
 
+  // 検査終了フロー（レスポンス駆動ポーリング用）
+  startCompleting: () => void;       // completing状態に遷移
+  completeInspection: () => void;    // 集計実行→completed遷移
+
   // サンプル追加（パネルから呼び出される）
   addNavStatusSample: (sample: Omit<NavStatusSample, "timestamp">) => void;
   addNavSigSample: (sample: Omit<NavSigSample, "timestamp">) => void;
+
+  // サンプル追加（completing状態用 - 状態チェックなし）
+  addFinalSample: (
+    navStatus: Omit<NavStatusSample, "timestamp"> | null,
+    navSig: Omit<NavSigSample, "timestamp"> | null,
+    snapshot: GnssStateResponse | null
+  ) => void;
 
   // スナップショット追加（生データ保存用）
   addSnapshot: (data: GnssStateResponse) => void;
@@ -143,8 +154,9 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     };
   }, [navStatusSamples, navSigSamples]);
 
-  // 検査終了処理
-  const finishInspection = useCallback(() => {
+  // 検査終了開始（completing状態に遷移）
+  // レスポンス駆動ポーリング用：最後のレスポンスを待つため即座にcompletedにしない
+  const startCompleting = useCallback(() => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -152,11 +164,16 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     // 終了処理中状態に遷移（UIで「集計中...」表示）
     setState("completing");
     setRemainingTime(0);
+  }, []);
+
+  // 検査完了（集計実行→completed遷移）
+  // 最後のレスポンス受信後に呼び出す
+  const completeInspection = useCallback(() => {
+    if (state !== "completing") return;
     const summary = aggregate();
     setResult(summary);
-    // 集計完了後に完了状態へ
     setState("completed");
-  }, [aggregate]);
+  }, [state, aggregate]);
 
   // 検査開始
   const start = useCallback((durationSec: number) => {
@@ -196,19 +213,21 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     }, 100);
   }, [state]);
 
-  // remainingTimeが0になったら終了
+  // remainingTimeが0になったらcompleting状態に遷移
+  // 最後のレスポンスを待ってからcompleteInspectionを呼ぶ（page.tsx側で制御）
   useEffect(() => {
     if (state === "running" && remainingTime === 0) {
-      finishInspection();
+      startCompleting();
     }
-  }, [state, remainingTime, finishInspection]);
+  }, [state, remainingTime, startCompleting]);
 
   // 検査停止（手動）
+  // レスポンス駆動ポーリング対応: 最後のレスポンスを待つためstartCompletingを呼ぶ
   const stop = useCallback(() => {
     // running状態でなければ停止しない
     if (state !== "running") return;
-    finishInspection();
-  }, [state, finishInspection]);
+    startCompleting();
+  }, [state, startCompleting]);
 
   // リセット
   const reset = useCallback(() => {
@@ -323,6 +342,36 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     [state]
   );
 
+  // 最終サンプル追加（completing状態用 - 状態チェックなし）
+  // 検査終了時の最後のレスポンスを追加するため
+  const addFinalSample = useCallback(
+    (
+      navStatus: Omit<NavStatusSample, "timestamp"> | null,
+      navSig: Omit<NavSigSample, "timestamp"> | null,
+      snapshot: GnssStateResponse | null
+    ) => {
+      if (navStatus) {
+        setNavStatusSamples((prev) => [
+          ...prev,
+          { ...navStatus, timestamp: Date.now() },
+        ]);
+      }
+      if (navSig) {
+        setNavSigSamples((prev) => [
+          ...prev,
+          { ...navSig, timestamp: Date.now() },
+        ]);
+      }
+      if (snapshot) {
+        setSnapshots((prev) => [
+          ...prev,
+          { timestamp_ms: Date.now(), data: snapshot },
+        ]);
+      }
+    },
+    []
+  );
+
   // スナップショット数
   const snapshotCount = snapshots.length;
 
@@ -348,8 +397,11 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     stop,
     reset,
     saveResult,
+    startCompleting,
+    completeInspection,
     addNavStatusSample,
     addNavSigSample,
+    addFinalSample,
     addSnapshot,
   };
 }

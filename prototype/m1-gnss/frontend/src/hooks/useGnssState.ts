@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { GnssStateResponse, getGnssState } from "@/lib/api";
 
 export interface UseGnssStateOptions {
   /** ポーリング有効フラグ（装置接続時のみtrue） */
   enabled: boolean;
-  /** ポーリング間隔（ミリ秒）、デフォルト1000ms */
-  pollIntervalMs?: number;
+  /** レスポンス後の遅延（ミリ秒）、デフォルト0 */
+  delayAfterResponseMs?: number;
 }
 
 export interface UseGnssStateResult {
@@ -15,72 +15,113 @@ export interface UseGnssStateResult {
   data: GnssStateResponse | null;
   /** エラーメッセージ */
   error: string | null;
-  /** 読み込み中フラグ */
+  /** 読み込み中フラグ（初回ロード用） */
   isLoading: boolean;
+  /** リクエスト中フラグ（レスポンス駆動の状態管理用） */
+  isFetching: boolean;
   /** 最終更新時刻 */
   lastUpdated: Date | null;
+  /** リクエスト回数（デバッグ用） */
+  requestCount: number;
 }
 
 /**
- * GNSS状態（統合API）をポーリングするhook
+ * GNSS状態（統合API）をレスポンス駆動でポーリングするhook
  *
- * 個別API（nav-sat, nav-sig, nav-status, mon-span）の代わりに
- * 統合API（/api/gnss-state）を1つだけポーリングし、
- * ポーリング競合を防止する。
+ * レスポンス駆動方式:
+ * - リクエスト → レスポンス受信 → 次のリクエスト → ...
+ * - BEの処理速度に自動追従し、キュー滞留を防止
+ * - 固定間隔ポーリングより効率的
  */
 export function useGnssState({
   enabled,
-  pollIntervalMs = 1000,
+  delayAfterResponseMs = 0,
 }: UseGnssStateOptions): UseGnssStateResult {
   const [data, setData] = useState<GnssStateResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [requestCount, setRequestCount] = useState(0);
 
-  // AbortController参照
-  const abortControllerRef = useRef<AbortController | null>(null);
+  // enabledをrefで保持（ループ内で最新値を参照するため）
+  const enabledRef = useRef(enabled);
+  enabledRef.current = enabled;
 
-  // 初回取得 + ポーリング
+  // ループ制御用
+  const mountedRef = useRef(true);
+
+  // レスポンス駆動ポーリング
   useEffect(() => {
+    mountedRef.current = true;
+
+    // 非活性時はデータクリア
     if (!enabled) {
       setData(null);
       setError(null);
       setLastUpdated(null);
+      setIsFetching(false);
       return;
     }
 
-    // AbortController作成
     const controller = new AbortController();
-    abortControllerRef.current = controller;
 
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const res = await getGnssState(controller.signal);
-        setData(res);
-        setError(null);
-        setLastUpdated(new Date());
-        // 部分エラーがあればログ出力
-        if (res.errors.length > 0) {
-          console.warn("[useGnssState] partial errors:", res.errors);
+    const fetchLoop = async () => {
+      while (mountedRef.current && enabledRef.current) {
+        setIsFetching(true);
+        setIsLoading(requestCount === 0);
+
+        try {
+          const res = await getGnssState(controller.signal);
+
+          // abort済みなら無視
+          if (!mountedRef.current) return;
+
+          setData(res);
+          setError(null);
+          setLastUpdated(new Date());
+          setRequestCount((prev) => prev + 1);
+
+          // 部分エラーがあればログ出力
+          if (res.errors.length > 0) {
+            console.warn("[useGnssState] partial errors:", res.errors);
+          }
+        } catch (e) {
+          // AbortErrorは無視
+          if (e instanceof Error && e.name === "AbortError") return;
+          if (!mountedRef.current) return;
+          setError(e instanceof Error ? e.message : "取得失敗");
+        } finally {
+          if (mountedRef.current) {
+            setIsFetching(false);
+            setIsLoading(false);
+          }
         }
-      } catch (e) {
-        // AbortErrorは無視
-        if (e instanceof Error && e.name === "AbortError") return;
-        setError(e instanceof Error ? e.message : "取得失敗");
-      } finally {
-        setIsLoading(false);
+
+        // enabledが変わっていたらループ終了
+        if (!enabledRef.current) break;
+
+        // 次のリクエストまでの遅延（オプション）
+        if (delayAfterResponseMs > 0) {
+          await new Promise((resolve) => setTimeout(resolve, delayAfterResponseMs));
+        }
       }
     };
 
-    fetchData();
-    const interval = setInterval(fetchData, pollIntervalMs);
+    fetchLoop();
 
     return () => {
-      clearInterval(interval);
+      mountedRef.current = false;
       controller.abort();
     };
-  }, [enabled, pollIntervalMs]);
+  }, [enabled, delayAfterResponseMs]);
 
-  return { data, error, isLoading, lastUpdated };
+  // リクエストカウントのリセット（enabled変更時）
+  useEffect(() => {
+    if (!enabled) {
+      setRequestCount(0);
+    }
+  }, [enabled]);
+
+  return { data, error, isLoading, isFetching, lastUpdated, requestCount };
 }
