@@ -7,7 +7,7 @@
 use actix_web::{web, HttpResponse, Responder};
 use serde::{Deserialize, Serialize};
 
-use crate::repository::OutdoorInspectionResult;
+use crate::repository::{OutdoorInspectionResult, OutdoorInspectionSnapshot};
 use super::device_api::{AppState, ErrorResponse};
 
 // ===========================================
@@ -49,6 +49,17 @@ pub struct SaveOutdoorResultRequest {
     pub rtk_fix_rate_pass: bool,
     /// 不合格理由（JSON配列）
     pub failure_reasons: Option<Vec<String>>,
+    /// スナップショット（時系列の生データ）
+    pub snapshots: Option<Vec<SnapshotData>>,
+}
+
+/// スナップショットデータ（リクエスト用）
+#[derive(Debug, Deserialize)]
+pub struct SnapshotData {
+    /// タイムスタンプ（ミリ秒エポック）
+    pub timestamp_ms: i64,
+    /// GnssStateResponseのJSON（そのまま文字列化して保存）
+    pub data: serde_json::Value,
 }
 
 /// 検査結果レスポンス
@@ -76,6 +87,21 @@ pub struct OutdoorResultResponse {
 #[derive(Debug, Serialize)]
 pub struct OutdoorResultListResponse {
     pub results: Vec<OutdoorResultResponse>,
+}
+
+/// スナップショットレスポンス
+#[derive(Debug, Serialize)]
+pub struct SnapshotResponse {
+    pub id: i64,
+    pub timestamp_ms: i64,
+    pub data: serde_json::Value,
+}
+
+/// スナップショット一覧レスポンス
+#[derive(Debug, Serialize)]
+pub struct SnapshotsListResponse {
+    pub inspection_id: i64,
+    pub snapshots: Vec<SnapshotResponse>,
 }
 
 // ===========================================
@@ -185,6 +211,24 @@ pub async fn save_outdoor_result(
     // 保存
     match repo.insert_outdoor_inspection_result(&result) {
         Ok(id) => {
+            // スナップショットがあれば保存
+            if let Some(snapshots) = &body.snapshots {
+                let snapshot_entities: Vec<OutdoorInspectionSnapshot> = snapshots
+                    .iter()
+                    .map(|s| OutdoorInspectionSnapshot::new(
+                        id,
+                        s.timestamp_ms,
+                        s.data.to_string(),
+                    ))
+                    .collect();
+
+                if let Err(e) = repo.insert_outdoor_inspection_snapshots(&snapshot_entities) {
+                    // スナップショット保存失敗はログのみ（検査結果は保存済み）
+                    // スナップショット保存失敗（検査結果は保存済みなので続行）
+                    eprintln!("スナップショット保存失敗: {}", e);
+                }
+            }
+
             // 保存したレコードを取得して返却
             match repo.get_outdoor_inspection_result(id) {
                 Ok(saved) => HttpResponse::Created().json(to_response(&saved)),
@@ -262,12 +306,61 @@ pub async fn get_outdoor_result(
     }
 }
 
+/// GET /api/outdoor-inspection-results/{id}/snapshots - スナップショット一覧を取得
+pub async fn get_outdoor_result_snapshots(
+    data: web::Data<AppState>,
+    path: web::Path<i64>,
+) -> impl Responder {
+    let inspection_id = path.into_inner();
+
+    let repo = match data.repository.lock() {
+        Ok(r) => r,
+        Err(_) => {
+            return HttpResponse::InternalServerError().json(ErrorResponse {
+                error: "内部エラー: ロック取得に失敗".to_string(),
+                code: "LOCK_ERROR".to_string(),
+            })
+        }
+    };
+
+    // 検査結果の存在確認
+    if let Err(crate::repository::RepositoryError::NotFound(_)) = repo.get_outdoor_inspection_result(inspection_id) {
+        return HttpResponse::NotFound().json(ErrorResponse {
+            error: format!("検査結果が見つかりません: id={}", inspection_id),
+            code: "NOT_FOUND".to_string(),
+        });
+    }
+
+    match repo.get_outdoor_inspection_snapshots(inspection_id) {
+        Ok(snapshots) => {
+            let response_list: Vec<SnapshotResponse> = snapshots
+                .iter()
+                .map(|s| SnapshotResponse {
+                    id: s.id.unwrap_or(0),
+                    timestamp_ms: s.timestamp_ms,
+                    data: serde_json::from_str(&s.snapshot_json).unwrap_or(serde_json::Value::Null),
+                })
+                .collect();
+
+            HttpResponse::Ok().json(SnapshotsListResponse {
+                inspection_id,
+                snapshots: response_list,
+            })
+        }
+        Err(e) => HttpResponse::InternalServerError().json(ErrorResponse {
+            error: e.to_string(),
+            code: "DB_ERROR".to_string(),
+        }),
+    }
+}
+
 /// APIルートを設定
 pub fn configure(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/api/outdoor-inspection-results")
             .route("", web::post().to(save_outdoor_result))
             .route("", web::get().to(list_outdoor_results))
-            .route("/{id}", web::get().to(get_outdoor_result)),
+            .route("/{id}", web::get().to(get_outdoor_result))
+            .route("/{id}/snapshots", web::get().to(get_outdoor_result_snapshots)),
     );
 }

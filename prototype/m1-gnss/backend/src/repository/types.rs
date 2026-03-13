@@ -313,6 +313,32 @@ impl OutdoorInspectionResult {
     }
 }
 
+/// 屋外検査スナップショット（生データ保存用）
+///
+/// GnssStateResponseをJSON形式で丸ごと保存し、後から再生可能にする
+/// 参照: sessions/session172/raw-data-storage-plan.md
+#[derive(Debug, Clone)]
+pub struct OutdoorInspectionSnapshot {
+    pub id: Option<i64>,
+    /// 親の検査結果ID
+    pub inspection_id: i64,
+    /// タイムスタンプ（ミリ秒エポック）
+    pub timestamp_ms: i64,
+    /// GnssStateResponseのJSON文字列
+    pub snapshot_json: String,
+}
+
+impl OutdoorInspectionSnapshot {
+    pub fn new(inspection_id: i64, timestamp_ms: i64, snapshot_json: String) -> Self {
+        Self {
+            id: None,
+            inspection_id,
+            timestamp_ms,
+            snapshot_json,
+        }
+    }
+}
+
 /// リポジトリエラー
 #[derive(Debug)]
 pub enum RepositoryError {

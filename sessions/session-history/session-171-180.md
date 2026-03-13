@@ -55,3 +55,34 @@
 3. 実装開始（Phase 1: BE）
 
 ---
+
+## Session 173 (2026-03-13)
+
+**概要**: 生データ保存機能 Phase 1（BE）実装
+
+**実施内容**:
+1. オプションB vs C の工数比較 → **オプションC（ハイブリッド）採用**
+2. DBスキーマ: `outdoor_inspection_snapshots`テーブル追加
+3. リポジトリ: insert/get_snapshots実装
+4. API: POST拡張 + GET snapshots新規追加
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session-summary.md](../session173/session-summary.md) | セッションサマリー |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| `repository/types.rs` | OutdoorInspectionSnapshot構造体追加 |
+| `repository/sqlite.rs` | テーブル作成 + CRUD |
+| `web/outdoor_inspection_api.rs` | POST拡張 + GET snapshots |
+
+**確認した問題**:
+- 既存テストコードでserialportクレートAPI変更によるエラー（今回の変更とは無関係）
+
+**次セッション（Session 174）でやること**:
+1. Phase 2: FE実装（スナップショット蓄積・送信）
+2. または: テストコード修正（serialport API対応）
+
+---
