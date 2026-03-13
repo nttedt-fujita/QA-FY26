@@ -497,11 +497,11 @@ pub async fn connect_ntrip(
 
                             // ZED-F9Pに転送（DeviceManagerを使用）
                             let forwarded = {
-                                tracing::debug!("[NTRIP-RTCM] ロック取得開始...");
+                                tracing::info!("[NTRIP-RTCM] ロック取得開始...");
                                 let lock_start = std::time::Instant::now();
                                 let mut device_manager = match app_state_clone.device_manager.lock() {
                                     Ok(m) => {
-                                        tracing::debug!("[NTRIP-RTCM] ロック取得成功 ({}ms)", lock_start.elapsed().as_millis());
+                                        tracing::info!("[NTRIP-RTCM] ロック取得成功 ({}ms)", lock_start.elapsed().as_millis());
                                         m
                                     }
                                     Err(_) => {
@@ -512,13 +512,23 @@ pub async fn connect_ntrip(
 
                                 // シリアルポートに書き込み
                                 let write_start = std::time::Instant::now();
+                                tracing::info!("[NTRIP-RTCM] 書込み開始: {} bytes", rtcm_data.len());
                                 match device_manager.write_data(rtcm_data) {
                                     Ok(written) => {
-                                        tracing::debug!("[NTRIP-RTCM] 転送完了: {} bytes ({}ms)", written, write_start.elapsed().as_millis());
+                                        let write_ms = write_start.elapsed().as_millis();
+                                        tracing::info!("[NTRIP-RTCM] 書込み完了: {} bytes ({}ms)", written, write_ms);
+
+                                        // 書き込み後にフラッシュ待機を追加（デバッグ用）
+                                        // ZED-F9Pがデータを処理するまでの時間を確保
+                                        // Session 160: 競合問題デバッグ
+                                        let flush_delay_ms = 50;
+                                        tracing::debug!("[NTRIP-RTCM] フラッシュ待機: {}ms", flush_delay_ms);
+                                        std::thread::sleep(std::time::Duration::from_millis(flush_delay_ms));
+
                                         written as u64
                                     }
                                     Err(e) => {
-                                        tracing::warn!("[NTRIP-RTCM] 転送失敗: {} ({}ms)", e, write_start.elapsed().as_millis());
+                                        tracing::warn!("[NTRIP-RTCM] 書込み失敗: {} ({}ms)", e, write_start.elapsed().as_millis());
                                         0
                                     }
                                 }
