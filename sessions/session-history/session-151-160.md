@@ -144,3 +144,90 @@
 - 屋外テストでGPS L1信号の有無とcno値を確認
 
 ---
+
+## Session 155 (2026-03-13)
+
+**概要**: NTRIP/RTK分離テストの方針整理
+
+**実施内容**:
+1. **L1 C/N0デバッグログ追加**（実装済み、テスト未実施）
+2. **NTRIP/RTK分離の懸念点整理**
+   - 現状: NTRIP接続とRTK検査が独立操作
+   - 疑問: NTRIP接続中に定期出力読み取りは並行動作できるか？
+3. **仕様書リストアップ**
+   - 20-ntrip-rtk-implementation.md
+   - 21-ntrip-protocol-spec.md
+   - 22-rtk-configuration.md
+   - 32-cfg-msgout-periodic-output.md
+   - 外部: ZED-F9P Integration Manual
+4. **確認項目リストアップ**
+   - ZED-F9P全二重通信、RTCMデータ流量、DeviceManagerロック等
+5. **TDDスキル改善方針**
+   - 「抜け漏れありますか？」→「この判断基準に照らして見落としはありますか？」
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ntrip-rtk-investigation-plan.md](../session155/ntrip-rtk-investigation-plan.md) | 調査計画・確認項目・セッション計画 |
+| [tdd-workflow-tradeoff-memo_20260313.md](../session155/tdd-workflow-tradeoff-memo_20260313.md) | TDDワークフロー改善メモ（ユーザー作成） |
+
+**配置PDF（Session 156で抽出予定）**:
+| ファイル | 内容 |
+|----------|------|
+| u-blox-F9-HPG-1.32_InterfaceDescription_UBX-22008968.pdf | ZED-F9P Interface Description |
+| Xiao_2017_IOP_Conf._Ser.__Mater._Sci._Eng._242_012131.pdf | 学術論文 |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [outdoor/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/outdoor/page.tsx) | L1 C/N0デバッグログ追加 |
+
+**残った課題**:
+- L1 C/N0=0問題（デバッグログ追加済み、屋外テスト未実施）
+- 仕様書の実際の調査（Session 156）
+- TDDスキルの実際の更新（Session 156）
+
+**次セッション（Session 156）でやること**:
+1. TDDスキル改善（ファイル更新）
+2. プロジェクト内仕様書（20, 21, 22, 32番）を読む
+3. 確認項目に対する回答をまとめる
+
+---
+
+## Session 156 (2026-03-13)
+
+**概要**: NTRIP/RTK仕様調査 + PDFルール追加
+
+**状態**: 低調・寝不足・疲労気味
+
+**実施内容**:
+1. **PDFルール追加**
+   - `~/.claude/rules/15-pdf-handling.md` を作成
+   - PDFを直接読まず、Pythonスクリプトで抽出してから読むルールを強制
+2. **NTRIP/RTK仕様調査**
+   - プロジェクト内仕様書4つ読了（20, 21, 22, 32番）
+   - u-blox Interface DescriptionからMON-COMMSセクション抽出（p.126-130）
+3. **確認項目に対する回答**
+   - ZED-F9P全二重通信: 間接的証拠あり（tx/rxバッファ独立）、直接的記述は未発見
+   - RTCMデータ流量: 50-500 Bytes/sec（低帯域、問題なし）
+   - DeviceManagerのロック: 要コード確認（Session 157）
+   - 定期出力設定: NTRIP接続前後で変更不要
+
+**作成ファイル**:
+| ファイル | 内容 | 状態 |
+|----------|------|------|
+| [ntrip-rtk-spec-findings.md](../session156/ntrip-rtk-spec-findings.md) | 仕様調査結果 | 作業中 |
+| [ublox-toc.md](../session156/ublox-toc.md) | u-blox PDF目次（p.1-5） | 作業中 |
+| [ublox-toc-2.md](../session156/ublox-toc-2.md) | u-blox PDF目次（p.6-14） | 作業中 |
+| [ublox-mon-comms.md](../session156/ublox-mon-comms.md) | MON-COMMS仕様（p.126-130） | 作業中 |
+
+**残課題**:
+- 全二重通信の直接的確認（Integration Manual p.270-274）
+- DeviceManagerのコード確認
+
+**次セッション（Session 157）でやること**:
+1. 全二重通信の追加調査（Integration Manual p.270-274）
+2. DeviceManagerのコード確認
+3. 設計判断（ADR-013が必要か）
+
+---
