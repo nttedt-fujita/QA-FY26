@@ -40,20 +40,25 @@ export default function OutdoorInspectionsPage() {
   // 選択中のロットを取得
   const selectedLot = lots.find((l) => l.id === selectedLotId);
 
-  // 統合API（検査中のみポーリング）
-  // ポーリング間隔: 6秒
-  // 理由: BEの処理能力（約6秒/回）に合わせてキュー滞留を防止
-  // 参照: session177/log-analysis-results.md, session178/polling-architecture.drawio
+  // 統合API（検査中 + completing状態でポーリング）
+  // レスポンス駆動方式: BEの処理完了後に次のリクエストを送信
+  // delayAfterResponseMs=1000: NTRIP-RTCMがロックを取得する隙間を確保
+  // completing状態でも1回だけ待って最後のサンプルを取得
+  // 参照: session179/session-plan.md
+  const isPollingEnabled = (isInspecting || inspection.state === "completing") && !!connectedDevice;
   const gnssState = useGnssState({
-    enabled: isInspecting && !!connectedDevice,
-    pollIntervalMs: 6000,
+    enabled: isPollingEnabled,
+    delayAfterResponseMs: 1000,
   });
 
   // 前回のデータを記録（重複サンプル防止）
   const lastNavStatusRef = useRef<number | null>(null);
   const lastNavSigRef = useRef<number | null>(null);
 
-  // データ変化時にサンプルを追加
+  // completing状態開始時のrequestCountを記録（最後のレスポンス検知用）
+  const completingRequestCountRef = useRef<number | null>(null);
+
+  // データ変化時にサンプルを追加（running状態）
   useEffect(() => {
     if (!isInspecting || !gnssState.data) return;
 
@@ -115,6 +120,71 @@ export default function OutdoorInspectionsPage() {
       }
     }
   }, [gnssState.data, isInspecting, inspection]);
+
+  // completing状態に入ったらrequestCountを記録
+  useEffect(() => {
+    if (inspection.state === "completing" && completingRequestCountRef.current === null) {
+      completingRequestCountRef.current = gnssState.requestCount;
+      console.log("[DEBUG] completing: started, waiting for final response (requestCount:", gnssState.requestCount, ")");
+    }
+    if (inspection.state !== "completing") {
+      completingRequestCountRef.current = null;
+    }
+  }, [inspection.state, gnssState.requestCount]);
+
+  // completing状態で新しいレスポンスを受信したら最終サンプル追加＆集計
+  useEffect(() => {
+    if (inspection.state !== "completing") return;
+    if (completingRequestCountRef.current === null) return;
+    if (gnssState.requestCount <= completingRequestCountRef.current) return;
+
+    console.log("[DEBUG] completing: received final response (requestCount:", gnssState.requestCount, ")");
+
+    // 最終サンプルを追加
+    if (gnssState.data) {
+      let navStatusSample = null;
+      let navSigSample = null;
+
+      if (gnssState.data.nav_status) {
+        const ns = gnssState.data.nav_status;
+        if (lastNavStatusRef.current !== ns.msss) {
+          navStatusSample = {
+            gps_fix: ns.gps_fix,
+            carr_soln: ns.carr_soln,
+            msss: ns.msss,
+            ttff: ns.ttff,
+          };
+        }
+      }
+
+      if (gnssState.data.nav_sig) {
+        const sig = gnssState.data.nav_sig;
+        const sigKey = sig.stats.gps_visible_count * 1000 + sig.stats.gps_l2_reception_count;
+        if (lastNavSigRef.current !== sigKey) {
+          const gpsL1Signals = sig.signals.filter(
+            (s) => s.gnss_id === 0 && s.is_l1
+          );
+          const minL1Cno =
+            gpsL1Signals.length > 0
+              ? Math.min(...gpsL1Signals.map((s) => s.cno))
+              : 0;
+          navSigSample = {
+            gps_visible_count: sig.stats.gps_visible_count,
+            gps_l2_reception_count: sig.stats.gps_l2_reception_count,
+            gps_l2_reception_rate: sig.stats.gps_l2_reception_rate,
+            min_l1_cno: minL1Cno,
+          };
+        }
+      }
+
+      // 最終サンプル追加
+      inspection.addFinalSample(navStatusSample, navSigSample, gnssState.data);
+    }
+
+    // 集計完了
+    console.log("[DEBUG] completing: calling completeInspection");
+    inspection.completeInspection();
+  }, [inspection.state, gnssState.requestCount, gnssState.data, inspection]);
 
   // 検査開始時にrefをリセット
   useEffect(() => {
