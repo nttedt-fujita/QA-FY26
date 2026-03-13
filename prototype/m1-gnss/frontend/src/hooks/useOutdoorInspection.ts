@@ -6,6 +6,7 @@ import type {
   NavSigSample,
   OutdoorInspectionJudgment,
 } from "@/types/outdoor-inspection";
+import type { GnssStateResponse } from "@/lib/api";
 import {
   calculateRtkFixRate,
   calculateRtkFixTime,
@@ -13,6 +14,14 @@ import {
   calculateMinL1Cno,
   judgeOutdoorInspection,
 } from "@/lib/outdoor-inspection-calc";
+
+/**
+ * スナップショット（生データ保存用）
+ */
+export interface InspectionSnapshot {
+  timestamp_ms: number;
+  data: GnssStateResponse;
+}
 
 /**
  * 検査状態
@@ -49,6 +58,7 @@ export interface UseOutdoorInspectionReturn {
   state: InspectionState;
   remainingTime: number;
   sampleCount: number;
+  snapshotCount: number;
 
   // 結果（検査完了時のみ）
   result: InspectionSummary | null;
@@ -67,6 +77,9 @@ export interface UseOutdoorInspectionReturn {
   // サンプル追加（パネルから呼び出される）
   addNavStatusSample: (sample: Omit<NavStatusSample, "timestamp">) => void;
   addNavSigSample: (sample: Omit<NavSigSample, "timestamp">) => void;
+
+  // スナップショット追加（生データ保存用）
+  addSnapshot: (data: GnssStateResponse) => void;
 }
 
 /**
@@ -82,6 +95,9 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     []
   );
   const [navSigSamples, setNavSigSamples] = useState<NavSigSample[]>([]);
+
+  // スナップショット蓄積（生データ保存用）
+  const [snapshots, setSnapshots] = useState<InspectionSnapshot[]>([]);
 
   // 検査開始時刻
   const startTimeRef = useRef<number>(0);
@@ -153,6 +169,7 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     // リセット
     setNavStatusSamples([]);
     setNavSigSamples([]);
+    setSnapshots([]);
     setResult(null);
     setSaveState("idle");
     setSaveError(null);
@@ -203,6 +220,7 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     setRemainingTime(0);
     setNavStatusSamples([]);
     setNavSigSamples([]);
+    setSnapshots([]);
     setResult(null);
     setSaveState("idle");
     setSaveError(null);
@@ -246,6 +264,11 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
               rtk_fix_time_pass: result.judgment.rtk_fix_time_pass,
               rtk_fix_rate_pass: result.judgment.rtk_fix_rate_pass,
               failure_reasons: result.judgment.failure_reasons,
+              // スナップショット（生データ）
+              snapshots: snapshots.map((s) => ({
+                timestamp_ms: s.timestamp_ms,
+                data: s.data,
+              })),
             }),
           }
         );
@@ -265,7 +288,7 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
         setSaveState("error");
       }
     },
-    [state, result]
+    [state, result, snapshots]
   );
 
   // サンプル追加
@@ -288,6 +311,21 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     [state]
   );
 
+  // スナップショット追加（生データ保存用）
+  const addSnapshot = useCallback(
+    (data: GnssStateResponse) => {
+      if (state !== "running") return;
+      setSnapshots((prev) => [
+        ...prev,
+        { timestamp_ms: Date.now(), data },
+      ]);
+    },
+    [state]
+  );
+
+  // スナップショット数
+  const snapshotCount = snapshots.length;
+
   // クリーンアップ
   useEffect(() => {
     return () => {
@@ -301,6 +339,7 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     state,
     remainingTime,
     sampleCount,
+    snapshotCount,
     result,
     saveState,
     saveError,
@@ -311,5 +350,6 @@ export function useOutdoorInspection(): UseOutdoorInspectionReturn {
     saveResult,
     addNavStatusSample,
     addNavSigSample,
+    addSnapshot,
   };
 }

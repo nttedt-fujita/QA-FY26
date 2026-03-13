@@ -269,6 +269,15 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
     }) {
         Ok(r) => {
             tracing::debug!("[GNSS-STATE] NAV-PVT成功 ({}ms)", msg_start.elapsed().as_millis());
+            // 位置更新（NTRIP GGA送信用）
+            if r.fix_type >= 2 {
+                if let Ok(mut pos) = data.current_position.lock() {
+                    pos.lat = r.lat;
+                    pos.lon = r.lon;
+                    pos.valid = true;
+                    tracing::debug!("[GNSS-STATE] 位置更新: lat={}, lon={}", r.lat, r.lon);
+                }
+            }
             response.nav_pvt = Some(r);
         }
         Err(e) => {
