@@ -512,6 +512,7 @@ export async function getGnssState(signal?: AbortSignal): Promise<GnssStateRespo
 export interface OutdoorInspectionResult {
   id: number;
   device_id: number | null;
+  serial_number: string | null;
   lot_id: number | null;
   inspected_at: string;
   duration_sec: number;

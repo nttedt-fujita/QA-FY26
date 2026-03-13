@@ -183,7 +183,7 @@ function SpanBlockCard({ block }: { block: SpanBlock }) {
  */
 function SpectrumChart({ spectrum }: { spectrum: number[] }) {
   const width = 256;
-  const height = 60;
+  const height = 100;
   const maxVal = Math.max(...spectrum, 1);
 
   // パスを生成
@@ -198,7 +198,7 @@ function SpectrumChart({ spectrum }: { spectrum: number[] }) {
     <div className="overflow-hidden rounded border border-gray-200 bg-white">
       <svg
         viewBox={`0 0 ${width} ${height}`}
-        className="h-16 w-full"
+        className="h-32 w-full"
         preserveAspectRatio="none"
       >
         {/* グリッド線 */}
