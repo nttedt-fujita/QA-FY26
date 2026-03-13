@@ -192,3 +192,38 @@
 2. 対策案A実装（ポーリング間隔6秒化）
 
 ---
+
+## Session 178 (2026-03-13)
+
+**概要**: FE/BEポーリング処理の図解作成と対策実装
+
+**実施内容**:
+1. 概念説明図作成（polling-architecture.drawio）
+2. シーケンス図作成（request-lifecycle.drawio）
+3. 対策案A実装: ポーリング間隔を1秒→6秒に変更
+4. 動作確認: POST後のBE処理時間が60-80秒→5秒に改善
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [polling-architecture.drawio](../session178/polling-architecture.drawio) | ポーリング構造概要図 |
+| [request-lifecycle.drawio](../session178/request-lifecycle.drawio) | リクエストライフサイクル図 |
+| [session-summary.md](../session178/session-summary.md) | セッションサマリー |
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| `frontend/src/app/inspections/outdoor/page.tsx` | pollIntervalMs: 1000 → 6000 |
+
+**動作確認結果**:
+- gnss-state呼び出し: 30回 → 6回
+- POST後BE処理時間: 60-80秒 → 5秒
+- ロック待機警告: 100件 → 0件
+
+**残課題**: POST後1件分（約5秒）の処理結果をFEに反映すべき
+
+**次セッション（Session 179）でやること**:
+1. FE表示タイミング調整: POST後のBE処理完了を待ってから結果表示
+2. スナップショット可視化: DBから取得したデータでスカイプロット再表示
+
+---

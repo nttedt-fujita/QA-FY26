@@ -41,9 +41,12 @@ export default function OutdoorInspectionsPage() {
   const selectedLot = lots.find((l) => l.id === selectedLotId);
 
   // 統合API（検査中のみポーリング）
+  // ポーリング間隔: 6秒
+  // 理由: BEの処理能力（約6秒/回）に合わせてキュー滞留を防止
+  // 参照: session177/log-analysis-results.md, session178/polling-architecture.drawio
   const gnssState = useGnssState({
     enabled: isInspecting && !!connectedDevice,
-    pollIntervalMs: 1000,
+    pollIntervalMs: 6000,
   });
 
   // 前回のデータを記録（重複サンプル防止）
