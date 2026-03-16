@@ -166,6 +166,8 @@ export function MonSpanComparePanel({
                     <SpectrumChart
                       spectrum={primaryBlock.spectrum}
                       maxAmplitude={primaryBlock.max_amplitude}
+                      centerHz={primaryBlock.center}
+                      spanHz={primaryBlock.span}
                       compareSpectrum={secondaryBlock?.spectrum}
                       compareMaxAmplitude={secondaryBlock?.max_amplitude}
                       strokeColor={colors.primary}
@@ -193,6 +195,8 @@ export function MonSpanComparePanel({
                     <SpectrumChart
                       spectrum={secondaryBlock.spectrum}
                       maxAmplitude={secondaryBlock.max_amplitude}
+                      centerHz={secondaryBlock.center}
+                      spanHz={secondaryBlock.span}
                       compareSpectrum={primaryBlock?.spectrum}
                       compareMaxAmplitude={primaryBlock?.max_amplitude}
                       strokeColor={colors.secondary}
@@ -268,6 +272,8 @@ export function MonSpanComparePanel({
                       <SpectrumChart
                         spectrum={mainBlock.spectrum}
                         maxAmplitude={mainBlock.max_amplitude}
+                        centerHz={mainBlock.center}
+                        spanHz={mainBlock.span}
                         compareSpectrum={compareBlock?.spectrum}
                         compareMaxAmplitude={compareBlock?.max_amplitude}
                         strokeColor={expandedCell.type === "primary" ? colors.primary : colors.secondary}
