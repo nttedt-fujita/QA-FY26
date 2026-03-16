@@ -316,11 +316,6 @@ pub async fn connect_device(
                     }
                 };
 
-                // F9Pシリアル番号を取得（失敗してもconnectは成功扱い）
-                if let Err(e) = manager.query_f9p_serial() {
-                    tracing::warn!("F9Pシリアル番号の取得に失敗: {}", e);
-                }
-
                 // ボーレートを115200に統一（Session 165）
                 use crate::device::manager::DEFAULT_BAUD_RATE;
                 let final_baud_rate = if baud_rate != DEFAULT_BAUD_RATE {
@@ -354,6 +349,11 @@ pub async fn connect_device(
                     tracing::warn!("NMEA出力無効化に失敗: {}", e);
                 } else {
                     tracing::debug!("NMEA出力を無効化しました");
+                }
+
+                // F9Pシリアル番号を取得（定期出力無効化後に実行）
+                if let Err(e) = manager.query_f9p_serial() {
+                    tracing::warn!("F9Pシリアル番号の取得に失敗: {}", e);
                 }
 
                 return HttpResponse::Ok().json(ConnectResponse {
