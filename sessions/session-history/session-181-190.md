@@ -235,3 +235,29 @@
 **次セッション**: [session189/session-plan.md](../session189/session-plan.md)
 
 ---
+
+## Session 189 (2026-03-16)
+
+**概要**: 比較画面色分け改善 + MON-SPAN dB変換調査
+
+**実施内容**:
+1. 比較画面の色分け改善
+   - 基準側: L1=青、L2=緑（変更なし）
+   - 比較側: L1=オレンジ、L2=紫（新規）
+2. MON-SPAN spectrum値のdB変換調査
+   - 仕様書、u-center画像、実データ、Web/論文を調査
+   - 式2 `dB = spectrum / 6.375 + 20` が整合する可能性が高い
+   - ただし1次情報による確定はできず
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| `components/MonSpanComparePanel.tsx` | 色分け改善（基準=青/緑、比較=オレンジ/紫） |
+
+**残った作業**:
+- dB変換式の実装（式2を適用）
+- 横軸（周波数）の表示改善
+
+**次セッション**: [session190/session-plan.md](../session190/session-plan.md)
+
+---
