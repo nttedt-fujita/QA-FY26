@@ -137,3 +137,32 @@
 **次セッション**: [session207/session-plan.md](../session207/session-plan.md)
 
 ---
+
+## Session 207 (2026-03-16)
+
+**概要**: 複数台一括検査機能の実装（Phase 1）
+
+**実施内容**:
+1. バックエンド実装
+   - BatchInspection型定義
+   - batch_inspectionハンドラー実装
+   - `POST /api/inspections/batch` ルート追加
+2. フロントエンド実装
+   - runBatchInspection() 追加
+   - 検査画面を複数デバイス対応に改修
+   - 結果をテーブル形式で詳細表示
+   - 点滅ボタン連携
+3. 実機テスト（3台）- 一括検査成功
+
+**発見した課題**: 古い機でFWバージョンがエラー（u-centerでは表示されるため、パース形式の違いと推測）
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [inspection_api.rs](../../prototype/m1-gnss/backend/src/web/inspection_api.rs) | BatchInspection型 + ハンドラー |
+| [api.ts](../../prototype/m1-gnss/frontend/src/lib/api.ts) | runBatchInspection() |
+| [indoor/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/indoor/page.tsx) | 複数デバイス対応 |
+
+**次セッション**: [session208/session-plan.md](../session208/session-plan.md)
+
+---

@@ -287,6 +287,61 @@ export async function listInspections(): Promise<InspectionListResponse> {
 }
 
 // ===========================================
+// 一括検査API（Phase 3: 複数台対応）
+// ===========================================
+
+/**
+ * 個別デバイスの検査結果
+ */
+export interface DeviceInspectionResult {
+  path: string;
+  serial_number: string;
+  overall_result: string;
+  inspection_id: number;
+  items: ItemResult[];
+}
+
+/**
+ * 一括検査サマリー
+ */
+export interface BatchSummary {
+  total: number;
+  passed: number;
+  failed: number;
+}
+
+/**
+ * 一括検査レスポンス
+ */
+export interface BatchInspectionResponse {
+  results: DeviceInspectionResult[];
+  summary: BatchSummary;
+}
+
+/**
+ * 一括検査リクエスト
+ */
+export interface BatchInspectionRequest {
+  lot_id?: number;
+}
+
+/**
+ * 一括検査を実行（接続中の全装置）
+ */
+export async function runBatchInspection(request: BatchInspectionRequest): Promise<BatchInspectionResponse> {
+  const res = await fetch(`${API_BASE}/api/inspections/batch`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(request),
+  });
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
+
+// ===========================================
 // NAV-SIG API（衛星信号情報）
 // ===========================================
 
