@@ -26,6 +26,7 @@ export default function OutdoorInspectionsPage() {
   const [lots, setLots] = useState<Lot[]>([]);
   const [devices, setDevices] = useState<Device[]>([]);
   const [selectedLotId, setSelectedLotId] = useState<number | null>(null);
+  const [selectedDevicePath, setSelectedDevicePath] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // GNSSフィルタ状態（全GNSS選択で初期化）
@@ -39,8 +40,16 @@ export default function OutdoorInspectionsPage() {
   const isInspecting = inspection.state === "running";
   const isProcessing = inspection.state === "starting" || inspection.state === "completing";
 
-  // 接続中の装置を取得
-  const connectedDevice = devices.find((d) => d.status === "connected");
+  // 接続中の装置一覧（Phase 3: 複数台対応）
+  const connectedDevices = devices.filter((d) => d.status === "connected");
+
+  // 選択中の装置（未選択時は最初の接続済み装置）
+  const selectedDevice = selectedDevicePath
+    ? connectedDevices.find((d) => d.path === selectedDevicePath)
+    : connectedDevices[0] ?? null;
+
+  // 後方互換性のためconnectedDeviceも維持
+  const connectedDevice = selectedDevice;
 
   // 選択中のロットを取得
   const selectedLot = lots.find((l) => l.id === selectedLotId);
@@ -54,6 +63,8 @@ export default function OutdoorInspectionsPage() {
   const gnssState = useGnssState({
     enabled: isPollingEnabled,
     delayAfterResponseMs: 1000,
+    // Phase 3: 複数台対応 - 選択中の装置パスを指定
+    devicePath: selectedDevice?.path,
   });
 
   // 前回のデータを記録（重複サンプル防止）
@@ -316,15 +327,44 @@ export default function OutdoorInspectionsPage() {
             )}
           </div>
 
-          {/* 接続中の装置 */}
+          {/* 接続中の装置（Phase 3: 複数台対応） */}
           <div className="rounded border border-gray-200 bg-white p-4">
-            <h3 className="mb-2 font-medium text-gray-700">接続中の装置</h3>
-            {connectedDevice ? (
+            <h3 className="mb-2 font-medium text-gray-700">
+              検査対象装置
+              {connectedDevices.length > 1 && (
+                <span className="ml-2 text-sm font-normal text-gray-500">
+                  ({connectedDevices.length}台接続中)
+                </span>
+              )}
+            </h3>
+            {connectedDevices.length > 0 ? (
               <div>
-                <div className="font-mono text-sm">{connectedDevice.path}</div>
-                <div className="text-sm text-gray-600">
-                  ボーレート: {connectedDevice.baud_rate ?? "-"} bps
-                </div>
+                {/* 複数台接続時は選択UI表示 */}
+                {connectedDevices.length > 1 ? (
+                  <select
+                    value={selectedDevicePath ?? connectedDevices[0]?.path ?? ""}
+                    onChange={(e) => setSelectedDevicePath(e.target.value)}
+                    className="w-full rounded border border-gray-300 p-2 font-mono text-sm"
+                    disabled={isInspecting || isProcessing}
+                  >
+                    {connectedDevices.map((device) => (
+                      <option key={device.path} value={device.path}>
+                        {device.path} ({device.baud_rate ?? "-"} bps)
+                        {device.f9p_serial ? ` - ${device.f9p_serial}` : ""}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="font-mono text-sm">{connectedDevice?.path}</div>
+                )}
+                {selectedDevice && (
+                  <div className="mt-2 text-sm text-gray-600">
+                    <div>ボーレート: {selectedDevice.baud_rate ?? "-"} bps</div>
+                    {selectedDevice.f9p_serial && (
+                      <div>シリアル: {selectedDevice.f9p_serial}</div>
+                    )}
+                  </div>
+                )}
                 <div className="mt-1 inline-block rounded bg-green-100 px-2 py-1 text-sm text-green-800">
                   接続中
                 </div>

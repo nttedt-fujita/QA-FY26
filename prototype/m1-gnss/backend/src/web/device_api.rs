@@ -203,6 +203,23 @@ impl AppState {
             Ok(None)
         }
     }
+
+    /// パス指定でデバイスマネージャーを取得（Phase 3: 複数台対応）
+    ///
+    /// 指定したパスのデバイスが接続されていない場合はNoneを返す
+    pub fn get_device_manager_by_path(
+        &self,
+        path: &str,
+    ) -> Result<Option<Arc<Mutex<DeviceManager<RealSerialPortProvider>>>>, DeviceManagerError> {
+        let multi_manager = self.multi_device_manager.lock().map_err(|_| {
+            DeviceManagerError::IoError(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "ロック取得に失敗",
+            ))
+        })?;
+
+        Ok(multi_manager.get_manager(path))
+    }
 }
 
 // ===========================================
@@ -513,6 +530,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
         web::scope("/api/devices")
             .route("", web::get().to(list_devices))
             .route("/{path}/connect", web::post().to(connect_device))
-            .route("/{path}/disconnect", web::post().to(disconnect_device)),
+            .route("/{path}/disconnect", web::post().to(disconnect_device))
+            // Phase 3: パス指定版API（/api/devices/{path}/gnss-state）
+            .route("/{path}/gnss-state", web::get().to(super::gnss_state_api::get_gnss_state_by_path)),
     );
 }

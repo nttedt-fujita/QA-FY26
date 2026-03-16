@@ -167,3 +167,41 @@
 **次セッション**: [session198/session-plan.md](../session198/session-plan.md)
 
 ---
+
+## Session 198 (2026-03-16)
+
+**概要**: Phase 3 パス指定API追加 + FEデバイス選択UI実装
+
+**実施内容**:
+1. パス指定API追加（BE）
+   - `/api/devices/{path}/gnss-state` 形式
+   - `get_device_manager_by_path()` メソッド追加
+2. FEデバイス選択UI実装
+   - `getGnssState()` にdevicePathパラメータ追加
+   - `useGnssState` にdevicePathオプション追加
+   - 屋外検査画面にデバイス選択ドロップダウン追加
+3. HashMap順序バグ修正
+   - `connected_paths()` がソートせずに返していた問題を修正
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| device_api.rs | `get_device_manager_by_path()` 追加、ルート追加 |
+| gnss_state_api.rs | `get_gnss_state_by_path()` ハンドラ追加 |
+| multi_manager.rs | `connected_paths()` にソート追加 |
+| api.ts | `getGnssState()` にdevicePathパラメータ追加 |
+| useGnssState.ts | devicePathオプション追加 |
+| outdoor/page.tsx | デバイス選択状態とUI追加 |
+
+**検証結果**:
+| 項目 | 結果 |
+|------|------|
+| 後方互換API | ✅ ソート順の最初のデバイスを返す |
+| パス指定API（USB0） | ✅ エラーなし |
+| パス指定API（USB1） | ⚠️ パースエラー（デバイス設定問題） |
+
+**テスト結果**: 272テストすべてパス
+
+**次セッション**: [session199/session-plan.md](../session199/session-plan.md)
+
+---
