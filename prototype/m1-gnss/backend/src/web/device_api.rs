@@ -532,6 +532,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
             .route("/{path}/connect", web::post().to(connect_device))
             .route("/{path}/disconnect", web::post().to(disconnect_device))
             // Phase 3: パス指定版API（/api/devices/{path}/gnss-state）
-            .route("/{path}/gnss-state", web::get().to(super::gnss_state_api::get_gnss_state_by_path)),
+            .route("/{path}/gnss-state", web::get().to(super::gnss_state_api::get_gnss_state_by_path))
+            // メッセージスキャンAPI
+            .route("/{path}/message-scan", web::get().to(super::message_scan_api::scan_messages)),
     );
 }

@@ -12,3 +12,4 @@ pub mod mon_span_api;
 pub mod nav_status_api;
 pub mod ntrip_api;
 pub mod gnss_state_api;
+pub mod message_scan_api;
