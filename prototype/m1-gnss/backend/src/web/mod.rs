@@ -14,3 +14,4 @@ pub mod ntrip_api;
 pub mod gnss_state_api;
 pub mod message_scan_api;
 pub mod blink_api;
+pub mod reset_config_api;
