@@ -172,6 +172,66 @@ pub const CFG_MSGOUT_NAV_COV_USB: u32 = 0x20910086;
 /// CFG-MSGOUT-UBX_NAV_COV_UART1
 pub const CFG_MSGOUT_NAV_COV_UART1: u32 = 0x20910084;
 
+// ===========================================
+// CFG-MSGOUT キーID（古い機向け追加メッセージ その2）
+// Session 210: 残り3メッセージ（NAV-HPPOSLLH, NAV-VELNED, NAV-ORB）を追加
+// 出典: u-blox F9 HPG 1.32 Interface Description (UBX-22008968) p.234-251
+// ===========================================
+
+/// CFG-MSGOUT-UBX_NAV_HPPOSLLH_USB (0x01 0x14)
+pub const CFG_MSGOUT_NAV_HPPOSLLH_USB: u32 = 0x20910036;
+
+/// CFG-MSGOUT-UBX_NAV_HPPOSLLH_UART1
+pub const CFG_MSGOUT_NAV_HPPOSLLH_UART1: u32 = 0x20910034;
+
+/// CFG-MSGOUT-UBX_NAV_VELNED_USB (0x01 0x12)
+pub const CFG_MSGOUT_NAV_VELNED_USB: u32 = 0x20910045;
+
+/// CFG-MSGOUT-UBX_NAV_VELNED_UART1
+pub const CFG_MSGOUT_NAV_VELNED_UART1: u32 = 0x20910043;
+
+/// CFG-MSGOUT-UBX_NAV_ORB_USB (0x01 0x34)
+pub const CFG_MSGOUT_NAV_ORB_USB: u32 = 0x20910013;
+
+/// CFG-MSGOUT-UBX_NAV_ORB_UART1
+pub const CFG_MSGOUT_NAV_ORB_UART1: u32 = 0x20910011;
+
+// ===========================================
+// CFG-MSGOUT キーID（古い機向け追加メッセージ その3）
+// Session 210: 実機確認で追加発覚した5メッセージ
+// 出典: u-blox F9 HPG 1.32 Interface Description (UBX-22008968) p.234-251
+// ===========================================
+
+/// CFG-MSGOUT-UBX_NAV_DOP_USB (0x01 0x04)
+pub const CFG_MSGOUT_NAV_DOP_USB: u32 = 0x2091003b;
+
+/// CFG-MSGOUT-UBX_NAV_DOP_UART1
+pub const CFG_MSGOUT_NAV_DOP_UART1: u32 = 0x20910039;
+
+/// CFG-MSGOUT-UBX_NAV_TIMEGLO_USB (0x01 0x23)
+pub const CFG_MSGOUT_NAV_TIMEGLO_USB: u32 = 0x2091004f;
+
+/// CFG-MSGOUT-UBX_NAV_TIMEGLO_UART1
+pub const CFG_MSGOUT_NAV_TIMEGLO_UART1: u32 = 0x2091004d;
+
+/// CFG-MSGOUT-UBX_NAV_TIMELS_USB (0x01 0x26)
+pub const CFG_MSGOUT_NAV_TIMELS_USB: u32 = 0x20910063;
+
+/// CFG-MSGOUT-UBX_NAV_TIMELS_UART1
+pub const CFG_MSGOUT_NAV_TIMELS_UART1: u32 = 0x20910061;
+
+/// CFG-MSGOUT-UBX_MON_SYS_USB (0x0A 0x39)
+pub const CFG_MSGOUT_MON_SYS_USB: u32 = 0x209106a0;
+
+/// CFG-MSGOUT-UBX_MON_SYS_UART1
+pub const CFG_MSGOUT_MON_SYS_UART1: u32 = 0x2091069e;
+
+/// CFG-MSGOUT-UBX_NAV_PL_USB (0x01 0x62)
+pub const CFG_MSGOUT_NAV_PL_USB: u32 = 0x20910418;
+
+/// CFG-MSGOUT-UBX_NAV_PL_UART1
+pub const CFG_MSGOUT_NAV_PL_UART1: u32 = 0x20910416;
+
 /// NMEA出力を制御するCFG-VALSETメッセージを生成
 ///
 /// # Arguments
@@ -351,8 +411,9 @@ pub fn disable_periodic_output(layer: Layer) -> Vec<u8> {
     // USB用とUART1用の両方のキーを0に設定
     // Session 199-200: 追加メッセージ（NAV-CLOCK, NAV-POSLLH, NAV-HPPOSECEF, NAV-TIMEGPS, NAV-TIMEQZSS, NAV-SBAS）を追加
     // Session 201: NAV-TIMEQZSS追加
-    // Session 209: 古い機向け追加（NAV-POSECEF, NAV-VELECEF, NAV-RELPOSNED, NAV-GEOFENCE, NAV-COV）→ 合計34キー
-    let configs: [(u32, u8); 34] = [
+    // Session 209: 古い機向け追加（NAV-POSECEF, NAV-VELECEF, NAV-RELPOSNED, NAV-GEOFENCE, NAV-COV）
+    // Session 210: 古い機向け追加（NAV-HPPOSLLH, NAV-VELNED, NAV-ORB, NAV-DOP, NAV-TIMEGLO, NAV-TIMELS, MON-SYS, NAV-PL）→ 合計50キー
+    let configs: [(u32, u8); 50] = [
         // USB用（元の6メッセージ）
         (CFG_MSGOUT_NAV_PVT_USB, 0),
         (CFG_MSGOUT_NAV_STATUS_USB, 0),
@@ -367,12 +428,20 @@ pub fn disable_periodic_output(layer: Layer) -> Vec<u8> {
         (CFG_MSGOUT_NAV_TIMEGPS_USB, 0),
         (CFG_MSGOUT_NAV_TIMEQZSS_USB, 0),
         (CFG_MSGOUT_NAV_SBAS_USB, 0),
-        // USB用（古い機向け5メッセージ）
+        // USB用（古い機向け13メッセージ）
         (CFG_MSGOUT_NAV_POSECEF_USB, 0),
         (CFG_MSGOUT_NAV_VELECEF_USB, 0),
         (CFG_MSGOUT_NAV_RELPOSNED_USB, 0),
         (CFG_MSGOUT_NAV_GEOFENCE_USB, 0),
         (CFG_MSGOUT_NAV_COV_USB, 0),
+        (CFG_MSGOUT_NAV_HPPOSLLH_USB, 0),
+        (CFG_MSGOUT_NAV_VELNED_USB, 0),
+        (CFG_MSGOUT_NAV_ORB_USB, 0),
+        (CFG_MSGOUT_NAV_DOP_USB, 0),
+        (CFG_MSGOUT_NAV_TIMEGLO_USB, 0),
+        (CFG_MSGOUT_NAV_TIMELS_USB, 0),
+        (CFG_MSGOUT_MON_SYS_USB, 0),
+        (CFG_MSGOUT_NAV_PL_USB, 0),
         // UART1用（元の6メッセージ）
         (CFG_MSGOUT_NAV_PVT_UART1, 0),
         (CFG_MSGOUT_NAV_STATUS_UART1, 0),
@@ -387,12 +456,20 @@ pub fn disable_periodic_output(layer: Layer) -> Vec<u8> {
         (CFG_MSGOUT_NAV_TIMEGPS_UART1, 0),
         (CFG_MSGOUT_NAV_TIMEQZSS_UART1, 0),
         (CFG_MSGOUT_NAV_SBAS_UART1, 0),
-        // UART1用（古い機向け5メッセージ）
+        // UART1用（古い機向け13メッセージ）
         (CFG_MSGOUT_NAV_POSECEF_UART1, 0),
         (CFG_MSGOUT_NAV_VELECEF_UART1, 0),
         (CFG_MSGOUT_NAV_RELPOSNED_UART1, 0),
         (CFG_MSGOUT_NAV_GEOFENCE_UART1, 0),
         (CFG_MSGOUT_NAV_COV_UART1, 0),
+        (CFG_MSGOUT_NAV_HPPOSLLH_UART1, 0),
+        (CFG_MSGOUT_NAV_VELNED_UART1, 0),
+        (CFG_MSGOUT_NAV_ORB_UART1, 0),
+        (CFG_MSGOUT_NAV_DOP_UART1, 0),
+        (CFG_MSGOUT_NAV_TIMEGLO_UART1, 0),
+        (CFG_MSGOUT_NAV_TIMELS_UART1, 0),
+        (CFG_MSGOUT_MON_SYS_UART1, 0),
+        (CFG_MSGOUT_NAV_PL_UART1, 0),
     ];
 
     for (key, value) in configs {
@@ -551,9 +628,9 @@ mod tests {
         }
     }
 
-    /// 定期出力無効化時に全メッセージのレートが0になる（USB + UART1の34キー）
+    /// 定期出力無効化時に全メッセージのレートが0になる（USB + UART1の50キー）
     #[rstest]
-    // USB用（index 0-16）
+    // USB用（index 0-24）
     #[case::usb_nav_pvt(0, 0, true)]
     #[case::usb_nav_status(1, 0, true)]
     #[case::usb_nav_sat(2, 0, true)]
@@ -571,24 +648,40 @@ mod tests {
     #[case::usb_nav_relposned(14, 0, true)]
     #[case::usb_nav_geofence(15, 0, true)]
     #[case::usb_nav_cov(16, 0, true)]
-    // UART1用（index 17-33）
-    #[case::uart1_nav_pvt(17, 0, true)]
-    #[case::uart1_nav_status(18, 0, true)]
-    #[case::uart1_nav_sat(19, 0, true)]
-    #[case::uart1_nav_sig(20, 0, true)]
-    #[case::uart1_mon_span(21, 0, true)]
-    #[case::uart1_mon_rf(22, 0, true)]
-    #[case::uart1_nav_clock(23, 0, true)]
-    #[case::uart1_nav_posllh(24, 0, true)]
-    #[case::uart1_nav_hpposecef(25, 0, true)]
-    #[case::uart1_nav_timegps(26, 0, true)]
-    #[case::uart1_nav_timeqzss(27, 0, true)]
-    #[case::uart1_nav_sbas(28, 0, true)]
-    #[case::uart1_nav_posecef(29, 0, true)]
-    #[case::uart1_nav_velecef(30, 0, true)]
-    #[case::uart1_nav_relposned(31, 0, true)]
-    #[case::uart1_nav_geofence(32, 0, true)]
-    #[case::uart1_nav_cov(33, 0, true)]
+    #[case::usb_nav_hpposllh(17, 0, true)]
+    #[case::usb_nav_velned(18, 0, true)]
+    #[case::usb_nav_orb(19, 0, true)]
+    #[case::usb_nav_dop(20, 0, true)]
+    #[case::usb_nav_timeglo(21, 0, true)]
+    #[case::usb_nav_timels(22, 0, true)]
+    #[case::usb_mon_sys(23, 0, true)]
+    #[case::usb_nav_pl(24, 0, true)]
+    // UART1用（index 25-49）
+    #[case::uart1_nav_pvt(25, 0, true)]
+    #[case::uart1_nav_status(26, 0, true)]
+    #[case::uart1_nav_sat(27, 0, true)]
+    #[case::uart1_nav_sig(28, 0, true)]
+    #[case::uart1_mon_span(29, 0, true)]
+    #[case::uart1_mon_rf(30, 0, true)]
+    #[case::uart1_nav_clock(31, 0, true)]
+    #[case::uart1_nav_posllh(32, 0, true)]
+    #[case::uart1_nav_hpposecef(33, 0, true)]
+    #[case::uart1_nav_timegps(34, 0, true)]
+    #[case::uart1_nav_timeqzss(35, 0, true)]
+    #[case::uart1_nav_sbas(36, 0, true)]
+    #[case::uart1_nav_posecef(37, 0, true)]
+    #[case::uart1_nav_velecef(38, 0, true)]
+    #[case::uart1_nav_relposned(39, 0, true)]
+    #[case::uart1_nav_geofence(40, 0, true)]
+    #[case::uart1_nav_cov(41, 0, true)]
+    #[case::uart1_nav_hpposllh(42, 0, true)]
+    #[case::uart1_nav_velned(43, 0, true)]
+    #[case::uart1_nav_orb(44, 0, true)]
+    #[case::uart1_nav_dop(45, 0, true)]
+    #[case::uart1_nav_timeglo(46, 0, true)]
+    #[case::uart1_nav_timels(47, 0, true)]
+    #[case::uart1_mon_sys(48, 0, true)]
+    #[case::uart1_nav_pl(49, 0, true)]
     fn test_定期出力無効化で全レートが0になる(
         #[case] index: usize,
         #[case] expected_rate: u8,
@@ -628,7 +721,7 @@ mod tests {
         }
     }
 
-    /// 定期出力無効化メッセージの構造が正しい（USB + UART1の34キー）
+    /// 定期出力無効化メッセージの構造が正しい（USB + UART1の50キー）
     #[rstest]
     #[case::正常系(Layer::Ram, true)]
     fn test_定期出力無効化メッセージ構造が正しい(
@@ -644,8 +737,8 @@ mod tests {
             assert_eq!(frame.sync2(), 0x62, "sync2");
             assert_eq!(frame.class(), 0x06, "class = CFG");
             assert_eq!(frame.id(), 0x8A, "id = VALSET");
-            // ペイロード長: version(1) + layers(1) + reserved(2) + 34*(key(4) + value(1)) = 174
-            assert_eq!(frame.payload_len(), 174, "payload length (34 keys)");
+            // ペイロード長: version(1) + layers(1) + reserved(2) + 50*(key(4) + value(1)) = 254
+            assert_eq!(frame.payload_len(), 254, "payload length (50 keys)");
             // 最初のキーがNAV-PVT USB
             assert_eq!(frame.first_key(), CFG_MSGOUT_NAV_PVT_USB, "first key = NAV-PVT USB");
             // チェックサム
