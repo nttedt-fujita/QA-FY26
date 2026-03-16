@@ -180,3 +180,33 @@
 **次セッション**: [session187/session-plan.md](../session187/session-plan.md)
 
 ---
+
+## Session 187 (2026-03-16)
+
+**概要**: u-center目盛り調査（1次情報不足で中断）
+
+**実施内容**:
+1. u-centerユーザーガイドPDF調査（目次確認、MON-SPAN関連セクションなし）
+2. Interface Description PDF p.134-135 抽出・確認
+3. Web検索（Qiita記事等）
+4. u-center画面と現在の実装の比較
+
+**発見した問題**:
+- u-center: 縦軸20〜60 dB、波形ピーク40〜50 dB
+- 現在の実装: 縦軸0〜255、波形ピーク160〜170
+- 仕様書には「spectrum: dB」と記載あるが、表示が大きく異なる
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session-summary.md](../session187/session-summary.md) | セッションサマリー |
+| [ucenter-toc.md](../session187/ucenter-toc.md) | u-centerユーザーガイド目次 |
+| [mon-span-spec.md](../session187/mon-span-spec.md) | Interface Description p.134-135 抽出 |
+
+**未解決**:
+- spectrum値（0-255）とdB表示の関係（1次情報による根拠固めが必要）
+
+**次セッション**: [session188/session-plan.md](../session188/session-plan.md)
+- 1次情報（仕様書、論文等）によるspectrum値の解釈調査
+
+---
