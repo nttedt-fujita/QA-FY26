@@ -22,15 +22,22 @@ function getBlockName(centerHz: number): string {
 
 /**
  * 帯域ごとの色設定
+ * - 基準側: L1=青、L2=緑
+ * - 比較側: L1=オレンジ、L2=紫
+ * - 転送表示（点線）: 元の色のまま
  */
 const BAND_COLORS = {
   L1: {
-    main: "#3b82f6",      // 青
-    mainDashed: "#60a5fa", // 明るい青（点線用）
+    primary: "#3b82f6",      // 青（基準側の実線）
+    primaryDashed: "#60a5fa", // 明るい青（基準側からの点線）
+    secondary: "#f97316",     // オレンジ（比較側の実線）
+    secondaryDashed: "#fb923c", // 明るいオレンジ（比較側からの点線）
   },
   L2: {
-    main: "#22c55e",      // 緑
-    mainDashed: "#4ade80", // 明るい緑（点線用）
+    primary: "#22c55e",      // 緑（基準側の実線）
+    primaryDashed: "#4ade80", // 明るい緑（基準側からの点線）
+    secondary: "#a855f7",     // 紫（比較側の実線）
+    secondaryDashed: "#c084fc", // 明るい紫（比較側からの点線）
   },
 } as const;
 
@@ -133,7 +140,7 @@ export function MonSpanComparePanel({
             >
               <span
                 className="font-bold text-lg"
-                style={{ color: colors.main }}
+                style={{ color: colors.primary }}
               >
                 {bandName}
               </span>
@@ -161,8 +168,8 @@ export function MonSpanComparePanel({
                       maxAmplitude={primaryBlock.max_amplitude}
                       compareSpectrum={secondaryBlock?.spectrum}
                       compareMaxAmplitude={secondaryBlock?.max_amplitude}
-                      strokeColor={colors.main}
-                      compareStrokeColor={colors.mainDashed}
+                      strokeColor={colors.primary}
+                      compareStrokeColor={colors.secondaryDashed}
                     />
                   </button>
                 </>
@@ -188,8 +195,8 @@ export function MonSpanComparePanel({
                       maxAmplitude={secondaryBlock.max_amplitude}
                       compareSpectrum={primaryBlock?.spectrum}
                       compareMaxAmplitude={primaryBlock?.max_amplitude}
-                      strokeColor={colors.main}
-                      compareStrokeColor={colors.mainDashed}
+                      strokeColor={colors.secondary}
+                      compareStrokeColor={colors.primaryDashed}
                     />
                   </button>
                 </>
@@ -202,21 +209,21 @@ export function MonSpanComparePanel({
       })}
 
       {/* 凡例 */}
-      <div className="mt-4 flex gap-6 text-sm justify-center">
+      <div className="mt-4 flex flex-wrap gap-4 text-sm justify-center">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L1.main }} />
+          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L1.primary }} />
           <span className="text-gray-700">L1 基準</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L1.mainDashed, borderBottom: "2px dashed" }} />
+          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L1.secondary }} />
           <span className="text-gray-700">L1 比較</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L2.main }} />
+          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L2.primary }} />
           <span className="text-gray-700">L2 基準</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L2.mainDashed, borderBottom: "2px dashed" }} />
+          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L2.secondary }} />
           <span className="text-gray-700">L2 比較</span>
         </div>
       </div>
@@ -263,8 +270,8 @@ export function MonSpanComparePanel({
                         maxAmplitude={mainBlock.max_amplitude}
                         compareSpectrum={compareBlock?.spectrum}
                         compareMaxAmplitude={compareBlock?.max_amplitude}
-                        strokeColor={colors.main}
-                        compareStrokeColor={colors.mainDashed}
+                        strokeColor={expandedCell.type === "primary" ? colors.primary : colors.secondary}
+                        compareStrokeColor={expandedCell.type === "primary" ? colors.secondaryDashed : colors.primaryDashed}
                         primaryLabel={expandedCell.type === "primary" ? "基準" : "比較"}
                         compareLabel={expandedCell.type === "primary" ? "比較" : "基準"}
                         expanded
