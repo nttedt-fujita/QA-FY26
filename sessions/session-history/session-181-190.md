@@ -261,3 +261,44 @@
 **次セッション**: [session190/session-plan.md](../session190/session-plan.md)
 
 ---
+
+## Session 190 (2026-03-16)
+
+**概要**: MON-SPAN dB変換式の1次情報調査・実装 + 比較画面色調整
+
+**実施内容**:
+1. MON-SPAN dB変換式の1次情報調査
+   - ZED-F9P Integration Manual (UBX-18010802 R16) p.83 を確認
+   - spectrum値は0.25 dB単位と明記: `dB = spectrum × 0.25`
+   - 周波数計算式: `Freq(i) = center + span × (i - 128) / 256`
+2. dB変換の実装（MonSpanPanel.tsx）
+3. 比較画面の色調整
+   - L1基準=青、L2基準=緑（変更なし）
+   - L1比較=アンバー、L2比較=赤に変更
+   - MAX線の色を波形色と統一
+   - 実線/破線は同色に統一
+4. 仕様ドキュメント作成（37-mon-span-display-spec.md）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [37-mon-span-display-spec.md](../../docs/missions/m1-sensor-evaluation/gnss/37-mon-span-display-spec.md) | MON-SPAN表示仕様（dB変換・周波数計算） |
+| [session-summary.md](../session190/session-summary.md) | セッションサマリー |
+| [integration-manual-spectrum-analyzer.md](../session190/integration-manual-spectrum-analyzer.md) | PDF抽出: Integration Manual p.83-85 |
+| [integration-manual-toc.md](../session190/integration-manual-toc.md) | PDF抽出: Integration Manual 目次 |
+
+**変更ファイル**:
+- `components/MonSpanPanel.tsx` - dB変換実装、MAX線色を波形色と統一
+- `components/MonSpanComparePanel.tsx` - 色調整（L1比較=アンバー、L2比較=赤）
+- `docs/missions/m1-sensor-evaluation/gnss/README.md` - 37-mon-span-display-spec.md 追加
+
+**1次情報の根拠**:
+- **dB変換**: Integration Manual p.83 "256 spectrum data points (0.25 dB units)"
+- **周波数計算**: Integration Manual p.83 "Freq(i) = center frequency + spectrum span * (i-128) / 256"
+
+**残った作業**:
+- 横軸（周波数）の表示実装
+
+**次セッション**: [session191/session-plan.md](../session191/session-plan.md)
+
+---

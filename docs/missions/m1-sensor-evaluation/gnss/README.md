@@ -115,7 +115,7 @@ Phase 4: 標準化
 | 30 | [30-ttff-monrf-spec.md](30-ttff-monrf-spec.md) | TTFF・MON-RF仕様調査 | 111 |
 | 31 | [31-outdoor-inspection-user-guide.md](31-outdoor-inspection-user-guide.md) | 屋外検査ユーザーガイド | 131 |
 
-### PDF仕様抽出・調査（33-36）
+### PDF仕様抽出・調査（33-37）
 
 | # | ファイル | 内容 | 作成Session |
 |---|---------|------|------------|
@@ -123,6 +123,7 @@ Phase 4: 標準化
 | 34 | [34-ubx-mon-comms.md](34-ubx-mon-comms.md) | UBX-MON-COMMS仕様（p.126-130） | 156 |
 | 35 | [35-ubx-uart-config.md](35-ubx-uart-config.md) | CFG-UART1/2仕様（p.270-274） | 157 |
 | 36 | [36-ntrip-rtk-findings.md](36-ntrip-rtk-findings.md) | NTRIP/RTK仕様調査まとめ | 156 |
+| 37 | [37-mon-span-display-spec.md](37-mon-span-display-spec.md) | MON-SPAN表示仕様（dB変換・周波数計算） | 190 |
 
 ### 図表
 

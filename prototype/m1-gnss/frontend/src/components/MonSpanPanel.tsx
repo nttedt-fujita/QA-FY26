@@ -246,8 +246,12 @@ interface SpectrumChartSingleProps {
   isDashed?: boolean;    // 点線にするか
 }
 
-// 固定スケール: 振幅の最大値（全波形で統一）
-const FIXED_AMPLITUDE_MAX = 255;
+// 固定スケール: dB表示（0〜64 dB）
+// spectrum値は0.25dB単位なので、spectrum * 0.25 = dB
+// 出典: ZED-F9P Integration Manual p.83 "256 spectrum data points (0.25 dB units)"
+const FIXED_DB_MAX = 64;
+// spectrum生値の最大（255 * 0.25 = 63.75 dB）
+const SPECTRUM_TO_DB = 0.25;
 
 /**
  * スペクトラム波形チャート（SVG）
@@ -273,23 +277,24 @@ export function SpectrumChart({
   const totalWidth = chartWidth + margin.left + margin.right;
   const totalHeight = chartHeight + margin.top + margin.bottom;
 
-  // 固定スケールを使用（全波形で同じスケール）
-  const scaleMax = FIXED_AMPLITUDE_MAX;
+  // dB単位での固定スケール（0〜64 dB）
+  const scaleMaxDb = FIXED_DB_MAX;
 
-  // パスを生成（固定スケールで描画）
+  // パスを生成（spectrum値をdBに変換して描画）
   const points = spectrum.map((val, idx) => {
     const x = margin.left + (idx / 255) * chartWidth;
-    const y = margin.top + chartHeight - (val / scaleMax) * chartHeight;
+    const dbVal = val * SPECTRUM_TO_DB;  // spectrum → dB変換
+    const y = margin.top + chartHeight - (dbVal / scaleMaxDb) * chartHeight;
     return `${x},${y}`;
   });
   const pathD = `M${points.join(" L")}`;
 
-  // Y軸メイン目盛り（固定: 0, 64, 128, 192, 255）
-  const yMainTicks = expanded ? [0, 64, 128, 192, 255] : [0, 128, 255];
-  // Y軸サブ目盛り（32刻み）
-  const ySubTicks = expanded ? [32, 96, 160, 224] : [64, 192];
-  // Y軸細分目盛り（16刻み、拡大時のみ）
-  const yFineTicks = expanded ? [16, 48, 80, 112, 144, 176, 208, 240] : [];
+  // Y軸メイン目盛り（dB単位: 0, 16, 32, 48, 64）
+  const yMainTicks = expanded ? [0, 16, 32, 48, 64] : [0, 32, 64];
+  // Y軸サブ目盛り（8dB刻み）
+  const ySubTicks = expanded ? [8, 24, 40, 56] : [16, 48];
+  // Y軸細分目盛り（4dB刻み、拡大時のみ）
+  const yFineTicks = expanded ? [4, 12, 20, 28, 36, 44, 52, 60] : [];
   // X軸メイン目盛り（周波数bin: 0, 64, 128, 192, 255）
   const xMainTicks = expanded ? [0, 64, 128, 192, 255] : [0, 128, 255];
   // X軸サブ目盛り（32刻み）
@@ -315,7 +320,7 @@ export function SpectrumChart({
 
         {/* 細分グリッド線（横）- 16刻み、最も薄い */}
         {yFineTicks.map((tick) => {
-          const y = margin.top + chartHeight - (tick / scaleMax) * chartHeight;
+          const y = margin.top + chartHeight - (tick / scaleMaxDb) * chartHeight;
           return (
             <line
               key={`y-fine-${tick}`}
@@ -331,7 +336,7 @@ export function SpectrumChart({
 
         {/* サブグリッド線（横）- 32刻み */}
         {ySubTicks.map((tick) => {
-          const y = margin.top + chartHeight - (tick / scaleMax) * chartHeight;
+          const y = margin.top + chartHeight - (tick / scaleMaxDb) * chartHeight;
           return (
             <line
               key={`y-sub-${tick}`}
@@ -347,7 +352,7 @@ export function SpectrumChart({
 
         {/* メイングリッド線（横） */}
         {yMainTicks.map((tick) => {
-          const y = margin.top + chartHeight - (tick / scaleMax) * chartHeight;
+          const y = margin.top + chartHeight - (tick / scaleMaxDb) * chartHeight;
           return (
             <line
               key={`y-main-${tick}`}
@@ -411,7 +416,7 @@ export function SpectrumChart({
 
         {/* Y軸目盛りラベル（メインのみ） */}
         {yMainTicks.map((tick) => {
-          const y = margin.top + chartHeight - (tick / scaleMax) * chartHeight;
+          const y = margin.top + chartHeight - (tick / scaleMaxDb) * chartHeight;
           return (
             <text
               key={`y-label-${tick}`}
@@ -482,7 +487,8 @@ export function SpectrumChart({
         {isCompareMode && (() => {
           const comparePoints = compareSpectrum.map((val, idx) => {
             const x = margin.left + (idx / 255) * chartWidth;
-            const y = margin.top + chartHeight - (val / scaleMax) * chartHeight;
+            const dbVal = val * SPECTRUM_TO_DB;  // spectrum → dB変換
+            const y = margin.top + chartHeight - (dbVal / scaleMaxDb) * chartHeight;
             return `${x},${y}`;
           });
           const comparePathD = `M${comparePoints.join(" L")}`;
@@ -540,44 +546,50 @@ export function SpectrumChart({
           </g>
         )}
 
-        {/* 比較最大値ライン */}
-        {isCompareMode && compareMaxAmplitude !== undefined && (
-          <>
+        {/* 比較最大値ライン（比較波形の色に合わせる） */}
+        {isCompareMode && compareMaxAmplitude !== undefined && (() => {
+          const compareMaxDb = compareMaxAmplitude * SPECTRUM_TO_DB;
+          return (
             <line
               x1={margin.left}
-              y1={margin.top + chartHeight - (compareMaxAmplitude / scaleMax) * chartHeight}
+              y1={margin.top + chartHeight - (compareMaxDb / scaleMaxDb) * chartHeight}
               x2={margin.left + chartWidth}
-              y2={margin.top + chartHeight - (compareMaxAmplitude / scaleMax) * chartHeight}
-              stroke="#ea580c"
+              y2={margin.top + chartHeight - (compareMaxDb / scaleMaxDb) * chartHeight}
+              stroke={compareStrokeColor}
               strokeWidth="1"
               strokeDasharray="2 2"
+              opacity="0.7"
             />
-          </>
-        )}
+          );
+        })()}
 
-        {/* 最大値ライン */}
-        {maxAmplitude !== undefined && (
-          <>
-            <line
-              x1={margin.left}
-              y1={margin.top + chartHeight - (maxAmplitude / scaleMax) * chartHeight}
-              x2={margin.left + chartWidth}
-              y2={margin.top + chartHeight - (maxAmplitude / scaleMax) * chartHeight}
-              stroke="#ef4444"
-              strokeWidth="1"
-              strokeDasharray="4 2"
-            />
-            <text
-              x={margin.left + chartWidth + 3}
-              y={margin.top + chartHeight - (maxAmplitude / scaleMax) * chartHeight}
-              dominantBaseline="middle"
-              className="fill-red-500"
-              style={{ fontSize: expanded ? 10 : 8 }}
-            >
-              Max:{maxAmplitude}
-            </text>
-          </>
-        )}
+        {/* 最大値ライン（波形の色に合わせる） */}
+        {maxAmplitude !== undefined && (() => {
+          const maxDb = maxAmplitude * SPECTRUM_TO_DB;
+          return (
+            <>
+              <line
+                x1={margin.left}
+                y1={margin.top + chartHeight - (maxDb / scaleMaxDb) * chartHeight}
+                x2={margin.left + chartWidth}
+                y2={margin.top + chartHeight - (maxDb / scaleMaxDb) * chartHeight}
+                stroke={strokeColor}
+                strokeWidth="1"
+                strokeDasharray="4 2"
+                opacity="0.7"
+              />
+              <text
+                x={margin.left + chartWidth + 3}
+                y={margin.top + chartHeight - (maxDb / scaleMaxDb) * chartHeight}
+                dominantBaseline="middle"
+                fill={strokeColor}
+                style={{ fontSize: expanded ? 10 : 8 }}
+              >
+                Max:{maxDb.toFixed(1)}dB
+              </text>
+            </>
+          );
+        })()}
       </svg>
     </div>
   );
@@ -601,18 +613,20 @@ export function SpectrumChartSingle({
   const totalWidth = chartWidth + margin.left + margin.right;
   const totalHeight = chartHeight + margin.top + margin.bottom;
 
-  const scaleMax = FIXED_AMPLITUDE_MAX;
+  // dB単位での固定スケール（0〜64 dB）
+  const scaleMaxDb = FIXED_DB_MAX;
 
-  // パスを生成
+  // パスを生成（spectrum値をdBに変換して描画）
   const points = spectrum.map((val, idx) => {
     const x = margin.left + (idx / 255) * chartWidth;
-    const y = margin.top + chartHeight - (val / scaleMax) * chartHeight;
+    const dbVal = val * SPECTRUM_TO_DB;  // spectrum → dB変換
+    const y = margin.top + chartHeight - (dbVal / scaleMaxDb) * chartHeight;
     return `${x},${y}`;
   });
   const pathD = points.length > 0 ? `M${points.join(" L")}` : "";
 
-  // 目盛り
-  const yMainTicks = expanded ? [0, 64, 128, 192, 255] : [0, 128, 255];
+  // 目盛り（dB単位）
+  const yMainTicks = expanded ? [0, 16, 32, 48, 64] : [0, 32, 64];
   const xMainTicks = expanded ? [0, 64, 128, 192, 255] : [0, 128, 255];
 
   return (
@@ -633,7 +647,7 @@ export function SpectrumChartSingle({
 
         {/* グリッド線（横） */}
         {yMainTicks.map((tick) => {
-          const y = margin.top + chartHeight - (tick / scaleMax) * chartHeight;
+          const y = margin.top + chartHeight - (tick / scaleMaxDb) * chartHeight;
           return (
             <line
               key={`y-${tick}`}
@@ -665,7 +679,7 @@ export function SpectrumChartSingle({
 
         {/* Y軸目盛りラベル */}
         {yMainTicks.map((tick) => {
-          const y = margin.top + chartHeight - (tick / scaleMax) * chartHeight;
+          const y = margin.top + chartHeight - (tick / scaleMaxDb) * chartHeight;
           return (
             <text
               key={`y-label-${tick}`}
@@ -709,31 +723,35 @@ export function SpectrumChartSingle({
           />
         )}
 
-        {/* 最大値ライン */}
-        {maxAmplitude !== undefined && (
-          <>
-            <line
-              x1={margin.left}
-              y1={margin.top + chartHeight - (maxAmplitude / scaleMax) * chartHeight}
-              x2={margin.left + chartWidth}
-              y2={margin.top + chartHeight - (maxAmplitude / scaleMax) * chartHeight}
-              stroke="#ef4444"
-              strokeWidth="1"
-              strokeDasharray="4 2"
-            />
-            {expanded && (
-              <text
-                x={margin.left + chartWidth + 3}
-                y={margin.top + chartHeight - (maxAmplitude / scaleMax) * chartHeight}
-                dominantBaseline="middle"
-                className="fill-red-500"
-                style={{ fontSize: 10 }}
-              >
-                Max:{maxAmplitude}
-              </text>
-            )}
-          </>
-        )}
+        {/* 最大値ライン（波形の色に合わせる） */}
+        {maxAmplitude !== undefined && (() => {
+          const maxDb = maxAmplitude * SPECTRUM_TO_DB;
+          return (
+            <>
+              <line
+                x1={margin.left}
+                y1={margin.top + chartHeight - (maxDb / scaleMaxDb) * chartHeight}
+                x2={margin.left + chartWidth}
+                y2={margin.top + chartHeight - (maxDb / scaleMaxDb) * chartHeight}
+                stroke={strokeColor}
+                strokeWidth="1"
+                strokeDasharray="4 2"
+                opacity="0.7"
+              />
+              {expanded && (
+                <text
+                  x={margin.left + chartWidth + 3}
+                  y={margin.top + chartHeight - (maxDb / scaleMaxDb) * chartHeight}
+                  dominantBaseline="middle"
+                  fill={strokeColor}
+                  style={{ fontSize: 10 }}
+                >
+                  Max:{maxDb.toFixed(1)}dB
+                </text>
+              )}
+            </>
+          );
+        })()}
       </svg>
     </div>
   );
