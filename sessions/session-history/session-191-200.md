@@ -205,3 +205,27 @@
 **次セッション**: [session199/session-plan.md](../session199/session-plan.md)
 
 ---
+
+## Session 199 (2026-03-16)
+
+**概要**: USB1パースエラーの原因特定
+
+**実施内容**:
+1. ログ分析でパースエラーの原因を特定
+   - `disable_periodic_output`は6種類のメッセージのみ無効化
+   - USB1からは他のメッセージ（NAV-CLOCK, NAV-POSLLH等）が流れ続けていた
+2. 追加が必要なメッセージを特定
+   - NAV-CLOCK (0x01, 0x22)
+   - NAV-POSLLH (0x01, 0x02)
+   - NAV-HPPOSECEF (0x01, 0x13)
+   - NAV-TIMEGPS (0x01, 0x27)
+   - NAV-SBAS (0x01, 0x32)
+
+**反省点**:
+- リポジトリ内に仕様書があるのにWeb検索しようとした
+
+**変更ファイル**: なし（調査のみ）
+
+**次セッション**: [session200/session-plan.md](../session200/session-plan.md)
+
+---
