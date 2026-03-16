@@ -228,6 +228,11 @@ interface SpectrumChartProps {
   spectrum: number[];
   maxAmplitude?: number;  // 最大振幅値（表示用）
   expanded?: boolean;
+  // 比較用（オプション）
+  compareSpectrum?: number[];
+  compareMaxAmplitude?: number;
+  compareLabel?: string;  // 比較データのラベル（凡例用）
+  primaryLabel?: string;  // 基準データのラベル（凡例用）
 }
 
 // 固定スケール: 振幅の最大値（全波形で統一）
@@ -235,8 +240,19 @@ const FIXED_AMPLITUDE_MAX = 255;
 
 /**
  * スペクトラム波形チャート（SVG）
+ *
+ * 比較モード: compareSpectrumを渡すと2つの波形を重ねて表示
  */
-function SpectrumChart({ spectrum, maxAmplitude, expanded = false }: SpectrumChartProps) {
+export function SpectrumChart({
+  spectrum,
+  maxAmplitude,
+  expanded = false,
+  compareSpectrum,
+  compareMaxAmplitude,
+  compareLabel,
+  primaryLabel,
+}: SpectrumChartProps) {
+  const isCompareMode = compareSpectrum && compareSpectrum.length > 0;
   // 拡大時はマージンを確保して目盛りを表示
   const margin = expanded ? { top: 10, right: 40, bottom: 30, left: 50 } : { top: 5, right: 5, bottom: 20, left: 35 };
   const chartWidth = 256;
@@ -441,13 +457,90 @@ function SpectrumChart({ spectrum, maxAmplitude, expanded = false }: SpectrumCha
           </>
         )}
 
-        {/* スペクトラム波形 */}
+        {/* スペクトラム波形（基準） */}
         <path
           d={pathD}
           fill="none"
           stroke="#3b82f6"
           strokeWidth={expanded ? 1.5 : 1}
         />
+
+        {/* 比較波形（オプション） */}
+        {isCompareMode && (() => {
+          const comparePoints = compareSpectrum.map((val, idx) => {
+            const x = margin.left + (idx / 255) * chartWidth;
+            const y = margin.top + chartHeight - (val / scaleMax) * chartHeight;
+            return `${x},${y}`;
+          });
+          const comparePathD = `M${comparePoints.join(" L")}`;
+          return (
+            <path
+              d={comparePathD}
+              fill="none"
+              stroke="#f97316"
+              strokeWidth={expanded ? 1.5 : 1}
+              strokeDasharray={expanded ? "6 3" : "4 2"}
+            />
+          );
+        })()}
+
+        {/* 凡例（比較モード時のみ） */}
+        {isCompareMode && expanded && (
+          <g>
+            {/* 基準 */}
+            <line
+              x1={margin.left + chartWidth - 120}
+              y1={margin.top + 15}
+              x2={margin.left + chartWidth - 100}
+              y2={margin.top + 15}
+              stroke="#3b82f6"
+              strokeWidth="2"
+            />
+            <text
+              x={margin.left + chartWidth - 95}
+              y={margin.top + 15}
+              dominantBaseline="middle"
+              className="fill-gray-700"
+              style={{ fontSize: 10 }}
+            >
+              {primaryLabel || "基準"}
+            </text>
+            {/* 比較 */}
+            <line
+              x1={margin.left + chartWidth - 120}
+              y1={margin.top + 30}
+              x2={margin.left + chartWidth - 100}
+              y2={margin.top + 30}
+              stroke="#f97316"
+              strokeWidth="2"
+              strokeDasharray="6 3"
+            />
+            <text
+              x={margin.left + chartWidth - 95}
+              y={margin.top + 30}
+              dominantBaseline="middle"
+              className="fill-gray-700"
+              style={{ fontSize: 10 }}
+            >
+              {compareLabel || "比較"}
+            </text>
+          </g>
+        )}
+
+        {/* 比較最大値ライン */}
+        {isCompareMode && compareMaxAmplitude !== undefined && (
+          <>
+            <line
+              x1={margin.left}
+              y1={margin.top + chartHeight - (compareMaxAmplitude / scaleMax) * chartHeight}
+              x2={margin.left + chartWidth}
+              y2={margin.top + chartHeight - (compareMaxAmplitude / scaleMax) * chartHeight}
+              stroke="#ea580c"
+              strokeWidth="1"
+              strokeDasharray="2 2"
+            />
+          </>
+        )}
 
         {/* 最大値ライン */}
         {maxAmplitude !== undefined && (

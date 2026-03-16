@@ -148,3 +148,35 @@
 **次セッション**: [session186/session-plan.md](../session186/session-plan.md)
 
 ---
+
+## Session 186 (2026-03-16)
+
+**概要**: RF波形比較機能の実装
+
+**実施内容**:
+1. M1タスク整理（連休明け状況確認）
+2. RF波形比較機能の実装
+   - SpectrumChart拡張（2波形重ね描画対応）
+   - MonSpanComparePanel作成
+   - 比較ページ（/inspections/compare）作成
+   - 履歴ページに比較リンク追加
+3. u-center目盛り調査（途中）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session-summary.md](../session186/session-summary.md) | セッションサマリー |
+| [MonSpanComparePanel.tsx](../../prototype/m1-gnss/frontend/src/components/MonSpanComparePanel.tsx) | 比較表示用パネル |
+| [compare/page.tsx](../../prototype/m1-gnss/frontend/src/app/inspections/compare/page.tsx) | 比較ページ |
+
+**変更ファイル**:
+- `components/MonSpanPanel.tsx` - SpectrumChart拡張（比較波形対応）、export追加
+- `app/inspections/history/page.tsx` - 比較ページへのリンクボタン追加
+
+**残った作業**:
+- u-center目盛り調査（仕様書・Web調査が必要）
+- 並列検査機能の要件整理
+
+**次セッション**: [session187/session-plan.md](../session187/session-plan.md)
+
+---
