@@ -46,3 +46,26 @@
 **次セッション**: [session203/session-plan.md](../session203/session-plan.md)
 
 ---
+
+## Session 203 (2026-03-16)
+
+**概要**: 複数台検査フローの要求確認 + LED点滅識別方式の設計
+
+**実施内容**:
+1. 複数台検査の要求確認
+   - 外見上同一のレシーバーを検査後に物理識別したい
+   - シリアル番号は接続しないとわからない
+2. 識別方式の検討
+   - 抜き差し検知、ラベリング、USBポート固定、LED点滅を比較
+   - **LED点滅方式**を採用（USB-UART基板のTX LEDを利用）
+3. blink_testバイナリの設計
+   - MON-VERポーリング送信でLED点滅を検証するテストツール
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session203/multi-device-inspection-design.md](../session203/multi-device-inspection-design.md) | 複数台検査フロー設計 |
+
+**次セッション**: [session204/session-plan.md](../session204/session-plan.md)
+
+---
