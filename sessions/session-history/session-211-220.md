@@ -58,3 +58,61 @@
 
 ---
 
+## Session 213 (2026-03-16)
+
+**概要**: reset-config API実機テスト → 効果なし → 仕様確認不足が判明
+
+**実施内容**:
+1. 実機テスト実施
+   - 古い機を接続（/dev/ttyUSB1）
+   - message-scanで定期出力確認: NAV-TIMEBDS(4), NAV-TIMEGAL(1)
+   - reset-config API実行 → ACK受信（成功応答）
+   - 再度message-scan → **定期出力が消えていない**
+   - USB抜き差し（電源リセット）後も同じ定期出力
+
+**問題**:
+- CFG-CFG (deviceMask=BBR) でBBRクリアしたが効果なし
+- 設定がBBRではなくFlashに保存されている可能性
+
+**反省**:
+- 「Flashも含めて試す」と提案したが、**仕様書確認が先**
+- 推測で試そうとした → ルール違反（13-spec-first-implementation.md）
+
+**次セッション**: [session214/session-plan.md](../session214/session-plan.md)
+
+---
+
+## Session 214 (2026-03-17)
+
+**概要**: CFG-CFG仕様の再確認 + 実装修正
+
+**実施内容**:
+1. CFG-CFG仕様の再確認（p.64）
+   - deviceMaskはclearMask/saveMaskにのみ適用
+   - loadMaskには適用されない（下位レイヤーから再構築）
+2. CFG-VALGET仕様の確認（p.95-96を新規抽出）
+   - レイヤー別読み出し方法を確認
+3. 問題の原因特定
+   - 旧実装: deviceMask=0x01 (BBRのみ)
+   - 設定がFlashに保存されていたため効果なし
+4. 実装修正
+   - deviceMaskを0x03 (BBR+Flash) に変更
+   - テスト修正、全4件パス
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg_cfg.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_cfg.rs) | deviceMaskをBBR+Flashに変更 |
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg-valget-spec.md](../session214/cfg-valget-spec.md) | CFG-VALGET仕様（p.96-98抽出） |
+| [cfg-valget-request-spec.md](../session214/cfg-valget-request-spec.md) | CFG-VALGETリクエスト仕様（p.95抽出） |
+
+**残タスク**: 実機テスト（古い機でreset-config APIが効くか確認）
+
+**次セッション**: [session215/session-plan.md](../session215/session-plan.md)
+
+---
+
