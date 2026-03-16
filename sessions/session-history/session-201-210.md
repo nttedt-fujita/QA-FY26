@@ -166,3 +166,30 @@
 **次セッション**: [session208/session-plan.md](../session208/session-plan.md)
 
 ---
+
+## Session 208 (2026-03-16)
+
+**概要**: 古い機のFWバージョン取得問題の調査（未解決）
+
+**実施内容**:
+1. ログ分析（不十分なまま修正を進めてしまった）
+2. リトライロジック追加
+   - `get_expected_class_id`メソッド追加
+   - `execute_item`でClass/IDが期待と異なる場合、最大5回リトライ
+3. 実機テスト → 修正後もFWバージョン取得失敗
+
+**問題の整理（未解決）**:
+- ttyUSB0: 5回リトライしてもMON-VERが来ない（定期出力ばかり）
+- ttyUSB1: Connectivityでタイムアウト（UBXフレーム抽出失敗）
+- wait_for_ack: 「ACK/NAKでない応答」でもOk(true)を返す（誤報告の原因）
+
+**反省**: 状況を正確に把握せずにデバッグを進めた
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [engine.rs](../../prototype/m1-gnss/backend/src/inspection/engine.rs) | get_expected_class_id追加、リトライロジック追加 |
+
+**次セッション**: [session209/session-plan.md](../session209/session-plan.md)
+
+---

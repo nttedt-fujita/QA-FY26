@@ -168,59 +168,86 @@ impl InspectionEngine {
         std::thread::sleep(std::time::Duration::from_millis(50));
         info!("[{:?}] Step3: 待機完了、receive_ubx開始 (timeout={:?})", item.item_type, item.timeout);
 
-        // 応答を受信
-        match manager.receive_ubx(item.timeout) {
-            Ok(response) => {
-                let hex_str: String = response.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
-                info!("[{:?}] Step4: 受信成功 ({}バイト): {}", item.item_type, response.len(), hex_str);
+        // 期待するClass/ID
+        let (expected_class, expected_id) = Self::get_expected_class_id(&item.item_type);
 
-                // UBXフレームの詳細解析（仮説検証用）
-                if response.len() >= 4 {
-                    let class = response[2];
-                    let id = response[3];
-                    debug!("[{:?}] UBX Class=0x{:02X}, ID=0x{:02X}", item.item_type, class, id);
+        // 応答を受信（Class/IDが一致するまでリトライ、最大5回）
+        const MAX_RETRIES: usize = 5;
+        let mut retry_count = 0;
 
-                    // ACK/NAKのチェック
-                    if class == 0x05 {
-                        if id == 0x01 {
-                            debug!("[{:?}] *** ACK-ACK 受信 ***", item.item_type);
-                        } else if id == 0x00 {
-                            warn!("[{:?}] *** ACK-NAK 受信 ***", item.item_type);
+        loop {
+            match manager.receive_ubx(item.timeout) {
+                Ok(response) => {
+                    let hex_str: String = response.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
+                    info!("[{:?}] Step4: 受信成功 ({}バイト): {}", item.item_type, response.len(), hex_str);
+
+                    // UBXフレームの詳細解析
+                    if response.len() >= 4 {
+                        let class = response[2];
+                        let id = response[3];
+                        debug!("[{:?}] UBX Class=0x{:02X}, ID=0x{:02X}", item.item_type, class, id);
+
+                        // ACK/NAKのチェック
+                        if class == 0x05 {
+                            if id == 0x01 {
+                                debug!("[{:?}] *** ACK-ACK 受信 ***", item.item_type);
+                            } else if id == 0x00 {
+                                warn!("[{:?}] *** ACK-NAK 受信 ***", item.item_type);
+                            }
+                        }
+
+                        // Class/IDが期待と一致しない場合はリトライ
+                        if class != expected_class || id != expected_id {
+                            retry_count += 1;
+                            if retry_count < MAX_RETRIES {
+                                warn!(
+                                    "[{:?}] Class/IDが不一致 (期待: 0x{:02X}/0x{:02X}, 実際: 0x{:02X}/0x{:02X})、リトライ {}/{}",
+                                    item.item_type, expected_class, expected_id, class, id, retry_count, MAX_RETRIES
+                                );
+                                // 50ms待って再受信
+                                std::thread::sleep(std::time::Duration::from_millis(50));
+                                continue;
+                            } else {
+                                warn!(
+                                    "[{:?}] リトライ上限到達、Class/ID不一致のまま処理続行",
+                                    item.item_type
+                                );
+                            }
                         }
                     }
+
+                    // パースして値を取得
+                    let (actual_value, error) = self.parse_response(&item.item_type, &response);
+                    debug!("[{:?}] パース結果: actual={:?}, error={:?}", item.item_type, actual_value, error);
+
+                    let verdict = judge_result(
+                        &item.expected,
+                        actual_value.as_deref(),
+                        error.as_deref(),
+                    );
+                    info!("[{:?}] Step5: 判定結果: {:?}", item.item_type, verdict);
+                    info!("----------------------------------------");
+
+                    return InspectionResult::new(item.item_type.clone(), verdict)
+                        .with_expected(item.expected.clone())
+                        .with_actual(actual_value.unwrap_or_default());
                 }
-
-                // パースして値を取得
-                let (actual_value, error) = self.parse_response(&item.item_type, &response);
-                debug!("[{:?}] パース結果: actual={:?}, error={:?}", item.item_type, actual_value, error);
-
-                let verdict = judge_result(
-                    &item.expected,
-                    actual_value.as_deref(),
-                    error.as_deref(),
-                );
-                info!("[{:?}] Step5: 判定結果: {:?}", item.item_type, verdict);
-                info!("----------------------------------------");
-
-                InspectionResult::new(item.item_type.clone(), verdict)
-                    .with_expected(item.expected.clone())
-                    .with_actual(actual_value.unwrap_or_default())
-            }
-            Err(DeviceManagerError::Timeout) => {
-                warn!("[{:?}] Step4: タイムアウト発生", item.item_type);
-                info!("----------------------------------------");
-                InspectionResult::new(
-                    item.item_type.clone(),
-                    Verdict::Error("Timeout".to_string()),
-                )
-            }
-            Err(e) => {
-                warn!("[{:?}] Step4: receive_ubx エラー: {}", item.item_type, e);
-                info!("----------------------------------------");
-                InspectionResult::new(
-                    item.item_type.clone(),
-                    Verdict::Error(format!("{}", e)),
-                )
+                Err(DeviceManagerError::Timeout) => {
+                    warn!("[{:?}] Step4: タイムアウト発生", item.item_type);
+                    info!("----------------------------------------");
+                    return InspectionResult::new(
+                        item.item_type.clone(),
+                        Verdict::Error("Timeout".to_string()),
+                    );
+                }
+                Err(e) => {
+                    warn!("[{:?}] Step4: receive_ubx エラー: {}", item.item_type, e);
+                    info!("----------------------------------------");
+                    return InspectionResult::new(
+                        item.item_type.clone(),
+                        Verdict::Error(format!("{}", e)),
+                    );
+                }
             }
         }
     }
@@ -254,6 +281,17 @@ impl InspectionEngine {
                 let payload: &[u8] = &[0x01];
                 Self::build_ubx_frame(0x06, 0x00, payload)
             }
+        }
+    }
+
+    /// 期待するUBXメッセージのClass/IDを返す
+    fn get_expected_class_id(item_type: &ItemType) -> (u8, u8) {
+        match item_type {
+            ItemType::Connectivity => (0x01, 0x03), // NAV-STATUS
+            ItemType::FwVersion => (0x0A, 0x04),    // MON-VER
+            ItemType::SerialNumber => (0x27, 0x03), // SEC-UNIQID
+            ItemType::OutputRate => (0x06, 0x08),   // CFG-RATE
+            ItemType::PortConfig => (0x06, 0x00),   // CFG-PRT
         }
     }
 
