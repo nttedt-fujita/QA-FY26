@@ -36,8 +36,8 @@ const BAND_COLORS = {
   L2: {
     primary: "#22c55e",      // 緑（基準側）
     primaryDashed: "#22c55e", // 同じ緑（破線も同色）
-    secondary: "#ef4444",     // 赤（比較側）
-    secondaryDashed: "#ef4444", // 同じ赤（破線も同色）
+    secondary: "#ec4899",     // ピンク/マゼンタ（比較側）- 緑の補色で対比がクリーン
+    secondaryDashed: "#ec4899", // 同じピンク（破線も同色）
   },
 } as const;
 
