@@ -495,17 +495,31 @@ pub async fn connect_ntrip(
                                 manager.add_bytes_received(n as u64);
                             }
 
-                            // ZED-F9Pに転送（DeviceManagerを使用）
+                            // ZED-F9Pに転送（MultiDeviceManager経由で最初のデバイスを使用）
                             let forwarded = {
                                 tracing::info!("[NTRIP-RTCM] ロック取得開始...");
                                 let lock_start = std::time::Instant::now();
-                                let mut device_manager = match app_state_clone.device_manager.lock() {
+
+                                // Phase 3: MultiDeviceManager経由で最初の接続デバイスを取得
+                                let device_manager_arc = match app_state_clone.get_first_device_manager() {
+                                    Ok(Some(arc)) => arc,
+                                    Ok(None) => {
+                                        tracing::warn!("[NTRIP-RTCM] デバイス未接続");
+                                        continue;
+                                    }
+                                    Err(_) => {
+                                        tracing::error!("[NTRIP-RTCM] ロック取得失敗（poisoned）");
+                                        continue;
+                                    }
+                                };
+
+                                let mut device_manager = match device_manager_arc.lock() {
                                     Ok(m) => {
                                         tracing::info!("[NTRIP-RTCM] ロック取得成功 ({}ms)", lock_start.elapsed().as_millis());
                                         m
                                     }
                                     Err(_) => {
-                                        tracing::error!("[NTRIP-RTCM] ロック取得失敗（poisoned）");
+                                        tracing::error!("[NTRIP-RTCM] デバイスロック取得失敗（poisoned）");
                                         continue;
                                     }
                                 };

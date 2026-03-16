@@ -117,3 +117,53 @@
 **次セッション**: [session196/session-plan.md](../session196/session-plan.md)
 
 ---
+
+## Session 196 (2026-03-16)
+
+**概要**: MultiDeviceManager を API に統合
+
+**実施内容**:
+1. RealSerialPortProvider に Clone 派生追加
+2. AppState を MultiDeviceManager に変更
+3. 後方互換ヘルパー `get_first_device_manager()` を追加
+4. 全 API ハンドラー（8ファイル）を移行
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| device_api.rs | AppState 変更、Clone 追加、ヘルパー追加 |
+| gnss_state_api.rs | MultiDeviceManager 経由に変更 |
+| nav_sat_api.rs | 同上 |
+| nav_sig_api.rs | 同上 |
+| nav_status_api.rs | 同上 |
+| mon_span_api.rs | 同上 |
+| inspection_api.rs | 同上 |
+| ntrip_api.rs | RTCM 転送を変更 |
+
+**テスト結果**: 272テストすべてパス
+
+**次セッション**: [session197/session-plan.md](../session197/session-plan.md)
+
+---
+
+## Session 197 (2026-03-16)
+
+**概要**: Phase 3 実機テスト（2台のF9P同時接続）
+
+**実施内容**:
+1. 2台のF9P（/dev/ttyUSB0, /dev/ttyUSB1）を接続
+2. MultiDeviceManager経由での同時接続テスト
+3. 全テスト項目成功（認識、個別接続、同時接続、データ取得）
+4. 課題発見: 全APIが `get_first_device_manager()` を使用しており、2台目を指定してデータ取得するAPIがない
+
+**テスト結果**:
+| 項目 | 結果 |
+|------|------|
+| 2台認識 | ✅ |
+| 同時接続 | ✅ |
+| 1台目データ取得 | ✅ |
+| 2台目データ取得 | ⚠️ API未対応 |
+
+**次セッション**: [session198/session-plan.md](../session198/session-plan.md)
+
+---
