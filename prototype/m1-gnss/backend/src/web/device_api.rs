@@ -534,6 +534,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
             // Phase 3: パス指定版API（/api/devices/{path}/gnss-state）
             .route("/{path}/gnss-state", web::get().to(super::gnss_state_api::get_gnss_state_by_path))
             // メッセージスキャンAPI
-            .route("/{path}/message-scan", web::get().to(super::message_scan_api::scan_messages)),
+            .route("/{path}/message-scan", web::get().to(super::message_scan_api::scan_messages))
+            // LED点滅API
+            .route("/{path}/blink", web::post().to(super::blink_api::blink_device)),
     );
 }

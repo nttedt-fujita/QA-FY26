@@ -3,6 +3,7 @@ name = "m1-gnss"
 version = "0.1.0"
 edition = "2021"
 description = "GNSS評価ツール（F9P UBX通信 + Webサーバー）"
+default-run = "m1-gnss"
 
 [dependencies]
 # Webフレームワーク
@@ -39,6 +40,10 @@ chrono = { version = "0.4", features = ["serde"] }
 
 # NTRIP/RTK（独自実装 - ntrip-clientはRTCMパース済みデータを返すため不使用）
 # 参照: docs/adr/m1/ADR-011-ntrip-implementation.md
+
+[[bin]]
+name = "blink_test"
+path = "src/bin/blink_test.rs"
 
 [dev-dependencies]
 # テスト用

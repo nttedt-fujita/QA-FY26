@@ -1,8 +1,15 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Device, listDevices, connectDevice, disconnectDevice } from "@/lib/api";
 import { DeviceCard } from "@/components/DeviceCard";
+
+/** 抜かれたデバイス情報 */
+interface DisconnectedDevice {
+  path: string;
+  f9p_serial: string | null;
+  serial_number: string | null;
+}
 
 /**
  * 装置接続画面
@@ -14,6 +21,10 @@ export default function DevicesPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isScanning, setIsScanning] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // 抜かれたデバイスを追跡
+  const [disconnectedDevices, setDisconnectedDevices] = useState<DisconnectedDevice[]>([]);
+  // 前回の接続中デバイスを記憶
+  const previousConnectedRef = useRef<Map<string, Device>>(new Map());
 
   // 装置一覧を取得
   const fetchDevices = useCallback(async () => {
@@ -21,7 +32,38 @@ export default function DevicesPage() {
     setError(null);
     try {
       const response = await listDevices();
-      setDevices(response.devices);
+      const newDevices = response.devices;
+
+      // 抜かれたデバイスを検出
+      const currentPaths = new Set(newDevices.map(d => d.path));
+      const previousConnected = previousConnectedRef.current;
+
+      // 以前接続中だったが今はリストにないデバイスを検出
+      const newlyDisconnected: DisconnectedDevice[] = [];
+      previousConnected.forEach((device, path) => {
+        if (!currentPaths.has(path)) {
+          newlyDisconnected.push({
+            path,
+            f9p_serial: device.f9p_serial,
+            serial_number: device.serial_number,
+          });
+        }
+      });
+
+      if (newlyDisconnected.length > 0) {
+        setDisconnectedDevices(prev => [...prev, ...newlyDisconnected]);
+      }
+
+      // 現在の接続中デバイスを記憶
+      const newConnected = new Map<string, Device>();
+      newDevices.forEach(d => {
+        if (d.status === "connected") {
+          newConnected.set(d.path, d);
+        }
+      });
+      previousConnectedRef.current = newConnected;
+
+      setDevices(newDevices);
     } catch (e) {
       setError(e instanceof Error ? e.message : "装置の取得に失敗しました");
     } finally {
@@ -29,9 +71,11 @@ export default function DevicesPage() {
     }
   }, []);
 
-  // 初回読み込み
+  // 初回読み込み + 定期ポーリング（2秒ごと）
   useEffect(() => {
     fetchDevices();
+    const interval = setInterval(fetchDevices, 2000);
+    return () => clearInterval(interval);
   }, [fetchDevices]);
 
   // 接続
@@ -60,6 +104,11 @@ export default function DevicesPage() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // 抜かれたデバイス表示をクリア
+  const clearDisconnected = (path: string) => {
+    setDisconnectedDevices(prev => prev.filter(d => d.path !== path));
   };
 
   return (
@@ -115,6 +164,34 @@ export default function DevicesPage() {
           </div>
         )}
 
+        {/* 抜かれたデバイスの通知 */}
+        {disconnectedDevices.length > 0 && (
+          <div className="mb-6 space-y-2">
+            {disconnectedDevices.map((d) => (
+              <div
+                key={d.path}
+                className="flex items-center justify-between rounded border-2 border-orange-400 bg-orange-50 p-3"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🔌</span>
+                  <div>
+                    <span className="font-bold text-orange-700">抜かれました: </span>
+                    <span className="text-orange-600">
+                      {d.f9p_serial ?? d.serial_number ?? d.path}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => clearDisconnected(d.path)}
+                  className="text-orange-500 hover:text-orange-700"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* 装置一覧 */}
         <div className="space-y-4">
           <h2 className="text-lg font-medium text-gray-700">
@@ -136,6 +213,7 @@ export default function DevicesPage() {
                   onConnect={handleConnect}
                   onDisconnect={handleDisconnect}
                   isLoading={isLoading}
+                  showBlinkButton={device.status === "connected"}
                 />
               ))}
             </div>
