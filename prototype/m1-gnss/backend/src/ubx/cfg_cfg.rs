@@ -73,10 +73,10 @@ pub enum DeviceMask {
     BbrAndFlash = 0x03,
 }
 
-/// BBRをクリアしてデフォルト設定に復元するCFG-CFGメッセージを生成
+/// BBR/Flashをクリアしてデフォルト設定に復元するCFG-CFGメッセージを生成
 ///
 /// 動作:
-/// 1. clearMask: BBRの全設定をクリア
+/// 1. clearMask: BBR + Flashの全設定をクリア
 /// 2. loadMask: ROM（デフォルト）からRAMに読み込み
 ///
 /// # Returns
@@ -84,18 +84,24 @@ pub enum DeviceMask {
 ///
 /// # 注意
 /// - この操作後、レシーバーは工場出荷時の設定で動作する
-/// - RTK基準局設定など、BBRに保存された設定は全て消える
+/// - RTK基準局設定など、BBR/Flashに保存された設定は全て消える
+///
+/// # 仕様書参照
+/// - deviceMaskはclearMask/saveMaskにのみ適用される（loadMaskには適用されない）
+/// - loadMaskは残っている下位レイヤー（Flash→BBR→ROM）から再構築
+/// - 出典: u-blox F9 HPG 1.32 Interface Description p.64
 pub fn reset_config_to_default() -> Vec<u8> {
     // ペイロード構成（13バイト版）:
     // - clearMask (4 bytes, X4): クリアする設定
     // - saveMask (4 bytes, X4): 保存する設定
     // - loadMask (4 bytes, X4): ロードする設定
-    // - deviceMask (1 byte, X1): 対象メモリ
+    // - deviceMask (1 byte, X1): 対象メモリ（clearMask/saveMaskにのみ適用）
 
     let clear_mask = ConfigMask::ALL.0;
     let save_mask = ConfigMask::NONE.0;
     let load_mask = ConfigMask::ALL.0;
-    let device_mask = DeviceMask::Bbr as u8;
+    // BBR + Flash両方をクリアする（Flashに設定が保存されている場合に対応）
+    let device_mask = DeviceMask::BbrAndFlash as u8;
 
     let mut payload = Vec::with_capacity(13);
     payload.extend_from_slice(&clear_mask.to_le_bytes());
@@ -241,8 +247,9 @@ mod tests {
             assert_eq!(frame.save_mask(), 0x0000_0000, "saveMask = NONE");
             // loadMask = 0xFFFF（デフォルトから読み込み）
             assert_eq!(frame.load_mask(), 0x0000_FFFF, "loadMask = ALL");
-            // deviceMask = 0x01（BBR）
-            assert_eq!(frame.device_mask(), 0x01, "deviceMask = BBR");
+            // deviceMask = 0x03（BBR + Flash）
+            // Flashに保存された設定もクリアするため、両方を指定
+            assert_eq!(frame.device_mask(), 0x03, "deviceMask = BBR + Flash");
         }
     }
 
