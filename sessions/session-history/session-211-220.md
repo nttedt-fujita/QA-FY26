@@ -32,3 +32,29 @@
 
 ---
 
+## Session 212 (2026-03-16)
+
+**概要**: CFG-CFGによる設定リセットAPIの実装
+
+**実施内容**:
+1. CFG-CFGコマンド実装（ubx/cfg_cfg.rs）
+   - CFG-CFG (0x06 0x09) メッセージ生成機能
+   - `reset_config_to_default()`: BBRクリア + ROMデフォルト復元
+   - `save_config_to_bbr()`: RAM → BBR保存
+   - テスト4件追加（全パス）
+2. 設定リセットAPI実装（web/reset_config_api.rs）
+   - `POST /api/devices/{path}/reset-config`
+   - CFG-CFG送信 → ACK/NAK確認
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg_cfg.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_cfg.rs) | CFG-CFGメッセージ生成（新規） |
+| [reset_config_api.rs](../../prototype/m1-gnss/backend/src/web/reset_config_api.rs) | 設定リセットAPI（新規） |
+
+**メモ**: PX4のubx.cpp/ubx.hを調査することで、FCがどのメッセージを定期出力設定しているか分かる可能性がある。
+
+**次セッション**: [session213/session-plan.md](../session213/session-plan.md)
+
+---
+

@@ -536,6 +536,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
             // メッセージスキャンAPI
             .route("/{path}/message-scan", web::get().to(super::message_scan_api::scan_messages))
             // LED点滅API
-            .route("/{path}/blink", web::post().to(super::blink_api::blink_device)),
+            .route("/{path}/blink", web::post().to(super::blink_api::blink_device))
+            // 設定リセットAPI
+            .route("/{path}/reset-config", web::post().to(super::reset_config_api::reset_config)),
     );
 }
