@@ -215,3 +215,24 @@
 **次セッション**: [session210/session-plan.md](../session210/session-plan.md)
 
 ---
+
+## Session 210 (2026-03-16)
+
+**概要**: 古い機の定期出力無効化（8メッセージ追加、50キー対応）
+
+**実施内容**:
+1. 計画通りに3メッセージ追加（NAV-HPPOSLLH, NAV-VELNED, NAV-ORB）
+2. 実機確認で追加発覚した5メッセージを追加（NAV-DOP, NAV-TIMEGLO, NAV-TIMELS, MON-SYS, NAV-PL）
+3. テスト更新（65テストパス）
+4. 実機再確認 → まだ3メッセージ出力（NAV-TIMEBDS, NAV-TIMEUTC, NAV-SLAS）
+
+**反省**: 個別メッセージ追加では際限がない。根本対処（CFG-CFGリセット等）を検討すべきだった。
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg_valset.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_valset.rs) | 8メッセージ追加（50キー対応） |
+
+**次セッション**: [session211/session-plan.md](../session211/session-plan.md)
+
+---
