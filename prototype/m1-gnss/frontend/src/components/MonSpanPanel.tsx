@@ -184,7 +184,12 @@ function SpanBlockCard({ block }: { block: SpanBlock }) {
             className="w-full cursor-pointer hover:opacity-80 transition-opacity"
             title="クリックで拡大"
           >
-            <SpectrumChart spectrum={block.spectrum} maxAmplitude={block.max_amplitude} />
+            <SpectrumChart
+              spectrum={block.spectrum}
+              maxAmplitude={block.max_amplitude}
+              centerHz={block.center}
+              spanHz={block.span}
+            />
           </button>
           <div className="mt-1 text-center text-xs text-gray-400">
             クリックで拡大
@@ -216,7 +221,13 @@ function SpanBlockCard({ block }: { block: SpanBlock }) {
             <div className="mb-2 text-sm text-gray-600">
               Max: {block.max_amplitude} dB / Avg: {block.avg_amplitude.toFixed(1)} dB / PGA: {block.pga} dB
             </div>
-            <SpectrumChart spectrum={block.spectrum} maxAmplitude={block.max_amplitude} expanded />
+            <SpectrumChart
+              spectrum={block.spectrum}
+              maxAmplitude={block.max_amplitude}
+              centerHz={block.center}
+              spanHz={block.span}
+              expanded
+            />
           </div>
         </div>
       )}
@@ -228,6 +239,11 @@ interface SpectrumChartProps {
   spectrum: number[];
   maxAmplitude?: number;  // 最大振幅値（表示用）
   expanded?: boolean;
+  // 周波数表示用（オプション）
+  // 出典: ZED-F9P Integration Manual p.83
+  // Freq(i) = center + span × (i - 128) / 256
+  centerHz?: number;  // 中心周波数 [Hz]
+  spanHz?: number;    // スペクトラム幅 [Hz]
   // 比較用（オプション）
   compareSpectrum?: number[];
   compareMaxAmplitude?: number;
@@ -244,6 +260,9 @@ interface SpectrumChartSingleProps {
   expanded?: boolean;
   strokeColor?: string;  // 波形の色
   isDashed?: boolean;    // 点線にするか
+  // 周波数表示用（オプション）
+  centerHz?: number;
+  spanHz?: number;
 }
 
 // 固定スケール: dB表示（0〜64 dB）
@@ -262,6 +281,8 @@ export function SpectrumChart({
   spectrum,
   maxAmplitude,
   expanded = false,
+  centerHz,
+  spanHz,
   compareSpectrum,
   compareMaxAmplitude,
   compareLabel,
@@ -295,12 +316,67 @@ export function SpectrumChart({
   const ySubTicks = expanded ? [8, 24, 40, 56] : [16, 48];
   // Y軸細分目盛り（4dB刻み、拡大時のみ）
   const yFineTicks = expanded ? [4, 12, 20, 28, 36, 44, 52, 60] : [];
-  // X軸メイン目盛り（周波数bin: 0, 64, 128, 192, 255）
-  const xMainTicks = expanded ? [0, 64, 128, 192, 255] : [0, 128, 255];
-  // X軸サブ目盛り（32刻み）
-  const xSubTicks = expanded ? [32, 96, 160, 224] : [64, 192];
-  // X軸細分目盛り（16刻み、拡大時のみ）
-  const xFineTicks = expanded ? [16, 48, 80, 112, 144, 176, 208, 240] : [];
+  // 周波数表示モード: centerHz/spanHzが指定されている場合
+  const hasFreqInfo = centerHz !== undefined && spanHz !== undefined;
+  // spanをMHz単位に変換（通常約50MHz or 128MHz）
+  const spanMHz = hasFreqInfo ? (spanHz as number) / 1e6 : 0;
+  // 周波数オフセット計算: Freq(i) = center + span × (i - 128) / 256
+  const freqOffsetMHz = (bin: number) => spanMHz * (bin - 128) / 256;
+  // bin番号への逆変換: bin = offset * 256 / spanMHz + 128
+  const offsetToBin = (offsetMHz: number) => offsetMHz * 256 / spanMHz + 128;
+
+  // X軸目盛りを周波数ベースで生成（u-center風）
+  // 10MHz刻みで目盛りを生成
+  const generateFreqTicks = () => {
+    if (!hasFreqInfo) {
+      // 周波数情報がない場合はbin番号ベース
+      return {
+        mainTicks: expanded ? [0, 64, 128, 192, 255] : [0, 128, 255],
+        subTicks: expanded ? [32, 96, 160, 224] : [64, 192],
+        fineTicks: expanded ? [16, 48, 80, 112, 144, 176, 208, 240] : [],
+      };
+    }
+    // 周波数範囲: -spanMHz/2 〜 +spanMHz/2
+    const halfSpan = spanMHz / 2;
+    // 10MHz刻みでメイン目盛り
+    const mainOffsets: number[] = [];
+    for (let offset = -Math.floor(halfSpan / 10) * 10; offset <= halfSpan; offset += 10) {
+      if (offset >= -halfSpan && offset <= halfSpan) {
+        mainOffsets.push(offset);
+      }
+    }
+    // 5MHz刻みでサブ目盛り（メイン以外）
+    const subOffsets: number[] = [];
+    for (let offset = -Math.floor(halfSpan / 5) * 5; offset <= halfSpan; offset += 5) {
+      if (offset >= -halfSpan && offset <= halfSpan && offset % 10 !== 0) {
+        subOffsets.push(offset);
+      }
+    }
+    // 2.5MHz刻みで細分目盛り（拡大時のみ）
+    const fineOffsets: number[] = [];
+    if (expanded) {
+      for (let offset = -Math.floor(halfSpan / 2.5) * 2.5; offset <= halfSpan; offset += 2.5) {
+        if (offset >= -halfSpan && offset <= halfSpan && offset % 5 !== 0) {
+          fineOffsets.push(offset);
+        }
+      }
+    }
+    return {
+      mainTicks: mainOffsets.map(offsetToBin),
+      subTicks: subOffsets.map(offsetToBin),
+      fineTicks: fineOffsets.map(offsetToBin),
+    };
+  };
+  const { mainTicks: xMainTicks, subTicks: xSubTicks, fineTicks: xFineTicks } = generateFreqTicks();
+
+  // X軸ラベル生成（周波数オフセット表示時）
+  const getXLabel = (bin: number): string => {
+    if (!hasFreqInfo) return String(Math.round(bin));
+    const offsetMHz = freqOffsetMHz(bin);
+    // 中央は"0"、それ以外は符号付き整数
+    if (Math.abs(offsetMHz) < 0.5) return "0";
+    return offsetMHz > 0 ? `+${Math.round(offsetMHz)}` : String(Math.round(offsetMHz));
+  };
 
   return (
     <div className={`overflow-hidden rounded border border-gray-200 bg-white ${expanded ? "" : "aspect-video"}`}>
@@ -444,7 +520,7 @@ export function SpectrumChart({
               className="fill-gray-500"
               style={{ fontSize: expanded ? 10 : 8 }}
             >
-              {tick}
+              {getXLabel(tick)}
             </text>
           );
         })}
@@ -470,7 +546,7 @@ export function SpectrumChart({
               className="fill-gray-600"
               style={{ fontSize: 11 }}
             >
-              周波数 bin
+              {hasFreqInfo ? "周波数オフセット (MHz)" : "周波数 bin"}
             </text>
           </>
         )}
@@ -606,6 +682,8 @@ export function SpectrumChartSingle({
   expanded = false,
   strokeColor = "#3b82f6",
   isDashed = false,
+  centerHz,
+  spanHz,
 }: SpectrumChartSingleProps) {
   const margin = expanded ? { top: 10, right: 40, bottom: 30, left: 50 } : { top: 5, right: 5, bottom: 20, left: 35 };
   const chartWidth = 256;
@@ -615,6 +693,18 @@ export function SpectrumChartSingle({
 
   // dB単位での固定スケール（0〜64 dB）
   const scaleMaxDb = FIXED_DB_MAX;
+
+  // 周波数表示モード
+  const hasFreqInfo = centerHz !== undefined && spanHz !== undefined;
+  const spanMHz = hasFreqInfo ? (spanHz as number) / 1e6 : 0;
+  const freqOffsetMHz = (bin: number) => spanMHz * (bin - 128) / 256;
+  const offsetToBin = (offsetMHz: number) => offsetMHz * 256 / spanMHz + 128;
+  const getXLabel = (bin: number): string => {
+    if (!hasFreqInfo) return String(Math.round(bin));
+    const offsetMHz = freqOffsetMHz(bin);
+    if (Math.abs(offsetMHz) < 0.5) return "0";
+    return offsetMHz > 0 ? `+${Math.round(offsetMHz)}` : String(Math.round(offsetMHz));
+  };
 
   // パスを生成（spectrum値をdBに変換して描画）
   const points = spectrum.map((val, idx) => {
@@ -627,7 +717,22 @@ export function SpectrumChartSingle({
 
   // 目盛り（dB単位）
   const yMainTicks = expanded ? [0, 16, 32, 48, 64] : [0, 32, 64];
-  const xMainTicks = expanded ? [0, 64, 128, 192, 255] : [0, 128, 255];
+
+  // X軸目盛りを周波数ベースで生成
+  const generateFreqTicksSingle = () => {
+    if (!hasFreqInfo) {
+      return { mainTicks: expanded ? [0, 64, 128, 192, 255] : [0, 128, 255] };
+    }
+    const halfSpan = spanMHz / 2;
+    const mainOffsets: number[] = [];
+    for (let offset = -Math.floor(halfSpan / 10) * 10; offset <= halfSpan; offset += 10) {
+      if (offset >= -halfSpan && offset <= halfSpan) {
+        mainOffsets.push(offset);
+      }
+    }
+    return { mainTicks: mainOffsets.map(offsetToBin) };
+  };
+  const { mainTicks: xMainTicks } = generateFreqTicksSingle();
 
   return (
     <div className={`overflow-hidden rounded border border-gray-200 bg-white ${expanded ? "" : "aspect-video"}`}>
@@ -707,7 +812,7 @@ export function SpectrumChartSingle({
               className="fill-gray-500"
               style={{ fontSize: expanded ? 10 : 8 }}
             >
-              {tick}
+              {getXLabel(tick)}
             </text>
           );
         })}
