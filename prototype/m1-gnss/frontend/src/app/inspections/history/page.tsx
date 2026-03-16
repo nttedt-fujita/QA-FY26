@@ -104,12 +104,20 @@ export default function InspectionHistoryPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-semibold text-gray-800">検査履歴再生</h1>
-            <a
-              href="/inspections/outdoor"
-              className="text-blue-600 hover:underline text-sm"
-            >
-              ← 屋外検査へ
-            </a>
+            <div className="flex items-center gap-4">
+              <a
+                href="/inspections/compare"
+                className="rounded bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"
+              >
+                スペクトラム比較
+              </a>
+              <a
+                href="/inspections/outdoor"
+                className="text-blue-600 hover:underline text-sm"
+              >
+                ← 屋外検査へ
+              </a>
+            </div>
           </div>
           <p className="text-sm text-gray-500 mt-1">
             保存されたスナップショットを再生表示
