@@ -5,7 +5,9 @@
 pub mod status;
 pub mod filter;
 pub mod manager;
+pub mod multi_manager;
 
 pub use status::{DeviceStatus, TransitionError};
 pub use filter::{is_f9p_device, filter_f9p_ports, PortInfo};
 pub use manager::{DeviceManager, DeviceManagerError};
+pub use multi_manager::{MultiDeviceManager, DeviceInfo};

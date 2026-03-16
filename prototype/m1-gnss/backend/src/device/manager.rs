@@ -726,14 +726,10 @@ mod tests {
         write_data: Arc<Mutex<Vec<u8>>>,
         read_data: Arc<Mutex<VecDeque<u8>>>,
         should_timeout: bool,
+        timeout: Duration,
     }
 
-    impl SerialPort for MockSerialPort {
-        fn write(&mut self, data: &[u8]) -> Result<usize, io::Error> {
-            self.write_data.lock().unwrap().extend_from_slice(data);
-            Ok(data.len())
-        }
-
+    impl io::Read for MockSerialPort {
         fn read(&mut self, buf: &mut [u8]) -> Result<usize, io::Error> {
             if self.should_timeout {
                 return Err(io::Error::new(io::ErrorKind::TimedOut, "timeout"));
@@ -745,10 +741,50 @@ mod tests {
             }
             Ok(len)
         }
+    }
 
-        fn set_timeout(&mut self, _timeout: Duration) -> Result<(), io::Error> {
+    impl io::Write for MockSerialPort {
+        fn write(&mut self, data: &[u8]) -> Result<usize, io::Error> {
+            self.write_data.lock().unwrap().extend_from_slice(data);
+            Ok(data.len())
+        }
+
+        fn flush(&mut self) -> Result<(), io::Error> {
             Ok(())
         }
+    }
+
+    impl SerialPort for MockSerialPort {
+        fn name(&self) -> Option<String> { Some("mock".to_string()) }
+        fn baud_rate(&self) -> serialport::Result<u32> { Ok(115200) }
+        fn data_bits(&self) -> serialport::Result<serialport::DataBits> { Ok(serialport::DataBits::Eight) }
+        fn flow_control(&self) -> serialport::Result<serialport::FlowControl> { Ok(serialport::FlowControl::None) }
+        fn parity(&self) -> serialport::Result<serialport::Parity> { Ok(serialport::Parity::None) }
+        fn stop_bits(&self) -> serialport::Result<serialport::StopBits> { Ok(serialport::StopBits::One) }
+        fn timeout(&self) -> Duration { self.timeout }
+        fn set_baud_rate(&mut self, _: u32) -> serialport::Result<()> { Ok(()) }
+        fn set_data_bits(&mut self, _: serialport::DataBits) -> serialport::Result<()> { Ok(()) }
+        fn set_flow_control(&mut self, _: serialport::FlowControl) -> serialport::Result<()> { Ok(()) }
+        fn set_parity(&mut self, _: serialport::Parity) -> serialport::Result<()> { Ok(()) }
+        fn set_stop_bits(&mut self, _: serialport::StopBits) -> serialport::Result<()> { Ok(()) }
+        fn set_timeout(&mut self, timeout: Duration) -> serialport::Result<()> {
+            self.timeout = timeout;
+            Ok(())
+        }
+        fn write_request_to_send(&mut self, _: bool) -> serialport::Result<()> { Ok(()) }
+        fn write_data_terminal_ready(&mut self, _: bool) -> serialport::Result<()> { Ok(()) }
+        fn read_clear_to_send(&mut self) -> serialport::Result<bool> { Ok(false) }
+        fn read_data_set_ready(&mut self) -> serialport::Result<bool> { Ok(false) }
+        fn read_ring_indicator(&mut self) -> serialport::Result<bool> { Ok(false) }
+        fn read_carrier_detect(&mut self) -> serialport::Result<bool> { Ok(false) }
+        fn bytes_to_read(&self) -> serialport::Result<u32> { Ok(0) }
+        fn bytes_to_write(&self) -> serialport::Result<u32> { Ok(0) }
+        fn clear(&self, _: serialport::ClearBuffer) -> serialport::Result<()> { Ok(()) }
+        fn try_clone(&self) -> serialport::Result<Box<dyn SerialPort>> {
+            Err(serialport::Error::new(serialport::ErrorKind::Unknown, "clone not supported"))
+        }
+        fn set_break(&self) -> serialport::Result<()> { Ok(()) }
+        fn clear_break(&self) -> serialport::Result<()> { Ok(()) }
     }
 
     /// モックSerialPortProvider（Send対応）
@@ -799,6 +835,7 @@ mod tests {
                 write_data: self.write_data.clone(),
                 read_data: self.read_data.clone(),
                 should_timeout: self.should_timeout,
+                timeout: Duration::from_secs(1),
             }))
         }
     }
@@ -1050,13 +1087,10 @@ mod tests {
     struct BaudRateMockPort {
         baud_rate: u32,
         respond_at_baud: u32,
+        timeout: Duration,
     }
 
-    impl SerialPort for BaudRateMockPort {
-        fn write(&mut self, _data: &[u8]) -> Result<usize, io::Error> {
-            Ok(8) // MON-VER Poll は 8バイト
-        }
-
+    impl io::Read for BaudRateMockPort {
         fn read(&mut self, buf: &mut [u8]) -> Result<usize, io::Error> {
             if self.baud_rate == self.respond_at_baud {
                 // 応答をシミュレート（MON-VER の最小応答）
@@ -1069,10 +1103,49 @@ mod tests {
                 Err(io::Error::new(io::ErrorKind::TimedOut, "no response"))
             }
         }
+    }
 
-        fn set_timeout(&mut self, _timeout: Duration) -> Result<(), io::Error> {
+    impl io::Write for BaudRateMockPort {
+        fn write(&mut self, _data: &[u8]) -> Result<usize, io::Error> {
+            Ok(8) // MON-VER Poll は 8バイト
+        }
+
+        fn flush(&mut self) -> Result<(), io::Error> {
             Ok(())
         }
+    }
+
+    impl SerialPort for BaudRateMockPort {
+        fn name(&self) -> Option<String> { Some("mock".to_string()) }
+        fn baud_rate(&self) -> serialport::Result<u32> { Ok(self.baud_rate) }
+        fn data_bits(&self) -> serialport::Result<serialport::DataBits> { Ok(serialport::DataBits::Eight) }
+        fn flow_control(&self) -> serialport::Result<serialport::FlowControl> { Ok(serialport::FlowControl::None) }
+        fn parity(&self) -> serialport::Result<serialport::Parity> { Ok(serialport::Parity::None) }
+        fn stop_bits(&self) -> serialport::Result<serialport::StopBits> { Ok(serialport::StopBits::One) }
+        fn timeout(&self) -> Duration { self.timeout }
+        fn set_baud_rate(&mut self, _: u32) -> serialport::Result<()> { Ok(()) }
+        fn set_data_bits(&mut self, _: serialport::DataBits) -> serialport::Result<()> { Ok(()) }
+        fn set_flow_control(&mut self, _: serialport::FlowControl) -> serialport::Result<()> { Ok(()) }
+        fn set_parity(&mut self, _: serialport::Parity) -> serialport::Result<()> { Ok(()) }
+        fn set_stop_bits(&mut self, _: serialport::StopBits) -> serialport::Result<()> { Ok(()) }
+        fn set_timeout(&mut self, timeout: Duration) -> serialport::Result<()> {
+            self.timeout = timeout;
+            Ok(())
+        }
+        fn write_request_to_send(&mut self, _: bool) -> serialport::Result<()> { Ok(()) }
+        fn write_data_terminal_ready(&mut self, _: bool) -> serialport::Result<()> { Ok(()) }
+        fn read_clear_to_send(&mut self) -> serialport::Result<bool> { Ok(false) }
+        fn read_data_set_ready(&mut self) -> serialport::Result<bool> { Ok(false) }
+        fn read_ring_indicator(&mut self) -> serialport::Result<bool> { Ok(false) }
+        fn read_carrier_detect(&mut self) -> serialport::Result<bool> { Ok(false) }
+        fn bytes_to_read(&self) -> serialport::Result<u32> { Ok(0) }
+        fn bytes_to_write(&self) -> serialport::Result<u32> { Ok(0) }
+        fn clear(&self, _: serialport::ClearBuffer) -> serialport::Result<()> { Ok(()) }
+        fn try_clone(&self) -> serialport::Result<Box<dyn SerialPort>> {
+            Err(serialport::Error::new(serialport::ErrorKind::Unknown, "clone not supported"))
+        }
+        fn set_break(&self) -> serialport::Result<()> { Ok(()) }
+        fn clear_break(&self) -> serialport::Result<()> { Ok(()) }
     }
 
     struct BaudRateMockProvider {
@@ -1101,6 +1174,7 @@ mod tests {
             Ok(Box::new(BaudRateMockPort {
                 baud_rate,
                 respond_at_baud: self.respond_at_baud,
+                timeout: Duration::from_secs(1),
             }))
         }
     }
