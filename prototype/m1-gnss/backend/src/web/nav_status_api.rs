@@ -100,23 +100,32 @@ fn build_nav_pvt_poll() -> Vec<u8> {
 
 /// GET /api/nav-status - NAV-STATUS取得
 pub async fn get_nav_status(data: web::Data<AppState>) -> impl Responder {
-    let mut manager = match data.device_manager.lock() {
-        Ok(m) => m,
+    // Phase 3: MultiDeviceManager経由で最初の接続デバイスを取得
+    let device_manager_arc = match data.get_first_device_manager() {
+        Ok(Some(arc)) => arc,
+        Ok(None) => {
+            return HttpResponse::BadRequest().json(ErrorResponse {
+                error: "装置が接続されていません".to_string(),
+                code: "DEVICE_NOT_CONNECTED".to_string(),
+            });
+        }
         Err(_) => {
             return HttpResponse::InternalServerError().json(ErrorResponse {
                 error: "内部エラー: ロック取得に失敗".to_string(),
                 code: "LOCK_ERROR".to_string(),
-            })
+            });
         }
     };
 
-    // 接続確認
-    if manager.get_connected_device().is_none() {
-        return HttpResponse::BadRequest().json(ErrorResponse {
-            error: "装置が接続されていません".to_string(),
-            code: "DEVICE_NOT_CONNECTED".to_string(),
-        });
-    }
+    let mut manager = match device_manager_arc.lock() {
+        Ok(m) => m,
+        Err(_) => {
+            return HttpResponse::InternalServerError().json(ErrorResponse {
+                error: "内部エラー: デバイスロック取得に失敗".to_string(),
+                code: "LOCK_ERROR".to_string(),
+            });
+        }
+    };
 
     // バッファをクリア
     if let Err(e) = manager.drain_buffer() {

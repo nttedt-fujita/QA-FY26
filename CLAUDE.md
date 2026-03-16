@@ -127,6 +127,7 @@
 | [ADR-011](docs/adr/m1/ADR-011-ntrip-implementation.md) | NTRIP実装方式（独自実装を採用） | NTRIPクライアント | 承認済み |
 | [ADR-012](docs/adr/m1/ADR-012-periodic-output-and-unified-api.md) | 定期出力と統合API採用 | API並行問題対策 | 承認済み |
 | [ADR-013](docs/adr/m1/ADR-013-gnss-filter-linkage.md) | GNSSフィルタ連動と周波数帯別統計 | FE状態管理 | 承認済み |
+| [ADR-014](docs/adr/m1/ADR-014-multi-device-manager.md) | 複数装置同時対応の実装方式 | Phase 3 複数台対応 | 承認済み |
 
 ### 共通（ミッション横断）
 

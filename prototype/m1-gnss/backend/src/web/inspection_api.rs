@@ -100,14 +100,30 @@ pub async fn run_inspection(
     data: web::Data<AppState>,
     body: web::Json<RunInspectionRequest>,
 ) -> impl Responder {
-    // DeviceManagerとRepositoryのロックを取得
-    let mut manager = match data.device_manager.lock() {
+    // Phase 3: MultiDeviceManager経由で最初の接続デバイスを取得
+    let device_manager_arc = match data.get_first_device_manager() {
+        Ok(Some(arc)) => arc,
+        Ok(None) => {
+            return HttpResponse::BadRequest().json(ErrorResponse {
+                error: "装置が接続されていません。先に接続してください。".to_string(),
+                code: "DEVICE_NOT_CONNECTED".to_string(),
+            });
+        }
+        Err(_) => {
+            return HttpResponse::InternalServerError().json(ErrorResponse {
+                error: "内部エラー: デバイスマネージャーのロック取得に失敗".to_string(),
+                code: "LOCK_ERROR".to_string(),
+            });
+        }
+    };
+
+    let mut manager = match device_manager_arc.lock() {
         Ok(m) => m,
         Err(_) => {
             return HttpResponse::InternalServerError().json(ErrorResponse {
                 error: "内部エラー: デバイスマネージャーのロック取得に失敗".to_string(),
                 code: "LOCK_ERROR".to_string(),
-            })
+            });
         }
     };
 
@@ -117,17 +133,9 @@ pub async fn run_inspection(
             return HttpResponse::InternalServerError().json(ErrorResponse {
                 error: "内部エラー: リポジトリのロック取得に失敗".to_string(),
                 code: "LOCK_ERROR".to_string(),
-            })
+            });
         }
     };
-
-    // 装置が接続されているか確認
-    if manager.get_connected_device().is_none() {
-        return HttpResponse::BadRequest().json(ErrorResponse {
-            error: "装置が接続されていません。先に接続してください。".to_string(),
-            code: "DEVICE_NOT_CONNECTED".to_string(),
-        });
-    }
 
     // InspectionServiceで検査実行
     let service = InspectionService::new(&repo);

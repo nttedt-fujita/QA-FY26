@@ -180,8 +180,26 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
     tracing::debug!("[GNSS-STATE] API呼び出し開始");
     let api_start = std::time::Instant::now();
 
+    // Phase 3: MultiDeviceManager経由で最初の接続デバイスを取得
     let lock_start = std::time::Instant::now();
-    let mut manager = match data.device_manager.lock() {
+    let device_manager_arc = match data.get_first_device_manager() {
+        Ok(Some(arc)) => arc,
+        Ok(None) => {
+            return HttpResponse::BadRequest().json(ErrorResponse {
+                error: "装置が接続されていません".to_string(),
+                code: "DEVICE_NOT_CONNECTED".to_string(),
+            });
+        }
+        Err(_) => {
+            tracing::error!("[GNSS-STATE] ロック取得失敗（poisoned）");
+            return HttpResponse::InternalServerError().json(ErrorResponse {
+                error: "内部エラー: ロック取得に失敗".to_string(),
+                code: "LOCK_ERROR".to_string(),
+            });
+        }
+    };
+
+    let mut manager = match device_manager_arc.lock() {
         Ok(m) => {
             let lock_ms = lock_start.elapsed().as_millis();
             tracing::debug!("[GNSS-STATE] ロック取得 ({}ms)", lock_ms);
@@ -191,21 +209,13 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
             m
         }
         Err(_) => {
-            tracing::error!("[GNSS-STATE] ロック取得失敗（poisoned）");
+            tracing::error!("[GNSS-STATE] デバイスロック取得失敗（poisoned）");
             return HttpResponse::InternalServerError().json(ErrorResponse {
                 error: "内部エラー: ロック取得に失敗".to_string(),
                 code: "LOCK_ERROR".to_string(),
-            })
+            });
         }
     };
-
-    // 接続確認
-    if manager.get_connected_device().is_none() {
-        return HttpResponse::BadRequest().json(ErrorResponse {
-            error: "装置が接続されていません".to_string(),
-            code: "DEVICE_NOT_CONNECTED".to_string(),
-        });
-    }
 
     // ロック取得直後にバッファをドレイン（NTRIP転送後の残データ対策）
     if let Err(e) = manager.drain_buffer() {
