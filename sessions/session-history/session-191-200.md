@@ -218,7 +218,7 @@
    - NAV-CLOCK (0x01, 0x22)
    - NAV-POSLLH (0x01, 0x02)
    - NAV-HPPOSECEF (0x01, 0x13)
-   - NAV-TIMEGPS (0x01, 0x27)
+   - NAV-TIMEGPS (0x01, 0x27) ← 後にSession 200でNAV-TIMEQZSSと判明
    - NAV-SBAS (0x01, 0x32)
 
 **反省点**:
@@ -227,5 +227,33 @@
 **変更ファイル**: なし（調査のみ）
 
 **次セッション**: [session200/session-plan.md](../session200/session-plan.md)
+
+---
+
+## Session 200 (2026-03-16)
+
+**概要**: MSGOUTキーの仕様書確認（やり直し）
+
+**実施内容**:
+1. 仕様書から正確なMSGOUTキーIDを確認
+   - 元の仕様書（sessions/session155/）の目次をPythonスクリプトで抽出
+   - CFG-MSGOUTセクション（p.234-255）からUBX_NAV系キーを確認
+2. Session 199の誤りを訂正
+   - `0x01, 0x27` は NAV-TIMEGPS ではなく **NAV-TIMEQZSS**
+   - NAV-TIMEGPSは `0x01, 0x20`
+3. 正式ドキュメント更新
+   - `32-cfg-msgout-periodic-output.md` を更新
+   - 出典をSparkFun → 仕様書に修正、NAV-TIMEQZSS追加
+
+**反省点**:
+- 前回のSession 200では仕様書を確認せずに作業しようとしていた
+- 今回は仕様書の目次確認 → 必要ページ抽出 → Key ID確認の手順を踏んだ
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [32-cfg-msgout-periodic-output.md](../../docs/missions/m1-sensor-evaluation/gnss/32-cfg-msgout-periodic-output.md) | 出典修正、NAV-TIMEQZSS追加 |
+
+**次セッション**: [session201/session-plan.md](../session201/session-plan.md)
 
 ---
