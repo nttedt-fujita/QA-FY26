@@ -20,6 +20,20 @@ function getBlockName(centerHz: number): string {
   return "?";
 }
 
+/**
+ * 帯域ごとの色設定
+ */
+const BAND_COLORS = {
+  L1: {
+    main: "#3b82f6",      // 青
+    mainDashed: "#60a5fa", // 明るい青（点線用）
+  },
+  L2: {
+    main: "#22c55e",      // 緑
+    mainDashed: "#4ade80", // 明るい緑（点線用）
+  },
+} as const;
+
 interface CompareData {
   /** データラベル（シリアル番号等） */
   label: string;
@@ -39,13 +53,13 @@ interface MonSpanComparePanelProps {
 /**
  * MON-SPAN比較パネル
  *
- * 2つのデータを重ねて表示
+ * 縦: L1/L2、横: 基準/比較 のレイアウト
  */
 export function MonSpanComparePanel({
   primary,
   secondary,
 }: MonSpanComparePanelProps) {
-  const [expandedBlock, setExpandedBlock] = useState<string | null>(null);
+  const [expandedCell, setExpandedCell] = useState<{band: string, type: "primary" | "secondary"} | null>(null);
 
   // 同一機体かどうか判定
   const isSameDevice =
@@ -54,11 +68,11 @@ export function MonSpanComparePanel({
     primary.serialNumber === secondary.serialNumber;
 
   // ブロックをL1/L2でグルーピング
-  const blockNames = ["L1", "L2"];
+  const bandNames = ["L1", "L2"] as const;
 
   // 各帯域のブロックを取得
-  const getBlock = (data: MonSpanResponse | undefined, blockName: string): SpanBlock | undefined => {
-    return data?.blocks.find((b) => getBlockName(b.center) === blockName);
+  const getBlock = (data: MonSpanResponse | undefined, bandName: string): SpanBlock | undefined => {
+    return data?.blocks.find((b) => getBlockName(b.center) === bandName);
   };
 
   if (!primary && !secondary) {
@@ -87,137 +101,177 @@ export function MonSpanComparePanel({
         )}
       </div>
 
-      {/* データ情報 */}
-      <div className="mb-4 grid grid-cols-2 gap-4 text-sm">
-        <div className="rounded bg-blue-50 p-2">
-          <span className="font-medium text-blue-700">基準: </span>
-          {primary ? (
-            <span className="font-mono">{primary.label}</span>
-          ) : (
-            <span className="text-gray-400">未選択</span>
+      {/* ヘッダー行: 基準 / 比較 */}
+      <div className="grid grid-cols-[80px_1fr_1fr] gap-2 mb-2">
+        <div /> {/* 空セル */}
+        <div className="rounded bg-gray-100 p-2 text-center">
+          <span className="font-medium text-gray-700">基準</span>
+          {primary && (
+            <div className="text-xs text-gray-500 font-mono truncate">{primary.label}</div>
           )}
         </div>
-        <div className="rounded bg-orange-50 p-2">
-          <span className="font-medium text-orange-700">比較: </span>
-          {secondary ? (
-            <span className="font-mono">{secondary.label}</span>
-          ) : (
-            <span className="text-gray-400">未選択</span>
+        <div className="rounded bg-gray-100 p-2 text-center">
+          <span className="font-medium text-gray-700">比較</span>
+          {secondary && (
+            <div className="text-xs text-gray-500 font-mono truncate">{secondary.label}</div>
           )}
         </div>
       </div>
 
-      {/* L1/L2 横並び */}
-      <div className="grid grid-cols-2 gap-4">
-        {blockNames.map((blockName) => {
-          const primaryBlock = getBlock(primary?.data, blockName);
-          const secondaryBlock = getBlock(secondary?.data, blockName);
+      {/* L1/L2 行 */}
+      {bandNames.map((bandName) => {
+        const primaryBlock = getBlock(primary?.data, bandName);
+        const secondaryBlock = getBlock(secondary?.data, bandName);
+        const colors = BAND_COLORS[bandName];
 
-          // 両方ない場合はスキップ
-          if (!primaryBlock && !secondaryBlock) {
-            return (
-              <div key={blockName} className="rounded border border-gray-100 bg-gray-50 p-3">
-                <span className="font-medium text-gray-400">{blockName}帯: データなし</span>
-              </div>
-            );
-          }
-
-          return (
-            <div key={blockName} className="rounded border border-gray-100 bg-gray-50 p-3">
-              {/* ヘッダー */}
-              <div className="mb-2 flex items-center justify-between">
-                <span className="font-medium text-gray-700">{blockName}帯</span>
-                {primaryBlock && (
-                  <span className="text-xs text-gray-500">
-                    {formatFrequency(primaryBlock.center)}
-                  </span>
-                )}
-              </div>
-
-              {/* PGA情報 */}
-              <div className="mb-2 text-xs text-gray-600">
-                {primaryBlock && (
-                  <div>
-                    <span className="text-blue-600">基準:</span> PGA {primaryBlock.pga}dB / Max {primaryBlock.max_amplitude}
-                  </div>
-                )}
-                {secondaryBlock && (
-                  <div>
-                    <span className="text-orange-600">比較:</span> PGA {secondaryBlock.pga}dB / Max {secondaryBlock.max_amplitude}
-                  </div>
-                )}
-              </div>
-
-              {/* 波形（クリックで拡大） */}
-              <button
-                onClick={() => setExpandedBlock(blockName)}
-                className="w-full cursor-pointer hover:opacity-80 transition-opacity"
-                title="クリックで拡大"
+        return (
+          <div key={bandName} className="grid grid-cols-[80px_1fr_1fr] gap-2 mb-2">
+            {/* 帯域ラベル */}
+            <div
+              className="flex flex-col items-center justify-center rounded p-2"
+              style={{ backgroundColor: bandName === "L1" ? "#eff6ff" : "#f0fdf4" }}
+            >
+              <span
+                className="font-bold text-lg"
+                style={{ color: colors.main }}
               >
-                <SpectrumChart
-                  spectrum={primaryBlock?.spectrum ?? []}
-                  maxAmplitude={primaryBlock?.max_amplitude}
-                  compareSpectrum={secondaryBlock?.spectrum}
-                  compareMaxAmplitude={secondaryBlock?.max_amplitude}
-                  primaryLabel={primary?.label}
-                  compareLabel={secondary?.label}
-                />
-              </button>
-              <div className="mt-1 text-center text-xs text-gray-400">
-                クリックで拡大
-              </div>
+                {bandName}
+              </span>
+              {primaryBlock && (
+                <span className="text-xs text-gray-500">
+                  {formatFrequency(primaryBlock.center)}
+                </span>
+              )}
             </div>
-          );
-        })}
+
+            {/* 基準データ波形（基準=実線、比較=点線） */}
+            <div className="rounded border border-gray-100 bg-gray-50 p-2">
+              {primaryBlock ? (
+                <>
+                  <div className="mb-1 text-xs text-gray-600">
+                    PGA {primaryBlock.pga}dB / Max {primaryBlock.max_amplitude}
+                  </div>
+                  <button
+                    onClick={() => setExpandedCell({ band: bandName, type: "primary" })}
+                    className="w-full cursor-pointer hover:opacity-80 transition-opacity"
+                    title="クリックで拡大"
+                  >
+                    <SpectrumChart
+                      spectrum={primaryBlock.spectrum}
+                      maxAmplitude={primaryBlock.max_amplitude}
+                      compareSpectrum={secondaryBlock?.spectrum}
+                      compareMaxAmplitude={secondaryBlock?.max_amplitude}
+                      strokeColor={colors.main}
+                      compareStrokeColor={colors.mainDashed}
+                    />
+                  </button>
+                </>
+              ) : (
+                <div className="text-gray-400 text-sm text-center py-4">データなし</div>
+              )}
+            </div>
+
+            {/* 比較データ波形（比較=実線、基準=点線） */}
+            <div className="rounded border border-gray-100 bg-gray-50 p-2">
+              {secondaryBlock ? (
+                <>
+                  <div className="mb-1 text-xs text-gray-600">
+                    PGA {secondaryBlock.pga}dB / Max {secondaryBlock.max_amplitude}
+                  </div>
+                  <button
+                    onClick={() => setExpandedCell({ band: bandName, type: "secondary" })}
+                    className="w-full cursor-pointer hover:opacity-80 transition-opacity"
+                    title="クリックで拡大"
+                  >
+                    <SpectrumChart
+                      spectrum={secondaryBlock.spectrum}
+                      maxAmplitude={secondaryBlock.max_amplitude}
+                      compareSpectrum={primaryBlock?.spectrum}
+                      compareMaxAmplitude={primaryBlock?.max_amplitude}
+                      strokeColor={colors.main}
+                      compareStrokeColor={colors.mainDashed}
+                    />
+                  </button>
+                </>
+              ) : (
+                <div className="text-gray-400 text-sm text-center py-4">データなし</div>
+              )}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* 凡例 */}
+      <div className="mt-4 flex gap-6 text-sm justify-center">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L1.main }} />
+          <span className="text-gray-700">L1 基準</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L1.mainDashed, borderBottom: "2px dashed" }} />
+          <span className="text-gray-700">L1 比較</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L2.main }} />
+          <span className="text-gray-700">L2 基準</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-0.5" style={{ backgroundColor: BAND_COLORS.L2.mainDashed, borderBottom: "2px dashed" }} />
+          <span className="text-gray-700">L2 比較</span>
+        </div>
       </div>
 
       {/* 拡大モーダル */}
-      {expandedBlock && (
+      {expandedCell && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          onClick={() => setExpandedBlock(null)}
+          onClick={() => setExpandedCell(null)}
         >
           <div
             className="bg-white rounded-lg p-6 w-[90vw] h-[85vh] max-w-none"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-medium">
-                {expandedBlock}帯 スペクトラム比較
-              </h3>
-              <button
-                onClick={() => setExpandedBlock(null)}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
-              >
-                ×
-              </button>
-            </div>
-
-            {/* 凡例 */}
-            <div className="mb-4 flex gap-6 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-0.5 bg-blue-500" />
-                <span className="text-gray-700">{primary?.label || "基準"}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-0.5 bg-orange-500" style={{ borderStyle: "dashed" }} />
-                <span className="text-gray-700">{secondary?.label || "比較"}</span>
-              </div>
-            </div>
-
             {(() => {
-              const primaryBlock = getBlock(primary?.data, expandedBlock);
-              const secondaryBlock = getBlock(secondary?.data, expandedBlock);
+              const primaryBlock = getBlock(primary?.data, expandedCell.band);
+              const secondaryBlock = getBlock(secondary?.data, expandedCell.band);
+              const mainBlock = expandedCell.type === "primary" ? primaryBlock : secondaryBlock;
+              const compareBlock = expandedCell.type === "primary" ? secondaryBlock : primaryBlock;
+              const label = expandedCell.type === "primary" ? primary?.label : secondary?.label;
+              const colors = BAND_COLORS[expandedCell.band as keyof typeof BAND_COLORS];
+
               return (
-                <SpectrumChart
-                  spectrum={primaryBlock?.spectrum ?? []}
-                  maxAmplitude={primaryBlock?.max_amplitude}
-                  compareSpectrum={secondaryBlock?.spectrum}
-                  compareMaxAmplitude={secondaryBlock?.max_amplitude}
-                  primaryLabel={primary?.label}
-                  compareLabel={secondary?.label}
-                  expanded
-                />
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium">
+                      {expandedCell.band}帯 - {expandedCell.type === "primary" ? "基準" : "比較"}
+                      {label && <span className="ml-2 text-gray-500 font-mono text-sm">({label})</span>}
+                    </h3>
+                    <button
+                      onClick={() => setExpandedCell(null)}
+                      className="text-gray-500 hover:text-gray-700 text-2xl"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  {mainBlock && (
+                    <>
+                      <div className="mb-2 text-sm text-gray-600">
+                        {formatFrequency(mainBlock.center)} / PGA {mainBlock.pga}dB / Max {mainBlock.max_amplitude}
+                      </div>
+                      <SpectrumChart
+                        spectrum={mainBlock.spectrum}
+                        maxAmplitude={mainBlock.max_amplitude}
+                        compareSpectrum={compareBlock?.spectrum}
+                        compareMaxAmplitude={compareBlock?.max_amplitude}
+                        strokeColor={colors.main}
+                        compareStrokeColor={colors.mainDashed}
+                        primaryLabel={expandedCell.type === "primary" ? "基準" : "比較"}
+                        compareLabel={expandedCell.type === "primary" ? "比較" : "基準"}
+                        expanded
+                      />
+                    </>
+                  )}
+                </>
               );
             })()}
           </div>

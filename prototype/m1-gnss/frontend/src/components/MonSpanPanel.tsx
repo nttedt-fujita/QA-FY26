@@ -233,6 +233,17 @@ interface SpectrumChartProps {
   compareMaxAmplitude?: number;
   compareLabel?: string;  // 比較データのラベル（凡例用）
   primaryLabel?: string;  // 基準データのラベル（凡例用）
+  // 色指定（オプション）
+  strokeColor?: string;         // メイン波形の色
+  compareStrokeColor?: string;  // 比較波形の色
+}
+
+interface SpectrumChartSingleProps {
+  spectrum: number[];
+  maxAmplitude?: number;
+  expanded?: boolean;
+  strokeColor?: string;  // 波形の色
+  isDashed?: boolean;    // 点線にするか
 }
 
 // 固定スケール: 振幅の最大値（全波形で統一）
@@ -251,6 +262,8 @@ export function SpectrumChart({
   compareMaxAmplitude,
   compareLabel,
   primaryLabel,
+  strokeColor = "#3b82f6",        // デフォルト: 青
+  compareStrokeColor = "#f97316", // デフォルト: オレンジ
 }: SpectrumChartProps) {
   const isCompareMode = compareSpectrum && compareSpectrum.length > 0;
   // 拡大時はマージンを確保して目盛りを表示
@@ -461,7 +474,7 @@ export function SpectrumChart({
         <path
           d={pathD}
           fill="none"
-          stroke="#3b82f6"
+          stroke={strokeColor}
           strokeWidth={expanded ? 1.5 : 1}
         />
 
@@ -477,7 +490,7 @@ export function SpectrumChart({
             <path
               d={comparePathD}
               fill="none"
-              stroke="#f97316"
+              stroke={compareStrokeColor}
               strokeWidth={expanded ? 1.5 : 1}
               strokeDasharray={expanded ? "6 3" : "4 2"}
             />
@@ -493,7 +506,7 @@ export function SpectrumChart({
               y1={margin.top + 15}
               x2={margin.left + chartWidth - 100}
               y2={margin.top + 15}
-              stroke="#3b82f6"
+              stroke={strokeColor}
               strokeWidth="2"
             />
             <text
@@ -511,7 +524,7 @@ export function SpectrumChart({
               y1={margin.top + 30}
               x2={margin.left + chartWidth - 100}
               y2={margin.top + 30}
-              stroke="#f97316"
+              stroke={compareStrokeColor}
               strokeWidth="2"
               strokeDasharray="6 3"
             />
@@ -563,6 +576,162 @@ export function SpectrumChart({
             >
               Max:{maxAmplitude}
             </text>
+          </>
+        )}
+      </svg>
+    </div>
+  );
+}
+
+/**
+ * 単一波形チャート（比較画面用）
+ *
+ * 色と点線を指定可能
+ */
+export function SpectrumChartSingle({
+  spectrum,
+  maxAmplitude,
+  expanded = false,
+  strokeColor = "#3b82f6",
+  isDashed = false,
+}: SpectrumChartSingleProps) {
+  const margin = expanded ? { top: 10, right: 40, bottom: 30, left: 50 } : { top: 5, right: 5, bottom: 20, left: 35 };
+  const chartWidth = 256;
+  const chartHeight = expanded ? 200 : 80;
+  const totalWidth = chartWidth + margin.left + margin.right;
+  const totalHeight = chartHeight + margin.top + margin.bottom;
+
+  const scaleMax = FIXED_AMPLITUDE_MAX;
+
+  // パスを生成
+  const points = spectrum.map((val, idx) => {
+    const x = margin.left + (idx / 255) * chartWidth;
+    const y = margin.top + chartHeight - (val / scaleMax) * chartHeight;
+    return `${x},${y}`;
+  });
+  const pathD = points.length > 0 ? `M${points.join(" L")}` : "";
+
+  // 目盛り
+  const yMainTicks = expanded ? [0, 64, 128, 192, 255] : [0, 128, 255];
+  const xMainTicks = expanded ? [0, 64, 128, 192, 255] : [0, 128, 255];
+
+  return (
+    <div className={`overflow-hidden rounded border border-gray-200 bg-white ${expanded ? "" : "aspect-video"}`}>
+      <svg
+        viewBox={`0 0 ${totalWidth} ${totalHeight}`}
+        className={expanded ? "w-full h-[70vh]" : "h-full w-full"}
+        preserveAspectRatio={expanded ? "xMidYMid meet" : "none"}
+      >
+        {/* 背景 */}
+        <rect
+          x={margin.left}
+          y={margin.top}
+          width={chartWidth}
+          height={chartHeight}
+          fill="#fafafa"
+        />
+
+        {/* グリッド線（横） */}
+        {yMainTicks.map((tick) => {
+          const y = margin.top + chartHeight - (tick / scaleMax) * chartHeight;
+          return (
+            <line
+              key={`y-${tick}`}
+              x1={margin.left}
+              y1={y}
+              x2={margin.left + chartWidth}
+              y2={y}
+              stroke="#e5e7eb"
+              strokeWidth="1"
+            />
+          );
+        })}
+
+        {/* グリッド線（縦） */}
+        {xMainTicks.map((tick) => {
+          const x = margin.left + (tick / 255) * chartWidth;
+          return (
+            <line
+              key={`x-${tick}`}
+              x1={x}
+              y1={margin.top}
+              x2={x}
+              y2={margin.top + chartHeight}
+              stroke="#e5e7eb"
+              strokeWidth="1"
+            />
+          );
+        })}
+
+        {/* Y軸目盛りラベル */}
+        {yMainTicks.map((tick) => {
+          const y = margin.top + chartHeight - (tick / scaleMax) * chartHeight;
+          return (
+            <text
+              key={`y-label-${tick}`}
+              x={margin.left - 5}
+              y={y}
+              textAnchor="end"
+              dominantBaseline="middle"
+              className="fill-gray-500"
+              style={{ fontSize: expanded ? 10 : 8 }}
+            >
+              {tick}
+            </text>
+          );
+        })}
+
+        {/* X軸目盛りラベル */}
+        {xMainTicks.map((tick) => {
+          const x = margin.left + (tick / 255) * chartWidth;
+          return (
+            <text
+              key={`x-label-${tick}`}
+              x={x}
+              y={margin.top + chartHeight + 12}
+              textAnchor="middle"
+              className="fill-gray-500"
+              style={{ fontSize: expanded ? 10 : 8 }}
+            >
+              {tick}
+            </text>
+          );
+        })}
+
+        {/* 波形 */}
+        {pathD && (
+          <path
+            d={pathD}
+            fill="none"
+            stroke={strokeColor}
+            strokeWidth={expanded ? 1.5 : 1}
+            strokeDasharray={isDashed ? (expanded ? "6 3" : "4 2") : undefined}
+          />
+        )}
+
+        {/* 最大値ライン */}
+        {maxAmplitude !== undefined && (
+          <>
+            <line
+              x1={margin.left}
+              y1={margin.top + chartHeight - (maxAmplitude / scaleMax) * chartHeight}
+              x2={margin.left + chartWidth}
+              y2={margin.top + chartHeight - (maxAmplitude / scaleMax) * chartHeight}
+              stroke="#ef4444"
+              strokeWidth="1"
+              strokeDasharray="4 2"
+            />
+            {expanded && (
+              <text
+                x={margin.left + chartWidth + 3}
+                y={margin.top + chartHeight - (maxAmplitude / scaleMax) * chartHeight}
+                dominantBaseline="middle"
+                className="fill-red-500"
+                style={{ fontSize: 10 }}
+              >
+                Max:{maxAmplitude}
+              </text>
+            )}
           </>
         )}
       </svg>
