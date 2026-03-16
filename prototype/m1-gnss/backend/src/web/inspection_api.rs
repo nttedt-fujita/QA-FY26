@@ -57,6 +57,47 @@ pub struct InspectionListResponse {
 }
 
 // ===========================================
+// 一括検査用型（Phase 3: 複数台対応）
+// ===========================================
+
+/// 一括検査リクエスト
+#[derive(Debug, Deserialize)]
+pub struct BatchInspectionRequest {
+    /// ロットID（任意）
+    pub lot_id: Option<i64>,
+}
+
+/// 一括検査レスポンス
+#[derive(Debug, Serialize)]
+pub struct BatchInspectionResponse {
+    pub results: Vec<DeviceInspectionResult>,
+    pub summary: BatchSummary,
+}
+
+/// 個別デバイスの検査結果
+#[derive(Debug, Serialize)]
+pub struct DeviceInspectionResult {
+    /// ポートパス（例: /dev/ttyUSB0）
+    pub path: String,
+    /// F9Pシリアル番号
+    pub serial_number: String,
+    /// 総合結果（Pass / Fail / Error）
+    pub overall_result: String,
+    /// 検査ID
+    pub inspection_id: i64,
+    /// 検査項目結果
+    pub items: Vec<ItemResultResponse>,
+}
+
+/// 一括検査サマリー
+#[derive(Debug, Serialize)]
+pub struct BatchSummary {
+    pub total: usize,
+    pub passed: usize,
+    pub failed: usize,
+}
+
+// ===========================================
 // ヘルパー関数
 // ===========================================
 
@@ -190,6 +231,162 @@ pub async fn run_inspection(
     }
 }
 
+/// POST /api/inspections/batch - 一括検査実行（Phase 3: 複数台対応）
+///
+/// 接続中の全装置に対して検査を実行し、結果をDBに保存する
+pub async fn run_batch_inspection(
+    data: web::Data<AppState>,
+    body: web::Json<BatchInspectionRequest>,
+) -> impl Responder {
+    // MultiDeviceManagerから接続中の全デバイスパスを取得
+    let paths = {
+        let multi_manager = match data.multi_device_manager.lock() {
+            Ok(m) => m,
+            Err(_) => {
+                return HttpResponse::InternalServerError().json(ErrorResponse {
+                    error: "内部エラー: ロック取得に失敗".to_string(),
+                    code: "LOCK_ERROR".to_string(),
+                });
+            }
+        };
+        multi_manager.connected_paths()
+    };
+
+    if paths.is_empty() {
+        return HttpResponse::BadRequest().json(ErrorResponse {
+            error: "装置が接続されていません。先に接続してください。".to_string(),
+            code: "NO_DEVICES_CONNECTED".to_string(),
+        });
+    }
+
+    let mut results: Vec<DeviceInspectionResult> = Vec::new();
+    let mut passed = 0;
+    let mut failed = 0;
+
+    // 各デバイスに対して順次検査実行
+    for path in &paths {
+        let result = run_single_device_inspection(&data, path, body.lot_id).await;
+        match result {
+            Ok(device_result) => {
+                if device_result.overall_result == "Pass" {
+                    passed += 1;
+                } else {
+                    failed += 1;
+                }
+                results.push(device_result);
+            }
+            Err(error_result) => {
+                failed += 1;
+                results.push(error_result);
+            }
+        }
+    }
+
+    HttpResponse::Ok().json(BatchInspectionResponse {
+        results,
+        summary: BatchSummary {
+            total: paths.len(),
+            passed,
+            failed,
+        },
+    })
+}
+
+/// 単一デバイスの検査を実行（内部ヘルパー）
+async fn run_single_device_inspection(
+    data: &web::Data<AppState>,
+    path: &str,
+    lot_id: Option<i64>,
+) -> Result<DeviceInspectionResult, DeviceInspectionResult> {
+    // パス指定でデバイスマネージャーを取得
+    let device_manager_arc = match data.get_device_manager_by_path(path) {
+        Ok(Some(arc)) => arc,
+        Ok(None) => {
+            return Err(DeviceInspectionResult {
+                path: path.to_string(),
+                serial_number: "不明".to_string(),
+                overall_result: "Error".to_string(),
+                inspection_id: 0,
+                items: vec![],
+            });
+        }
+        Err(_) => {
+            return Err(DeviceInspectionResult {
+                path: path.to_string(),
+                serial_number: "不明".to_string(),
+                overall_result: "Error".to_string(),
+                inspection_id: 0,
+                items: vec![],
+            });
+        }
+    };
+
+    let mut manager = match device_manager_arc.lock() {
+        Ok(m) => m,
+        Err(_) => {
+            return Err(DeviceInspectionResult {
+                path: path.to_string(),
+                serial_number: "不明".to_string(),
+                overall_result: "Error".to_string(),
+                inspection_id: 0,
+                items: vec![],
+            });
+        }
+    };
+
+    let repo = match data.repository.lock() {
+        Ok(r) => r,
+        Err(_) => {
+            return Err(DeviceInspectionResult {
+                path: path.to_string(),
+                serial_number: "不明".to_string(),
+                overall_result: "Error".to_string(),
+                inspection_id: 0,
+                items: vec![],
+            });
+        }
+    };
+
+    // InspectionServiceで検査実行
+    let service = InspectionService::new(&repo);
+    match service.run_and_save(&mut manager, lot_id) {
+        Ok(report) => {
+            // シリアル番号を取得
+            let serial_number = report.item_results.iter()
+                .find(|r| matches!(r.item_type, ItemType::SerialNumber))
+                .and_then(|r| r.actual_value.clone())
+                .unwrap_or_else(|| "不明".to_string());
+
+            // 項目結果をレスポンス用に変換
+            let items: Vec<ItemResultResponse> = report.item_results.iter()
+                .map(|r| ItemResultResponse {
+                    item_name: item_type_to_str(&r.item_type).to_string(),
+                    verdict: verdict_to_str(&r.verdict).to_string(),
+                    actual_value: r.actual_value.clone(),
+                    expected_value: expected_to_string(&r.expected_value),
+                })
+                .collect();
+
+            Ok(DeviceInspectionResult {
+                path: path.to_string(),
+                serial_number,
+                overall_result: report.overall_result,
+                inspection_id: report.inspection_id,
+                items,
+            })
+        }
+        Err(e) => {
+            Err(DeviceInspectionResult {
+                path: path.to_string(),
+                serial_number: "不明".to_string(),
+                overall_result: format!("Error: {}", e),
+                inspection_id: 0,
+                items: vec![],
+            })
+        }
+    }
+}
+
 /// GET /api/inspections - 検査履歴取得
 pub async fn list_inspections(data: web::Data<AppState>) -> impl Responder {
     let repo = match data.repository.lock() {
@@ -236,6 +433,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/api/inspections")
             .route("", web::post().to(run_inspection))
-            .route("", web::get().to(list_inspections)),
+            .route("", web::get().to(list_inspections))
+            // Phase 3: 一括検査API
+            .route("/batch", web::post().to(run_batch_inspection)),
     );
 }

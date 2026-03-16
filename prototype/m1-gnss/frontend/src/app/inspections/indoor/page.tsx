@@ -4,17 +4,18 @@ import { useState, useEffect, useCallback } from "react";
 import {
   Device,
   Lot,
-  InspectionResponse,
   InspectionSummary,
+  BatchInspectionResponse,
+  DeviceInspectionResult,
   listDevices,
   listLots,
-  runInspection,
+  runBatchInspection,
   listInspections,
+  blinkDevice,
 } from "@/lib/api";
-import { InspectionResult } from "@/components/InspectionResult";
 
 /**
- * 屋内検査実行画面
+ * 屋内検査実行画面（Phase 3: 複数台対応）
  *
  * 5項目: RATE, UART1, UART2, USB, NAV
  */
@@ -23,17 +24,15 @@ export default function IndoorInspectionsPage() {
   const [lots, setLots] = useState<Lot[]>([]);
   const [devices, setDevices] = useState<Device[]>([]);
   const [selectedLotId, setSelectedLotId] = useState<number | null>(null);
-  const [inspectionResult, setInspectionResult] =
-    useState<InspectionResponse | null>(null);
-  const [inspectionHistory, setInspectionHistory] = useState<
-    InspectionSummary[]
-  >([]);
+  const [batchResult, setBatchResult] = useState<BatchInspectionResponse | null>(null);
+  const [inspectionHistory, setInspectionHistory] = useState<InspectionSummary[]>([]);
+  const [blinkingPaths, setBlinkingPaths] = useState<Set<string>>(new Set());
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 接続中の装置を取得
-  const connectedDevice = devices.find((d) => d.status === "connected");
+  // 接続中の装置一覧（複数台対応）
+  const connectedDevices = devices.filter((d) => d.status === "connected");
 
   // 選択中のロットを取得
   const selectedLot = lots.find((l) => l.id === selectedLotId);
@@ -59,22 +58,22 @@ export default function IndoorInspectionsPage() {
     fetchData();
   }, [fetchData]);
 
-  // 検査実行
-  const handleRunInspection = async () => {
-    if (!connectedDevice) {
+  // 一括検査実行
+  const handleRunBatchInspection = async () => {
+    if (connectedDevices.length === 0) {
       setError("装置が接続されていません");
       return;
     }
 
     setIsLoading(true);
     setError(null);
-    setInspectionResult(null);
+    setBatchResult(null);
 
     try {
-      const result = await runInspection({
+      const result = await runBatchInspection({
         lot_id: selectedLotId ?? undefined,
       });
-      setInspectionResult(result);
+      setBatchResult(result);
       // 履歴を更新
       const inspectionsRes = await listInspections();
       setInspectionHistory(inspectionsRes.inspections);
@@ -84,6 +83,25 @@ export default function IndoorInspectionsPage() {
       setIsLoading(false);
     }
   };
+
+  // LED点滅
+  const handleBlink = async (path: string) => {
+    setBlinkingPaths((prev) => new Set(prev).add(path));
+    try {
+      await blinkDevice(path, 3);
+    } catch (e) {
+      console.error("点滅エラー:", e);
+    } finally {
+      setBlinkingPaths((prev) => {
+        const next = new Set(prev);
+        next.delete(path);
+        return next;
+      });
+    }
+  };
+
+  // パス名の短縮表示（/dev/ttyUSB0 → ttyUSB0）
+  const shortPath = (path: string) => path.replace("/dev/", "");
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -143,16 +161,27 @@ export default function IndoorInspectionsPage() {
 
           {/* 接続中の装置 */}
           <div className="rounded border border-gray-200 bg-white p-4">
-            <h3 className="mb-2 font-medium text-gray-700">接続中の装置</h3>
-            {connectedDevice ? (
-              <div>
-                <div className="font-mono text-sm">{connectedDevice.path}</div>
-                <div className="text-sm text-gray-600">
-                  ボーレート: {connectedDevice.baud_rate ?? "-"} bps
-                </div>
-                <div className="mt-1 inline-block rounded bg-green-100 px-2 py-1 text-sm text-green-800">
-                  接続中
-                </div>
+            <h3 className="mb-2 font-medium text-gray-700">
+              接続中の装置 ({connectedDevices.length}台)
+            </h3>
+            {connectedDevices.length > 0 ? (
+              <div className="space-y-2">
+                {connectedDevices.map((device) => (
+                  <div
+                    key={device.path}
+                    className="flex items-center justify-between rounded bg-gray-50 p-2"
+                  >
+                    <div>
+                      <div className="font-mono text-sm">{shortPath(device.path)}</div>
+                      <div className="text-xs text-gray-500">
+                        {device.f9p_serial || device.serial_number || "-"}
+                      </div>
+                    </div>
+                    <div className="inline-block rounded bg-green-100 px-2 py-1 text-xs text-green-800">
+                      接続中
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               <div className="text-gray-500">
@@ -171,11 +200,15 @@ export default function IndoorInspectionsPage() {
         {/* 検査開始ボタン */}
         <div className="mb-6">
           <button
-            onClick={handleRunInspection}
-            disabled={isLoading || !connectedDevice}
+            onClick={handleRunBatchInspection}
+            disabled={isLoading || connectedDevices.length === 0}
             className="rounded bg-[#2e75b6] px-8 py-3 text-lg font-medium text-white hover:bg-[#245d92] disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isLoading ? "検査中..." : "検査開始"}
+            {isLoading
+              ? "検査中..."
+              : connectedDevices.length === 1
+              ? "検査開始"
+              : `全台検査開始 (${connectedDevices.length}台)`}
           </button>
         </div>
 
@@ -201,10 +234,22 @@ export default function IndoorInspectionsPage() {
           </div>
         )}
 
-        {/* 検査結果 */}
-        {inspectionResult && (
-          <div className="mb-6">
-            <InspectionResult result={inspectionResult} />
+        {/* 一括検査結果 */}
+        {batchResult && (
+          <div className="mb-6 rounded border border-gray-200 bg-white p-4">
+            <h3 className="mb-4 text-lg font-medium text-gray-700">
+              検査結果 ({batchResult.summary.total}台中 {batchResult.summary.passed}台合格)
+            </h3>
+            <div className="space-y-3">
+              {batchResult.results.map((result) => (
+                <BatchResultCard
+                  key={result.path}
+                  result={result}
+                  isBlinking={blinkingPaths.has(result.path)}
+                  onBlink={() => handleBlink(result.path)}
+                />
+              ))}
+            </div>
           </div>
         )}
 
@@ -249,6 +294,145 @@ export default function IndoorInspectionsPage() {
           )}
         </div>
       </main>
+    </div>
+  );
+}
+
+/**
+ * 検査項目名を日本語に変換
+ */
+function itemNameToJapanese(itemName: string): string {
+  const mapping: Record<string, string> = {
+    communication: "通信疎通",
+    fw: "FWバージョン",
+    serial: "シリアル番号",
+    rate: "出力レート",
+    port: "ポート設定",
+  };
+  return mapping[itemName] || itemName;
+}
+
+/**
+ * 判定結果に応じた色を返す
+ */
+function getVerdictColor(verdict: string): string {
+  switch (verdict) {
+    case "Pass":
+      return "text-green-600";
+    case "Fail":
+      return "text-red-600";
+    case "Error":
+      return "text-yellow-600";
+    default:
+      return "text-gray-600";
+  }
+}
+
+/**
+ * 判定結果を日本語に変換
+ */
+function verdictToJapanese(verdict: string): string {
+  switch (verdict) {
+    case "Pass":
+      return "合格";
+    case "Fail":
+      return "不合格";
+    case "Error":
+      return "エラー";
+    default:
+      return verdict;
+  }
+}
+
+/**
+ * 一括検査結果カード
+ */
+function BatchResultCard({
+  result,
+  isBlinking,
+  onBlink,
+}: {
+  result: DeviceInspectionResult;
+  isBlinking: boolean;
+  onBlink: () => void;
+}) {
+  const isPassed = result.overall_result === "Pass";
+  const shortPath = result.path.replace("/dev/", "");
+
+  return (
+    <div
+      className={`rounded border p-4 ${
+        isPassed
+          ? "border-green-200 bg-green-50"
+          : "border-red-200 bg-red-50"
+      }`}
+    >
+      {/* ヘッダー: デバイス情報 + 総合判定 + 点滅ボタン */}
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">{isPassed ? "✅" : "❌"}</span>
+          <div>
+            <div className="font-mono text-sm font-medium">
+              {shortPath} / {result.serial_number}
+            </div>
+            <div
+              className={`text-sm font-semibold ${
+                isPassed ? "text-green-700" : "text-red-700"
+              }`}
+            >
+              {isPassed ? "合格" : "不合格"}
+            </div>
+          </div>
+        </div>
+        {/* 点滅ボタン */}
+        <button
+          onClick={onBlink}
+          disabled={isBlinking}
+          className={`rounded px-3 py-2 text-sm font-medium transition-colors ${
+            isBlinking
+              ? "animate-pulse bg-yellow-400 text-yellow-900"
+              : "bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
+          }`}
+        >
+          💡 {isBlinking ? "点滅中..." : "点滅"}
+        </button>
+      </div>
+
+      {/* 項目詳細テーブル */}
+      {result.items.length > 0 && (
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr className="bg-white/50">
+              <th className="border border-gray-300 p-2 text-left">項目</th>
+              <th className="border border-gray-300 p-2 text-left">期待値</th>
+              <th className="border border-gray-300 p-2 text-left">実測値</th>
+              <th className="border border-gray-300 p-2 text-center w-20">判定</th>
+            </tr>
+          </thead>
+          <tbody>
+            {result.items.map((item, index) => (
+              <tr key={index} className="bg-white/30">
+                <td className="border border-gray-300 p-2">
+                  {itemNameToJapanese(item.item_name)}
+                </td>
+                <td className="border border-gray-300 p-2 text-gray-600">
+                  {item.expected_value || "-"}
+                </td>
+                <td className="border border-gray-300 p-2">
+                  {item.actual_value || "-"}
+                </td>
+                <td
+                  className={`border border-gray-300 p-2 text-center font-semibold ${getVerdictColor(
+                    item.verdict
+                  )}`}
+                >
+                  {verdictToJapanese(item.verdict)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
