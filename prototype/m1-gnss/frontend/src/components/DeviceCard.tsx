@@ -58,8 +58,8 @@ export function DeviceCard({
           {device.baud_rate && (
             <p>ボーレート: {device.baud_rate.toLocaleString()} bps</p>
           )}
-          {device.serial_number && (
-            <p>シリアル: {device.serial_number}</p>
+          {(device.f9p_serial || device.serial_number) && (
+            <p>シリアル: {device.f9p_serial ?? device.serial_number}</p>
           )}
         </div>
       )}
