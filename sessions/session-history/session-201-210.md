@@ -92,3 +92,48 @@
 **次セッション**: [session205/session-plan.md](../session205/session-plan.md)
 
 ---
+
+## Session 205 (2026-03-16)
+
+**概要**: 複数台検査フローの要件整理
+
+**実施内容**:
+1. 屋内検査の一括/個別実行の要件確認
+   - 一括検査・個別検査の両方必要
+2. DB登録タイミング・順序の決定
+   - 検査完了時に自動登録（現行踏襲）
+   - USBポート順（ttyUSB0 → 1 → 2）
+3. 検査後フローの確定
+   - 結果表示 → 点滅で識別 → シール貼り/対処 → 取り外し
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session205/multi-device-inspection-requirements.md](../session205/multi-device-inspection-requirements.md) | 複数台検査フロー要件 |
+
+**次セッション**: [session206/session-plan.md](../session206/session-plan.md)
+
+---
+
+## Session 206 (2026-03-16)
+
+**概要**: 複数台検査機能の実装計画策定
+
+**実施内容**:
+1. 現在の屋内検査実装を確認
+   - バックエンド: `get_first_device_manager()` で1台目のみ検査
+   - フロントエンド: 1台表示、一括/個別検査UIなし
+2. 複数台対応の実装計画策定
+   - Phase 1: 一括検査対応（BE: batch API、FE: 複数台表示）
+   - Phase 2: 個別検査対応（次回以降）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session206/multi-device-inspection-plan.md](../session206/multi-device-inspection-plan.md) | 複数台検査機能の実装計画 |
+
+**スコープ外メモ**: 同一シリアルの重複レコード問題 → 別セッションで検討
+
+**次セッション**: 実装計画に基づきPhase 1を実装
+
+---
