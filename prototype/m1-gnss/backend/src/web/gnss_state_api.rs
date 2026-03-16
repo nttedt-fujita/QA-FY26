@@ -2,8 +2,11 @@
 //!
 //! F9Pの現在状態を1回のAPIで全取得（ポーリング競合防止）
 //! 対象: NAV-PVT, NAV-STATUS, NAV-SAT, NAV-SIG, MON-SPAN, MON-RF
+//!
+//! Phase 3: パス指定版 `/api/devices/{path}/gnss-state` も追加
 
 use actix_web::{web, HttpResponse, Responder};
+use std::sync::{Arc, Mutex};
 use serde::Serialize;
 
 use crate::ubx::{nav_pvt, nav_sat, nav_sig, nav_status, mon_span, mon_rf};
@@ -175,13 +178,11 @@ fn build_poll(class: u8, id: u8) -> Vec<u8> {
 // APIハンドラー
 // ===========================================
 
-/// GET /api/gnss-state - 統合API
+/// GET /api/gnss-state - 統合API（後方互換性: 最初の接続デバイスを使用）
 pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
-    tracing::debug!("[GNSS-STATE] API呼び出し開始");
-    let api_start = std::time::Instant::now();
+    tracing::debug!("[GNSS-STATE] API呼び出し開始（後方互換モード）");
 
     // Phase 3: MultiDeviceManager経由で最初の接続デバイスを取得
-    let lock_start = std::time::Instant::now();
     let device_manager_arc = match data.get_first_device_manager() {
         Ok(Some(arc)) => arc,
         Ok(None) => {
@@ -198,6 +199,50 @@ pub async fn get_gnss_state(data: web::Data<AppState>) -> impl Responder {
             });
         }
     };
+
+    // 共通処理を呼び出し
+    get_gnss_state_impl(data, device_manager_arc).await
+}
+
+/// GET /api/devices/{path}/gnss-state - パス指定版統合API（Phase 3）
+pub async fn get_gnss_state_by_path(
+    data: web::Data<AppState>,
+    path: web::Path<String>,
+) -> impl Responder {
+    let port_path = urlencoding::decode(&path.into_inner())
+        .unwrap_or_else(|_| std::borrow::Cow::Borrowed(""))
+        .to_string();
+
+    tracing::debug!("[GNSS-STATE] パス指定API呼び出し: {}", port_path);
+
+    // パス指定でデバイスマネージャーを取得
+    let device_manager_arc = match data.get_device_manager_by_path(&port_path) {
+        Ok(Some(arc)) => arc,
+        Ok(None) => {
+            return HttpResponse::BadRequest().json(ErrorResponse {
+                error: format!("装置が接続されていません: {}", port_path),
+                code: "DEVICE_NOT_CONNECTED".to_string(),
+            });
+        }
+        Err(_) => {
+            return HttpResponse::InternalServerError().json(ErrorResponse {
+                error: "内部エラー: ロック取得に失敗".to_string(),
+                code: "LOCK_ERROR".to_string(),
+            });
+        }
+    };
+
+    // 共通処理を呼び出し
+    get_gnss_state_impl(data, device_manager_arc).await
+}
+
+/// GNSS状態取得の共通処理（デバイスマネージャーを受け取る）
+async fn get_gnss_state_impl(
+    data: web::Data<AppState>,
+    device_manager_arc: Arc<Mutex<crate::device::manager::DeviceManager<super::device_api::RealSerialPortProvider>>>,
+) -> HttpResponse {
+    let api_start = std::time::Instant::now();
+    let lock_start = std::time::Instant::now();
 
     let mut manager = match device_manager_arc.lock() {
         Ok(m) => {
@@ -471,4 +516,11 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
         web::scope("/api/gnss-state")
             .route("", web::get().to(get_gnss_state)),
     );
+}
+
+/// パス指定版APIルートを設定（Phase 3）
+///
+/// device_api.rs から呼び出される
+pub fn configure_device_routes(cfg: &mut web::ServiceConfig) {
+    cfg.route("/gnss-state", web::get().to(get_gnss_state_by_path));
 }

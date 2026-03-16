@@ -492,9 +492,16 @@ export interface GnssStateResponse {
 
 /**
  * GNSS状態（統合API）を取得
+ * @param signal AbortSignal
+ * @param devicePath 装置パス（指定時はパス指定APIを使用）
  */
-export async function getGnssState(signal?: AbortSignal): Promise<GnssStateResponse> {
-  const res = await fetch(`${API_BASE}/api/gnss-state`, { signal });
+export async function getGnssState(signal?: AbortSignal, devicePath?: string): Promise<GnssStateResponse> {
+  // パス指定があればパス指定APIを使用（Phase 3: 複数台対応）
+  const url = devicePath
+    ? `${API_BASE}/api/devices/${encodeURIComponent(devicePath)}/gnss-state`
+    : `${API_BASE}/api/gnss-state`;
+
+  const res = await fetch(url, { signal });
   if (!res.ok) {
     const error: ErrorResponse = await res.json();
     throw new Error(error.error);

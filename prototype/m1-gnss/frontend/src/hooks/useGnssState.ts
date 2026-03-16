@@ -8,6 +8,8 @@ export interface UseGnssStateOptions {
   enabled: boolean;
   /** レスポンス後の遅延（ミリ秒）、デフォルト0 */
   delayAfterResponseMs?: number;
+  /** 装置パス（指定時はパス指定APIを使用、Phase 3: 複数台対応） */
+  devicePath?: string;
 }
 
 export interface UseGnssStateResult {
@@ -36,6 +38,7 @@ export interface UseGnssStateResult {
 export function useGnssState({
   enabled,
   delayAfterResponseMs = 0,
+  devicePath,
 }: UseGnssStateOptions): UseGnssStateResult {
   const [data, setData] = useState<GnssStateResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -72,7 +75,7 @@ export function useGnssState({
         setIsLoading(requestCount === 0);
 
         try {
-          const res = await getGnssState(controller.signal);
+          const res = await getGnssState(controller.signal, devicePath);
 
           // abort済みなら無視
           if (!mountedRef.current) return;
@@ -114,7 +117,7 @@ export function useGnssState({
       mountedRef.current = false;
       controller.abort();
     };
-  }, [enabled, delayAfterResponseMs]);
+  }, [enabled, delayAfterResponseMs, devicePath]);
 
   // リクエストカウントのリセット（enabled変更時）
   useEffect(() => {

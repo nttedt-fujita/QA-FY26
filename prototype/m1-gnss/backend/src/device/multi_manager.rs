@@ -132,8 +132,12 @@ impl<P: SerialPortProvider + Clone> MultiDeviceManager<P> {
     }
 
     /// 接続中のデバイスパス一覧を取得
+    ///
+    /// パス名でソートして返す（HashMapは順序を保証しないため）
     pub fn connected_paths(&self) -> Vec<String> {
-        self.managers.keys().cloned().collect()
+        let mut paths: Vec<String> = self.managers.keys().cloned().collect();
+        paths.sort();
+        paths
     }
 
     /// 接続中のデバイス数を取得
