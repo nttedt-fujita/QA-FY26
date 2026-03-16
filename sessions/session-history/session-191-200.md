@@ -36,7 +36,84 @@
 - `components/MonSpanComparePanel.tsx` - L2比較色を赤→ピンクに変更
 
 **次セッション**: [session193/session-plan.md](../session193/session-plan.md)
-- 現在地の再確認（M1/M2/M3の優先度整理）
-- 直近セッションのドキュメント整備
+
+---
+
+## Session 193 (2026-03-16)
+
+**概要**: 現在地確認 + ドキュメント整備
+
+**実施内容**:
+1. session-managementスキルでの文脈確認
+   - Session 186-187で計画されたPhase 3（複数台同時対応）が未着手だった
+2. ドキュメント整備（Session 186-192の成果物）
+   - 削除: session187/ucenter-toc.md, mon-span-spec.md（ubx-mon-messages.mdと重複）
+   - 削除: session190/integration-manual-toc.md, integration-manual-spectrum-section.md
+   - 残存: session190/integration-manual-spectrum-analyzer.md（37-mon-span-display-spec.mdから参照）
+   - 移動: session187/u-center_Userguide_UBX-13005250.pdf → docs/.../gnss/sources/
+
+**残っている作業**:
+- M1 Phase 3: 複数台同時対応（未着手）
+- M1: 実機での動作確認
+- M2/M3: 放置中
+
+**次セッション**: [session194/session-plan.md](../session194/session-plan.md)
+
+---
+
+## Session 194 (2026-03-16)
+
+**概要**: Phase 3（複数台同時対応）の実装方針決定
+
+**実施内容**:
+1. DeviceManager 現状分析
+   - Phase 1設計で1台のみ接続可能
+   - 2台目接続は `MaxDevicesReached` エラー
+2. 実装方針の比較検討
+   - 案A: DeviceManager拡張 → 並行処理でロック競合懸念
+   - **案B: MultiDeviceManager新設** → 採用
+   - 案C: Deviceに接続保持 → ライフタイム管理複雑
+3. 案Bの実現可能性検証
+   - `RealSerialPortProvider` は状態を持たないので複製可能 ✅
+   - 各デバイスを `Arc<Mutex<DeviceManager>>` で独立管理 → 並行可能 ✅
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session194/multi-device-manager-design.md](../session194/multi-device-manager-design.md) | MultiDeviceManager 設計書 |
+| [ADR-014](../../docs/adr/m1/ADR-014-multi-device-manager.md) | 複数装置同時対応のADR |
+
+**次セッション**: [session195/session-plan.md](../session195/session-plan.md)
+
+---
+
+## Session 195 (2026-03-16)
+
+**概要**: MultiDeviceManager 実装 + serialport API対応（技術的負債解消）
+
+**実施内容**:
+1. MultiDeviceManager の実装（TDD）
+   - `list_devices()`, `connect()`, `disconnect()`, `get_manager()`, `connected_paths()`
+   - 12テスト追加（M1-1〜M4-1）
+2. serialport API対応（Session 163で放置されていた技術的負債）
+   - `serialport::SerialPort` は `io::Read + io::Write + 固有メソッド` を要求
+   - 7ファイルのモック実装を修正
+
+**変更ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| device/mod.rs | multi_manager モジュール追加 |
+| device/multi_manager.rs | 新規作成（12テスト含む） |
+| device/manager.rs | モック実装修正 |
+| inspection/engine.rs | モック実装修正 |
+| service/inspection_service.rs | モック実装修正 |
+| web/mon_span_api.rs | モック実装修正 |
+| web/nav_sat_api.rs | モック実装修正 |
+| web/nav_sig_api.rs | モック実装修正 |
+| web/nav_status_api.rs | モック実装修正 |
+
+**テスト結果**: 272テストすべてパス
+
+**次セッション**: [session196/session-plan.md](../session196/session-plan.md)
 
 ---
