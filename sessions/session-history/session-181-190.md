@@ -212,3 +212,26 @@
 - 比較機能のバグ調査
 
 ---
+
+## Session 188 (2026-03-16)
+
+**概要**: 比較機能のレイアウト改善
+
+**実施内容**:
+1. Session 187の比較機能バグ調査 → バグではなくレイアウトがわかりにくかった
+2. 比較画面のレイアウト改善
+   - 旧: 横にL1/L2（各枠に基準+比較を重ねて表示）
+   - 新: 縦にL1/L2、横に基準/比較
+3. 色分けの改善（L1=青、L2=緑）
+
+**変更ファイル**:
+- `components/MonSpanComparePanel.tsx` - レイアウト変更
+- `components/MonSpanPanel.tsx` - SpectrumChartに色指定オプション追加
+
+**残った作業**:
+- MON-SPAN spectrum値の1次情報調査（Session 187から継続）
+- u-center表示との乖離問題
+
+**次セッション**: [session189/session-plan.md](../session189/session-plan.md)
+
+---
