@@ -193,3 +193,25 @@
 **次セッション**: [session209/session-plan.md](../session209/session-plan.md)
 
 ---
+
+## Session 209 (2026-03-16)
+
+**概要**: 古い機の定期出力問題を調査・部分対処
+
+**実施内容**:
+1. 過去の類似問題（Session 145, 168）を確認
+2. message-scan APIで定期出力確認 → 無効化リストにないメッセージを検出
+3. PDF抽出スクリプトでKey IDを確認
+4. 5メッセージを無効化リストに追加（NAV-POSECEF, NAV-VELECEF, NAV-RELPOSNED, NAV-GEOFENCE, NAV-COV）
+5. 実機確認 → 10件→7件に改善（まだ3種類出力あり）
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg_valset.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_valset.rs) | 5メッセージ追加（34キー） |
+
+**残課題**: NAV-HPPOSLLH, NAV-VELNED, 0x01-0x34の追加
+
+**次セッション**: [session210/session-plan.md](../session210/session-plan.md)
+
+---
