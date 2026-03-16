@@ -84,6 +84,30 @@ export async function disconnectDevice(path: string): Promise<void> {
   }
 }
 
+/**
+ * LED点滅レスポンス
+ */
+export interface BlinkResponse {
+  path: string;
+  message: string;
+  send_count: number;
+}
+
+/**
+ * 装置のLEDを点滅させる（物理的な識別用）
+ */
+export async function blinkDevice(path: string, durationSec: number = 3): Promise<BlinkResponse> {
+  const encodedPath = encodeURIComponent(path);
+  const res = await fetch(`${API_BASE}/api/devices/${encodedPath}/blink?duration_sec=${durationSec}`, {
+    method: "POST",
+  });
+  if (!res.ok) {
+    const error: ErrorResponse = await res.json();
+    throw new Error(error.error);
+  }
+  return res.json();
+}
+
 // ===========================================
 // ロットAPI
 // ===========================================

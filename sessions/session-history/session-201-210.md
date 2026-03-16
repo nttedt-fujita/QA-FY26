@@ -69,3 +69,26 @@
 **次セッション**: [session204/session-plan.md](../session204/session-plan.md)
 
 ---
+
+## Session 204 (2026-03-16)
+
+**概要**: LED点滅機能のFE/BE統合実装 + 実機検証
+
+**実施内容**:
+1. blink_testバイナリ実機検証 - 3台全てでLED点滅確認成功
+2. バックエンドAPI実装 - `POST /api/devices/{path}/blink`
+3. フロントエンド実装
+   - 点滅ボタン追加（点滅中アニメーション付き）
+   - デバイス切断検知（2秒ポーリング）
+   - 「抜かれました」通知表示
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [blink_api.rs](../../prototype/m1-gnss/backend/src/web/blink_api.rs) | 新規：LED点滅API |
+| [DeviceCard.tsx](../../prototype/m1-gnss/frontend/src/components/DeviceCard.tsx) | 点滅ボタン・切断表示 |
+| [devices/page.tsx](../../prototype/m1-gnss/frontend/src/app/devices/page.tsx) | 切断検知・通知表示 |
+
+**次セッション**: [session205/session-plan.md](../session205/session-plan.md)
+
+---
