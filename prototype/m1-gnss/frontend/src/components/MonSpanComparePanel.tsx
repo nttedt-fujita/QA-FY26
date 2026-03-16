@@ -23,21 +23,21 @@ function getBlockName(centerHz: number): string {
 /**
  * 帯域ごとの色設定
  * - 基準側: L1=青、L2=緑
- * - 比較側: L1=オレンジ、L2=紫
- * - 転送表示（点線）: 元の色のまま
+ * - 比較側: L1=アンバー（茶オレンジ）、L2=バイオレット（紫）
+ * - 実線/破線は同じ色（色の違いは帯域×基準/比較で区別）
  */
 const BAND_COLORS = {
   L1: {
-    primary: "#3b82f6",      // 青（基準側の実線）
-    primaryDashed: "#60a5fa", // 明るい青（基準側からの点線）
-    secondary: "#f97316",     // オレンジ（比較側の実線）
-    secondaryDashed: "#fb923c", // 明るいオレンジ（比較側からの点線）
+    primary: "#3b82f6",      // 青（基準側）
+    primaryDashed: "#3b82f6", // 同じ青（破線も同色）
+    secondary: "#b45309",     // アンバー/茶オレンジ（比較側）
+    secondaryDashed: "#b45309", // 同じアンバー（破線も同色）
   },
   L2: {
-    primary: "#22c55e",      // 緑（基準側の実線）
-    primaryDashed: "#4ade80", // 明るい緑（基準側からの点線）
-    secondary: "#a855f7",     // 紫（比較側の実線）
-    secondaryDashed: "#c084fc", // 明るい紫（比較側からの点線）
+    primary: "#22c55e",      // 緑（基準側）
+    primaryDashed: "#22c55e", // 同じ緑（破線も同色）
+    secondary: "#ef4444",     // 赤（比較側）
+    secondaryDashed: "#ef4444", // 同じ赤（破線も同色）
   },
 } as const;
 
