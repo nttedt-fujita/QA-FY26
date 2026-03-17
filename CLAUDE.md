@@ -45,6 +45,10 @@
 - ❌ 「`make backend-dev`で起動」（推測）
 - ✅ Makefileを確認 → 「`make dev-backend`で起動」（確認済み）
 
+## 現在の進捗
+
+詳細は [docs/progress.md](docs/progress.md) を参照。
+
 ## 藤田さんの担当ミッション
 
 1. AirGrow搭載センサーの定量的評価手法の策定（Lidar / GNSS）
