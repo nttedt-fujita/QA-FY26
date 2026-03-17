@@ -115,7 +115,7 @@ Phase 4: 標準化
 | 30 | [30-ttff-monrf-spec.md](30-ttff-monrf-spec.md) | TTFF・MON-RF仕様調査 | 111 |
 | 31 | [31-outdoor-inspection-user-guide.md](31-outdoor-inspection-user-guide.md) | 屋外検査ユーザーガイド | 131 |
 
-### PDF仕様抽出・調査（33-38）
+### PDF仕様抽出・調査（33-42）
 
 | # | ファイル | 内容 | 作成Session |
 |---|---------|------|------------|
@@ -125,6 +125,14 @@ Phase 4: 標準化
 | 36 | [36-ntrip-rtk-findings.md](36-ntrip-rtk-findings.md) | NTRIP/RTK仕様調査まとめ | 156 |
 | 37 | [37-mon-span-display-spec.md](37-mon-span-display-spec.md) | MON-SPAN表示仕様（dB変換・周波数計算） | 190 |
 | 38 | [38-ublox-config-management.md](38-ublox-config-management.md) | u-blox設定管理の仕組み（CFG-CFG/VALGET/VALSET） | 211 |
+| 39 | [39-cfg-cfg-spec.md](39-cfg-cfg-spec.md) | CFG-CFG仕様（p.63-68）Legacy config | 211 |
+| 40 | [40-cfg-valget-spec.md](40-cfg-valget-spec.md) | CFG-VALSET/VALGET仕様（p.95-97） | 214 |
+| 41 | [41-ubx-nav-status-dop-spec.md](41-ubx-nav-status-dop-spec.md) | NAV-STATUS/NAV-DOP/MON-RF詳細仕様 | 64 |
+| 42 | [42-ubx-mon-ver-sec-uniqid-spec.md](42-ubx-mon-ver-sec-uniqid-spec.md) | MON-VER/SEC-UNIQID仕様 | 76 |
+| 43 | [43-cfg-valdel-spec.md](43-cfg-valdel-spec.md) | CFG-VALDEL仕様（p.93-97） | 227 |
+| 44 | [44-log-analysis-report.md](44-log-analysis-report.md) | ログ分析レポート | 148 |
+| 45 | [45-layer-config-cheatsheet.md](45-layer-config-cheatsheet.md) | レイヤー設定確認コマンド一覧 | 229 |
+| 46 | [46-bbr-investigation-summary.md](46-bbr-investigation-summary.md) | BBR優先順位問題の調査サマリー | 229 |
 
 ### 図表
 
@@ -165,10 +173,13 @@ Phase 4: 標準化
 | MON-RF | IF | - | [ubx-mon-messages.md](ubx-mon-messages.md) | ✅ 済 |
 | NAV-SIG | IF | - | [ubx-nav-messages.md](ubx-nav-messages.md)、[25-nav-sig-behavior-spec.md](25-nav-sig-behavior-spec.md) | ✅ 済 |
 | NAV-SAT | IF | - | [ubx-nav-messages.md](ubx-nav-messages.md) | ✅ 済 |
-| NAV-STATUS/TTFF | IF | - | [30-ttff-monrf-spec.md](30-ttff-monrf-spec.md) | ✅ 済 |
-| CFG-CFG | IF | p.63-68 | [session211/cfg-cfg-spec.md](../../../../sessions/session211/cfg-cfg-spec.md) | 📝 session |
-| CFG-VALDEL | IF | p.93-94 | [session227/cfg-valdel-spec.md](../../../../sessions/session227/cfg-valdel-spec.md)、[38-ublox-config-management.md](38-ublox-config-management.md) | ✅ 済 |
-| CFG-VALSET/VALGET | IF | p.95-97 | [session214/cfg-valget-spec.md](../../../../sessions/session214/cfg-valget-spec.md) | 📝 session |
+| NAV-STATUS/TTFF | IF | - | [30-ttff-monrf-spec.md](30-ttff-monrf-spec.md)、[41-ubx-nav-status-dop-spec.md](41-ubx-nav-status-dop-spec.md) | ✅ 済 |
+| NAV-DOP | IF | - | [41-ubx-nav-status-dop-spec.md](41-ubx-nav-status-dop-spec.md) | ✅ 済 |
+| MON-VER | IF | - | [42-ubx-mon-ver-sec-uniqid-spec.md](42-ubx-mon-ver-sec-uniqid-spec.md) | ✅ 済 |
+| SEC-UNIQID | IF | - | [42-ubx-mon-ver-sec-uniqid-spec.md](42-ubx-mon-ver-sec-uniqid-spec.md) | ✅ 済 |
+| CFG-CFG | IF | p.63-68 | [39-cfg-cfg-spec.md](39-cfg-cfg-spec.md) | ✅ 済 |
+| CFG-VALDEL | IF | p.93-94 | [43-cfg-valdel-spec.md](43-cfg-valdel-spec.md)、[38-ublox-config-management.md](38-ublox-config-management.md) | ✅ 済 |
+| CFG-VALSET/VALGET | IF | p.95-97 | [40-cfg-valget-spec.md](40-cfg-valget-spec.md) | ✅ 済 |
 | Configuration layers | IF | p.223-225 | [38-ublox-config-management.md](38-ublox-config-management.md) | ✅ 済 |
 | NTRIP仕様 | NTRIP | - | [21-ntrip-protocol-spec.md](21-ntrip-protocol-spec.md) | ✅ 済 |
 
