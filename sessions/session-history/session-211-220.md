@@ -179,3 +179,28 @@
 
 ---
 
+## Session 217 (2026-03-17)
+
+**概要**: コマンド引き継ぎ問題の解決（ルール・スキル拡張）
+
+**実施内容**:
+1. 問題分析: 複数セッションでMakefileコマンド・curlが引き継がれない
+2. 新ルール `16-command-reference.md` 作成（コマンド推測禁止）
+3. session-managementスキル拡張（参照コマンド・使用コマンドセクション追加）
+4. M1-GNSS CLAUDE.mdにコマンドリファレンス追加
+5. api.mk拡張（message-scan, reset-config, DEVICE変数）
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [16-command-reference.md](../../.claude/rules/16-command-reference.md) | 新規: コマンド推測禁止ルール |
+| [session-management/SKILL.md](../../.claude/skills/session-management/SKILL.md) | 拡張: テンプレート |
+| [prototype/m1-gnss/CLAUDE.md](../../prototype/m1-gnss/CLAUDE.md) | 追加: コマンドリファレンス |
+| [api.mk](../../prototype/m1-gnss/makefiles/api.mk) | 追加: DEVICE変数、新コマンド |
+
+**結論**: 次セッションから「参照コマンド」カラム・「使用したコマンド」セクションを使用
+
+**次セッション**: [session218/session-plan.md](../session218/session-plan.md)
+
+---
+

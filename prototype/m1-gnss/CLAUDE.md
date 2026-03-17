@@ -67,3 +67,53 @@ prototype/m1-gnss/
 ## プロトタイプ固有ドキュメント
 
 - [docs/nav-sig-api-design.md](docs/nav-sig-api-design.md) - NAV-SIG API設計
+
+## コマンドリファレンス
+
+**IMPORTANT**: コマンドを実行する前に、必ず `make help` または api.mk を確認すること。推測でコマンドを作成しない。
+
+詳細: [makefiles/api.mk](makefiles/api.mk)
+
+**デバイス指定**: デフォルトは `/dev/ttyUSB0`。変更する場合は `DEVICE=/dev/ttyUSB1` を付ける。
+```bash
+make connect DEVICE=/dev/ttyUSB1
+make message-scan DEVICE=/dev/ttyUSB1
+```
+
+### 基本コマンド
+
+| 用途 | コマンド | 備考 |
+|------|----------|------|
+| ヘルプ表示 | `make help` | 全コマンド一覧 |
+| バックエンド起動 | `make dev-backend` | RUST_LOG=debug付き |
+| フロントエンド起動 | `make dev-frontend` | Next.js dev |
+
+### APIデバッグ（makefiles/api.mk）
+
+| 用途 | コマンド | メソッド |
+|------|----------|----------|
+| 装置一覧 | `make devices` | GET |
+| 装置接続 | `make connect` | POST |
+| 装置切断 | `make disconnect` | POST |
+| GNSS状態 | `make gnss-state` | GET |
+| message-scan | `make message-scan` | GET |
+| reset-config | `make reset-config` | POST |
+| ヘルスチェック | `make health` | GET |
+
+### RTK関連
+
+| 用途 | コマンド | メソッド |
+|------|----------|----------|
+| RTKデバッグ一括 | `make rtk-debug` | POST+GET |
+| NTRIP接続 | `make rtk-connect` | POST |
+| NTRIP切断 | `make rtk-disconnect` | POST |
+| RTKポーリング | `make rtk-poll` | GET |
+
+### ロット・検査
+
+| 用途 | コマンド | メソッド |
+|------|----------|----------|
+| ロット一覧 | `make lots` | GET |
+| ロット作成 | `make create-lot` | POST |
+| 検査実行 | `make inspect LOT_ID=1` | POST |
+| 検査履歴 | `make inspections` | GET |

@@ -1,9 +1,14 @@
 # API呼び出しコマンド（デバッグ用）
 
-.PHONY: devices connect disconnect lots create-lot inspect inspections health
+.PHONY: devices connect disconnect message-scan reset-config lots create-lot inspect inspections health
 
 # ベースURL
 API_URL := http://localhost:8080
+
+# デバイスパス（デフォルト: /dev/ttyUSB0）
+# 使い方: make connect DEVICE=/dev/ttyUSB1
+DEVICE := /dev/ttyUSB0
+DEVICE_ENCODED := $(subst /,%2F,$(DEVICE))
 
 # ====================
 # 装置API
@@ -15,11 +20,19 @@ devices:
 
 # 装置接続（/dev/ttyUSB0）
 connect:
-	@curl -s -X POST "$(API_URL)/api/devices/%2Fdev%2FttyUSB0/connect" | jq .
+	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/connect" | jq .
 
 # 装置切断
 disconnect:
-	@curl -s -X POST "$(API_URL)/api/devices/%2Fdev%2FttyUSB0/disconnect" | jq .
+	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/disconnect" | jq .
+
+# メッセージスキャン（定期出力確認）
+message-scan:
+	@curl -s "$(API_URL)/api/devices/$(DEVICE_ENCODED)/message-scan" | jq .
+
+# 設定リセット（BBR+Flash クリア）
+reset-config:
+	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/reset-config" | jq .
 
 # ====================
 # ロットAPI
@@ -140,7 +153,7 @@ rtk-debug:
 	fi
 	@echo ""
 	@echo "[1/3] デバイス接続..."
-	@curl -s -X POST "$(API_URL)/api/devices/%2Fdev%2FttyUSB0/connect" | jq -r '.message // .error // "接続完了"'
+	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/connect" | jq -r '.message // .error // "接続完了"'
 	@echo ""
 	@echo "[2/3] NTRIP接続..."
 	@curl -s -X POST $(API_URL)/api/ntrip/connect \
@@ -160,7 +173,7 @@ rtk-connect:
 		exit 1; \
 	fi
 	@echo "[1/2] デバイス接続..."
-	@curl -s -X POST "$(API_URL)/api/devices/%2Fdev%2FttyUSB0/connect" | jq .
+	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/connect" | jq .
 	@echo ""
 	@echo "[2/2] NTRIP接続..."
 	@curl -s -X POST $(API_URL)/api/ntrip/connect \
