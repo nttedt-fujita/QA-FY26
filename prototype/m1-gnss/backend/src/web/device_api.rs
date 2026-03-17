@@ -538,6 +538,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
             // LED点滅API
             .route("/{path}/blink", web::post().to(super::blink_api::blink_device))
             // 設定リセットAPI
-            .route("/{path}/reset-config", web::post().to(super::reset_config_api::reset_config)),
+            .route("/{path}/reset-config", web::post().to(super::reset_config_api::reset_config))
+            // 定期出力設定API（テスト用）
+            .route("/{path}/set-periodic-output", web::post().to(super::set_periodic_output_api::set_periodic_output_handler)),
     );
 }
