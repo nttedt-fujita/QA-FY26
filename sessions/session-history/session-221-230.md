@@ -272,3 +272,32 @@
 **次セッション**: [session230/session-plan.md](../session230/session-plan.md)
 
 ---
+
+## Session 230 (2026-03-17)
+
+**概要**: Living Documentation方針確定 + 断捨離計画策定
+
+**実施内容**:
+1. リポジトリ全体のドキュメント構造調査
+   - sessions/に657個のMarkdownファイル
+   - 重複ファイル10件以上を発見
+2. Living Documentationの概念整理
+   - 出典: Cyrille Martraire「Living Documentation」(2019)
+   - 4原則: Reliable, Low Effort, Collaborative, Insightful
+3. 組み込み開発への適用方針を確定
+   - 仕様書（PDF）が1次情報
+   - コードが実装の真実（出典をコードに書く）
+   - 抽出ドキュメントはClaude用に必要（PDFを直接読めないため）
+4. 断捨離計画策定
+   - 重複ファイル削除（10件）
+   - 📝 sessionマーク移動（CFG-CFG, CFG-VALGET）
+   - ルールファイル改善
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [living-documentation-concept.md](../session230/living-documentation-concept.md) | 方針と断捨離計画（次セッション用背景情報） |
+
+**次セッション**: [session231/session-plan.md](../session231/session-plan.md)
+
+---
