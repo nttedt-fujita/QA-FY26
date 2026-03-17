@@ -101,6 +101,7 @@ pub fn reset_config_to_default() -> Vec<u8> {
     let save_mask = ConfigMask::NONE.0;
     // loadMaskは使わない（ボーレートがROMデフォルトに戻ってしまうため）
     // 設定はBBR/Flashからクリアされ、次回電源投入時にROMデフォルトが適用される
+    // 詳細: docs/adr/m1/ADR-015-cfg-cfg-loadmask.md
     let load_mask = ConfigMask::NONE.0;
     // BBR + Flash両方をクリアする（Flashに設定が保存されている場合に対応）
     let device_mask = DeviceMask::BbrAndFlash as u8;
