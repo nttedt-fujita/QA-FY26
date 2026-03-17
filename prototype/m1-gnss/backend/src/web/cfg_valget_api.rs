@@ -13,7 +13,7 @@ use std::time::Duration;
 
 use super::device_api::{AppState, ErrorResponse, send_disable_nmea_output};
 use crate::ubx::cfg_valget::{build_cfg_valget_poll, parse_cfg_valget_response, parse_layer_name};
-use crate::ubx::cfg_valset::CFG_MSGOUT_NAV_PVT_USB;
+use crate::ubx::cfg_valset::{CFG_MSGOUT_NAV_PVT_USB, CFG_MSGOUT_NAV_PVT_UART1};
 
 /// CFG-VALGETのClass/ID
 const CFG_CLASS: u8 = 0x06;
@@ -43,10 +43,10 @@ pub struct CfgValgetResponse {
 
 /// キー名からキーIDを取得
 fn get_key_id(key_name: &str) -> Result<u32, String> {
-    // 現在はNAV_PVT_USBのみサポート
     match key_name.to_uppercase().as_str() {
         "NAV_PVT_USB" | "CFG_MSGOUT_NAV_PVT_USB" => Ok(CFG_MSGOUT_NAV_PVT_USB),
-        _ => Err(format!("Unknown key: {}. Supported: NAV_PVT_USB", key_name)),
+        "NAV_PVT_UART1" | "CFG_MSGOUT_NAV_PVT_UART1" => Ok(CFG_MSGOUT_NAV_PVT_UART1),
+        _ => Err(format!("Unknown key: {}. Supported: NAV_PVT_USB, NAV_PVT_UART1", key_name)),
     }
 }
 
