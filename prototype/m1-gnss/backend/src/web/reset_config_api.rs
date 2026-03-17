@@ -12,9 +12,12 @@ use actix_web::{web, HttpResponse, Responder};
 use serde::Serialize;
 use std::time::Duration;
 
-use super::device_api::{AppState, ErrorResponse};
-use crate::ubx::ack;
+use super::device_api::{AppState, ErrorResponse, send_disable_nmea_output};
 use crate::ubx::cfg_cfg::reset_config_to_default;
+
+/// CFG-CFGのClass/ID
+const CFG_CLASS: u8 = 0x06;
+const CFG_CFG_ID: u8 = 0x09;
 
 /// リセットレスポンス
 #[derive(Debug, Serialize)]
@@ -69,13 +72,22 @@ pub async fn reset_config(
         }
     };
 
-    // CFG-CFG（BBRクリア + デフォルト復元）を生成
-    let reset_cmd = reset_config_to_default();
+    // NMEA出力を一時的にOFF（ACK受信を妨げないため）
+    if let Err(e) = send_disable_nmea_output(&mut manager) {
+        tracing::warn!("NMEA OFF送信に失敗: {}", e);
+    }
+    // NMEA OFFのACKを待つ
+    let _ = manager.wait_for_ack(0x06, 0x8A, Duration::from_millis(500));
 
     // バッファをクリア
     if let Err(e) = manager.drain_buffer() {
         tracing::warn!("バッファクリアに失敗: {}", e);
     }
+
+    // CFG-CFG（BBRクリア + デフォルト復元）を生成
+    let reset_cmd = reset_config_to_default();
+    let hex_str: String = reset_cmd.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
+    tracing::info!("CFG-CFG送信データ: {} ({}バイト)", hex_str, reset_cmd.len());
 
     // 送信
     if let Err(e) = manager.send_ubx(&reset_cmd) {
@@ -85,49 +97,30 @@ pub async fn reset_config(
         });
     }
 
-    // ACK待ち
-    std::thread::sleep(Duration::from_millis(50));
-    let response = match manager.receive_ubx(Duration::from_secs(2)) {
-        Ok(r) => r,
-        Err(e) => {
-            return HttpResponse::InternalServerError().json(ErrorResponse {
-                error: format!("CFG-CFG応答受信に失敗: {}", e),
-                code: "RECEIVE_ERROR".to_string(),
-            });
-        }
-    };
+    // ACK待ち（Flash操作は時間がかかる可能性があるため5秒待機）
+    let ack_result = manager.wait_for_ack(CFG_CLASS, CFG_CFG_ID, Duration::from_secs(5));
 
     // ACK/NAK確認
-    let ack_result = ack::parse_ack(&response);
     match ack_result {
-        ack::AckResult::Ack { class, id } => {
-            tracing::info!(
-                "CFG-CFG ACK received (class: 0x{:02X}, id: 0x{:02X})",
-                class,
-                id
-            );
+        Ok(true) => {
+            tracing::info!("CFG-CFG ACK received");
             HttpResponse::Ok().json(ResetConfigResponse {
                 path: port_path,
                 message: "設定をデフォルトにリセットしました".to_string(),
             })
         }
-        ack::AckResult::Nak { class, id } => {
-            tracing::warn!(
-                "CFG-CFG NAK received (class: 0x{:02X}, id: 0x{:02X})",
-                class,
-                id
-            );
+        Ok(false) => {
+            tracing::warn!("CFG-CFG NAK received");
             HttpResponse::BadRequest().json(ErrorResponse {
                 error: "CFG-CFGがデバイスに拒否されました".to_string(),
                 code: "COMMAND_REJECTED".to_string(),
             })
         }
-        _ => {
-            tracing::warn!("Unexpected response to CFG-CFG: {:?}", ack_result);
-            // ACK以外の応答でも成功として扱う（定期出力がある場合など）
-            HttpResponse::Ok().json(ResetConfigResponse {
-                path: port_path,
-                message: "設定リセットを送信しました（ACK未確認）".to_string(),
+        Err(e) => {
+            tracing::warn!("CFG-CFG ACK待ちに失敗: {}", e);
+            HttpResponse::InternalServerError().json(ErrorResponse {
+                error: format!("CFG-CFG応答受信に失敗: {}", e),
+                code: "RECEIVE_ERROR".to_string(),
             })
         }
     }

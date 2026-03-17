@@ -469,6 +469,16 @@ impl<P: SerialPortProvider> DeviceManager<P> {
             let elapsed = start.elapsed();
             if elapsed >= timeout {
                 debug!("receive_ubx: タイムアウト（{}バイト受信済み）", accumulated.len());
+                // 受信データの先頭128バイトをログに出力
+                let preview_len = std::cmp::min(128, accumulated.len());
+                let hex_preview: String = accumulated[..preview_len].iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
+                debug!("receive_ubx: 受信データ先頭: {}", hex_preview);
+                // B5 62 の位置を探す
+                if let Some(pos) = accumulated.windows(2).position(|w| w == [0xB5, 0x62]) {
+                    debug!("receive_ubx: B5 62 発見位置: {}", pos);
+                } else {
+                    debug!("receive_ubx: B5 62 が見つからない");
+                }
                 return Err(DeviceManagerError::Timeout);
             }
 

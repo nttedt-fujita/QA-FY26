@@ -116,3 +116,31 @@
 
 ---
 
+## Session 215 (2026-03-17)
+
+**概要**: reset-config API実機テスト + NMEA OFF対応 + loadMask問題発見
+
+**実施内容**:
+1. reset-config API実機テスト
+   - deviceMask=BBR+Flashで実機テスト → タイムアウトエラー
+   - NMEAデータが大量に来てACKが受信できなかった
+2. NMEA OFF対応（Session 102-103の知見活用）
+   - `send_disable_nmea_output`と`wait_for_ack`を使用
+   - reset-config API内でNMEA OFFを先に送信
+3. loadMask問題の発見
+   - loadMask=ALLでボーレートがROMデフォルト（9600bps）に戻る
+   - 受信データが文字化け → loadMask=NONEに変更
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg_cfg.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_cfg.rs) | loadMask=NONEに変更 |
+| [reset_config_api.rs](../../prototype/m1-gnss/backend/src/web/reset_config_api.rs) | NMEA OFF送信追加、wait_for_ack使用 |
+| [manager.rs](../../prototype/m1-gnss/backend/src/device/manager.rs) | デバッグログ追加 |
+
+**残タスク**: loadMask=NONE版の実機テスト
+
+**次セッション**: [session216/session-plan.md](../session216/session-plan.md)
+
+---
+

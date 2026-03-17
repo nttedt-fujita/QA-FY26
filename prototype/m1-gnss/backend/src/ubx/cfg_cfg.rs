@@ -99,7 +99,9 @@ pub fn reset_config_to_default() -> Vec<u8> {
 
     let clear_mask = ConfigMask::ALL.0;
     let save_mask = ConfigMask::NONE.0;
-    let load_mask = ConfigMask::ALL.0;
+    // loadMaskは使わない（ボーレートがROMデフォルトに戻ってしまうため）
+    // 設定はBBR/Flashからクリアされ、次回電源投入時にROMデフォルトが適用される
+    let load_mask = ConfigMask::NONE.0;
     // BBR + Flash両方をクリアする（Flashに設定が保存されている場合に対応）
     let device_mask = DeviceMask::BbrAndFlash as u8;
 
@@ -245,8 +247,8 @@ mod tests {
             assert_eq!(frame.clear_mask(), 0x0000_FFFF, "clearMask = ALL");
             // saveMask = 0（保存しない）
             assert_eq!(frame.save_mask(), 0x0000_0000, "saveMask = NONE");
-            // loadMask = 0xFFFF（デフォルトから読み込み）
-            assert_eq!(frame.load_mask(), 0x0000_FFFF, "loadMask = ALL");
+            // loadMask = 0（ロードしない = ボーレート維持）
+            assert_eq!(frame.load_mask(), 0x0000_0000, "loadMask = NONE");
             // deviceMask = 0x03（BBR + Flash）
             // Flashに保存された設定もクリアするため、両方を指定
             assert_eq!(frame.device_mask(), 0x03, "deviceMask = BBR + Flash");
