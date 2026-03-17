@@ -149,3 +149,32 @@
 **次セッション**: [session226/session-plan.md](../session226/session-plan.md)
 
 ---
+
+## Session 226 (2026-03-17)
+
+**概要**: BBR優先順位問題の対策実装 + テスト手順書作成
+
+**実施内容**:
+1. 対策実装
+   - `disable_periodic_output`を`Layer::RamAndBbr`から`Layer::Ram`に変更
+   - BBRに0を書き込まないようにする
+2. 現状確認（Step 1のみ）
+   - BBR: 0, Flash: 1 を確認
+3. テスト手順書作成
+   - USB抜き差し→BE再起動→状態確認→message-scanをセットで行う方針
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [test-procedure.md](../session226/test-procedure.md) | テスト手順書 |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [device_api.rs](../../prototype/m1-gnss/backend/src/web/device_api.rs) | disable_periodic_outputをRAMのみに変更 |
+
+**残タスク**: Step 2-3テスト実施、ドキュメント更新
+
+**次セッション**: [session227/session-plan.md](../session227/session-plan.md)
+
+---
