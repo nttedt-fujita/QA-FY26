@@ -11,9 +11,10 @@
 | # | 作業 | 読むべきファイル | 参照コマンド |
 |---|------|-----------------|--------------|
 | 1 | 未整理の疑問を整理 | session229/session-summary.md | - |
-| 2 | 全設定一覧取得の可能性調査 | IF p.95-96 (CFG-VALGET) | - |
-| 3 | 古い機での動作確認 | - | make connect, make message-scan |
-| 4 | Phase 3テスト再開 | session206/multi-device-inspection-plan.md | - |
+| 2 | コマンド定義の整備 | api.mk | - |
+| 3 | 全設定一覧取得の可能性調査 | IF p.95-96 (CFG-VALGET) | - |
+| 4 | 古い機での動作確認 | - | make connect, make message-scan |
+| 5 | Phase 3テスト再開 | session206/multi-device-inspection-plan.md | - |
 
 ---
 
@@ -27,13 +28,24 @@ Session 229で出た疑問：
 - 「切っても切っても出てくる」問題の根本原因
 - スキャン時間と設定確認の関係
 
-### 2. 全設定一覧取得の可能性調査
+### 2. コマンド定義の整備
+
+**api.mkのコメント整備**:
+- cfg-valget: 静的確認（設定値そのものを読む）
+- message-scan: 動的確認（実際の定期出力を観測）
+- 各コマンドの用途・違いを明記
+
+**Living Documentation整備の見直し**:
+- 以前ルール/スキルに落とし込む作業をしたが不完全
+- どこが未整備か確認
+
+### 3. 全設定一覧取得の可能性調査
 
 CFG-VALGETで複数キー一括取得可能か仕様書確認：
 - IF p.95-96 (CFG-VALGET)
 - Wildcard指定の可否
 
-### 3-4. Phase 3テスト再開
+### 4-5. Phase 3テスト再開
 
 古い機（RTK基準局設定あり）での動作確認：
 - reset-config または cfg-valdel でクリア
