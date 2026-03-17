@@ -1,6 +1,6 @@
 # API呼び出しコマンド（デバッグ用）
 
-.PHONY: devices connect disconnect message-scan reset-config set-periodic-output set-periodic-output-flash mon-ver lots create-lot inspect inspections health
+.PHONY: devices connect disconnect message-scan reset-config set-periodic-output set-periodic-output-flash mon-ver cfg-valget-flash lots create-lot inspect inspections health
 
 # ベースURL
 API_URL := http://localhost:8080
@@ -46,6 +46,11 @@ set-periodic-output-flash:
 # モジュール情報取得（Flash有無確認用）
 mon-ver:
 	@curl -s "$(API_URL)/api/devices/$(DEVICE_ENCODED)/mon-ver" | jq .
+
+# CFG-VALGET（Flashレイヤーから設定値取得 - Flash搭載確認用）
+# 値が返る → Flash搭載、エラー → Flash非搭載
+cfg-valget-flash:
+	@curl -s "$(API_URL)/api/devices/$(DEVICE_ENCODED)/cfg-valget?layer=flash&key=NAV_PVT_USB" | jq .
 
 # ====================
 # ロットAPI

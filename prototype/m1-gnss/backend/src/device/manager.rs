@@ -716,6 +716,73 @@ impl<P: SerialPortProvider> DeviceManager<P> {
 
         Ok(port.bytes_to_write().unwrap_or(0))
     }
+
+    /// 特定のClass/IDを持つUBXメッセージを待つ
+    ///
+    /// 指定したClass/IDのUBXメッセージを受信するまで待つ。
+    /// 別のClass/IDのメッセージが来た場合は無視して待ち続ける。
+    ///
+    /// # Arguments
+    /// * `expected_class` - 期待するメッセージクラス
+    /// * `expected_id` - 期待するメッセージID
+    /// * `timeout` - タイムアウト
+    ///
+    /// # Returns
+    /// * Ok(payload) - ペイロード部分（ヘッダー・チェックサムを除く）
+    /// * Err - タイムアウトまたはエラー
+    pub fn wait_for_ubx_message(
+        &mut self,
+        expected_class: u8,
+        expected_id: u8,
+        timeout: std::time::Duration,
+    ) -> Result<Vec<u8>, DeviceManagerError> {
+        use std::time::Instant;
+
+        let start = Instant::now();
+
+        debug!(
+            "wait_for_ubx_message: Class=0x{:02X}, ID=0x{:02X}, timeout={:?}",
+            expected_class, expected_id, timeout
+        );
+
+        loop {
+            let elapsed = start.elapsed();
+            if elapsed >= timeout {
+                debug!("wait_for_ubx_message: タイムアウト");
+                return Err(DeviceManagerError::Timeout);
+            }
+
+            let remaining = timeout - elapsed;
+            let frame = self.receive_ubx(remaining)?;
+
+            // Class/IDを確認
+            if frame.len() < 6 {
+                warn!("wait_for_ubx_message: フレームが短すぎる（{}バイト）", frame.len());
+                continue;
+            }
+
+            let class = frame[2];
+            let id = frame[3];
+
+            if class == expected_class && id == expected_id {
+                // ペイロード部分を抽出（offset 6〜末尾-2）
+                let payload_len = u16::from_le_bytes([frame[4], frame[5]]) as usize;
+                let payload = frame[6..6 + payload_len].to_vec();
+                debug!(
+                    "wait_for_ubx_message: 目的のメッセージ受信 ({}バイトペイロード)",
+                    payload.len()
+                );
+                return Ok(payload);
+            } else {
+                debug!(
+                    "wait_for_ubx_message: 別のメッセージを無視 (Class=0x{:02X}, ID=0x{:02X})",
+                    class, id
+                );
+                // 別のメッセージなので無視して再試行
+                continue;
+            }
+        }
+    }
 }
 
 #[cfg(test)]
