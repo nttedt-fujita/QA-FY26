@@ -10,10 +10,30 @@
 
 | # | 作業 | 読むべきファイル | 参照コマンド |
 |---|------|-----------------|--------------|
+| 0 | message-scanのスキャン時間を10秒以上に延長 | message_scan_api.rs | - |
 | 1 | Phase 1完了: USB抜き差し3回で定期出力が維持されることを確認 | - | make connect, make message-scan |
 | 2 | Phase 2: reset-config → 定期出力が消えることを確認 | - | make reset-config, make message-scan |
 | 3 | Phase 2完了: USB抜き差し3回で消えた状態が維持されることを確認 | - | make message-scan |
 | 4 | テスト結果を記録 | session218/session-summary.md | - |
+
+---
+
+## 前提知識
+
+### message-scanスキャン時間の問題
+
+Session 218で発覚: 現在のスキャン時間（約3秒）ではレートが低いメッセージを検出できない。
+
+| メッセージ | レート | 検出に必要な時間 |
+|-----------|--------|-----------------|
+| NAV-PVT | 1 | 1秒以上 |
+| NAV-STATUS | 1 | 1秒以上 |
+| NAV-SAT | 5 | 5秒以上 |
+| NAV-SIG | 5 | 5秒以上 |
+| MON-SPAN | 10 | 10秒以上 |
+| MON-RF | 10 | 10秒以上 |
+
+**対応**: スキャン時間を10秒以上に延長する
 
 ---
 
