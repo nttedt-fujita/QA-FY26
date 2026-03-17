@@ -1,6 +1,6 @@
 # API呼び出しコマンド（デバッグ用）
 
-.PHONY: devices connect disconnect message-scan reset-config set-periodic-output set-periodic-output-flash mon-ver cfg-valget-flash cfg-valget-ram cfg-valget-bbr connect-raw lots create-lot inspect inspections health
+.PHONY: devices connect disconnect message-scan reset-config set-periodic-output set-periodic-output-flash mon-ver cfg-valget-flash cfg-valget-ram cfg-valget-bbr cfg-valget-default connect-raw lots create-lot inspect inspections health
 
 # ベースURL
 API_URL := http://localhost:8080
@@ -60,6 +60,11 @@ cfg-valget-ram:
 # CFG-VALGET（BBRレイヤーから設定値取得 - 仮説検証用）
 cfg-valget-bbr:
 	@curl -s "$(API_URL)/api/devices/$(DEVICE_ENCODED)/cfg-valget?layer=bbr&key=NAV_PVT_USB" | jq .
+
+# CFG-VALGET（Defaultレイヤーから設定値取得 - 出荷時初期値確認用）
+# デバイスのファームウェアに焼かれた初期値
+cfg-valget-default:
+	@curl -s "$(API_URL)/api/devices/$(DEVICE_ENCODED)/cfg-valget?layer=default&key=NAV_PVT_USB" | jq .
 
 # 接続（定期出力無効化をスキップ - 仮説検証用）
 # FlashからRAMへのコピーを確認するため

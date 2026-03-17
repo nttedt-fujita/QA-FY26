@@ -30,10 +30,18 @@ RAM > BBR > Flash > Default
 
 | # | 作業 | 読むべきファイル |
 |---|------|-----------------|
-| 1 | set_periodic_output_api.rsでデフォルトをRamBbrFlashに変更 | set_periodic_output_api.rs |
-| 2 | ビルド＆テスト | - |
-| 3 | 全レイヤーで1になることを確認 | - |
-| 4 | USB抜き差し後もmessage-scanで検出されることを確認 | - |
+| 1 | 各レイヤーの初期状態を確認（cfg-valget default） | - |
+| 2 | set_periodic_output_api.rsでデフォルトをRamBbrFlashに変更 | set_periodic_output_api.rs |
+| 3 | ビルド＆テスト | - |
+| 4 | 全レイヤーで1になることを確認 | - |
+| 5 | USB抜き差し後もmessage-scanで検出されることを確認 | - |
+
+### 追加確認事項
+
+**レイヤー初期状態の確認**（Session 224で追加）:
+- 出荷時のデフォルト状態を把握しておく
+- cfg-valget layer=defaultで確認可能
+- 「何もしていない状態」の各レイヤー値を記録
 
 ---
 
