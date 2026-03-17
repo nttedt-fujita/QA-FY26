@@ -144,6 +144,40 @@ Phase 4: 標準化
 
 ---
 
+## PDF仕様抽出状態
+
+**IMPORTANT**: 実装前に該当仕様を確認すること。未抽出の場合は先に抽出する。
+
+### 原典PDF一覧
+
+| 略称 | PDF名 | 場所 |
+|------|-------|------|
+| IF | u-blox-F9-HPG-1.32_InterfaceDescription_UBX-22008968.pdf | ~/ダウンロード/ |
+| IM | ZED-F9P_IntegrationManual_UBX-18010802.pdf | ~/ダウンロード/ |
+| NTRIP | NtripDocumentation.pdf | [sources/](sources/) |
+| UC | u-center_Userguide_UBX-13005250.pdf | [sources/](sources/) |
+
+### 抽出状態
+
+| 対象 | 原典 | ページ | 抽出先 | 状態 |
+|------|------|--------|--------|------|
+| MON-SPAN | IF | - | [ubx-mon-messages.md](ubx-mon-messages.md)、[23-mon-span-implementation.md](23-mon-span-implementation.md) | ✅ 済 |
+| MON-RF | IF | - | [ubx-mon-messages.md](ubx-mon-messages.md) | ✅ 済 |
+| NAV-SIG | IF | - | [ubx-nav-messages.md](ubx-nav-messages.md)、[25-nav-sig-behavior-spec.md](25-nav-sig-behavior-spec.md) | ✅ 済 |
+| NAV-SAT | IF | - | [ubx-nav-messages.md](ubx-nav-messages.md) | ✅ 済 |
+| NAV-STATUS/TTFF | IF | - | [30-ttff-monrf-spec.md](30-ttff-monrf-spec.md) | ✅ 済 |
+| CFG-CFG | IF | p.63-68 | [session211/cfg-cfg-spec.md](../../../../sessions/session211/cfg-cfg-spec.md) | 📝 session |
+| CFG-VALSET/VALGET | IF | p.96-98 | [session214/cfg-valget-spec.md](../../../../sessions/session214/cfg-valget-spec.md) | 📝 session |
+| Configuration layers | IF | p.223-225 | [session220/config-layers-spec.md](../../../../sessions/session220/config-layers-spec.md) | 📝 session |
+| NTRIP仕様 | NTRIP | - | [21-ntrip-protocol-spec.md](21-ntrip-protocol-spec.md) | ✅ 済 |
+
+**凡例**:
+- ✅ 済: docs/に正式配置済み
+- 📝 session: sessions/に抽出済み（docs/への移動検討中）
+- ❌ 未抽出: PDFから抽出していない
+
+---
+
 ## 作成経緯
 
 - Session 17: Excelの全シートテキストデータ + PDFの主要メッセージ定義を分析

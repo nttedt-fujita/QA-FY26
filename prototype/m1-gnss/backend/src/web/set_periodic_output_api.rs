@@ -89,9 +89,11 @@ pub async fn set_periodic_output_handler(
         tracing::warn!("バッファクリアに失敗: {}", e);
     }
 
-    // 定期出力設定（デフォルト値、RAM+BBRに保存）
+    // 定期出力設定（デフォルト値、RAM+BBR+Flashに保存）
+    // Session 220: BBRはバッテリーバックアップがないと電源断で消えるため、Flashにも保存
+    // 出典: u-blox F9 HPG 1.32 Interface Description p.224
     let config = PeriodicOutputConfig::default();
-    let set_cmd = set_periodic_output(&config, Layer::RamAndBbr);
+    let set_cmd = set_periodic_output(&config, Layer::RamBbrFlash);
     let hex_str: String = set_cmd.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
     tracing::info!("CFG-VALSET（定期出力）送信データ: {} ({}バイト)", hex_str, set_cmd.len());
 
