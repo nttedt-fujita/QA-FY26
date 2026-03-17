@@ -1,6 +1,6 @@
 # API呼び出しコマンド（デバッグ用）
 
-.PHONY: devices connect disconnect message-scan reset-config set-periodic-output set-periodic-output-flash mon-ver cfg-valget-flash cfg-valget-ram cfg-valget-bbr cfg-valget-default connect-raw lots create-lot inspect inspections health
+.PHONY: devices connect disconnect message-scan reset-config set-periodic-output set-periodic-output-flash mon-ver cfg-valget-flash cfg-valget-ram cfg-valget-bbr cfg-valget-default cfg-valdel-bbr cfg-valdel-flash connect-raw lots create-lot inspect inspections health
 
 # ベースURL
 API_URL := http://localhost:8080
@@ -65,6 +65,15 @@ cfg-valget-bbr:
 # デバイスのファームウェアに焼かれた初期値
 cfg-valget-default:
 	@curl -s "$(API_URL)/api/devices/$(DEVICE_ENCODED)/cfg-valget?layer=default&key=NAV_PVT_USB" | jq .
+
+# CFG-VALDEL（BBRレイヤーから設定削除 - BBR優先順位問題の解決）
+# BBRを削除すると、Flashの値が参照されるようになる
+cfg-valdel-bbr:
+	@curl -s -X DELETE "$(API_URL)/api/devices/$(DEVICE_ENCODED)/cfg-valdel?layer=bbr&key=NAV_PVT" | jq .
+
+# CFG-VALDEL（Flashレイヤーから設定削除）
+cfg-valdel-flash:
+	@curl -s -X DELETE "$(API_URL)/api/devices/$(DEVICE_ENCODED)/cfg-valdel?layer=flash&key=NAV_PVT" | jq .
 
 # 接続（定期出力無効化をスキップ - 仮説検証用）
 # FlashからRAMへのコピーを確認するため
