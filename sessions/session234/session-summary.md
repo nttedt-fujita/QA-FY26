@@ -30,6 +30,14 @@
 
 ---
 
+## 進捗管理ファイル作成
+
+- [docs/progress.md](../../docs/progress.md) — ミッション進捗一覧
+- CLAUDE.mdにポインタ追加
+- session-historyを出典として記載（コード確認は未実施）
+
+---
+
 ## 保持ファイル（docs/からリンク）
 
 | ファイル | リンク元 |
