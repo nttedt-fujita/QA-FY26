@@ -240,3 +240,35 @@
 **次セッション**: [session229/session-plan.md](../session229/session-plan.md)
 
 ---
+
+## Session 229 (2026-03-17)
+
+**概要**: USB抜き差し後のFlash値確認成功 + 調査サマリー作成
+
+**実施内容**:
+1. USB抜き差し後のテスト
+   - connect-raw → message-scan → **NAV-PVT 13件検出**
+   - BBR削除後、Flashの値が正しく使われることを確認
+2. ドキュメント更新
+   - 38-ublox-config-management.md にセクション6追加（BBR優先順位問題）
+3. 調査サマリー作成
+   - Session 199-229の一連の調査を整理
+4. チートシート作成
+   - レイヤー設定確認コマンド一覧
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [investigation-summary.md](../session229/investigation-summary.md) | Session 199-229 調査サマリー |
+| [layer-config-cheatsheet.md](../session229/layer-config-cheatsheet.md) | レイヤー設定確認コマンド一覧 |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [38-ublox-config-management.md](../../docs/missions/m1-sensor-evaluation/gnss/38-ublox-config-management.md) | セクション6追加 |
+
+**結論**: BBR優先順位問題の解決手順が確立
+
+**次セッション**: [session230/session-plan.md](../session230/session-plan.md)
+
+---
