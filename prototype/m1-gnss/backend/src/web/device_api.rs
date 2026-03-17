@@ -540,6 +540,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
             // 設定リセットAPI
             .route("/{path}/reset-config", web::post().to(super::reset_config_api::reset_config))
             // 定期出力設定API（テスト用）
-            .route("/{path}/set-periodic-output", web::post().to(super::set_periodic_output_api::set_periodic_output_handler)),
+            .route("/{path}/set-periodic-output", web::post().to(super::set_periodic_output_api::set_periodic_output_handler))
+            // MON-VER API（モジュール情報取得）
+            .route("/{path}/mon-ver", web::get().to(super::mon_ver_api::get_mon_ver)),
     );
 }

@@ -309,3 +309,39 @@
 
 ---
 
+## Session 221 (2026-03-17)
+
+**概要**: reset-configテスト → Flash保存されない問題発覚 + MON-VER API作成
+
+**実施内容**:
+1. Phase 1テスト開始
+   - set-periodic-output → ACK成功
+   - message-scan → NAV-PVT等検出
+   - USB抜き差し → **0件**（消失）
+2. 問題調査
+   - Flashレイヤー仕様確認（IF p.224）
+   - 「外部Flashメモリがある場合のみ」使用可能
+3. MON-VER API作成
+   - モジュール情報取得（ZED-F9P, HPG 1.32確認）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [mon_ver_api.rs](../../prototype/m1-gnss/backend/src/web/mon_ver_api.rs) | MON-VER API（新規） |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| web/mod.rs, device_api.rs | MON-VER APIルーティング追加 |
+| api.mk | `make mon-ver` コマンド追加 |
+
+**問題点・反省**:
+- Session 220で整備した仕様書索引（gnss/README.md）を確認せずにWeb検索した
+- リポジトリ内のPDFを使うべきところでWeb調査してしまった
+
+**残タスク**: 評価ボードのFlash有無調査、対応策検討
+
+**次セッション**: [session222/session-plan.md](../session222/session-plan.md)
+
+---
+
