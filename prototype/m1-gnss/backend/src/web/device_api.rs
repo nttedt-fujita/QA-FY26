@@ -466,7 +466,10 @@ fn send_disable_periodic_output<P: SerialPortProvider>(
     // 全メッセージの定期出力を無効化（レート=0）
     // Session 149: BBRに書き込んで不揮発性に
     // Session 151: BBRのみでは即座に有効にならないため、RAM+BBRに変更
-    let msg = disable_periodic_output(Layer::RamAndBbr);
+    // Session 226: RAMのみに変更（BBRに0を書くとFlash設定より優先されてしまう問題の修正）
+    //   - BBRに値が「存在する」とFlashより優先される
+    //   - 接続時の一時的な無効化はRAMのみで十分
+    let msg = disable_periodic_output(Layer::Ram);
 
     // バッファをクリア
     manager.drain_buffer()?;
