@@ -1,6 +1,6 @@
 # API呼び出しコマンド（デバッグ用）
 
-.PHONY: devices connect disconnect message-scan reset-config set-periodic-output mon-ver lots create-lot inspect inspections health
+.PHONY: devices connect disconnect message-scan reset-config set-periodic-output set-periodic-output-flash mon-ver lots create-lot inspect inspections health
 
 # ベースURL
 API_URL := http://localhost:8080
@@ -37,6 +37,11 @@ reset-config:
 # 定期出力有効化（テスト用、RAM+BBR+Flashに保存）
 set-periodic-output:
 	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/set-periodic-output" | jq .
+
+# 定期出力有効化（Flashのみに保存 - Flash搭載確認用）
+# ACK → Flash搭載、NAK → Flash非搭載
+set-periodic-output-flash:
+	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/set-periodic-output?layer=flash" | jq .
 
 # モジュール情報取得（Flash有無確認用）
 mon-ver:
