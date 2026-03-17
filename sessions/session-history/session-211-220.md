@@ -237,3 +237,37 @@
 
 ---
 
+## Session 219 (2026-03-17)
+
+**概要**: reset-configテスト → USB抜き差しでBBR消失問題発覚 + 作業品質問題
+
+**実施内容**:
+1. message-scanスキャン時間延長（3秒→12秒）
+2. Phase 1テスト開始
+   - set-periodic-output → 成功
+   - message-scan → NAV-PVT等検出
+   - USB抜き差し1回目 → **0件**（定期出力消失）
+3. 問題調査
+   - CFG-VALSET仕様確認（p.96-98、Session 214で抽出済み）
+   - 複数レイヤー同時指定可能（ビットフィールド）
+
+**問題点**:
+- 推測と事実を分けなかった（「BBRはバッテリーがないと消える」は仮説）
+- 仕様書への誘導が不足（CFG-VALSET仕様の場所を探すのに時間がかかった）
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| message_scan_api.rs | スキャン時間3秒→12秒 |
+| cfg_valset.rs | `Layer::RamBbrFlash = 0x07` 追加（未テスト） |
+
+**次セッションでやること**:
+- ルール追加: 推測と事実の分離
+- 仕様書索引の整備
+- BBR/Flash仕様確認（p.223抽出）
+- reset-configテスト再実行
+
+**次セッション**: [session220/session-plan.md](../session220/session-plan.md)
+
+---
+
