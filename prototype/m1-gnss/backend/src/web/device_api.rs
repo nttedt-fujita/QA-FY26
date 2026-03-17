@@ -5,7 +5,7 @@
 //! - POST /api/devices/{path}/disconnect - 切断
 
 use actix_web::{web, HttpResponse, Responder};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::sync::Mutex;
 use std::time::Duration;
 
@@ -72,6 +72,14 @@ pub struct ConnectResponse {
     pub path: String,
     pub baud_rate: u32,
     pub message: String,
+}
+
+/// 接続APIのクエリパラメータ
+#[derive(Debug, Deserialize)]
+pub struct ConnectQuery {
+    /// テスト用: 定期出力無効化をスキップ（デフォルト: false）
+    /// 仮説検証: Flashから読み込まれた値がRAMにあるか確認するため
+    pub skip_disable: Option<bool>,
 }
 
 /// エラーレスポンス
@@ -281,10 +289,15 @@ pub async fn list_devices(data: web::Data<AppState>) -> impl Responder {
 /// POST /api/devices/{path}/connect - 接続（自動検出）
 ///
 /// パスはURLエンコードされている前提（例: %2Fdev%2FttyACM0）
+///
+/// クエリパラメータ:
+/// - skip_disable: true の場合、定期出力無効化をスキップ（仮説検証用）
 pub async fn connect_device(
     data: web::Data<AppState>,
     path: web::Path<String>,
+    query: web::Query<ConnectQuery>,
 ) -> impl Responder {
+    let skip_disable = query.skip_disable.unwrap_or(false);
     let port_path = urlencoding::decode(&path.into_inner())
         .unwrap_or_else(|_| std::borrow::Cow::Borrowed(""))
         .to_string();
@@ -338,13 +351,18 @@ pub async fn connect_device(
                 };
 
                 // 定期出力を無効化（ポーリング専用）
-                if let Err(e) = send_disable_periodic_output(&mut manager) {
-                    tracing::warn!("定期出力無効化に失敗: {}", e);
+                // skip_disable=true の場合はスキップ（仮説検証用）
+                if skip_disable {
+                    tracing::info!("skip_disable=true: 定期出力無効化をスキップ");
                 } else {
-                    tracing::debug!("定期出力を無効化しました");
+                    if let Err(e) = send_disable_periodic_output(&mut manager) {
+                        tracing::warn!("定期出力無効化に失敗: {}", e);
+                    } else {
+                        tracing::debug!("定期出力を無効化しました");
+                    }
                 }
 
-                // NMEA出力を無効化
+                // NMEA出力を無効化（skip_disableでもNMEAは無効化する）
                 if let Err(e) = send_disable_nmea_output(&mut manager) {
                     tracing::warn!("NMEA出力無効化に失敗: {}", e);
                 } else {

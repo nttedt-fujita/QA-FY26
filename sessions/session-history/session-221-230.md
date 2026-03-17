@@ -83,3 +83,34 @@
 **次セッション**: [session224/session-plan.md](../session224/session-plan.md)
 
 ---
+
+## Session 224 (2026-03-17)
+
+**概要**: Flash永続化問題の真因特定（BBR優先順位問題）
+
+**実施内容**:
+1. CFG-VALGET実機テスト
+   - Flashに値あり（value=1）
+   - USB抜き差し後もFlash維持 → **Flash搭載確認**
+   - しかしmessage-scan 0件
+2. 仮説検証ツール作成
+   - cfg-valget-ram, cfg-valget-bbr, connect-raw
+3. 真因特定
+   - BBRに0が残っていて、Flashの1より優先されていた
+   - u-blox優先順位: RAM > BBR > Flash > Default
+
+**発見事項**:
+- **BBRに値があるとFlashが無視される**
+- 接続時のdisable_periodic_outputがBBRに0を書き込んでいた
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| device_api.rs | skip_disableパラメータ追加 |
+| api.mk | cfg-valget-ram, cfg-valget-bbr, connect-raw追加 |
+
+**残タスク**: set-periodic-outputをRamBbrFlashで書くように変更
+
+**次セッション**: [session225/session-plan.md](../session225/session-plan.md)
+
+---

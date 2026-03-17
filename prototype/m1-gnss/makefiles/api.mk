@@ -1,6 +1,6 @@
 # API呼び出しコマンド（デバッグ用）
 
-.PHONY: devices connect disconnect message-scan reset-config set-periodic-output set-periodic-output-flash mon-ver cfg-valget-flash lots create-lot inspect inspections health
+.PHONY: devices connect disconnect message-scan reset-config set-periodic-output set-periodic-output-flash mon-ver cfg-valget-flash cfg-valget-ram cfg-valget-bbr connect-raw lots create-lot inspect inspections health
 
 # ベースURL
 API_URL := http://localhost:8080
@@ -51,6 +51,20 @@ mon-ver:
 # 値が返る → Flash搭載、エラー → Flash非搭載
 cfg-valget-flash:
 	@curl -s "$(API_URL)/api/devices/$(DEVICE_ENCODED)/cfg-valget?layer=flash&key=NAV_PVT_USB" | jq .
+
+# CFG-VALGET（RAMレイヤーから設定値取得 - 仮説検証用）
+# 現在有効な設定値を確認
+cfg-valget-ram:
+	@curl -s "$(API_URL)/api/devices/$(DEVICE_ENCODED)/cfg-valget?layer=ram&key=NAV_PVT_USB" | jq .
+
+# CFG-VALGET（BBRレイヤーから設定値取得 - 仮説検証用）
+cfg-valget-bbr:
+	@curl -s "$(API_URL)/api/devices/$(DEVICE_ENCODED)/cfg-valget?layer=bbr&key=NAV_PVT_USB" | jq .
+
+# 接続（定期出力無効化をスキップ - 仮説検証用）
+# FlashからRAMへのコピーを確認するため
+connect-raw:
+	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/connect?skip_disable=true" | jq .
 
 # ====================
 # ロットAPI
