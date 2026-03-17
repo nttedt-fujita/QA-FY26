@@ -138,6 +138,11 @@
 | [reset_config_api.rs](../../prototype/m1-gnss/backend/src/web/reset_config_api.rs) | NMEA OFF送信追加、wait_for_ack使用 |
 | [manager.rs](../../prototype/m1-gnss/backend/src/device/manager.rs) | デバッグログ追加 |
 
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [ADR-015-cfg-cfg-loadmask.md](../../docs/adr/m1/ADR-015-cfg-cfg-loadmask.md) | loadMask使用禁止の理由を記録 |
+
 **残タスク**: loadMask=NONE版の実機テスト
 
 **次セッション**: [session216/session-plan.md](../session216/session-plan.md)
