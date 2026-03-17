@@ -114,3 +114,38 @@
 **次セッション**: [session225/session-plan.md](../session225/session-plan.md)
 
 ---
+
+## Session 225 (2026-03-17)
+
+**概要**: BBR優先順位問題の解決 + 仕様理解の深掘り
+
+**実施内容**:
+1. いじったデバイス vs いじっていないデバイスの比較
+   - いじったデバイス: BBR=0（値あり）
+   - いじっていないデバイス: BBR=エラー（値なし）
+2. 重要な発見
+   - BBRの「値の存在」がポイント
+   - 値がなければスキップされ、次のレイヤーが参照される
+   - `disable_periodic_output`がBBRに0を書くことで問題発生
+3. 定期出力の謎を解決
+   - cfg-valget NAV_PVT_USB=0なのにNAV-PVTが出力されていた
+   - 原因: デバイスは内部的にUART1として接続されている
+   - NAV_PVT_UART1=1が有効だった
+
+**発見事項（重要）**:
+- **BBRレイヤーの「値の存在」**: 未設定=エラー、一度でも書き込み=値あり（0でも）
+- **USB vs UART1の接続形態**: 組み込みボードはPCにUSB経由で接続するが、内部的にはUART1として動作
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [api.mk](../../prototype/m1-gnss/makefiles/api.mk) | cfg-valget-default追加 |
+| [cfg_valget_api.rs](../../prototype/m1-gnss/backend/src/web/cfg_valget_api.rs) | NAV_PVT_UART1キー追加 |
+
+**残タスク**:
+- BBR優先順位問題の解決（disable_periodic_outputをRAMのみに変更 or CFG-VALDELでBBR削除）
+- 仕様書との整合性確認（config-layers-spec.md、32-cfg-msgout-periodic-output.mdへの追記）
+
+**次セッション**: [session226/session-plan.md](../session226/session-plan.md)
+
+---
