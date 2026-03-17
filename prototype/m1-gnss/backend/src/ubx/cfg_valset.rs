@@ -706,7 +706,7 @@ mod tests {
         }
     }
 
-    /// 定期出力設定メッセージの構造が正しい
+    /// 定期出力設定メッセージの構造が正しい（USB + UART1の12キー）
     #[rstest]
     #[case::正常系(Layer::Ram, true)]
     fn test_定期出力メッセージ構造が正しい(
@@ -723,10 +723,11 @@ mod tests {
             assert_eq!(frame.sync2(), 0x62, "sync2");
             assert_eq!(frame.class(), 0x06, "class = CFG");
             assert_eq!(frame.id(), 0x8A, "id = VALSET");
-            // ペイロード長: version(1) + layers(1) + reserved(2) + 6*(key(4) + value(1)) = 34
-            assert_eq!(frame.payload_len(), 34, "payload length");
-            // 最初のキーがNAV-PVT
-            assert_eq!(frame.first_key(), CFG_MSGOUT_NAV_PVT_USB, "first key = NAV-PVT");
+            // ペイロード長: version(1) + layers(1) + reserved(2) + 12*(key(4) + value(1)) = 64
+            // USB 6キー + UART1 6キー = 12キー
+            assert_eq!(frame.payload_len(), 64, "payload length (12 keys)");
+            // 最初のキーがNAV-PVT USB
+            assert_eq!(frame.first_key(), CFG_MSGOUT_NAV_PVT_USB, "first key = NAV-PVT USB");
             // チェックサム
             assert!(frame.checksum_valid(), "checksum");
         }

@@ -211,3 +211,32 @@
 **次セッション**: [session228/session-plan.md](../session228/session-plan.md)
 
 ---
+
+## Session 228 (2026-03-17)
+
+**概要**: CFG-VALDEL実装 + BBR削除テスト成功
+
+**実施内容**:
+1. CFG-VALDELメッセージ実装
+   - cfg_valdel.rs（9テスト全パス）
+   - DeleteLayer enum: Bbr, Flash, BbrAndFlash
+2. CFG-VALDEL API実装
+   - DELETE /api/devices/{path}/cfg-valdel
+3. Makeコマンド追加
+   - cfg-valdel-bbr, cfg-valdel-flash
+4. 実機テスト
+   - BBR=0, Flash=1 を確認
+   - cfg-valdel-bbr → ACK
+   - cfg-valget-bbr → エラー（BBR削除成功）
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [cfg_valdel.rs](../../prototype/m1-gnss/backend/src/ubx/cfg_valdel.rs) | CFG-VALDELメッセージ生成 |
+| [cfg_valdel_api.rs](../../prototype/m1-gnss/backend/src/web/cfg_valdel_api.rs) | CFG-VALDEL REST API |
+
+**残タスク**: USB抜き差し後のFlash値確認
+
+**次セッション**: [session229/session-plan.md](../session229/session-plan.md)
+
+---

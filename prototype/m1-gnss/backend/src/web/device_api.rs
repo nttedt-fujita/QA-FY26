@@ -565,6 +565,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
             // MON-VER API（モジュール情報取得）
             .route("/{path}/mon-ver", web::get().to(super::mon_ver_api::get_mon_ver))
             // CFG-VALGET API（設定値取得）
-            .route("/{path}/cfg-valget", web::get().to(super::cfg_valget_api::cfg_valget_handler)),
+            .route("/{path}/cfg-valget", web::get().to(super::cfg_valget_api::cfg_valget_handler))
+            // CFG-VALDEL API（設定削除）
+            .route("/{path}/cfg-valdel", web::delete().to(super::cfg_valdel_api::cfg_valdel_handler)),
     );
 }
