@@ -271,3 +271,41 @@
 
 ---
 
+## Session 220 (2026-03-17)
+
+**概要**: 仕様書索引整備 + ルール追加 + set-periodic-output Flash対応
+
+**実施内容**:
+1. ルール追加: 推測と事実の分離（17-fact-vs-hypothesis.md）
+2. PDF抽出ルール拡張: 抽出後の整備セクション追加（15-pdf-handling.md）
+3. 仕様書索引の整備
+   - gnss/README.mdに「PDF仕様抽出状態」セクション追加
+   - 複数PDF対応（IF, IM, NTRIP, UC）
+   - CLAUDE.mdを簡素化（gnss/README.mdを参照）
+4. BBR/Flash仕様確認（p.223-225抽出）
+   - **事実確認**: BBRはバッテリーバックアップがないと電源断で消える
+   - **事実確認**: Flashは永続的
+5. set-periodic-output APIをFlash対応に修正
+   - Layer::RamAndBbr → Layer::RamBbrFlash
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [17-fact-vs-hypothesis.md](../../.claude/rules/17-fact-vs-hypothesis.md) | 推測と事実の分離ルール |
+| [config-layers-spec.md](../session220/config-layers-spec.md) | PDF抽出: Configuration layers |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| 15-pdf-handling.md | 抽出後の整備セクション追加 |
+| gnss/README.md | PDF仕様抽出状態セクション追加 |
+| prototype/m1-gnss/CLAUDE.md | 簡素化 |
+| set_periodic_output_api.rs | Layer::RamBbrFlashに変更 |
+| api.mk | コメント更新 |
+
+**残タスク**: reset-configテスト再実行（Phase 1/2）
+
+**次セッション**: [session221/session-plan.md](../session221/session-plan.md)
+
+---
+

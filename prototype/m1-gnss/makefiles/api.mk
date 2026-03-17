@@ -34,7 +34,7 @@ message-scan:
 reset-config:
 	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/reset-config" | jq .
 
-# 定期出力有効化（テスト用、BBR+RAMに保存）
+# 定期出力有効化（テスト用、RAM+BBR+Flashに保存）
 set-periodic-output:
 	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/set-periodic-output" | jq .
 
