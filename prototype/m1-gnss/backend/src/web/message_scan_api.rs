@@ -244,8 +244,9 @@ pub async fn scan_messages(
         }
     };
 
-    // スキャン実行（3秒間）
-    let scan_duration = Duration::from_secs(3);
+    // スキャン実行（12秒間）
+    // MON-SPAN/MON-RF（10秒周期）を検出するため、10秒以上必要
+    let scan_duration = Duration::from_secs(12);
     let mut message_counts: HashMap<(u8, u8), u32> = HashMap::new();
     let start = Instant::now();
 

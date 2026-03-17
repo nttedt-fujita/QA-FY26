@@ -34,6 +34,9 @@ pub enum Layer {
     /// RAM + BBR（即座に有効 + 再起動後も有効）
     /// Session 151: BBRのみでは即座に有効にならないため追加
     RamAndBbr = 0x03,
+    /// RAM + BBR + Flash（即座に有効 + 全レイヤーに保存）
+    /// Session 219: USB抜き差しでBBRが消えた問題への対処（要検証）
+    RamBbrFlash = 0x07,
 }
 
 /// CFG-UART1OUTPROT-NMEA のキーID
