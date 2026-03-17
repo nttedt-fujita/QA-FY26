@@ -167,8 +167,9 @@ Phase 4: 標準化
 | NAV-SAT | IF | - | [ubx-nav-messages.md](ubx-nav-messages.md) | ✅ 済 |
 | NAV-STATUS/TTFF | IF | - | [30-ttff-monrf-spec.md](30-ttff-monrf-spec.md) | ✅ 済 |
 | CFG-CFG | IF | p.63-68 | [session211/cfg-cfg-spec.md](../../../../sessions/session211/cfg-cfg-spec.md) | 📝 session |
-| CFG-VALSET/VALGET | IF | p.96-98 | [session214/cfg-valget-spec.md](../../../../sessions/session214/cfg-valget-spec.md) | 📝 session |
-| Configuration layers | IF | p.223-225 | [session220/config-layers-spec.md](../../../../sessions/session220/config-layers-spec.md) | 📝 session |
+| CFG-VALDEL | IF | p.93-94 | [session227/cfg-valdel-spec.md](../../../../sessions/session227/cfg-valdel-spec.md)、[38-ublox-config-management.md](38-ublox-config-management.md) | ✅ 済 |
+| CFG-VALSET/VALGET | IF | p.95-97 | [session214/cfg-valget-spec.md](../../../../sessions/session214/cfg-valget-spec.md) | 📝 session |
+| Configuration layers | IF | p.223-225 | [38-ublox-config-management.md](38-ublox-config-management.md) | ✅ 済 |
 | NTRIP仕様 | NTRIP | - | [21-ntrip-protocol-spec.md](21-ntrip-protocol-spec.md) | ✅ 済 |
 
 **凡例**:

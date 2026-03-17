@@ -178,3 +178,36 @@
 **次セッション**: [session227/session-plan.md](../session227/session-plan.md)
 
 ---
+
+## Session 227 (2026-03-17)
+
+**概要**: BBR優先順位問題テスト + 仕様書確認
+
+**実施内容**:
+1. Step 2-3 テスト実施
+   - Step 2: BBR=0（変化なし）、Flash=1、message-scan=0件
+   - Step 3: 同上
+   - **結論**: 既存のBBR=0があるためFlashが使われない
+2. 仕様書確認（ユーザー指摘を受けて）
+   - CFG-VALDEL仕様（p.93-97）を抽出
+   - Configuration layers仕様（p.223-225）を抽出
+   - **BBRを削除すればFlashが参照される**ことを仕様書で確認
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [session227/cfg-valdel-spec.md](../session227/cfg-valdel-spec.md) | CFG-VALDEL仕様抽出 |
+| [session227/config-layers-spec.md](../session227/config-layers-spec.md) | Configuration layers仕様抽出 |
+| [session227/session-summary.md](../session227/session-summary.md) | セッションサマリー |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [38-ublox-config-management.md](../../docs/missions/m1-sensor-evaluation/gnss/38-ublox-config-management.md) | CFG-VALDEL詳細仕様、レイヤー優先順位詳細を追記 |
+| [README.md](../../docs/missions/m1-sensor-evaluation/gnss/README.md) | PDF仕様抽出状態テーブル更新 |
+
+**残タスク**: CFG-VALDEL実装、BBR削除テスト
+
+**次セッション**: [session228/session-plan.md](../session228/session-plan.md)
+
+---
