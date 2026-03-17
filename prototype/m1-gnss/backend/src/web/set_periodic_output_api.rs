@@ -1,15 +1,18 @@
 //! 定期出力設定API
 //!
 //! - POST /api/devices/{path}/set-periodic-output - 定期出力を有効化
+//! - POST /api/devices/{path}/set-periodic-output?layer=flash - Flashのみに保存
 //!
 //! 作成: Session 218 (2026-03-17)
+//! 更新: Session 222 (2026-03-17) - layerクエリパラメータ追加
 //!
 //! 用途:
 //! - reset-config APIの効果確認用テストAPI
 //! - 定期出力を意図的に有効化してBBR/Flashに保存
+//! - Flashレイヤーの有効性確認（layer=flashでNAK→Flash非搭載）
 
 use actix_web::{web, HttpResponse, Responder};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
 use super::device_api::{AppState, ErrorResponse, send_disable_nmea_output};
@@ -19,16 +22,27 @@ use crate::ubx::cfg_valset::{set_periodic_output, PeriodicOutputConfig, Layer};
 const CFG_CLASS: u8 = 0x06;
 const CFG_VALSET_ID: u8 = 0x8A;
 
+/// クエリパラメータ
+#[derive(Debug, Deserialize)]
+pub struct SetPeriodicOutputQuery {
+    /// 保存先レイヤー: "ram", "bbr", "flash", "all"（デフォルト: "all"）
+    pub layer: Option<String>,
+}
+
 /// 定期出力設定レスポンス
 #[derive(Debug, Serialize)]
 pub struct SetPeriodicOutputResponse {
     pub path: String,
     pub message: String,
+    pub layer: String,
 }
 
 /// POST /api/devices/{path}/set-periodic-output - 定期出力有効化
 ///
-/// CFG-VALSETを送信して、定期出力をBBR+RAMに設定する
+/// CFG-VALSETを送信して、定期出力を指定レイヤーに設定する
+///
+/// クエリパラメータ:
+/// - layer: "ram", "bbr", "flash", "all"（デフォルト: "all" = RAM+BBR+Flash）
 ///
 /// 動作:
 /// 1. NMEA出力をOFF（ACK受信を妨げないため）
@@ -42,9 +56,14 @@ pub struct SetPeriodicOutputResponse {
 /// - NAV-SIG: 5エポックに1回
 /// - MON-SPAN: 10エポックに1回
 /// - MON-RF: 10エポックに1回
+///
+/// Flashレイヤー確認方法:
+/// - layer=flash で実行し、NAK → 外部Flash非搭載
+/// - layer=flash で実行し、ACK → 外部Flash搭載
 pub async fn set_periodic_output_handler(
     data: web::Data<AppState>,
     path: web::Path<String>,
+    query: web::Query<SetPeriodicOutputQuery>,
 ) -> impl Responder {
     let port_path = urlencoding::decode(&path.into_inner())
         .unwrap_or_else(|_| std::borrow::Cow::Borrowed(""))
@@ -89,11 +108,28 @@ pub async fn set_periodic_output_handler(
         tracing::warn!("バッファクリアに失敗: {}", e);
     }
 
-    // 定期出力設定（デフォルト値、RAM+BBR+Flashに保存）
+    // レイヤー解析
+    let layer_str = query.layer.as_deref().unwrap_or("all");
+    let layer = match layer_str {
+        "ram" => Layer::Ram,
+        "bbr" => Layer::Bbr,
+        "flash" => Layer::Flash,
+        "all" | _ => Layer::RamBbrFlash,
+    };
+    let layer_name = match layer {
+        Layer::Ram => "RAM",
+        Layer::Bbr => "BBR",
+        Layer::Flash => "Flash",
+        Layer::RamAndBbr => "RAM+BBR",
+        Layer::RamBbrFlash => "RAM+BBR+Flash",
+    };
+    tracing::info!("定期出力設定: layer={} (0x{:02X})", layer_name, layer as u8);
+
+    // 定期出力設定（デフォルト値）
     // Session 220: BBRはバッテリーバックアップがないと電源断で消えるため、Flashにも保存
     // 出典: u-blox F9 HPG 1.32 Interface Description p.224
     let config = PeriodicOutputConfig::default();
-    let set_cmd = set_periodic_output(&config, Layer::RamBbrFlash);
+    let set_cmd = set_periodic_output(&config, layer);
     let hex_str: String = set_cmd.iter().map(|b| format!("{:02X}", b)).collect::<Vec<_>>().join(" ");
     tracing::info!("CFG-VALSET（定期出力）送信データ: {} ({}バイト)", hex_str, set_cmd.len());
 
@@ -111,16 +147,17 @@ pub async fn set_periodic_output_handler(
     // ACK/NAK確認
     match ack_result {
         Ok(true) => {
-            tracing::info!("CFG-VALSET（定期出力）ACK received");
+            tracing::info!("CFG-VALSET（定期出力）ACK received (layer={})", layer_name);
             HttpResponse::Ok().json(SetPeriodicOutputResponse {
                 path: port_path,
-                message: "定期出力を有効化しました（NAV-PVT, NAV-STATUS, NAV-SAT, NAV-SIG, MON-SPAN, MON-RF）".to_string(),
+                message: format!("定期出力を有効化しました（{}に保存）", layer_name),
+                layer: layer_name.to_string(),
             })
         }
         Ok(false) => {
-            tracing::warn!("CFG-VALSET（定期出力）NAK received");
+            tracing::warn!("CFG-VALSET（定期出力）NAK received (layer={})", layer_name);
             HttpResponse::BadRequest().json(ErrorResponse {
-                error: "CFG-VALSETがデバイスに拒否されました".to_string(),
+                error: format!("CFG-VALSETがデバイスに拒否されました（layer={}）。このレイヤーは利用できない可能性があります。", layer_name),
                 code: "COMMAND_REJECTED".to_string(),
             })
         }
