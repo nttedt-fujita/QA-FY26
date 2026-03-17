@@ -90,6 +90,9 @@
 
 **削除合計**: 約22ファイル/ディレクトリ
 
+**作成ファイル**:
+- [docs/progress.md](../../docs/progress.md) — ミッション進捗一覧（CLAUDE.mdにポインタ追加）
+
 **保持ファイル**（docs/からリンク）:
 - session78/cfg-rate-prt-behavior.md, cfg-rate-prt-spec.md
 - session64/ubx-nav-status-pages.md
