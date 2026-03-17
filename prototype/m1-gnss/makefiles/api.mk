@@ -1,6 +1,6 @@
 # API呼び出しコマンド（デバッグ用）
 
-.PHONY: devices connect disconnect message-scan reset-config lots create-lot inspect inspections health
+.PHONY: devices connect disconnect message-scan reset-config set-periodic-output lots create-lot inspect inspections health
 
 # ベースURL
 API_URL := http://localhost:8080
@@ -33,6 +33,10 @@ message-scan:
 # 設定リセット（BBR+Flash クリア）
 reset-config:
 	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/reset-config" | jq .
+
+# 定期出力有効化（テスト用、BBR+RAMに保存）
+set-periodic-output:
+	@curl -s -X POST "$(API_URL)/api/devices/$(DEVICE_ENCODED)/set-periodic-output" | jq .
 
 # ====================
 # ロットAPI

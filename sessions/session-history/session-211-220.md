@@ -204,3 +204,36 @@
 
 ---
 
+## Session 218 (2026-03-17)
+
+**概要**: set-periodic-output API作成 + 実機テスト（途中まで）
+
+**実施内容**:
+1. set-periodic-output API作成
+   - reset-config効果確認のためのテスト用API
+   - `POST /api/devices/{path}/set-periodic-output`
+2. 実機テスト → USB用キーのみで検出されない問題発覚
+   - 原因: `set_periodic_output`がUSB用キーのみ設定（UART1キー不足）
+   - 修正: USB + UART1両方のキーを設定
+3. 再テスト成功
+   - NAV-PVT(3), MON-RF(1), NAV-STATUS(1) 検出
+
+**作成ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| [set_periodic_output_api.rs](../../prototype/m1-gnss/backend/src/web/set_periodic_output_api.rs) | 定期出力有効化API（新規） |
+
+**変更ファイル**:
+| ファイル | 内容 |
+|----------|------|
+| cfg_valset.rs | `set_periodic_output`にUART1キー追加 |
+| api.mk | `make set-periodic-output` コマンド追加 |
+| device_api.rs | ルーティング追加 |
+| mod.rs | モジュール追加 |
+
+**残タスク**: Phase 1/2完全テスト（USB抜き差し3回含む）
+
+**次セッション**: [session219/session-plan.md](../session219/session-plan.md)
+
+---
+

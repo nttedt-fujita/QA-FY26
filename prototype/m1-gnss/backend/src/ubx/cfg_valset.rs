@@ -373,14 +373,22 @@ pub fn set_periodic_output(config: &PeriodicOutputConfig, layer: Layer) -> Vec<u
         0x00, 0x00,     // reserved
     ];
 
-    // 各メッセージの設定を追加
-    let configs: [(u32, u8); 6] = [
+    // USB用とUART1用の両方のキーを設定（実機はUART1接続のため）
+    let configs: [(u32, u8); 12] = [
+        // USB用
         (CFG_MSGOUT_NAV_PVT_USB, config.nav_pvt),
         (CFG_MSGOUT_NAV_STATUS_USB, config.nav_status),
         (CFG_MSGOUT_NAV_SAT_USB, config.nav_sat),
         (CFG_MSGOUT_NAV_SIG_USB, config.nav_sig),
         (CFG_MSGOUT_MON_SPAN_USB, config.mon_span),
         (CFG_MSGOUT_MON_RF_USB, config.mon_rf),
+        // UART1用
+        (CFG_MSGOUT_NAV_PVT_UART1, config.nav_pvt),
+        (CFG_MSGOUT_NAV_STATUS_UART1, config.nav_status),
+        (CFG_MSGOUT_NAV_SAT_UART1, config.nav_sat),
+        (CFG_MSGOUT_NAV_SIG_UART1, config.nav_sig),
+        (CFG_MSGOUT_MON_SPAN_UART1, config.mon_span),
+        (CFG_MSGOUT_MON_RF_UART1, config.mon_rf),
     ];
 
     for (key, value) in configs {
