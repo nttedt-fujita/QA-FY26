@@ -542,6 +542,8 @@ pub fn configure(cfg: &mut web::ServiceConfig) {
             // 定期出力設定API（テスト用）
             .route("/{path}/set-periodic-output", web::post().to(super::set_periodic_output_api::set_periodic_output_handler))
             // MON-VER API（モジュール情報取得）
-            .route("/{path}/mon-ver", web::get().to(super::mon_ver_api::get_mon_ver)),
+            .route("/{path}/mon-ver", web::get().to(super::mon_ver_api::get_mon_ver))
+            // CFG-VALGET API（設定値取得）
+            .route("/{path}/cfg-valget", web::get().to(super::cfg_valget_api::cfg_valget_handler)),
     );
 }

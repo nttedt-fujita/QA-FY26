@@ -17,3 +17,4 @@ pub mod blink_api;
 pub mod reset_config_api;
 pub mod set_periodic_output_api;
 pub mod mon_ver_api;
+pub mod cfg_valget_api;

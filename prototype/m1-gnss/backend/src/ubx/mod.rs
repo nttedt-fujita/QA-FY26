@@ -4,6 +4,7 @@ pub mod ack;
 pub mod cfg_cfg;
 pub mod cfg_prt;
 pub mod cfg_rate;
+pub mod cfg_valget;
 pub mod cfg_valset;
 pub mod common;
 pub mod mon_rf;
