@@ -115,3 +115,34 @@
 **次セッション**: [session245/session-plan.md](../session245/session-plan.md) — to-be-model.drawio確認・ドメインモデル/ER図整理
 
 ---
+
+## Session 245 (2026-03-18)
+
+**概要**: ドメインモデル vs ER図の整理 + AI検査連携設計たたき台
+
+**実施内容**:
+1. to-be-model.drawioの確認
+   - 実態は「ER図相当」（PK/FK、カラム詳細を含む）
+   - 純粋なドメインモデル（概念図）ではない
+2. schema.sqlとの整合性確認
+   - 8テーブル全て一致、created_at/updated_at全テーブルに存在
+3. M3/M4図の状況確認
+   - M3: 3つの図あり、M4: ドメインモデル図なし
+4. 解説ドキュメント作成（Living Documentation観点含む）
+5. AI検査連携設計のたたき台作成（3案提示、案A推奨）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [domain-model-vs-er-diagram.md](../session245/domain-model-vs-er-diagram.md) | ドメインモデル vs ER図の解説、整理方針 |
+| [ai-inspection-m3-integration-draft.md](../session245/ai-inspection-m3-integration-draft.md) | AI検査とM3連携設計のたたき台 |
+
+**主な発見**:
+- to-be-model.drawio = ER図（名前と実態の不一致）
+- ドメインモデル（概念図）がM3/M4とも欠如
+- 致命的な整合性問題はなし
+
+**次セッション**: [session246/session-plan.md](../session246/session-plan.md) — M3/M4ドメインモデル（概念図）の新規作成
+
+---
