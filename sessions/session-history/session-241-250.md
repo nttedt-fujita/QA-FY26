@@ -196,22 +196,24 @@
 3. 比較材料の整理フレームワーク作成
    - 軸1: クラウド構成（A〜D）
    - 軸2: 規模（現状 vs 1万台）
-4. 既存調査との統合確認
-   - 07_ai_integration_and_cost_analysis.md: コスト試算あり
-   - 不足: 1万台規模での再計算、統合システム構成
+4. ヒアリング確認項目の整理
+   - そもそも何にAIを使うのが効果的か → 未検証
+   - AI使用候補の洗い出し・現状工数・1万台規模での変化・削減見積もり
 
 **作成ファイル**:
 
 | ファイル | 内容 |
 |----------|------|
-| [requirements-and-direction.md](../session247/requirements-and-direction.md) | 要求整理・方針・比較フレームワーク |
+| [requirements-and-direction.md](../session247/requirements-and-direction.md) | 要求整理・方針・ヒアリング確認項目 |
 
 **確定事項**:
 - Need: 不良品の市場流出を防ぎ、発生時に追跡できる状態にする
 - AI検査の主目的: 工数削減（品質向上・属人化解消・スケーラビリティも副次効果）
 
-**残課題**: 1万台規模での検査工数確認（ヒアリング必要）
+**残課題**:
+- AI使用候補の効果検証（ヒアリング必要）
+- 1万台規模での検査工数確認
 
-**次セッション**: [session248/session-plan.md](../session248/session-plan.md) — コスト試算・統合システム構成案作成
+**次セッション**: [session248/session-plan.md](../session248/session-plan.md) — ヒアリング実施・AI使用候補の優先順位決定
 
 ---
