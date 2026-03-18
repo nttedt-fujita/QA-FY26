@@ -137,6 +137,6 @@
 - Hamess（タイポ）
 - 検査数量列が未使用
 
-**次セッション**: M3 AI組み合わせ見積もり調査（今回見送り分）
+**次セッション**: [session236/session-plan.md](../session236/session-plan.md) — M3 AI組み合わせ見積もり調査
 
 ---
