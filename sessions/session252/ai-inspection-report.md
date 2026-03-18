@@ -109,6 +109,24 @@ style: |
 
 ---
 
+# 検査ブースの構成
+
+<img src="./images/ai-inspection-booth-shoot.png" width="700" alt="検査ブース構成図"/>
+
+---
+
+# 検査フロー（2面撮影）
+
+<img src="./images/ai-inspection-booth-flow.png" width="750" alt="検査フロー図"/>
+
+---
+
+# 検査アプリ画面イメージ
+
+<img src="./images/ai-inspection-booth-app.png" width="750" alt="アプリ画面イメージ"/>
+
+---
+
 # 背景・きっかけ
 
 ## 宇枝部長からの問い合わせ
