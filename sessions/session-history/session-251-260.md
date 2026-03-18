@@ -26,3 +26,30 @@
 **次セッション**: [session252/session-plan.md](../session252/session-plan.md) — Marpスキルでスライド作成
 
 ---
+
+## Session 252 (2026-03-18)
+
+**概要**: AI検査1次報告スライド作成（Marp）
+
+**実施内容**:
+1. Session 251のスライド指示書に基づきMarpスライド作成
+2. ユーザーレビューに基づく複数回の修正
+   - 結論を最初に持ってくる
+   - コストの根拠を明記
+   - M3/M4ツールのメリット追加
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [ai-inspection-report.md](../session252/ai-inspection-report.md) | Marpスライド（14ページ） |
+| [ai-inspection-report.pdf](../session252/ai-inspection-report.pdf) | PDF出力 |
+
+**未解決課題**:
+- 検査時間の根拠（プロポ1.3分/個は推測）
+- AIレスポンス時間の調査
+- Sonnet vs Opus 比較
+
+**次セッション**: [session253/session-plan.md](../session253/session-plan.md) — 工程内不良リスク整理・スライドレビュー継続・数字の根拠調査
+
+---
