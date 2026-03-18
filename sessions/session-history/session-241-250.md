@@ -146,3 +146,37 @@
 **次セッション**: [session246/session-plan.md](../session246/session-plan.md) — M3/M4ドメインモデル（概念図）の新規作成
 
 ---
+
+## Session 246 (2026-03-18)
+
+**概要**: M3/M4ドメインモデル新規作成 + AI検査サービス選定議論
+
+**実施内容**:
+1. M3ドメインモデル（概念図）を新規作成
+   - エンティティ: サプライヤ、部品、ロット、検査記録、不良レポート、不問判定
+   - ビジネスルール4項目を図中に記載
+2. M4ドメインモデル（概念図）を新規作成
+   - 工程不良記録、不良コード体系（3階層）、原因コード体系（4M1E）
+3. to-be-model.drawio → er-diagram.drawio リネーム
+4. AI検査サービス選定の議論
+   - AWS各サービスの出力仕様を調査（Rekognition Custom Labels、SageMaker、Bedrock）
+   - 新たな状況: 「1万台生産を見据えたスケーラビリティ」が必要
+   - 方針: 要求・要件・コストを整理してからサービス選定する
+
+**作成/変更ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [domain/domain-model.drawio](../../docs/missions/m3-incoming-inspection-db/domain/domain-model.drawio) | M3ドメインモデル（新規） |
+| [domain/domain-model.drawio](../../docs/missions/m4-defect-db/domain/domain-model.drawio) | M4ドメインモデル（新規） |
+| [to-be/er-diagram.drawio](../../docs/missions/m3-incoming-inspection-db/to-be/er-diagram.drawio) | リネーム（旧: to-be-model.drawio） |
+| [ai-service-selection-notes.md](../session246/ai-service-selection-notes.md) | AI検査サービス選定中間メモ |
+
+**主な発見**:
+- Bedrockは学習データ不要でスケーラブル（MVP向き）
+- Rekognition Custom LabelsはBoundingBox取得可能
+- 1万台規模では要求・要件・コストを先に整理する必要あり
+
+**次セッション**: [session247/session-plan.md](../session247/session-plan.md) — AI検査サービス選定（要求・要件・コスト整理）
+
+---
