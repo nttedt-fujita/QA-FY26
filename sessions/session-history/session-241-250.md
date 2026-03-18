@@ -55,3 +55,33 @@
 **次セッション**: [session243/session-plan.md](../session243/session-plan.md) — AI検査システム要件・要求の詳細整理
 
 ---
+
+## Session 243 (2026-03-18)
+
+**概要**: AI検査システム要件・要求の詳細整理
+
+**実施内容**:
+1. 員数確認・外観検査の対象整理
+   - ネジは対象外（写真判別困難）
+   - 外観検査: シルク印刷のカケ、クラック（難しい）
+2. AI化の判断基準を整理
+   - 価格高い、影響大きい、まとめて効率化、撮影コスト < AI価値
+3. 受入検査CSVデータ確認（Session 235）
+   - プロポ: 80分/60個、外装部打痕12個の不良実績
+4. QAフレームワークとの整合性確認
+   - Session 25の品質管理フレームワーク調査を参照
+   - トレーサビリティは必要（ロット＝入荷タイミング）
+   - AQLは要相談（部品・文脈依存）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [ai-inspection-requirements-draft.md](../session243/ai-inspection-requirements-draft.md) | AI検査システム要件整理（仮） |
+| [qa-framework-considerations.md](../session243/qa-framework-considerations.md) | QAフレームワーク考慮事項（中間） |
+
+**結論**: AI検査システムの要件を仮整理。次はM3/M4ドメインモデリングの過去文脈を再確認
+
+**次セッション**: [session244/session-plan.md](../session244/session-plan.md) — M3/M4ドメインモデリング再確認・AI検査連携検討
+
+---
