@@ -47,8 +47,8 @@ make frontend-dev    # Frontend起動（別ターミナル）
 | [quickstart.md](../../../prototype/m3/docs/quickstart.md) | 起動手順 |
 | [demo-guide.md](../../../prototype/m3/docs/demo-guide.md) | デモ手順・ヒアリングポイント |
 | [implementation-plan.md](../../../prototype/m3/docs/implementation-plan.md) | 実装計画（Session別） |
-| [ADR-001](../../adr/ADR-001-error-handling.md) | エラーハンドリング方針 |
-| [ADR-002](../../adr/ADR-002-api-contract.md) | API契約とFE/BE整合性 |
+| [ADR-001](../../adr/m3/ADR-001-error-handling.md) | エラーハンドリング方針 |
+| [ADR-002](../../adr/m3/ADR-002-api-contract.md) | API契約とFE/BE整合性 |
 
 ### 技術スタック
 
@@ -168,6 +168,19 @@ Session 6, 24, 30で発見した主な問題:
 | [closed-questions-m3m4.md](hearing/closed-questions-m3m4.md) | クローズド質問（M3/M4共通） |
 | [closed-questions-m3m4.csv](hearing/closed-questions-m3m4.csv) | クローズド質問（CSV） |
 
+### ai-research/（AI連携調査）
+
+Session 185で作成したAI連携に関する調査資料。M3再開時に参照。
+
+| ファイル | 内容 |
+|----------|------|
+| [00_index.md](ai-research/00_index.md) | **資料インデックス**（読み方ガイド付き） |
+| [01_define_phase_report.md](ai-research/01_define_phase_report.md) | DMAIC Defineフェーズレポート |
+| [06_ai_visual_inspection_comparison.md](ai-research/06_ai_visual_inspection_comparison.md) | AI外観検査サービス比較 |
+| [07_ai_integration_and_cost_analysis.md](ai-research/07_ai_integration_and_cost_analysis.md) | AI連携設計・コスト分析 |
+| [08_lean_improvement_proposals.md](ai-research/08_lean_improvement_proposals.md) | 少人数で最大効果を出すアプローチ案 |
+| [10_gap_analysis.md](ai-research/10_gap_analysis.md) | **ギャップ分析**（プロトタイプ vs AI要件） |
+
 ---
 
 ## 関連リソース
@@ -204,4 +217,4 @@ M3/M4に関連する品質管理の概念:
 
 ---
 
-*更新日: 2026-03-18 (Session 239)*
+*更新日: 2026-03-18 (Session 241: ai-research/配置)*

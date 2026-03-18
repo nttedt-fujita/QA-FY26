@@ -275,10 +275,34 @@
 
 | ファイル | 内容 |
 |----------|------|
-| [ai-gap-analysis.md](../session240/ai-gap-analysis.md) | ギャップ分析結果・対応方針案 |
+| [10_gap_analysis.md](../../docs/missions/m3-incoming-inspection-db/ai-research/10_gap_analysis.md) | ギャップ分析結果・対応方針案（Session 241でdocs/へ移動） |
 
 **結論**: M3再開時は上記ギャップを埋める設計変更が必要。現在M3は⏸️ストップ中のため即時対応は不要。
 
 **次セッション**: [session241/session-plan.md](../session241/session-plan.md) — AI調査資料の統合整理
+
+---
+
+## Session 241 (2026-03-18)
+
+**概要**: AI調査資料の統合整理
+
+**実施内容**:
+1. session236/M3M4tools-AI-research/（10ファイル）を確認
+2. `docs/missions/m3-incoming-inspection-db/ai-research/` を新規作成
+3. 全ファイルをdocs/へ移動
+4. Session 240のギャップ分析を `10_gap_analysis.md` として統合
+5. README.mdに「ai-research/」セクションを追加
+6. 元ファイル削除（session236/, session240/）
+
+**配置ファイル**:
+
+| 配置先 | 内容 |
+|--------|------|
+| [ai-research/](../../docs/missions/m3-incoming-inspection-db/ai-research/) | AI連携調査資料（11ファイル） |
+
+**結論**: M3再開時は `ai-research/` ディレクトリを参照すればよい状態に整理完了
+
+**次セッション**: [session242/session-plan.md](../session242/session-plan.md) — M3レビュー完了確認
 
 ---

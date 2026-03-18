@@ -115,6 +115,6 @@ GET /api/v1/export/images?manifest=sagemaker  -- SageMaker manifest形式
 
 ## 参照
 
-- [07_ai_integration_and_cost_analysis.md](../session236/M3M4tools-AI-research/07_ai_integration_and_cost_analysis.md)
-- [prototype/m3/docs/ARCHITECTURE.md](../../prototype/m3/docs/ARCHITECTURE.md)
-- [prototype/m3/db/schema.sql](../../prototype/m3/db/schema.sql)
+- [07_ai_integration_and_cost_analysis.md](07_ai_integration_and_cost_analysis.md)
+- [prototype/m3/docs/ARCHITECTURE.md](../../../../prototype/m3/docs/ARCHITECTURE.md)
+- [prototype/m3/db/schema.sql](../../../../prototype/m3/db/schema.sql)
