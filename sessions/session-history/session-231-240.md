@@ -224,3 +224,61 @@
 **次セッション**: [session239/session-plan.md](../session239/session-plan.md) — 古いドキュメント整理
 
 ---
+
+## Session 239 (2026-03-18)
+
+**概要**: 古いドキュメント整理（Living Documentation準拠）
+
+**実施内容**:
+1. platform-comparison.md 更新 — 現状（Go + Next.js確定、M3ストップ）を冒頭に追記
+2. prototype-approach.md 更新 — Phase進捗・方針変更を冒頭に追記
+3. hearing/ディレクトリ確認 — そのまま保持（再開時に使用可能）
+4. README.md更新 — 技術方針を「kintone推奨」→「Go + Next.js採用」に修正
+
+**更新ファイル**:
+
+| ファイル | 変更内容 |
+|----------|---------|
+| [platform-comparison.md](../../docs/missions/m3-incoming-inspection-db/to-be/platform-comparison.md) | 現状を冒頭に追記 |
+| [prototype-approach.md](../../docs/missions/m3-incoming-inspection-db/to-be/prototype-approach.md) | 現状を冒頭に追記 |
+| [README.md](../../docs/missions/m3-incoming-inspection-db/README.md) | 技術方針を更新 |
+
+**結論**: to-be/ドキュメントのLiving Documentation化完了
+
+**次セッション**: [session240/session-plan.md](../session240/session-plan.md) — AI連携要件の確認
+
+---
+
+## Session 240 (2026-03-18)
+
+**概要**: AI連携要件の確認（現プロトタイプとのギャップ分析）
+
+**実施内容**:
+1. prototype/m3/docs/ARCHITECTURE.md を確認
+2. session236/07_ai_integration_and_cost_analysis.md のMust/Should要件を確認
+3. db/schema.sql と照合してギャップ分析
+
+**ギャップ分析結果**:
+
+| 分類 | 対応状況 |
+|------|----------|
+| Must 5項目 | **1/5** 対応済み（良品/不良品ラベルのみ） |
+| Should 4項目 | **0/4** 対応済み |
+| Could 3項目 | **1.5/3** 対応済み |
+
+**主要な未対応項目**:
+- 検査画像の保存機能（スキーマに画像フィールドなし）
+- 不良モード統一コード（defect_typeがTEXT自由入力）
+- データエクスポート機能（CSV/JSON出力APIなし）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [ai-gap-analysis.md](../session240/ai-gap-analysis.md) | ギャップ分析結果・対応方針案 |
+
+**結論**: M3再開時は上記ギャップを埋める設計変更が必要。現在M3は⏸️ストップ中のため即時対応は不要。
+
+**次セッション**: [session241/session-plan.md](../session241/session-plan.md) — AI調査資料の統合整理
+
+---
