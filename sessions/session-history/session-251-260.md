@@ -204,3 +204,30 @@
 **次セッション**: [session258/session-plan.md](../session258/session-plan.md) — 既存Draw.io確認・員数確認フロー作成・スライド作成
 
 ---
+
+## Session 258 (2026-03-18)
+
+**概要**: 員数確認AI化スライドの作成（フロー図・アプリ画面・Marpスライド）
+
+**実施内容**:
+1. 既存Draw.io（撮影ブース等）の流用可否確認
+2. 員数確認フローのDraw.io作成（2シート）
+3. Marpスライド作成・PDF出力（16ページ）
+4. 画像のimages/配置・スライドへの埋め込み
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [counting-inspection-flow.drawio](../session258/counting-inspection-flow.drawio) | 員数確認フロー図 + アプリ画面イメージ |
+| [counting-inspection-report.md](../session258/counting-inspection-report.md) | Marpスライド（16ページ） |
+| [counting-inspection-report.pdf](../session258/counting-inspection-report.pdf) | PDF出力 |
+| [images/count-flow.png](../session258/images/count-flow.png) | フロー図スクリーンショット |
+| [images/count-app.png](../session258/images/count-app.png) | アプリ画面スクリーンショット |
+
+**未解決**:
+- 「24時間検査工数」の期間が不明確（年間/月間/ロット単位？）
+
+**次セッション**: [session259/session-plan.md](../session259/session-plan.md) — 検査工数の期間分析・スライド数字更新
+
+---
