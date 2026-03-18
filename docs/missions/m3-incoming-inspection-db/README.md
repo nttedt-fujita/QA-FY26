@@ -87,11 +87,17 @@ make frontend-dev    # Frontend起動（別ターミナル）
 
 ## 技術方針
 
-**kintone + 外部分析** を推奨
+**採用**: Go + Next.js + PostgreSQL（Session 34で決定）
 
-詳細: [to-be/platform-comparison.md](to-be/platform-comparison.md)
+| 項目 | 技術 |
+|------|------|
+| Backend | Go + net/http + pgx |
+| Frontend | Next.js 15 + TypeScript + Tailwind CSS |
+| Database | PostgreSQL 16 |
 
-> **更新ルール**: 技術方針の変更はこのファイルを更新すること（sessions/は記録のみ）
+初期検討の記録: [to-be/platform-comparison.md](to-be/platform-comparison.md)
+
+> **Note**: Session 5では kintone + 外部分析 を推奨していたが、Session 34でGo + Next.jsに変更。詳細はADRを参照。
 
 ---
 
@@ -198,4 +204,4 @@ M3/M4に関連する品質管理の概念:
 
 ---
 
-*更新日: 2026-03-09 (Session 47)*
+*更新日: 2026-03-18 (Session 239)*
