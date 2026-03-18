@@ -85,3 +85,33 @@
 **次セッション**: [session244/session-plan.md](../session244/session-plan.md) — M3/M4ドメインモデリング再確認・AI検査連携検討
 
 ---
+
+## Session 244 (2026-03-18)
+
+**概要**: M3/M4ドメインモデリングの再確認（途中）
+
+**実施内容**:
+1. M3/M4ドメインモデリングの過去決定事項を確認
+   - M3 README、M4 README、セッション履歴（31-50）を確認
+   - M3/M4の紐づけ方針（部品、ロット番号、時系列）を再確認
+2. ロット概念の設計詳細を確認
+   - 方針: 入荷タイミング = ロット
+   - schema.sqlで`lots`テーブルに`arrival_date`を確認
+3. ドメインモデル関連ファイルの存在確認
+   - to-be-model.drawio、as-is-model.drawio、qa-gap-analysis.drawio
+
+**議論**:
+- ドメインモデル vs ER図の違いが曖昧 → 次セッションで整理
+- created_at / updated_at の追加が必要な箇所を確認 → 次セッション
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [domain-model-review-notes.md](../session244/domain-model-review-notes.md) | 中間ドキュメント（次セッション継続用） |
+
+**結論**: ドメインモデリングの過去決定は確認完了。図の詳細確認・整理は次セッションで継続
+
+**次セッション**: [session245/session-plan.md](../session245/session-plan.md) — to-be-model.drawio確認・ドメインモデル/ER図整理
+
+---
