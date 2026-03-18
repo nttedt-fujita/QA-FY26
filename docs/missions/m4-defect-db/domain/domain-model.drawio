@@ -1,0 +1,176 @@
+<mxfile host="app.diagrams.net" modified="2026-03-18T00:00:00.000Z" agent="Claude Code" etag="m4-domain-model" version="21.0.0" type="device">
+  <diagram name="M4 ドメインモデル（概念図）" id="m4-domain-model">
+    <mxGraphModel dx="1200" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- タイトル -->
+        <mxCell id="title" value="M4: 工程不良DB ドメインモデル（概念図）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="400" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="※ER図ではなく、ビジネス概念の関係を表現" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#666666" vertex="1" parent="1">
+          <mxGeometry x="350" y="50" width="400" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- M3連携 -->
+        <mxCell id="m3-link" value="【M3連携】&#xa;ロット" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;dashed=1;align=center;verticalAlign=middle" vertex="1" parent="1">
+          <mxGeometry x="80" y="140" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 工程不良記録 -->
+        <mxCell id="defect-record" value="工程不良記録&#xa;───────&#xa;・発生日&#xa;・発生工程&#xa;・不良内容&#xa;・数量&#xa;・作業者" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=center;verticalAlign=top;spacingTop=5" vertex="1" parent="1">
+          <mxGeometry x="280" y="100" width="160" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- 不良コード（3階層） -->
+        <mxCell id="defect-code-box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=0" vertex="1" parent="1">
+          <mxGeometry x="520" y="80" width="280" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="defect-code-title" value="不良コード体系（3階層）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="520" y="85" width="280" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Level 1 -->
+        <mxCell id="level1" value="Level 1: 大分類&#xa;───────&#xa;EL: 電気系&#xa;ME: 機構系&#xa;SW: ソフト系&#xa;SE: センサー系" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;verticalAlign=top;spacingTop=3;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="530" y="110" width="80" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Level 2 -->
+        <mxCell id="level2" value="Level 2: 中分類&#xa;───────&#xa;EL-SO: はんだ&#xa;EL-CM: 部品&#xa;ME-AS: 組立&#xa;..." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;verticalAlign=top;spacingTop=3;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="620" y="110" width="80" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Level 3 -->
+        <mxCell id="level3" value="Level 3: 詳細&#xa;───────&#xa;EL-SO-01:&#xa;  はんだブリッジ&#xa;EL-SO-02:&#xa;  はんだ不足" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=center;verticalAlign=top;spacingTop=3;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="710" y="110" width="80" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- 階層矢印 -->
+        <mxCell id="arrow1" value="" style="endArrow=classic;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="610" y="160" as="sourcePoint" />
+            <mxPoint x="620" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow2" value="" style="endArrow=classic;html=1" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="700" y="160" as="sourcePoint" />
+            <mxPoint x="710" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 原因コード（4M1E） -->
+        <mxCell id="cause-code-box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=0" vertex="1" parent="1">
+          <mxGeometry x="520" y="280" width="280" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="cause-code-title" value="原因コード体系（4M1E分類）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="520" y="285" width="280" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- 4M1E 要素 -->
+        <mxCell id="m1" value="M1: Man&#xa;人的要因" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=center;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="530" y="310" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="m2" value="M2: Machine&#xa;設備要因" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=center;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="620" y="310" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="m3" value="M3: Material&#xa;材料要因" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=center;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="710" y="310" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="m4" value="M4: Method&#xa;方法要因" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=center;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="575" y="370" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="E1: Environment&#xa;環境要因" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=center;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="665" y="370" width="80" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 関係線: M3連携 → 工程不良記録 -->
+        <mxCell id="rel-m3-defect" value="発生源" style="endArrow=open;html=1;rounded=0;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.3;entryDx=0;entryDy=0" edge="1" parent="1" source="m3-link" target="defect-record">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="card-m3-defect" value="1 : N" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10;fontColor=#9673a6" vertex="1" parent="1">
+          <mxGeometry x="210" y="145" width="40" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- 関係線: 工程不良記録 → 不良コード -->
+        <mxCell id="rel-defect-code" value="分類" style="endArrow=open;html=1;rounded=0;exitX=1;exitY=0.3;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0" edge="1" parent="1" source="defect-record" target="defect-code-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="card-defect-code" value="N : 1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="40" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- 関係線: 工程不良記録 → 原因コード -->
+        <mxCell id="rel-defect-cause" value="原因特定" style="endArrow=open;html=1;rounded=0;exitX=1;exitY=0.7;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0" edge="1" parent="1" source="defect-record" target="cause-code-box">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="card-defect-cause" value="N : 0..1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="450" y="320" width="50" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ビジネスルール -->
+        <mxCell id="rules-title" value="【ビジネスルール】" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="480" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="rule1" value="1. 不良コードは3階層（大分類-中分類-詳細）で管理&#xa;   → 集計粒度を柔軟に変更可能" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="505" width="350" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rule2" value="2. 原因コードは4M1E分類（Man/Machine/Material/Method/Environment）&#xa;   → 根本原因分析（RCA）に活用" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="550" width="420" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rule3" value="3. 原因コードは任意（発生時点では未特定の場合あり）&#xa;   → 後から原因調査結果を追記可能" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="595" width="350" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="rule4" value="4. M3（受入検査）との連携はlot_idで紐付け&#xa;   → 材料起因不良（M3-xx）の場合、サプライヤ品質との相関分析が可能" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="640" width="450" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 凡例 -->
+        <mxCell id="legend-title" value="【凡例】" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="560" y="480" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-tx" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366" vertex="1" parent="1">
+          <mxGeometry x="560" y="510" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-tx-text" value="トランザクション系（不良記録）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="590" y="505" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-defect-code" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656" vertex="1" parent="1">
+          <mxGeometry x="560" y="535" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-defect-code-text" value="不良コードマスタ（3階層）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="590" y="530" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-cause-code" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00" vertex="1" parent="1">
+          <mxGeometry x="560" y="560" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-cause-code-text" value="原因コードマスタ（4M1E）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="590" y="555" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-external" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;dashed=1" vertex="1" parent="1">
+          <mxGeometry x="560" y="585" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-external-text" value="外部システム連携（M3）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="590" y="580" width="150" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- 注記 -->
+        <mxCell id="note" value="※このドメインモデルは概念レベルの図です。&#xa;　PK/FK、データ型、技術的属性（created_at等）は含みません。&#xa;　スキーマ設計時にER図を別途作成します。" style="text;html=1;strokeColor=#999999;fillColor=#f5f5f5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#666666;spacing=5" vertex="1" parent="1">
+          <mxGeometry x="80" y="700" width="350" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- IPC参照 -->
+        <mxCell id="ref" value="参考: IPC-9261A (In-Process DPMO)、石川馨「品質管理入門」(4M分類)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#999999" vertex="1" parent="1">
+          <mxGeometry x="80" y="265" width="380" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- 作成情報 -->
+        <mxCell id="created" value="作成: Session 246 (2026-03-18)" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#999999" vertex="1" parent="1">
+          <mxGeometry x="700" y="760" width="180" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -150,5 +150,6 @@ internal/
 
 ## 参考資料
 
-- [To-Beドメインモデル](../../../docs/missions/m3-incoming-inspection-db/to-be/to-be-model.drawio)
+- [ER図](../../../docs/missions/m3-incoming-inspection-db/to-be/er-diagram.drawio)
+- [ドメインモデル（概念図）](../../../docs/missions/m3-incoming-inspection-db/domain/domain-model.drawio)
 - [品質管理フレームワーク調査](../../../sessions/session25/quality-framework-research.md)
