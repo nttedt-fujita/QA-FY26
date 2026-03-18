@@ -198,3 +198,29 @@
 **次セッション**: [session238/session-plan.md](../session238/session-plan.md) — M3 AI組み合わせ見積もり調査
 
 ---
+
+## Session 238 (2026-03-18)
+
+**概要**: M3レビュー・AI見積もり調査の状況把握と計画立て
+
+**実施内容**:
+1. session236のM3M4tools-AI-research/ディレクトリの資料確認
+2. M3プロトタイプの現状調査（Exploreエージェント使用）
+3. 現状マップ作成（何が最新で何が古いか整理）
+4. 今後のセッション計画（Session 239〜242）を策定
+
+**現状整理**:
+- M3プロトタイプ: 完成済み（Session 42-47）
+- M3方針: ⏸️ ストップ（M4優先、Session 52決定）
+- to-be/ドキュメント: 古い（Session 5, 25で更新停止）
+- AI調査資料: session236にあり（2026-03-07作成）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [m3-review-plan.md](../session238/m3-review-plan.md) | Session 239〜242の計画書 |
+
+**次セッション**: [session239/session-plan.md](../session239/session-plan.md) — 古いドキュメント整理
+
+---
