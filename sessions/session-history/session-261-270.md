@@ -387,3 +387,53 @@
 **次セッション**: [session270/session-plan.md](../session270/session-plan.md) — 宇枝さん説明資料作成開始（AI導入の現実を伝える）
 
 ---
+
+## Session 270 (2026-03-19)
+
+**概要**: Linear運用方針の策定とスキル実装
+
+**実施内容**:
+1. Linear運用方針の整理（Issue粒度、アーカイブ、課金判断基準）
+2. Living Documentationの視点でドキュメント配置を決定（ADRとして記録）
+3. linear-managementスキル作成（セッション開始時の自動監視）
+4. session-managementスキル更新（Linear管理呼び出し追加）
+5. ADR-017作成（Linear無料プラン運用方針）
+6. QA-FY26/CLAUDE.md更新（Linear運用セクション追加）
+7. Linearに実装（Project + Issues作成）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| `~/.claude/skills/linear-management/SKILL.md` | Linear管理スキル（アクティブissue数監視、課金判断） |
+| `~/.claude/skills/session-management/SKILL.md`（更新） | Linear管理呼び出しを追加（0.5. Linear管理） |
+| [docs/adr/common/ADR-017-linear-free-plan-operation.md](../../docs/adr/common/ADR-017-linear-free-plan-operation.md) | Linear無料プラン運用方針（ADR） |
+| [CLAUDE.md](../../CLAUDE.md)（更新） | Linear運用セクション追加、ADR-017追加 |
+| [session270/session-summary.md](../session270/session-summary.md) | セッションサマリー |
+| [session271/session-plan.md](../session271/session-plan.md) | 次セッション計画 |
+
+**主な決定**:
+- **Freeプランで運用開始**（250 active issues）
+- **Issue粒度**: 中程度（作業単位）、説明文にチェックリスト
+- **アーカイブ**: Issue完了時に即座に実施
+- **課金判断**: 150件到達時に上司に相談、200件で移行検討
+- **監視**: セッション開始時に自動確認（linear-managementスキル）
+
+**Linear作成内容**:
+- Project: M3+M4: 検査プロセス改善
+- Issue: QA-5（SIPOC作成）、QA-6（プレート調査）、QA-7（梱包変更作業調査）
+
+**主な発見**:
+- 方針を先に決めてからドキュメント化（Living Documentationの視点）
+- スキルとルールの責務分離（session-management ≠ ツール運用）
+- **推測禁止の原則違反**: Linear GraphQL APIを推測で実装→公式ドキュメント確認が必要
+
+**残った課題**:
+- Linear API公式ドキュメント調査（GraphQL Schema、正式な仕様）
+- メンバー招待手順の調査・実施（Guest vs Member権限）
+- Issueの追加・アーカイブ（現在の進捗を全て反映）
+- ガントチャート表示確認
+
+**次セッション**: [session271/session-plan.md](../session271/session-plan.md) — Linear API公式ドキュメント調査とメンバー招待
+
+---
