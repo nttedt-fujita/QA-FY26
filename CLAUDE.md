@@ -87,6 +87,15 @@
 - **M3/M4の方向性**: Go + Next.jsで自前開発（Session 34決定）、M3は⏸️ストップ中（M4優先、Session 52決定）
 - **画像ディレクトリ**: `docs/images/` — スライド用の図表を格納
 
+## 環境変数・API Key
+
+**Linear API Key**:
+- 保存場所: `.env`（Git管理外）
+- フォーマット例: `.env.example`（Git管理下）
+- Workspace: QA-FY26-FUJITA
+- Team ID: QA
+- 設定日: Session 269 (2026-03-19)
+
 ## 品質管理設計ルール
 
 **IMPORTANT**: M3/M4関連の設計・図作成時は、必ず以下を参照すること。
