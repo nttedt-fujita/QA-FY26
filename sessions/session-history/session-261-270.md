@@ -89,3 +89,68 @@
 **次セッション**: Session 263 — 田原さん・杉山さんとのSIPOC作成ワークショップ実施
 
 ---
+
+## Session 263 (2026-03-19)
+
+**概要**: SIPOCワークショップ準備完了（具体的根拠の追加、実施計画詳細化、印刷準備）
+
+**実施内容**:
+1. pre-extracted-info-from-excel.md の修正（具体的な根拠（行番号、数値、日付）を追加）
+2. SIPOCワークショップ実施計画の詳細化（Phase 0-6のタイムライン、確認ポイント、質問例）
+3. ワークショップ資料の印刷準備チェックリスト作成
+4. 次セッション計画の立案（ドメインモデルと課題の整合性確認）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [pre-extracted-info-from-excel.md](../session262/pre-extracted-info-from-excel.md)（修正） | Excelから抽出した情報（具体的な行番号・品番・数値を追加） |
+| [sipoc-workshop-execution-plan.md](../session263/sipoc-workshop-execution-plan.md) | SIPOCワークショップ実施計画（Phase 0-6の詳細タイムライン） |
+| [print-preparation-checklist.md](../session263/print-preparation-checklist.md) | 印刷資料・デジタル資料・会場準備のチェックリスト |
+| [session264/session-plan.md](../session264/session-plan.md) | 次セッション計画（ドメインモデルと課題の整合性確認） |
+
+**主な発見**:
+- 具体的根拠の重要性: Excel行番号・品番・数値を明示することでワークショップで確認しやすくなる
+- ワークショップの成功要因: 詳細なタイムライン、確認ポイント、質問例を事前に用意
+- 「完璧な図を描く」ことが目的ではない: 分からないことを洗い出すことが重要
+- ドメインモデル確認の必要性: 開発中に新しい課題が判明したため、定期的な見直しが必要
+
+**次セッション**: [session264/session-plan.md](../session264/session-plan.md) — ドメインモデルと課題の整合性確認
+
+---
+
+## Session 264 (2026-03-19)
+
+**概要**: ドメインモデルと課題の整合性確認
+
+**実施内容**:
+1. 現在のM3ドメインモデル確認（schema.sql、Goコード）
+2. Excelの課題とドメインモデルの対応確認（9つの課題カテゴリを検証）
+3. ドメインモデル修正の必要性判断（優先度A/B/Cに分類）
+4. 修正提案の作成（サプライヤーロット番号フィールドの追加）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [domain-model-review.md](../session264/domain-model-review.md) | ドメインモデルと課題の対応表 |
+| [domain-model-revision-proposal.md](../session264/domain-model-revision-proposal.md) | 優先度A修正の実施計画（サプライヤーロット番号追加） |
+| [files-reviewed.md](../session264/files-reviewed.md) | 確認ファイル一覧 |
+| [session-summary.md](../session264/session-summary.md) | セッションサマリー |
+| [session265/session-plan.md](../session265/session-plan.md) | 次セッション計画 |
+
+**主な発見**:
+- ドメインモデルは基本的に課題に対応している（表記揺れ、混在問題等は正規化で解決済み）
+- 優先度Aの必須修正は1件のみ: **サプライヤーロット番号の欠落** → `lots.supplier_lot_number` フィールドを追加
+- 優先度Bはワークショップで確認: 複数人作業の記録、検査記録の粒度、defect_qty のDEFAULT値
+- 優先度Cは将来的に検討: 測定結果の構造化、改善提案の記録
+
+**ドメインモデル構成**（確認結果）:
+```
+マスタデータ: suppliers, parts, inspection_items, workers
+トランザクションデータ: lots, inspection_records, defect_reports, waivers
+```
+
+**次セッション**: [session265/session-plan.md](../session265/session-plan.md) — サプライヤーロット番号フィールドの追加（優先度A修正）
+
+---
