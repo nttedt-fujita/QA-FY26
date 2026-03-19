@@ -60,3 +60,16 @@
 **詳細**: [session274/session-summary.md](../session274/session-summary.md)
 
 ---
+
+## Session 275 (2026-03-19)
+
+**概要**: 社長説明資料（Marpスライド）作成開始
+
+**重要な成果**:
+- Marpスライド7枚完成（表紙〜現場調査での発見）
+- 残りのスライドは下書き済み（コメント内）
+- SIPOC画像スクショ取得済み
+
+**詳細**: [session275/session-summary.md](../session275/session-summary.md)
+
+---
