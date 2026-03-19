@@ -437,3 +437,49 @@
 **次セッション**: [session271/session-plan.md](../session271/session-plan.md) — Linear API公式ドキュメント調査とメンバー招待
 
 ---
+
+## Session 271 (2026-03-19)
+
+**概要**: Linear API公式ドキュメント調査、アーカイブ仕様確認、メンバー招待手順調査
+
+**実施内容**:
+1. Linear API認証の確認（前回のコマンドを参照して解決）
+2. アーカイブ操作の仕様確認（自動実行、手動不可）
+3. メンバー招待の仕様確認（Freeプランは全員Admin）
+4. Roadmap / Timeline Viewの確認（ガントチャート表示）
+5. linear-managementスキルの更新（認証方法、アーカイブ運用）
+6. ADR-017の修正（アーカイブ運用の記載を修正）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [linear-api-research.md](../session271/linear-api-research.md) | Linear API調査レポート（認証、アーカイブ、メンバー招待、Timeline view） |
+| [session-summary.md](../session271/session-summary.md) | セッションサマリー |
+| [session272/session-plan.md](../session272/session-plan.md) | 次セッション計画（Workflow State運用方針議論） |
+
+**更新ファイル**:
+| ファイル | 変更内容 |
+|----------|----------|
+| `~/.claude/skills/linear-management/SKILL.md` | 認証方法、アーカイブ運用、Issue完了方法を追加 |
+| [docs/adr/common/ADR-017-linear-free-plan-operation.md](../../docs/adr/common/ADR-017-linear-free-plan-operation.md) | アーカイブ運用の記載を修正（自動実行） |
+
+**主な発見**:
+- **Linearのアーカイブは自動実行**（手動操作不可）: Issueを完了状態（Done）にすると、設定されたアーカイブ期間後に自動アーカイブ
+- **API認証の正しい方法**: `-H "Authorization: $(grep LINEAR_API_KEY .env | cut -d= -f2)"`（`source .env`方式は動作しない）
+- **Freeプランの制約**: 全員がAdmin、GuestはBusiness/Enterpriseのみ、メンバー招待はUI操作推奨
+- **Workflow Statesの確認**: Backlog, Todo, In Progress, Done, Canceled, Duplicateの6状態
+
+**Linear監視結果**:
+- アクティブissue数: 3件（QA-5, QA-6, QA-7）
+- 状態: ✅ 余裕あり（0-100件）
+
+**残った課題**:
+- Workflow State運用方針の決定（Backlogの使い方、In Progressの扱い等）
+- メンバー招待の実施（宇枝さん、小笠原さん、石川さん）
+- Timeline Viewの確認（Freeプランで利用可能か）
+- Issueの追加・完了（QA-6をDone状態に、新規Issueを追加）
+
+**次セッション**: [session272/session-plan.md](../session272/session-plan.md) — Workflow State運用方針議論とメンバー招待
+
+---
