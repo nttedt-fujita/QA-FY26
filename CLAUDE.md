@@ -96,6 +96,25 @@
 - Team ID: QA
 - 設定日: Session 269 (2026-03-19)
 
+## Linear運用
+
+**IMPORTANT**: このプロジェクトはLinearで進捗管理しています。
+
+- **Workspace**: QA-FY26-FUJITA
+- **Team ID**: QA
+- **料金プラン**: Free（250 active issues）
+- **セッション開始時**: `linear-management` スキルで自動監視
+- **運用方針**: [ADR-017](docs/adr/common/ADR-017-linear-free-plan-operation.md) 参照
+
+### 監視基準
+
+| アクティブissue数 | 状態 | 対応 |
+|-----------------|------|------|
+| 0-100 | ✅ 余裕 | 継続 |
+| 100-150 | 🟡 注意 | 監視強化 |
+| 150-200 | 🟠 警告 | 小笠原さん・宇枝さんに相談 |
+| 200-250 | 🔴 限界 | Basicプラン移行（$10/月） |
+
 ## 品質管理設計ルール
 
 **IMPORTANT**: M3/M4関連の設計・図作成時は、必ず以下を参照すること。
@@ -148,6 +167,7 @@
 | ADR | タイトル | 影響範囲 | 状態 |
 |-----|---------|---------|------|
 | [ADR-006](docs/adr/common/ADR-006-m1-m3-integration.md) | M1/M3統合方針 | M1-B、M3 | 承認済み |
+| [ADR-017](docs/adr/common/ADR-017-linear-free-plan-operation.md) | Linearの無料プラン運用方針 | プロジェクト管理 | 承認済み |
 
 ## 過去セッションの重要な決定
 
