@@ -73,3 +73,15 @@
 **詳細**: [session275/session-summary.md](../session275/session-summary.md)
 
 ---
+
+## Session 276 (2026-03-19)
+
+**概要**: 社長説明資料（Marpスライド）完成
+
+**重要な成果**:
+- 全17枚のスライド完成
+- Marp 2カラムレイアウト（CSS Grid）手法を発見・スキルに追記
+
+**詳細**: [session276/session-summary.md](../session276/session-summary.md)
+
+---
