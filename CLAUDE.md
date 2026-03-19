@@ -163,3 +163,5 @@
 | [docs/missions/m3-incoming-inspection-db/hearing-items.md](docs/missions/m3-incoming-inspection-db/hearing-items.md) | ヒアリング項目統合版（P0〜P3優先度付き） |
 | [prototype/m3/docs/implementation-plan.md](prototype/m3/docs/implementation-plan.md) | プロトタイプ実装計画（Session 42-47） |
 | [sessions/session41/all-screens-mockup.drawio](sessions/session41/all-screens-mockup.drawio) | 全画面モックアップ |
+| [sessions/session266/iqc-detailed-sipoc-template.drawio](sessions/session266/iqc-detailed-sipoc-template.drawio) | 受入検査詳細SIPOC（11プロセス、梱包変更作業明示化） |
+| [sessions/session266/process-checklist.md](sessions/session266/process-checklist.md) | SIPOCワークショップ用チェックリスト（クローズドクエスチョン形式） |
