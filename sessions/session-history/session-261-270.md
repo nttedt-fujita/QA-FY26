@@ -344,3 +344,46 @@
 **次セッション**: [session269/session-plan.md](../session269/session-plan.md) — ユーザーヒアリング + Linear導入判断
 
 ---
+
+## Session 269 (2026-03-19)
+
+**概要**: Linear Free導入完了・次セッション方針確定（説明資料作り優先）
+
+**実施内容**:
+1. 要求（What）の確認と方針決定（本来のミッション: 宇枝さん説明資料作り）
+2. Linear Free Workspace作成（QA-FY26-FUJITA）
+3. Linear MCP Server設定・Personal API Key発行
+4. セキュア管理（.env / .env.example / .gitignore）
+5. 次セッション計画作成（説明資料作り優先）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| `.env` | Linear API Key（Git管理外） |
+| `.env.example` | API Keyフォーマット例（Git管理下） |
+| `.gitignore` | `.env`を除外設定 |
+| [session269/session-summary.md](../session269/session-summary.md) | セッションサマリー |
+| [session270/session-plan.md](../session270/session-plan.md) | 次セッション計画（説明資料作り優先） |
+
+**主な発見**:
+- **Linearの課金単位**: Workspace単位で独立して課金
+- **複数Workspace対応**: 1アカウントで複数Workspaceに参加可能（ソフトチームとQAを分離）
+- **Team ID確認方法**: URL（linear.app/.../settings/teams/XXX）で確認
+- **API Key発行場所**: Workspace設定ではなく、個人設定（Security & access）
+- **要求の再確認**: Session 268でLinear調査に1日費やした → 本来のミッション（説明資料作り）に戻る
+
+**Linear導入の状態**:
+- ✅ Workspace作成済み（QA-FY26-FUJITA、Team ID: QA）
+- ✅ MCP Server設定済み（~/.claude.json）
+- ✅ API Key発行・保存済み（.env）
+- ⏳ 動作確認（次セッションで）
+
+**方針転換（要求への立ち返り）**:
+- Session 268でLinear調査に時間を費やした → 今回で区切り
+- **本来のミッション**: 宇枝さんへの説明資料作り（AI導入は厳しい、手を入れる部分が違う）
+- **次セッション優先順位**: 説明資料作り > GNSS作業
+
+**次セッション**: [session270/session-plan.md](../session270/session-plan.md) — 宇枝さん説明資料作成開始（AI導入の現実を伝える）
+
+---
