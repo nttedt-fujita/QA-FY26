@@ -41,3 +41,22 @@
 **詳細**: [session273/session-summary.md](../session273/session-summary.md)
 
 ---
+
+## Session 274 (2026-03-19)
+
+**概要**: Issue整理・水曜日社長説明の準備（小笠原さんとの話を記録）
+
+**重要な成果**:
+- QA-6をDone状態に変更 ✅
+- 小笠原さんとの話を記録 → [sessions/session274/ogasawara-discussion.md](../session274/ogasawara-discussion.md)
+- 水曜日（2026-03-25）社長説明の方向性確定
+
+**重要な方針**:
+- AI化は500台規模では効果が出ない（回収15-39年、21-58年）
+- 小笠原さんの意見: AIより人の方が安い
+- 今年の目標: 可視化に注力
+- 根本解決: 梱包仕様の標準化（業者との調整）
+
+**詳細**: [session274/session-summary.md](../session274/session-summary.md)
+
+---
