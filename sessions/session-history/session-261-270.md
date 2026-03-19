@@ -302,3 +302,45 @@
 **次セッション**: [session268/session-plan.md](../session268/session-plan.md) — Linear調査・進捗管理の仕組み決定
 
 ---
+
+## Session 268 (2026-03-19)
+
+**概要**: Linear調査・進捗管理の仕組み決定
+
+**実施内容**:
+1. Linear価格・機能調査（公式サイト、MCP Server、CLI、API）
+2. Issue数見積もり（QA-FY26プロジェクト全体）
+3. コスト試算（Basicプラン $10/user/月、年$360-600）
+4. 進捗管理の仕組み決定（Linear + Markdown ハイブリッド運用）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [docs/tools/linear/pricing-and-features.md](../../docs/tools/linear/pricing-and-features.md) | Linear価格・機能調査レポート（**出典・原文抜粋付き**） |
+| [docs/tools/linear/issue-estimate.md](../../docs/tools/linear/issue-estimate.md) | Issue数見積もり（Phase 1-3 + 他ミッション） |
+| [docs/tools/linear/hybrid-operation-rules.md](../../docs/tools/linear/hybrid-operation-rules.md) | Linear + Markdown ハイブリッド運用ルール |
+| [session268/issue-estimate-explanation.md](../session268/issue-estimate-explanation.md) | Issue数見積もりの根拠と内訳（詳細解説） |
+| [session268/session-summary.md](../session268/session-summary.md) | セッションサマリー |
+| [session269/session-plan.md](../session269/session-plan.md) | 次セッション計画 |
+
+**主な発見**:
+- **250 issue制限の真実**: アクティブissueのみ250まで、アーカイブは無制限
+- **アクティブissue見積もり**: 71-101（最悪ケース）、30-50（現実的）
+- **Basicプラン必要**: Freeプラン（250上限）では不足、年$360-600は許容範囲
+- **Claude Code連携**: Linear MCP Serverで強力な連携が可能
+
+**調査結論**:
+- **推奨**: Linear Basicプラン採用（$10/user/月、年$360-600）
+- **運用方針**: Linear + Markdown ハイブリッド運用
+  - Linear: 進捗管理・コラボレーション・可視化
+  - Markdown: 技術詳細・設計判断・履歴管理
+
+**出典付き調査の徹底**:
+- 全ての調査レポートに出典URLと原文抜粋を併記
+- 推測と事実を明確に分離
+- docs/ に正式配置（然るべきところへの設置）
+
+**次セッション**: [session269/session-plan.md](../session269/session-plan.md) — ユーザーヒアリング + Linear導入判断
+
+---
