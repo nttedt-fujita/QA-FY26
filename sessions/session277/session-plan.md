@@ -1,8 +1,14 @@
 # Session 277 計画
 
-**目的**: 火曜日レビューに備えた最終確認・修正
+**目的**: GENクラウドサービスの調査 + 社長説明資料の打ち合わせ
 
-**前提**: Session 276で社長説明資料（17枚）完成
+**前提**: Session 276で社長説明資料（17枚）完成、docs/presentations/に正式配置済み
+
+---
+
+## スケジュール（月曜日）
+
+- **11:00**: 小笠原さんと社長説明資料について打ち合わせ
 
 ---
 
@@ -10,41 +16,32 @@
 
 | # | 作業 | 読むべきファイル | 参照コマンド |
 |---|------|-----------------|--------------|
-| 1 | スライド全体の最終確認 | [session275/ceo-presentation.md](../session275/ceo-presentation.md) | - |
-| 2 | PDF出力テスト | - | `marp --pdf --allow-local-files ceo-presentation.md` |
-| 3 | レビュー指摘の反映 | - | - |
+| 1 | GENクラウドサービスの調査 | - | - |
+| 2 | 打ち合わせ後の資料修正（必要に応じて） | [docs/presentations/2026-03-25-ceo-iqc-improvement/slides.md](../../docs/presentations/2026-03-25-ceo-iqc-improvement/slides.md) | - |
 
 ---
 
 ## 詳細
 
-### 1. スライド全体の最終確認
+### 1. GENクラウドサービスの調査
 
-- 全17枚をプレビューで確認
-- 画像の表示、レイアウトの確認
-- 誤字脱字のチェック
+**背景**: 会社のデータベースとして使用しているクラウドサービス
 
-### 2. PDF出力テスト
+**調査項目**:
+- GENとは何か（サービス概要）
+- Web APIでのデータアクセス可否
+- API仕様・認証方式
+- データ取得の制限事項
 
-```bash
-cd sessions/session275
-marp --pdf --allow-local-files ceo-presentation.md
-```
+**目的**: 受入検査データ等をGENから引っ張ってこれるか確認
 
-### 3. レビュー指摘の反映
+### 2. 打ち合わせ後の資料修正
 
-火曜日に小笠原さん・宇枝さんから指摘があれば反映。
-
----
-
-## スケジュール
-
-- 火曜日: レビュー・修正
-- 水曜日（2026-03-25）: 社長説明
+11時の打ち合わせで指摘があれば反映。
 
 ---
 
 ## 参照
 
-- [session275/ceo-presentation.md](../session275/ceo-presentation.md) — 完成したスライド
+- [docs/presentations/2026-03-25-ceo-iqc-improvement/slides.md](../../docs/presentations/2026-03-25-ceo-iqc-improvement/slides.md) — 完成したスライド
 - [session276/session-summary.md](../session276/session-summary.md) — 前セッションサマリー
