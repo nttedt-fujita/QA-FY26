@@ -1,0 +1,308 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0" version="24.7.6">
+  <diagram name="GNSS評価ツールER図" id="gnss-er-diagram">
+    <mxGraphModel dx="1434" dy="780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- タイトル -->
+        <mxCell id="title" value="GNSS評価ツール ER図" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Session 125 (2026-03-12)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#666666" vertex="1" parent="1">
+          <mxGeometry x="40" y="50" width="200" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- lots テーブル -->
+        <!-- ============================================== -->
+        <mxCell id="lots" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="lots-header" value="lots" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="lots-pk" value="🔑 id (PK)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="150" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lots-col1" value="lot_number (UNIQUE)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="170" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lots-col2" value="expected_rate_ms" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="190" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lots-col3" value="expected_port_in_proto" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="210" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lots-col4" value="expected_port_out_proto" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="230" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="lots-col5" value="created_at, updated_at" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#888888" vertex="1" parent="1">
+          <mxGeometry x="90" y="250" width="180" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- devices テーブル -->
+        <!-- ============================================== -->
+        <mxCell id="devices" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="360" y="120" width="200" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="devices-header" value="devices" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="360" y="120" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="devices-pk" value="🔑 id (PK)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="150" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="devices-fk" value="🔗 lot_id (FK → lots)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="170" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="devices-col1" value="serial_number (UNIQUE)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="190" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="devices-col2" value="model_number" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="210" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="devices-col3" value="fw_version" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="230" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="devices-col4" value="created_at, updated_at" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#888888" vertex="1" parent="1">
+          <mxGeometry x="370" y="250" width="180" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- lots → devices リレーション -->
+        <mxCell id="rel-lots-devices" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#6c8ebf;" edge="1" parent="1" source="lots" target="devices">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- indoor_inspections テーブル -->
+        <!-- ============================================== -->
+        <mxCell id="indoor_inspections" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="640" y="120" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="indoor_inspections-header" value="indoor_inspections" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=14" vertex="1" parent="1">
+          <mxGeometry x="640" y="120" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="indoor_inspections-pk" value="🔑 id (PK)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="150" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="indoor_inspections-fk" value="🔗 device_id (FK → devices)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="170" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="indoor_inspections-col1" value="inspected_at" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="190" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="indoor_inspections-col2" value="overall_result (Pass/Fail/Partial)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="210" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="indoor_inspections-col3" value="created_at, updated_at" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#888888" vertex="1" parent="1">
+          <mxGeometry x="650" y="230" width="180" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- devices → indoor_inspections リレーション -->
+        <mxCell id="rel-devices-indoor" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="devices" target="indoor_inspections">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- inspection_item_results テーブル -->
+        <!-- ============================================== -->
+        <mxCell id="inspection_item_results" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="920" y="120" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="inspection_item_results-header" value="inspection_item_results" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="920" y="120" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="inspection_item_results-pk" value="🔑 id (PK)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="930" y="150" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="inspection_item_results-fk" value="🔗 inspection_id (FK)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="930" y="170" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="inspection_item_results-col1" value="item_name" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="930" y="190" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="inspection_item_results-col2" value="verdict (Pass/Fail/Error)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="930" y="210" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="inspection_item_results-col3" value="actual_value, expected_value" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="930" y="230" width="180" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- indoor_inspections → inspection_item_results リレーション -->
+        <mxCell id="rel-indoor-items" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#82b366;" edge="1" parent="1" source="indoor_inspections" target="inspection_item_results">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- outdoor_inspection_results テーブル（新規追加予定） -->
+        <!-- ============================================== -->
+        <mxCell id="outdoor_inspection_results" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="640" y="320" width="240" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-header" value="outdoor_inspection_results (新規)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="640" y="320" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-pk" value="🔑 id (PK)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="350" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-fk1" value="🔗 device_id (FK → devices)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="370" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-fk2" value="🔗 lot_id (FK → lots, nullable)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="390" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-col1" value="inspected_at, duration_sec" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="410" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-col2" value="sample_count" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="430" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-col3" value="rtk_fix_rate, rtk_fix_time_ms" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="450" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-col4" value="l2_reception_rate, l1_min_cno" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="470" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-col5" value="is_pass, l1_cno_pass, l2_rate_pass" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="490" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-col6" value="rtk_fix_time_pass, rtk_fix_rate_pass" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="510" width="220" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_inspection_results-col7" value="failure_reasons (JSON)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="650" y="530" width="220" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- devices → outdoor_inspection_results リレーション -->
+        <mxCell id="rel-devices-outdoor" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#d6b656;dashed=1;dashPattern=5 5;" edge="1" parent="1" source="devices" target="outdoor_inspection_results">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="460" y="300" />
+              <mxPoint x="600" y="300" />
+              <mxPoint x="600" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- outdoor_measurements テーブル（既存、時系列蓄積用） -->
+        <!-- ============================================== -->
+        <mxCell id="outdoor_measurements" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="360" y="340" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_measurements-header" value="outdoor_measurements" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="360" y="340" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_measurements-pk" value="🔑 id (PK)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="370" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_measurements-fk" value="🔗 device_id (FK → devices)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="390" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_measurements-col1" value="started_at, ended_at" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="410" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_measurements-col2" value="location_lat, location_lon" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="430" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_measurements-col3" value="environment, weather" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="450" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_measurements-col4" value="antenna_config, base_station_info" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="470" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_measurements-col5" value="judgment, comment" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="370" y="490" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="outdoor_measurements-col6" value="..." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#888888" vertex="1" parent="1">
+          <mxGeometry x="370" y="510" width="180" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- devices → outdoor_measurements リレーション -->
+        <mxCell id="rel-devices-measurements" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#9673a6;" edge="1" parent="1" source="devices" target="outdoor_measurements">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="460" y="300" />
+              <mxPoint x="460" y="300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- 時系列テーブル群（サマリ表示） -->
+        <!-- ============================================== -->
+        <mxCell id="timeseries-group" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="timeseries-header" value="時系列テーブル群" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="80" y="340" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="timeseries-col1" value="nav_pvt_records" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="370" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="timeseries-col2" value="nav_status_records" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="390" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="timeseries-col3" value="nav_dop_records" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="410" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="timeseries-col4" value="satellites" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="430" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="timeseries-col5" value="signals" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="450" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="timeseries-col6" value="mon_span_records" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="470" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="timeseries-col7" value="mon_rf_records" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="90" y="490" width="180" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="timeseries-note" value="(すべて measurement_id FK)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#888888" vertex="1" parent="1">
+          <mxGeometry x="90" y="510" width="180" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- outdoor_measurements → 時系列 リレーション -->
+        <mxCell id="rel-measurements-timeseries" value="1:N" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#9673a6;" edge="1" parent="1" source="outdoor_measurements" target="timeseries-group">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ============================================== -->
+        <!-- 凡例 -->
+        <!-- ============================================== -->
+        <mxCell id="legend" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="920" y="320" width="200" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-header" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="920" y="320" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="930" y="355" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-1-text" value="マスタ（lots, devices）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="960" y="350" width="150" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="930" y="385" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-2-text" value="屋内検査" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="960" y="380" width="150" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="930" y="415" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-3-text" value="屋外検査結果（新規追加予定）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="960" y="410" width="150" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="930" y="445" width="20" height="15" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-4-text" value="計測・時系列データ" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="960" y="440" width="150" height="25" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
