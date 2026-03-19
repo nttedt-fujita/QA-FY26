@@ -161,6 +161,22 @@ ADRはミッション別に配置: `adr/{m1,m3,common}/`
 
 ---
 
+## プロジェクト管理ツール
+
+### Linear調査（Session 268）
+
+| ドキュメント | 内容 | 作成Session |
+|-------------|------|-------------|
+| [tools/linear/pricing-and-features.md](tools/linear/pricing-and-features.md) | Linear価格・機能調査レポート（出典・原文抜粋付き） | Session 268 |
+| [tools/linear/issue-estimate.md](tools/linear/issue-estimate.md) | Issue数見積もり（Phase 1-3 + 他ミッション） | Session 268 |
+
+**調査結論**:
+- **推奨**: Linearを採用（Basicプラン $10/user/月、年$360-600）
+- **理由**: アクティブissueが71-101に達する見込み、Freeプラン（250上限）では不足
+- **Claude Code連携**: MCP Serverで強力な連携が可能
+
+---
+
 ## 画像・図表
 
 | ファイル | 内容 | Session |
@@ -193,6 +209,8 @@ docs/
 │   ├── m3-incoming-inspection-db/  ← M3: 受入検査DB
 │   └── m4-defect-db/             ← M4: 工程不良DB
 ├── qa-knowledge/                 ← QA基礎知識
+├── tools/                        ← プロジェクト管理ツール調査
+│   └── linear/                   ← Linear調査レポート
 └── images/                       ← 図表
 
 sessions/
