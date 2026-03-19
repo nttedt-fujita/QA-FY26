@@ -1,0 +1,160 @@
+<mxfile host="app.diagrams.net" modified="2026-03-19T00:00:00.000Z" agent="Claude" version="24.0.0">
+  <diagram name="SIPOC: 受入検査プロセス詳細化" id="sipoc-iqc-detailed">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="SIPOC Diagram: 受入検査プロセス（詳細化版）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="350" y="40" width="500" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Subtitle -->
+        <mxCell id="subtitle" value="※ Session 265での発見: プロセス粒度が粗い → クローズドクエスチョンができるレベルまで分解" style="text;html=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="250" y="90" width="700" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Suppliers Column -->
+        <mxCell id="suppliers-header" value="Suppliers&#xa;(供給者)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="140" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="suppliers-1" value="サプライヤー" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="80" y="210" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="suppliers-2" value="物流業者" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="80" y="260" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="suppliers-3" value="検査員（田原さん等）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="80" y="310" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Inputs Column -->
+        <mxCell id="inputs-header" value="Inputs&#xa;(入力)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="260" y="140" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="inputs-1" value="部品（梱包済み）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="260" y="210" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="inputs-2" value="納品書" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="260" y="260" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="inputs-3" value="検査基準書" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="260" y="310" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="inputs-4" value="ノギス・測定器具" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="260" y="360" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Process Column -->
+        <mxCell id="process-header" value="Process&#xa;(プロセス)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="440" y="140" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- 詳細化されたプロセス（10ステップ） -->
+        <mxCell id="process-1" value="1. 部品入荷（納品受け取り）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="210" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="process-2" value="2. 作業場所への移動" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="260" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="process-3" value="3. 検査段取り&#xa;（場所・人員確保）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="310" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="process-4" value="4. 開梱作業" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="360" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="process-5" value="5. 梱包変更作業&#xa;（Session 260の隠れコスト）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ffcccc;strokeColor=#b85450" vertex="1" parent="1">
+          <mxGeometry x="440" y="410" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="process-6" value="6. 員数確認" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="470" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="process-7" value="7. 外観検査" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="520" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="process-8" value="8. 測定（ノギス等）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="570" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="process-9" value="9. 記録作成（Excel入力）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="620" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="process-10" value="10. 入庫のための梱包作業" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="670" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="process-11" value="11. 入庫" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="720" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="process-note" value="（ヒアリング時に「✅これやってる」「❌これやってない」で確認）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;dashed=1" vertex="1" parent="1">
+          <mxGeometry x="440" y="770" width="200" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Outputs Column -->
+        <mxCell id="outputs-header" value="Outputs&#xa;(出力)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="660" y="140" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="outputs-1" value="検査記録（Excel）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="660" y="210" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="outputs-2" value="合格ロット" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="660" y="260" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="outputs-3" value="不合格報告書" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="660" y="310" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="outputs-4" value="入庫済み部品" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="660" y="360" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Customers Column -->
+        <mxCell id="customers-header" value="Customers&#xa;(顧客)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="840" y="140" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="customers-1" value="倉庫担当" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="840" y="210" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="customers-2" value="組立担当" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="840" y="260" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="customers-3" value="品質管理担当" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="840" y="310" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="customers-4" value="経営層（レポート）" style="rounded=0;whiteSpace=wrap;html=1;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="840" y="360" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows -->
+        <mxCell id="arrow-si" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="suppliers-1" target="inputs-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-ip" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="inputs-1" target="process-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-po" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="process-9" target="outputs-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-oc" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="outputs-4" target="customers-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Notes -->
+        <mxCell id="notes-title" value="【Session 265での発見と改善】" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=13;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="850" width="920" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="notes-problem" value="❌ Session 262のSIPOC（粗い粒度）:&#xa;  1. 部品入荷&#xa;  2. 検査準備（梱包確認）← 抽象的すぎる&#xa;  3. 検査実施（外観・員数）&#xa;  4. 記録作成（Excel入力）&#xa;  5. 入庫/不合格処理&#xa;&#xa;問題点:&#xa;  - 「検査準備（梱包確認）」だけでは、クローズドクエスチョンができない&#xa;  - 「これでいいか？」と聞けない&#xa;  - 梱包変更作業（隠れコスト）がどこに含まれるか不明" style="text;html=1;strokeColor=#b85450;fillColor=#ffcccc;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#333333" vertex="1" parent="1">
+          <mxGeometry x="80" y="890" width="440" height="200" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notes-solution" value="✅ 詳細化版（クローズドクエスチョン可能）:&#xa;  1. 部品入荷（納品受け取り）&#xa;  2. 作業場所への移動&#xa;  3. 検査段取り（場所・人員確保）&#xa;  4. 開梱作業&#xa;  5. 梱包変更作業 ← Session 260の隠れコスト&#xa;  6. 員数確認&#xa;  7. 外観検査&#xa;  8. 測定（ノギス等）&#xa;  9. 記録作成（Excel入力）&#xa; 10. 入庫のための梱包作業&#xa; 11. 入庫&#xa;&#xa;改善点:&#xa;  - 田原さんに「✅これやってる」「❌これやってない」と答えてもらえる粒度&#xa;  - 梱包変更作業（隠れコスト）を明示化&#xa;  - 各工程の所要時間を測定できる" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#333333" vertex="1" parent="1">
+          <mxGeometry x="540" y="890" width="460" height="280" as="geometry" />
+        </mxCell>
+
+        <mxCell id="notes-next" value="📝 ワークショップでの確認方法:&#xa;  1. この図を見せて「こういう流れですか？」と確認&#xa;  2. 各プロセスについて「✅やってる」「❌やってない」「△部分的」で確認&#xa;  3. 抜けているプロセスはないか質問&#xa;  4. 順序は正しいか質問&#xa;  5. 特に時間がかかるプロセスはどれか質問（「梱包変更作業が大半」等）" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#333333" vertex="1" parent="1">
+          <mxGeometry x="80" y="1110" width="920" height="110" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
