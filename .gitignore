@@ -9,3 +9,20 @@
 
 # スクリーンショット画像（分析結果はmarkdownに書き出し済み）
 sessions/*/screenshot/
+
+# ビルド成果物
+target/
+*/target/
+
+# ログファイル
+logs/
+*.log
+
+# データベースファイル（開発用）
+*.db
+*.db-shm
+*.db-wal
+
+# Python バイトコード
+__pycache__/
+*.pyc
