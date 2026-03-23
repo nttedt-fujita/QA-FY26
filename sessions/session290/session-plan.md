@@ -1,6 +1,6 @@
 # Session 290 計画
 
-**目的**: 通常作業再開（効果測定期間開始）
+**目的**: 効果測定の方法を設計する
 
 **前提**: Session 289でトークン消費削減Phase 1-3完了（52%削減）
 
@@ -8,22 +8,23 @@
 
 ## やること
 
-効果測定期間（Session 290-300）の開始。通常作業に戻る。
+| # | 作業 | 読むべきファイル |
+|---|------|-----------------|
+| 1 | 効果測定の方法をきちんと設計 | token-reduction-evaluation.md（暫定版） |
 
-問題を感じたらsession-summary.mdに記録:
-```markdown
-## トークン削減の効果測定
+### 検討ポイント
 
-- 問題: [あれば記載]
-- 気づき: [あれば記載]
-```
+- 何を記録するか（定量・定性）
+- どう強制するか（session-summary必須セクション？専用ログ？hooks？）
+- いつまで続けるか
+- 判断基準は何か
 
 ---
 
 ## 参照
 
 - [Session 289 summary](../session289/session-summary.md)
-- [効果測定計画](../session289/token-reduction-evaluation.md)
+- [効果測定計画（暫定版）](../session289/token-reduction-evaluation.md)
 
 ---
 
