@@ -111,3 +111,17 @@
 **詳細**: [session278/session-summary.md](../session278/session-summary.md)
 
 ---
+
+## Session 279 (2026-03-23)
+
+**概要**: 進捗管理方法の見直し（Phase 2）— 調査・方針策定・作業計画
+
+**重要な成果**:
+- SSOT、Living Documentation、Docs as Code についてWeb調査
+- 進捗管理方針策定 → [docs/progress-management-policy.md](../../docs/progress-management-policy.md)
+- 断捨離作業計画（Session 280-284） → [sessions/session279/docs-cleanup-plan.md](../session279/docs-cleanup-plan.md)
+- docs/index.md 廃止決定
+
+**詳細**: [session279/session-summary.md](../session279/session-summary.md)
+
+---
