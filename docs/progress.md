@@ -1,42 +1,71 @@
 # ミッション進捗
 
-**最終更新**: Session 234 (2026-03-17)
+**最終更新**: Session 280 (2026-03-23)
 
 ---
 
-## 注意事項
+## M1: センサー評価
 
-このファイルは **session-history/*.md** を出典として作成しました。
-コードや実装状況の直接確認は行っていません。
+### M1-A: LiDAR評価
 
-実際の進捗と乖離している可能性があります。
-正確な状況確認にはコードレビューが必要です。
+| 項目 | 内容 |
+|------|------|
+| 状態 | 放置中（初期調査完了） |
+| 最新セッション | [Session 70](../sessions/session-history/session-061-070.md) |
+| 再開時に読む | [lidar/README.md](missions/m1-sensor-evaluation/lidar/README.md) |
 
----
+### M1-B: GNSS評価
 
-## ミッション別状況
-
-| ミッション | 状況 | 次のアクション | 出典 |
-|-----------|------|---------------|------|
-| M1-A: LiDAR評価 | 初期調査完了（AS-DT1仕様確認） | 放置中 | session-history/session-061-070.md |
-| M1-B: GNSS評価 | プロトタイプ実装中 | 実機テスト継続、並列検査機能 | session-history/session-221-230.md |
-| M2: 点群データ検証 | 未着手 | 放置中 | session-history/session-181-190.md |
-| M3: 受入検査DB | プロトタイプ途中 | AI組み合わせ見積もり | session-history/session-181-190.md |
-| M4: 工程不良DB | 未着手 | - | - |
+| 項目 | 内容 |
+|------|------|
+| 状態 | 放置中（Phase 3、BBR問題解決済み） |
+| 最新セッション | [Session 229](../sessions/session229/session-summary.md) |
+| 再開時に読む | [gnss/README.md](missions/m1-sensor-evaluation/gnss/README.md) |
 
 ---
 
-## 放置タスク
+## M2: 点群データ検証
 
-| タスク | 発生Session | 状況 | 出典 |
-|--------|------------|------|------|
-| M3 AI組み合わせ見積もり | 185 | 放置中 | session-history/session-181-190.md |
-| M2 点群データ検証方法の調査 | 185 | 放置中 | session-history/session-181-190.md |
+| 項目 | 内容 |
+|------|------|
+| 状態 | 放置中（FA率評価方法確認待ち） |
+| 最新セッション | 未特定 |
+| 再開時に読む | [m2-pointcloud-verification/](missions/m2-pointcloud-verification/) |
 
 ---
 
-## 更新履歴
+## M3: 受入検査DB
 
-| 日付 | Session | 内容 |
-|------|---------|------|
-| 2026-03-17 | 234 | 初版作成（session-historyから情報収集） |
+| 項目 | 内容 |
+|------|------|
+| 状態 | ⏸️ストップ中（M4優先、Session 52決定） |
+| Linear | [QA-5: SIPOC作成と現場レビュー準備](https://linear.app/qa-fy26-fujita/issue/QA-5/sipoc作成と現場レビュー準備) |
+| Linear | [QA-7: 梱包変更作業・隠れコストの定量調査](https://linear.app/qa-fy26-fujita/issue/QA-7/梱包変更作業隠れコストの定量調査) |
+| 最新セッション | [Session 276](../sessions/session276/session-summary.md)（社長説明資料） |
+| 再開時に読む | [ai-research/](missions/m3-incoming-inspection-db/ai-research/) |
+
+---
+
+## M4: 工程不良DB
+
+| 項目 | 内容 |
+|------|------|
+| 状態 | 未着手（Excel未入手） |
+| 最新セッション | なし |
+| 再開時に読む | - |
+
+---
+
+## 今週の活動
+
+| 項目 | 内容 |
+|------|------|
+| Linear In Progress | [QA-7: 梱包変更作業・隠れコストの定量調査](https://linear.app/qa-fy26-fujita/issue/QA-7/梱包変更作業隠れコストの定量調査) |
+| 次のイベント | 2026-03-25（水）社長説明 |
+
+---
+
+## 関連資料
+
+- [progress-management-policy.md](progress-management-policy.md) — 進捗管理方針
+- [session-history/](../sessions/session-history/) — セッション履歴
