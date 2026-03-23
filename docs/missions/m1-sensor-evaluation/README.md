@@ -158,4 +158,4 @@ Step 3 (3Q-FY27 1Q): 標準化・文書化
 
 ---
 
-*元データ: [session1/mission-approach-report.md](../../sessions/session1/mission-approach-report.md)*
+*元データ: [session1/mission-approach-report.md](../../../sessions/session1/mission-approach-report.md)*
