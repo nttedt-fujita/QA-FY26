@@ -98,3 +98,16 @@
 **詳細**: [session277/session-summary.md](../session277/session-summary.md)
 
 ---
+
+## Session 278 (2026-03-23)
+
+**概要**: 進捗管理方法の見直し（Phase 1）— セッション履歴の確認と課題特定
+
+**重要な成果**:
+- セッション履歴7ファイル確認（session-211-220 〜 session-271-280）
+- 課題特定: コンテキスト確認コストが高い（72%消費）
+- 中間ファイル作成 → [sessions/session278/context-review-progress.md](../session278/context-review-progress.md)
+
+**詳細**: [session278/session-summary.md](../session278/session-summary.md)
+
+---
