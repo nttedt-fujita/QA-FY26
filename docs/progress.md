@@ -12,7 +12,7 @@
 |------|------|
 | 状態 | 放置中（初期調査完了） |
 | 最新セッション | [Session 70](../sessions/session-history/session-061-070.md) |
-| 再開時に読む | [lidar/README.md](missions/m1-sensor-evaluation/lidar/README.md) |
+| 再開時に読む | [lidar/](missions/m1-sensor-evaluation/lidar/) |
 
 ### M1-B: GNSS評価
 

@@ -11,3 +11,16 @@
 **詳細**: [session281/session-summary.md](../session281/session-summary.md)
 
 ---
+
+## Session 282 (2026-03-23)
+
+**概要**: session-managementスキル更新（progress.md更新ルール追加）、docs/断捨離計画完了
+
+**重要な成果**:
+- session-managementスキルにセクション6（progress.md更新）追加
+- docs/断捨離計画完了（計画5セッション → 実績3セッション）
+- Linear連携の課題特定 → Session 283で対応予定
+
+**詳細**: [session282/session-summary.md](../session282/session-summary.md)
+
+---
