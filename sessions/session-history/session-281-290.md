@@ -80,3 +80,16 @@
 **詳細**: [session286/session-summary.md](../session286/session-summary.md)
 
 ---
+
+## Session 287 (2026-03-23)
+
+**概要**: トークン消費削減計画の策定（セッション開始時2381行の読み込み量を特定）
+
+**重要な成果**:
+- 問題再定義: スキル単体ではなく「セッション開始時の総読み込み量」が問題
+- ルール群1250行 + スキル830行 = 2381行を計測
+- Phase 1-3の削減計画策定
+
+**詳細**: [session287/session-summary.md](../session287/session-summary.md)
+
+---
