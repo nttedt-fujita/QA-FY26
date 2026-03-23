@@ -4,6 +4,24 @@
 
 ---
 
+## 断捨離計画との対応
+
+**元の計画**（[docs-cleanup-plan.md](../session279/docs-cleanup-plan.md)）:
+- Session 280: progress.md再構築
+- Session 281: technical-research/整理
+- Session 282: M3/M4整理
+- Session 283: M1/M2整理
+- Session 284: スキル更新
+
+**実際の進捗**:
+- Session 280: progress.md再構築 ✅ + technical-research/整理 ✅（前倒し）
+- Session 281: M3整理 ✅ + M1/M2整理 ✅（前倒し）
+- Session 282: スキル更新（予定）
+
+→ 計画より2セッション前倒しで完了見込み
+
+---
+
 ## 実施内容
 
 ### 1. M3（受入検査DB）のファイル確認・リンク修正
