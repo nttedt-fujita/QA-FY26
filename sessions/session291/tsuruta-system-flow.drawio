@@ -1,0 +1,156 @@
+<mxfile host="65bd71144e">
+    <diagram name="鶴田システム処理フロー" id="tsuruta-flow">
+        <mxGraphModel dx="599" dy="427" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="鶴田システム（在庫管理ツール.xlsx）処理フロー" style="text;html=1;fontSize=18;fontStyle=1;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="20" width="500" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle" value="最終更新：2026/1/22　｜　2027年3月まで対応" style="text;html=1;fontSize=11;fontColor=#666666;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="55" width="500" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="input-group" value="入力データ（手動更新）" style="text;html=1;fontSize=14;fontStyle=1;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="90" width="250" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tanaoroshi" value="&lt;b&gt;棚卸表&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;eDT: 棚卸表_eDT_260114&lt;br&gt;ナカヨ: 棚卸表_ナカヨ_251226&lt;br&gt;&lt;br&gt;部品ごとの&lt;b&gt;実在庫数&lt;/b&gt;（時点スナップショット）&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="240" width="250" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="bom" value="&lt;b&gt;BOM（部品表）&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;AC102: A25-BOM-7&lt;br&gt;BB102: B25-BOM-01&lt;br&gt;粒剤装置: P13-AC102-BOM-3&lt;br&gt;&lt;br&gt;製品1台あたりの&lt;b&gt;部品員数&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="120" width="250" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="seisan" value="&lt;b&gt;生産計画&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;製造委託先ごとの月別生産台数&lt;br&gt;・ナカヨ&lt;br&gt;・渡辺製作所&lt;br&gt;・スカイリンク福島&lt;br&gt;&lt;br&gt;例: AC102 ナカヨ 1月=50台&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="380" width="250" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="edt-nyuko" value="&lt;b&gt;eDT入庫数&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;部品ごとの月別入庫予定数&lt;br&gt;（発注→納品の実績・予定）&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="530" width="250" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="edt-nakayo" value="&lt;b&gt;eDT→ナカヨ出庫数&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;eDTからナカヨへの部品出庫数&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="620" width="250" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="calc-group" value="計算処理（自動）" style="text;html=1;fontSize=14;fontStyle=1;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="90" width="250" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="buhin-master" value="&lt;b&gt;部品リストマスター&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;BOMから自動生成&lt;br&gt;部品番号 → 員数マッピング&lt;br&gt;(AC102用, BB102用, 粒剤用)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="130" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="shukko-calc" value="&lt;b&gt;出庫予定(ALL)&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;&lt;b&gt;計算式:&lt;/b&gt;&lt;br&gt;月別出庫数 = &lt;br&gt;　員数(AC102) × 生産台数(AC102)&lt;br&gt;+ 員数(BB102) × 生産台数(BB102)&lt;br&gt;+ 員数(粒剤) × 生産台数(粒剤)&lt;br&gt;&lt;br&gt;※ナカヨ版は(ナカヨ)のみで計算&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="240" width="280" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="zaiko-calc" value="&lt;b&gt;在庫数計算処理(ALL)&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;&lt;b&gt;計算式:&lt;/b&gt;&lt;br&gt;初月在庫 = 棚卸時在庫 + eDT→ナカヨ出庫数&lt;br&gt;翌月在庫 = 前月在庫 + 入庫数 - 出庫予定&lt;br&gt;&lt;br&gt;各月の在庫数を16ヶ月先まで計算&lt;br&gt;&lt;br&gt;※ナカヨ版はナカヨのみの計算&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="420" width="280" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="output-group" value="出力（アラート表示）" style="text;html=1;fontSize=14;fontStyle=1;fontColor=#333333;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="90" width="250" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="alert" value="&lt;b&gt;在庫アラート&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;在庫数が0以下になる月を検出し&lt;br&gt;色分けで可視化&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="130" width="300" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="color-black" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="210" width="30" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="color-black-text" value="■ eDT在庫が欠品する月（全製造計画ベース）" style="text;html=1;fontSize=11;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="210" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="color-stripe" value="▨" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0E0E0;strokeColor=#999999;fontSize=14;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="240" width="30" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="color-stripe-text" value="▨ ナカヨ在庫が欠品する月（ナカヨのみベース）" style="text;html=1;fontSize=11;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="240" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="color-yellow" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFF00;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="270" width="30" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="color-yellow-text" value="黄色 = 在庫注意（残りわずか）" style="text;html=1;fontSize=11;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="270" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="color-red" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF0000;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="300" width="30" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="color-red-text" value="赤 = 在庫切れ（欠品確定）" style="text;html=1;fontSize=11;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="880" y="300" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="order-decision" value="&lt;b&gt;発注タイミング判断&lt;/b&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;アラート色を見て&lt;br&gt;「いつまでに何を発注すべきか」を判断&lt;br&gt;&lt;br&gt;→ 鶴田さんが手動で発注処理&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="390" width="300" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="tanaoroshi" target="zaiko-calc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow1-label" value="初月在庫" style="edgeLabel;html=1;fontSize=10;" parent="arrow1" vertex="1" connectable="0">
+                    <mxGeometry x="-0.3" relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="bom" target="buhin-master" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow2-label" value="員数" style="edgeLabel;html=1;fontSize=10;" parent="arrow2" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="buhin-master" target="shukko-calc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow3-label" value="部品別員数" style="edgeLabel;html=1;fontSize=10;" parent="arrow3" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="seisan" target="shukko-calc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow4-label" value="月別生産台数" style="edgeLabel;html=1;fontSize=10;" parent="arrow4" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="shukko-calc" target="zaiko-calc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow5-label" value="月別出庫予定数" style="edgeLabel;html=1;fontSize=10;" parent="arrow5" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="edt-nyuko" target="zaiko-calc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow6-label" value="月別入庫数" style="edgeLabel;html=1;fontSize=10;" parent="arrow6" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;" parent="1" source="edt-nakayo" target="zaiko-calc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow7-label" value="ナカヨ向け出庫" style="edgeLabel;html=1;fontSize=10;" parent="arrow7" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#FF0000;strokeWidth=2;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="zaiko-calc" target="alert" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow8-label" value="在庫≦0を検出" style="edgeLabel;html=1;fontSize=10;fontColor=#FF0000;" parent="arrow8" vertex="1" connectable="0">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-25" y="-197" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="alert" target="order-decision" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="formula-box" value="&lt;b&gt;計算式の詳細&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font style=&#39;font-size:10px&#39;&gt;&lt;b&gt;出庫予定(月)&lt;/b&gt; = Σ(員数[製品i] × 生産台数[製品i][月])&lt;br&gt;　製品i = AC102, BB102, 粒剤装置&lt;br&gt;　製造先 = ナカヨ + 渡辺製作所 + SL福島&lt;br&gt;&lt;br&gt;&lt;b&gt;在庫数(初月)&lt;/b&gt; = 棚卸在庫 + eDT→ナカヨ出庫調整&lt;br&gt;&lt;b&gt;在庫数(N+1月)&lt;/b&gt; = 在庫数(N月) + 入庫数(N+1月) - 出庫予定(N+1月)&lt;br&gt;&lt;br&gt;&lt;b&gt;アラート&lt;/b&gt; = 在庫数 ≦ 0 の月を色分け表示&lt;br&gt;　■ = 全拠点合計で欠品&lt;br&gt;　▨ = ナカヨ単独で欠品&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#CCCCCC;align=left;spacingLeft=10;spacingTop=5;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="560" width="350" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-title" value="凡例" style="text;html=1;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="790" width="50" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="815" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend1-text" value="手動入力データ" style="text;html=1;fontSize=10;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="785" y="813" width="100" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="815" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend2-text" value="自動計算" style="text;html=1;fontSize=10;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="925" y="813" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="815" width="20" height="15" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend3-text" value="アラート出力" style="text;html=1;fontSize=10;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="1025" y="813" width="80" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

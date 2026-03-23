@@ -7,6 +7,9 @@
 # ただし目次用の小サイズPDF（1-14-app-note-ublox.pdf）も除外
 *.pdf
 
+# PowerPoint（md化済み）
+*.pptx
+
 # スクリーンショット画像（分析結果はmarkdownに書き出し済み）
 sessions/*/screenshot/
 
