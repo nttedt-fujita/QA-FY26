@@ -37,3 +37,16 @@
 **詳細**: [session283/session-summary.md](../session283/session-summary.md)
 
 ---
+
+## Session 284 (2026-03-23)
+
+**概要**: 設定構成シンプル化 Phase 1 完了（棚卸し）
+
+**重要な成果**:
+- ルール17個・スキル22個の責務を1行要約
+- 重複疑い4箇所を特定（CLAUDE.md vs ルール群、ルール01vs17、07vs14、セッション管理系）
+- phase1-inventory.md 作成
+
+**詳細**: [session284/session-summary.md](../session284/session-summary.md)
+
+---
