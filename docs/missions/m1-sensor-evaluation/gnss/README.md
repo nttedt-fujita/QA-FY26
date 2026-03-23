@@ -58,8 +58,6 @@ Phase 4: 標準化
 
 > 今は原理試作に対しての設計検証をしているが、**受入検査でも何をするかを整理しておいたほうが良い**かも
 
-詳細: [sessions/session16/gnss-hearing-koitabashi-01.md](../../../../sessions/session16/gnss-hearing-koitabashi-01.md)
-
 ---
 
 ## ドキュメント一覧

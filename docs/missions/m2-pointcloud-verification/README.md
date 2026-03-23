@@ -145,4 +145,4 @@ Step 3: 試行運用と改善
 
 ---
 
-*元データ: [session1/mission-approach-report.md](../../sessions/session1/mission-approach-report.md)*
+*元データ: [session1/mission-approach-report.md](../../../sessions/session1/mission-approach-report.md)*
