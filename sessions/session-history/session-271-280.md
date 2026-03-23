@@ -125,3 +125,16 @@
 **詳細**: [session279/session-summary.md](../session279/session-summary.md)
 
 ---
+
+## Session 280 (2026-03-23)
+
+**概要**: progress.md再構築 + docs/断捨離（Session 280-281計画実施）
+
+**重要な成果**:
+- progress.md をハブ形式に書き換え
+- docs/index.md 削除
+- docs/technical-research/ 整理（14→8ファイル）
+
+**詳細**: [session280/session-summary.md](../session280/session-summary.md)
+
+---
