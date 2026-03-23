@@ -120,3 +120,15 @@
 **詳細**: [session289/session-summary.md](../session289/session-summary.md)
 
 ---
+
+## Session 290 (2026-03-23)
+
+**概要**: 効果測定の方法設計 + 現在地確認 + 放置タスク解消
+
+**重要な成果**:
+- session-end-checklistに削減効果メモ追加（Session 290-300限定）
+- linear-managementスキルにprogress.mdとの関係追記
+
+**詳細**: [session290/session-summary.md](../session290/session-summary.md)
+
+---
