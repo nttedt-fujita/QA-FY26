@@ -136,5 +136,3 @@
 - docs/technical-research/ 整理（14→8ファイル）
 
 **詳細**: [session280/session-summary.md](../session280/session-summary.md)
-
----
