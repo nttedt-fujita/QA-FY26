@@ -106,3 +106,17 @@
 **詳細**: [session288/session-summary.md](../session288/session-summary.md)
 
 ---
+
+## Session 289 (2026-03-23)
+
+**概要**: トークン消費削減 Phase 2-3 完了（スキル群圧縮）
+
+**重要な成果**:
+- session-management 611行→104行（83%削減）
+- energy-management 219行→96行（56%削減）
+- 累計52%削減（目標30%を上回る）
+- 効果測定計画策定
+
+**詳細**: [session289/session-summary.md](../session289/session-summary.md)
+
+---
