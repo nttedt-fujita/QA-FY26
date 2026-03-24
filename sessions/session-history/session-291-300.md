@@ -274,3 +274,30 @@
 **詳細**: [session299/session-summary.md](../session299/session-summary.md)
 
 ---
+
+## Session 300 (2026-03-24)
+
+**概要**: 社長説明スライドの完成 / 4フェーズ構成への更新
+
+**重要な成果**:
+- スライドv3作成（4フェーズ構成対応）
+- 文字はみ出しの修正（8ページ以降）
+- 図のスクショ保存（ユーザー側で実施）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session300/ceo-presentation-v3.md](../session300/ceo-presentation-v3.md) | 社長説明スライドv3（4フェーズ構成対応） |
+| [session300/session-summary.md](../session300/session-summary.md) | セッションサマリー |
+
+**v2 → v3 の主な変更点**:
+- 「2つの軸」→「4フェーズ構成」
+- QRコードから着手 → Phase 1（PSI自動化）が先
+- お願い: Phase 1着手承認 + kintone独自契約
+
+**次セッション**: 図のスライド組み込み
+
+**詳細**: [session300/session-summary.md](../session300/session-summary.md)
+
+---
