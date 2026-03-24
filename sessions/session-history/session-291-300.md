@@ -38,3 +38,33 @@
 **詳細**: [session291/session-summary.md](../session291/session-summary.md)
 
 ---
+
+## Session 292 (2026-03-24)
+
+**概要**: 社長説明スライド作成開始 — 業務フロー図作成、QRロット管理の課題整理
+
+**重要な成果**:
+- 社長説明スライドv2の骨格作成
+- 業務フロー図（drawio）作成 — 3システム構成（GEN/kintone/PSI）を可視化
+- 出庫フローの追加（GEN → 製造各社）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session292/ceo-presentation-v2.md](../session292/ceo-presentation-v2.md) | 社長説明スライドv2（骨格） |
+| [session292/current-system-flow.drawio](../session292/current-system-flow.drawio) | 業務フロー図（3システム構成） |
+| [session292/session-summary.md](../session292/session-summary.md) | セッションサマリー |
+
+**重要な判断**:
+- QRコードロット管理は仕組みを詰めないと提案できない（分割・統合・員数変動が未設計）
+- スケジュールは勝手に決められない（他ミッションとの兼ね合い）
+
+**未完了**:
+- drawioのスクリーンショット → スライド差し替え
+- QRコードロット管理の仕組み整理
+- 宮崎さん打ち合わせ結果の反映
+
+**詳細**: [session292/session-summary.md](../session292/session-summary.md)
+
+---
