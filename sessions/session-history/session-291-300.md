@@ -101,3 +101,31 @@
 **詳細**: [session293/session-summary.md](../session293/session-summary.md)
 
 ---
+
+## Session 294 (2026-03-24)
+
+**概要**: 在庫・ロット管理システム設計スキルの作成
+
+**重要な成果**:
+- `inventory-lot-design`スキル作成 — 管理粒度、分割・統合パターン、段階的導入の判断基準
+- kintoneに既にシリアル番号等が管理されていると判明
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [~/.claude/skills/inventory-lot-design/SKILL.md](~/.claude/skills/inventory-lot-design/SKILL.md) | 在庫・ロット管理設計スキル |
+| [session294/session-summary.md](../session294/session-summary.md) | セッションサマリー |
+
+**重要な判断**:
+- ロット管理設計の前にkintone既存データを確認する必要がある
+- 迷ったらロットから始める（シリアルへの移行は後から可能）
+
+**未完了**:
+- kintone既存データ構造の確認（宮崎さんに聞く）
+- QRコードロット管理の仕組み整理
+- スライドのスケジュール修正
+
+**詳細**: [session294/session-summary.md](../session294/session-summary.md)
+
+---
