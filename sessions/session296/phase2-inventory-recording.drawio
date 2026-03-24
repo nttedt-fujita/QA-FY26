@@ -1,0 +1,243 @@
+<mxfile host="65bd71144e">
+    <diagram name="Phase 2-1: 入出庫管理（現状）" id="phase2-current">
+        <mxGraphModel dx="1081" dy="924" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Phase 2: 入出庫の自動記録 — 現状" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="450" y="30" width="300" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="section-in" value="入庫フロー" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="80" y="90" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="in1" value="受入検査完了" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="80" y="130" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="in2" value="棚に格納" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="240" y="130" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="in3" value="GEN/kintoneに&#xa;手動入力" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="400" y="130" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="in3-issue" value="⚠️ 二重入力&#xa;（GEN + kintone）" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="400" y="185" width="120" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="ain1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="in1" target="in2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ain2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="in2" target="in3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="section-out" value="出庫フロー" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="80" y="260" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="out1" value="出庫指示" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="80" y="300" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="out2" value="棚から取り出し" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="240" y="300" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="out2-issue" value="⚠️ どの棚に&#xa;何があるか不明" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="240" y="355" width="120" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="out3" value="GEN/kintoneに&#xa;手動入力" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="400" y="300" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="out4" value="製造各社へ出荷" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="560" y="300" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="aout1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="out1" target="out2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="aout2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="out2" target="out3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="aout3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="out3" target="out4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf-title" value="在庫棚（現状）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="750" y="90" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="750" y="130" width="300" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf-row1" value="棚A-1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="760" y="145" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf-row2" value="棚A-2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="855" y="145" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf-row3" value="棚A-3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="950" y="145" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf-row4" value="棚B-1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="760" y="195" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf-row5" value="棚B-2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="855" y="195" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf-row6" value="棚B-3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="950" y="195" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf-issue" value="❌ 何がどこにあるか分からない&#xa;❌ 入出庫履歴が追えない&#xa;❌ 先入れ先出しが管理できない" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="760" y="260" width="280" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="issues-title" value="現状の課題" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="80" y="430" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="issue1" value="1. 棚番とロットが紐付いていない → どの棚に何があるか分からない" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="80" y="465" width="450" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="issue2" value="2. 入出庫がGEN/kintone両方に手動入力 → 二重管理・入力漏れリスク" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="80" y="500" width="450" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="issue3" value="3. 入出庫の履歴が追えない → FIFO管理ができない" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="80" y="535" width="450" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="issue4" value="4. 実在庫と理論在庫の差異が分かりにくい → 棚卸時に発覚" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="80" y="570" width="450" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="Phase 2-2: 入出庫の自動記録（QRコード導入後）" id="phase2-after">
+        <mxGraphModel dx="891" dy="761" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title2" value="Phase 2: 入出庫の自動記録 — After" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="400" y="30" width="400" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle2" value="棚にQRコードを貼り、スキャンで入出庫を記録" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="400" y="75" width="400" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="section-in2" value="入庫フロー" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="80" y="110" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="qin1" value="受入検査完了&#xa;（ロットQR付き）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="80" y="150" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="qin2" value="棚QRスキャン&#xa;+ ロットQRスキャン" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="240" y="150" width="140" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="qin2-note" value="📱 自動で紐付け&#xa;棚番 + ロット + 員数" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="240" y="205" width="140" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="qin3" value="棚に格納" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="420" y="150" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="qin4" value="システムに&#xa;自動反映" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="580" y="150" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="qain1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="qin1" target="qin2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="qain2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="qin2" target="qin3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="qain3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="qin3" target="qin4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="section-out2" value="出庫フロー" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="80" y="280" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="qout1" value="出庫指示" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="80" y="320" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="qout2" value="システムで&#xa;棚番確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="240" y="320" width="140" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="qout2-note" value="📱 どの棚に何があるか&#xa;即座に分かる" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="240" y="375" width="140" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="qout3" value="棚QRスキャン&#xa;+ ロットQRスキャン" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="420" y="320" width="140" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="qout3-note" value="📱 出庫数・出庫先を記録" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="420" y="375" width="140" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="qout4" value="製造各社へ出荷" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="600" y="320" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="qaout1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="qout1" target="qout2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="qaout2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="qout2" target="qout3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="qaout3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="qout3" target="qout4" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf-title2" value="在庫棚（QRコード付き）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="780" y="110" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=12" parent="1" vertex="1">
+                    <mxGeometry x="780" y="150" width="300" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf2-row1" value="棚A-1&#xa;📱QR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="790" y="165" width="90" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf2-row2" value="棚A-2&#xa;📱QR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="885" y="165" width="90" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf2-row3" value="棚A-3&#xa;📱QR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="980" y="165" width="90" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf2-row4" value="棚B-1&#xa;📱QR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="790" y="220" width="90" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf2-row5" value="棚B-2&#xa;📱QR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="885" y="220" width="90" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf2-row6" value="棚B-3&#xa;📱QR" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="980" y="220" width="90" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="shelf2-effect" value="✅ 各棚にQRコードを貼付&#xa;✅ スキャンで入出庫を自動記録&#xa;✅ どの棚に何があるか即座に分かる" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="790" y="275" width="280" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-title" value="期待される効果" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="80" y="450" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect1" value="✅ 棚番とロットが紐付く → どの棚に何があるか即座に分かる" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="80" y="485" width="450" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect2" value="✅ 入出庫が自動記録 → 手動入力不要、入力漏れ防止" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="80" y="520" width="450" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect3" value="✅ 入出庫履歴が追える → FIFO管理が可能に" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="80" y="555" width="450" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect4" value="✅ 実在庫がリアルタイムで把握 → 棚卸の負担軽減" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="80" y="590" width="450" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="cost-title" value="導入コスト（概算）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="600" y="450" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="cost1" value="棚用QRラベル: ほぼ0円（既存プリンタで印刷）" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="600" y="485" width="350" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="cost2" value="スキャナー: 0円（スマートフォンで代替）" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="600" y="520" width="350" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="cost3" value="管理システム: Google スプレッドシート（0円）&#xa;または 将来的にkintone/統合システム連携" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" parent="1" vertex="1">
+                    <mxGeometry x="600" y="555" width="350" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend2-title" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="980" y="450" width="60" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend2-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="980" y="480" width="20" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend2-1-text" value="通常工程" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="1005" y="480" width="80" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend2-2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="980" y="505" width="20" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend2-2-text" value="QRスキャン" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" parent="1" vertex="1">
+                    <mxGeometry x="1005" y="505" width="80" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
