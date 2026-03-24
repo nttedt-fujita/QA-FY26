@@ -213,3 +213,39 @@
 **詳細**: [session297/session-summary.md](../session297/session-summary.md)
 
 ---
+
+## Session 298 (2026-03-24)
+
+**概要**: kintone契約方式の整理 / 4フェーズ構成への拡張
+
+**重要な成果**:
+- kintone契約方式の整理（独自契約推奨、和田さん・宮崎さんが対応中）
+- 4フェーズ構成への拡張（Phase 2「入出庫の自動記録」を追加）
+- fy26-roadmap.mdの更新
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session298/kintone-contract-summary.md](../session298/kintone-contract-summary.md) | kintone契約方式の整理 |
+| [session298/phase-rename-proposal.md](../session298/phase-rename-proposal.md) | 4フェーズ構成の決定事項 |
+| [session298/session-summary.md](../session298/session-summary.md) | セッションサマリー |
+
+**4フェーズ構成（決定）**:
+
+| Phase | 名称 | 内容 |
+|-------|------|------|
+| 1 | 集計業務の自動化 | PSI集計の手作業削減 |
+| 2 | 入出庫の自動記録 | 受入検査・棚のQRコード化 |
+| 3 | 委託先在庫の見える化 | 製造委託先の実在庫可視化 |
+| 4 | SCM全体の一元管理 | 統合ダッシュボード + AI |
+
+**重要な判断**:
+- kintone独自契約が必要（理想像にはAPI連携が必須）
+- 4フェーズ構成（Phase 2「入出庫の自動記録」を追加）
+
+**次セッション**: 社長説明スライドの完成、図のスライド組み込み
+
+**詳細**: [session298/session-summary.md](../session298/session-summary.md)
+
+---
