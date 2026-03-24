@@ -1,6 +1,6 @@
 # ミッション進捗
 
-**最終更新**: Session 280 (2026-03-23)
+**最終更新**: Session 293 (2026-03-24)
 
 ---
 
@@ -41,7 +41,7 @@
 | 状態 | ⏸️ストップ中（M4優先、Session 52決定） |
 | Linear | [QA-5: SIPOC作成と現場レビュー準備](https://linear.app/qa-fy26-fujita/issue/QA-5/sipoc作成と現場レビュー準備) |
 | Linear | [QA-7: 梱包変更作業・隠れコストの定量調査](https://linear.app/qa-fy26-fujita/issue/QA-7/梱包変更作業隠れコストの定量調査) |
-| 最新セッション | [Session 276](../sessions/session276/session-summary.md)（社長説明資料） |
+| 最新セッション | [Session 293](../sessions/session293/session-summary.md)（業務フロー図修正） |
 | 再開時に読む | [ai-research/](missions/m3-incoming-inspection-db/ai-research/) |
 
 ---
