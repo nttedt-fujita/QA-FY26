@@ -249,3 +249,28 @@
 **詳細**: [session298/session-summary.md](../session298/session-summary.md)
 
 ---
+
+## Session 299 (2026-03-24)
+
+**概要**: 写真から線図（テクニカルイラスト）への変換手法の調査
+
+**重要な成果**:
+- 写真→線図変換の技術調査（Web検索、エビデンス収集）
+- 各手法の比較・評価レポート作成
+- 推奨手法の選定（ChatGPT GPT-4o、TechLagoon、ColorBliss）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session299/photo-to-line-drawing-research.md](../session299/photo-to-line-drawing-research.md) | 写真→線図変換の調査レポート |
+| [session299/session-summary.md](../session299/session-summary.md) | セッションサマリー |
+
+**調査結論**:
+- ChatGPT GPT-4oが最も柔軟で高品質（プロンプトでスタイル指定可能）
+- 無料で試すならTechLagoon（100%無料、カスタマイズ可能）
+- ベクター形式が必要な場合は後処理でトレース
+
+**詳細**: [session299/session-summary.md](../session299/session-summary.md)
+
+---
