@@ -68,3 +68,36 @@
 **詳細**: [session292/session-summary.md](../session292/session-summary.md)
 
 ---
+
+## Session 293 (2026-03-24)
+
+**概要**: 業務フロー図の修正（小笠原さん・掛川さんフィードバック反映）
+
+**重要な成果**:
+- 業務フロー図v2作成 — フィードバックを反映した修正版
+- GEN/kintone二重管理の問題を明示
+- 組立委託→組立在庫追記のフローを追加
+- 受入検査→kintoneの入庫カウントを追加
+
+**フィードバック内容**:
+- GEN→製造各社: 出庫 + 組立委託（部品を預けている）
+- 組立完了時: GEN・kintone両方に「組立在庫」追記
+- 組み上がり機体: 群馬通商で在庫管理
+- 受入検査対象: バッテリー、チャージャー、散布装置も含む → kintoneに入庫カウント
+- GEN vs kintone: 全在庫マスタ vs 営業の販売管理 → 二重管理
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session293/current-system-flow-v2.drawio](../session293/current-system-flow-v2.drawio) | 業務フロー図v2（フィードバック反映） |
+| [session293/session-summary.md](../session293/session-summary.md) | セッションサマリー |
+
+**未完了**:
+- drawioのスクリーンショット → スライド差し替え
+- QRコードロット管理の仕組み整理
+- 宮崎さん打ち合わせ結果の反映
+
+**詳細**: [session293/session-summary.md](../session293/session-summary.md)
+
+---
