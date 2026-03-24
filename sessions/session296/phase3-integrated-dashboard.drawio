@@ -1,0 +1,180 @@
+<mxfile host="65bd71144e">
+    <diagram name="Phase 3: 統合ダッシュボード" id="phase3-dashboard">
+        <mxGraphModel dx="1176" dy="924" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="Phase 3: 統合ダッシュボード + AI連携検討（1-3月）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="350" y="20" width="600" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle" value="目標: Phase 1/2の統合 + SCM全体の意思決定支援" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="55" width="600" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="datasource-label" value="データソース（Phase 1/2で構築済み）" style="text;html=1;strokeColor=none;fillColor=#E3F2FD;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;fontStyle=1;fontColor=#1565C0;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="100" width="280" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="gen" value="GEN&#xa;（部材管理）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="140" width="100" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="kintone" value="kintone&#xa;（販売管理）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="140" width="100" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="psi-tool" value="PSI自動集計&#xa;（Phase 1）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="310" width="100" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="mfg-dashboard" value="製造委託先&#xa;実在庫&#xa;（Phase 2）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="310" width="100" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-dashboard-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;strokeWidth=4;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="140" width="400" height="250" as="geometry"/>
+                </mxCell>
+                <mxCell id="main-dashboard-title" value="統合ダッシュボード（新規開発）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="430" y="150" width="240" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="parts-view" value="部品在庫" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="200" width="100" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="psi-view" value="PSI集計" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="490" y="200" width="100" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="mfg-view" value="製造委託先在庫" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#E65100;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="200" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="alert-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="270" width="360" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="alert-title" value="⚠ 欠品リスクアラート（オプション・AI連携候補）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#C62828;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="278" width="320" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="alert-content" value="• 在庫が閾値以下になったら通知&#xa;• 発注リードタイムを考慮した警告&#xa;• 将来: AI予測による先行アラート" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="300" width="320" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-gen-dashboard" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#1565C0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" edge="1" source="gen">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="180" as="sourcePoint"/>
+                        <mxPoint x="350" y="220" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="90" y="220"/>
+                            <mxPoint x="280" y="220"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow-kintone-dashboard" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2E7D32;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" edge="1" source="kintone">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="260" y="180" as="sourcePoint"/>
+                        <mxPoint x="350" y="230" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="210" y="230"/>
+                            <mxPoint x="310" y="230"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow-psi-dashboard" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#F9A825;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" edge="1" source="psi-tool">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="140" y="270" as="sourcePoint"/>
+                        <mxPoint x="350" y="270" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="90" y="270"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow-mfg-dashboard" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#E65100;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" parent="1" edge="1" source="mfg-dashboard">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="260" y="280" as="sourcePoint"/>
+                        <mxPoint x="350" y="280" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="210" y="280"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="user-label" value="ユーザー（SCM関係者）" style="text;html=1;strokeColor=none;fillColor=#E8F5E9;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;fontStyle=1;fontColor=#2E7D32;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="100" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="ogasawara" value="小笠原さん" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="170" width="30" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="kakegawa" value="掛川さん" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="170" width="30" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="scm" value="SCM担当" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="970" y="170" width="30" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow-dashboard-users" value="" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#2E7D32;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="750" y="260" as="sourcePoint"/>
+                        <mxPoint x="820" y="210" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="future-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="430" width="500" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="future-title" value="将来ビジョン: AI連携（Phase 3+）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#7B1FA2;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="440" width="280" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="ai-demand" value="需要予測" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2;strokeWidth=1;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="490" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="ai-order" value="発注最適化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2;strokeWidth=1;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="170" y="490" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="ai-alert" value="欠品リスク&#xa;アラート" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CE93D8;strokeColor=#7B1FA2;strokeWidth=2;fontSize=11;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="280" y="490" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="ai-anomaly" value="異常検知" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1BEE7;strokeColor=#7B1FA2;strokeWidth=1;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="490" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="ai-note" value="FY26着手候補" style="text;html=1;strokeColor=none;fillColor=#CE93D8;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#4A148C;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="280" y="535" width="90" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="future-prereq" value="【AI連携の前提】&#xa;• Phase 1-3で蓄積されたデータ&#xa;• PSI履歴、在庫推移、リードタイム情報&#xa;• kintone API許可があればさらに高度化可能" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#7B1FA2;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="565" width="460" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#4CAF50;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="430" width="360" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-title" value="Phase 3 完了時の効果" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#2E7D32;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="440" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-table" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4CAF50;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="480" width="320" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-header" value="Phase | 解決する課題 | 受益者" style="text;html=1;strokeColor=none;fillColor=#C8E6C9;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="490" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-row1" value="1 | PSI手作業 → 年間104h削減 | 掛川さん" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="515" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-row2" value="2 | 実在庫不可視 → 欠品リスク低減 | 小笠原さん" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="540" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-row3" value="3 | データ分断 → 意思決定スピード向上 | SCM全体" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="565" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-row4" value="3+ | 欠品予測 → アラートによる先手対応 | SCM全体" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#7B1FA2;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="590" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#BDBDBD;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="980" y="430" width="150" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-title" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1025" y="440" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-new" value="新規開発" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;strokeWidth=2;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="470" width="80" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-existing" value="既存システム" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=1;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="505" width="80" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-phase12" value="Phase 1/2成果" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;strokeWidth=1;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="540" width="80" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-future" value="将来ビジョン" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="575" width="80" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-alert" value="オプション" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=1;fontSize=10;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="1000" y="610" width="80" height="25" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

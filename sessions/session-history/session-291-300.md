@@ -166,3 +166,28 @@
 **詳細**: [session295/session-summary.md](../session295/session-summary.md)
 
 ---
+
+## Session 296 (2026-03-24)
+
+**概要**: FY26ロードマップ各フェーズの構成図作成
+
+**重要な成果**:
+- Phase 1構成図作成 — PSI自動化のBefore/After図
+- Phase 2構成図作成 — 製造委託先可視化のBefore/After図
+- Phase 3構成図作成 — 統合ダッシュボード + AI連携ビジョン
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session296/phase1-psi-automation.drawio](../session296/phase1-psi-automation.drawio) | Phase 1: PSI自動化（Before/After図） |
+| [session296/phase2-manufacturer-visibility.drawio](../session296/phase2-manufacturer-visibility.drawio) | Phase 2: 製造委託先可視化（Before/After図） |
+| [session296/phase3-integrated-dashboard.drawio](../session296/phase3-integrated-dashboard.drawio) | Phase 3: 統合ダッシュボード + AI連携ビジョン |
+| [session296/session-summary.md](../session296/session-summary.md) | セッションサマリー |
+
+**判明した情報**:
+- kintone CSV出力は標準機能として搭載、ただしNTT東基盤での利用可否は要確認
+
+**詳細**: [session296/session-summary.md](../session296/session-summary.md)
+
+---

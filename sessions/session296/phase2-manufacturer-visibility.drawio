@@ -1,0 +1,183 @@
+<mxfile host="65bd71144e">
+    <diagram name="Phase 2: 製造委託先可視化" id="phase2-mfg">
+        <mxGraphModel dx="1200" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <!-- タイトル -->
+                <mxCell id="title" value="Phase 2: 製造委託先の実在庫可視化（7-12月）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=22;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="300" y="20" width="500" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle" value="目標: 小笠原さんの課題解決（製造委託先の実在庫が見えない）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="55" width="500" height="25" as="geometry"/>
+                </mxCell>
+
+                <!-- Before/After ラベル -->
+                <mxCell id="before-label" value="Before（現状）" style="text;html=1;strokeColor=none;fillColor=#FFEEEE;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;fontStyle=1;fontColor=#CC0000;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="100" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="after-label" value="After（Phase 2完了後）" style="text;html=1;strokeColor=none;fillColor=#E8F5E9;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;fontStyle=1;fontColor=#2E7D32;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="100" width="180" height="30" as="geometry"/>
+                </mxCell>
+
+                <!-- Before側 -->
+                <!-- NTT e-Drone -->
+                <mxCell id="ntt-before" value="NTT e-Drone" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="160" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <!-- 製造委託先 -->
+                <mxCell id="mfg-box-before" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="270" width="200" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="mfg-title-before" value="製造委託先" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="280" width="100" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="watanabe-before" value="渡辺製作所" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8E8E8;strokeColor=#666666;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="315" width="80" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="nakayo-before" value="ナカヨ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8E8E8;strokeColor=#666666;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="315" width="70" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="mfg-note-before" value="各社独自に&#xa;在庫管理" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="360" width="90" height="30" as="geometry"/>
+                </mxCell>
+                <!-- 小笠原さん -->
+                <mxCell id="ogasawara-before" value="小笠原さん" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="340" y="290" width="30" height="50" as="geometry"/>
+                </mxCell>
+                <!-- 矢印（月末のみ） -->
+                <mxCell id="arrow-mfg-ogasawara" value="月末に&#xa;確認" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#CC0000;dashed=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="250" y="330" as="sourcePoint"/>
+                        <mxPoint x="340" y="320" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <!-- 課題ボックス -->
+                <mxCell id="pain-box" value="⚠ 月末まで&#xa;実在庫が不明" style="text;html=1;strokeColor=none;fillColor=#FFCCCC;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontColor=#990000;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="280" y="380" width="100" height="40" as="geometry"/>
+                </mxCell>
+                <!-- ブラックボックス表現 -->
+                <mxCell id="blackbox" value="？" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#333333;strokeColor=#666666;fontColor=#FFFFFF;fontSize=24;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="120" y="430" width="50" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="blackbox-label" value="在庫状況が&#xa;見えない" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="110" y="485" width="70" height="30" as="geometry"/>
+                </mxCell>
+
+                <!-- 中央の矢印 -->
+                <mxCell id="transform-arrow" value="" style="shape=flexArrow;endArrow=classic;html=1;strokeWidth=2;fillColor=#FFD54F;strokeColor=#F57F17;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="420" y="320" as="sourcePoint"/>
+                        <mxPoint x="530" y="320" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="transform-label" value="可視化" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#F57F17;" parent="1" vertex="1">
+                    <mxGeometry x="440" y="280" width="70" height="25" as="geometry"/>
+                </mxCell>
+
+                <!-- After側 -->
+                <!-- 製造委託先 -->
+                <mxCell id="mfg-box-after" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="560" y="150" width="200" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="mfg-title-after" value="製造委託先" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="160" width="100" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="watanabe-after" value="渡辺製作所" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8E8E8;strokeColor=#666666;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="195" width="80" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="nakayo-after" value="ナカヨ" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8E8E8;strokeColor=#666666;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="670" y="195" width="70" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="mfg-note-after" value="定期的に在庫報告" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="240" width="110" height="20" as="geometry"/>
+                </mxCell>
+
+                <!-- 在庫報告ツール（新規） -->
+                <mxCell id="report-tool" value="在庫報告ツール&#xa;（新規開発）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;strokeWidth=3;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="180" width="130" height="60" as="geometry"/>
+                </mxCell>
+
+                <!-- 実在庫ダッシュボード（新規） -->
+                <mxCell id="dashboard" value="製造委託先&#xa;実在庫ダッシュボード&#xa;（新規開発）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;strokeWidth=3;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="350" width="160" height="70" as="geometry"/>
+                </mxCell>
+
+                <!-- 小笠原さん（リアルタイム確認） -->
+                <mxCell id="ogasawara-after" value="小笠原さん" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f5f5f5;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="340" width="30" height="50" as="geometry"/>
+                </mxCell>
+
+                <!-- 矢印（自動） -->
+                <mxCell id="arrow-mfg-tool" value="Excel/フォーム&#xa;で報告" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2E7D32;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="760" y="210" as="sourcePoint"/>
+                        <mxPoint x="830" y="210" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow-tool-dashboard" value="データ&#xa;集約" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2E7D32;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="895" y="240" as="sourcePoint"/>
+                        <mxPoint x="780" y="350" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="895" y="300"/>
+                            <mxPoint x="780" y="300"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="arrow-dashboard-ogasawara" value="いつでも&#xa;確認可能" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#2E7D32;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="820" y="385" as="sourcePoint"/>
+                        <mxPoint x="900" y="370" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+
+                <!-- 効果ボックス -->
+                <mxCell id="benefit-box" value="リアルタイムで&#xa;実在庫を把握" style="text;html=1;strokeColor=none;fillColor=#C8E6C9;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontColor=#2E7D32;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="950" y="360" width="100" height="40" as="geometry"/>
+                </mxCell>
+
+                <!-- 可視化イメージ -->
+                <mxCell id="visibility-icon" value="📊" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=36;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="430" width="60" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="visibility-label" value="在庫状況が&#xa;見える！" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#2E7D32;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="690" y="480" width="80" height="30" as="geometry"/>
+                </mxCell>
+
+                <!-- 下部の説明 -->
+                <mxCell id="note-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#9E9E9E;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="540" width="360" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="note-title" value="Phase 2 詳細" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="55" y="550" width="120" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="note-content" value="【報告方法の選択肢】&#xa;• Excel: 既存フォーマット活用、導入障壁低&#xa;• Webフォーム: 入力しやすい、フォーマット統一&#xa;• API連携: 自動化だが委託先の対応必要&#xa;&#xa;【報告頻度】&#xa;• 週次: 欠品リスク低減に効果的&#xa;• 日次: 理想だが委託先の負担大" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="55" y="575" width="330" height="110" as="geometry"/>
+                </mxCell>
+
+                <!-- 前提条件ボックス -->
+                <mxCell id="prereq-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="540" width="300" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="prereq-title" value="前提条件・確認事項" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#E65100;" parent="1" vertex="1">
+                    <mxGeometry x="435" y="550" width="160" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="prereq-content" value="• 製造委託先との連携方法の合意&#xa;• 報告頻度の決定（日次 or 週次）&#xa;• フォーマット統一の可否&#xa;• 群馬通商の在庫管理ツールとの連携&#xa;&#xa;→ 製造委託先の負担を最小限にしつつ&#xa;   必要なデータを取得する設計が必要" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="435" y="575" width="270" height="110" as="geometry"/>
+                </mxCell>
+
+                <!-- 効果ボックス -->
+                <mxCell id="effect-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#4CAF50;strokeWidth=1;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="540" width="280" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-title" value="期待される効果" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#2E7D32;" parent="1" vertex="1">
+                    <mxGeometry x="755" y="550" width="130" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="effect-content" value="✓ 欠品リスクの早期検知&#xa;✓ 発注判断の改善&#xa;✓ 製造委託先との情報連携強化&#xa;✓ 月末確認作業の削減&#xa;&#xa;→ Phase 3の統合ダッシュボードの&#xa;   基盤となるデータ蓄積" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#2E7D32;" parent="1" vertex="1">
+                    <mxGeometry x="755" y="575" width="250" height="110" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
