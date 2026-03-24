@@ -191,3 +191,25 @@
 **詳細**: [session296/session-summary.md](../session296/session-summary.md)
 
 ---
+
+## Session 297 (2026-03-24)
+
+**概要**: 宇枝さん・小笠原さん打ち合わせ結果の反映 — 受入検査フロー図・QRコード入出庫管理図の作成
+
+**重要な成果**:
+- 受入検査フロー図作成（現状 + QRコード導入後の理想）
+- QRコード入出庫管理図作成（棚にQR貼付で入出庫自動記録）
+- Session 31-296の背景整理（M3経緯、AI検査調査、SIPOC、DX施策統合）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session297/iqc-flow-current-and-ideal.drawio](../session297/iqc-flow-current-and-ideal.drawio) | 受入検査フロー図（現状 + 理想） |
+| [session297/qr-inventory-management.drawio](../session297/qr-inventory-management.drawio) | QRコード入出庫管理図（現状 + 理想） |
+
+**次セッション**: kintone契約方式の整理（NTT東 vs NTTeDT独自）
+
+**詳細**: [session297/session-summary.md](../session297/session-summary.md)
+
+---

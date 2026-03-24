@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="Phase 3: 統合ダッシュボード" id="phase3-dashboard">
-        <mxGraphModel dx="1176" dy="924" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+        <mxGraphModel dx="1196" dy="761" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -29,7 +29,7 @@
                     <mxGeometry x="350" y="140" width="400" height="250" as="geometry"/>
                 </mxCell>
                 <mxCell id="main-dashboard-title" value="統合ダッシュボード（新規開発）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
-                    <mxGeometry x="430" y="150" width="240" height="30" as="geometry"/>
+                    <mxGeometry x="410" y="150" width="270" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="parts-view" value="部品在庫" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;fontSize=12;" parent="1" vertex="1">
                     <mxGeometry x="370" y="200" width="100" height="50" as="geometry"/>

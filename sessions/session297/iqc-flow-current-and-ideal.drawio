@@ -1,0 +1,375 @@
+<mxfile host="app.diagrams.net" modified="2026-03-24T00:00:00.000Z" agent="Claude" version="24.0.0">
+  <diagram name="1. 現状フロー（課題あり）" id="iqc-current">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="受入検査フロー（現状）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="30" width="350" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Subtitle -->
+        <mxCell id="subtitle" value="※ 時間の概算はこれから確認予定" style="text;html=1;strokeColor=#d79b00;fillColor=#ffe6cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="400" y="75" width="350" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Process Flow -->
+        <!-- 1. 部品入荷 -->
+        <mxCell id="p1" value="1. 部品入荷&#xa;（納品受け取り）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="80" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 2. 作業場所への移動 -->
+        <mxCell id="p2" value="2. 作業場所への移動" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="260" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 3. 検査段取り -->
+        <mxCell id="p3" value="3. 検査段取り&#xa;（場所・人員確保）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 4. 開梱作業 -->
+        <mxCell id="p4" value="4. 開梱作業" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="620" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 5. 梱包変更作業（隠れコスト） -->
+        <mxCell id="p5" value="5. 梱包変更作業&#xa;（小分け・袋詰め等）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="800" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p5-issue" value="⚠️ 隠れコスト&#xa;時間不明" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="800" y="185" width="140" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- 6. 員数確認 -->
+        <mxCell id="p6" value="6. 員数確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="80" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 7. 外観検査 -->
+        <mxCell id="p7" value="7. 外観検査" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="260" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 8. 測定 -->
+        <mxCell id="p8" value="8. 測定&#xa;（ノギス等）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 9. 記録作成（課題） -->
+        <mxCell id="p9" value="9. 記録作成&#xa;（Excel入力）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="620" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p9-issue" value="⚠️ データ化&#xa;されていない" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="620" y="335" width="140" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- 10. 入庫のための梱包作業 -->
+        <mxCell id="p10" value="10. 入庫のための&#xa;梱包作業" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="800" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 11. 入庫 -->
+        <mxCell id="p11" value="11. 入庫" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="980" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="p11-issue" value="⚠️ ロット追跡&#xa;できない" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="980" y="335" width="100" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows Row 1 -->
+        <mxCell id="a1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="p1" target="p2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="p2" target="p3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="p3" target="p4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="p4" target="p5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow down to Row 2 -->
+        <mxCell id="a5" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="p5" target="p6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="230" />
+              <mxPoint x="220" y="230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Arrows Row 2 -->
+        <mxCell id="a6" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="p6" target="p7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a7" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="p7" target="p8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a8" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="p8" target="p9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a9" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="p9" target="p10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a10" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="p10" target="p11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 課題サマリー -->
+        <mxCell id="issues-title" value="現状の課題" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="420" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="issue1" value="1. ロット概念がない → 不良発生時にサプライヤー特定不能" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="455" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="issue2" value="2. 記録がExcelのみ → データ活用・分析が困難" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="490" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="issue3" value="3. 梱包変更作業の時間が不明 → 隠れコストが可視化されていない" style="text;html=1;strokeColor=#b85450;fillColor=#f8cecc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="525" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="issue4" value="4. 各工程の所要時間が不明 → 改善ポイントが特定できない" style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="560" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- 今後のアクション -->
+        <mxCell id="action-title" value="今後のアクション" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="550" y="420" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="action1" value="✅ 各工程の時間を計測（これから確認）" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="550" y="455" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="action2" value="✅ 計測結果をもとに改善ポイントを特定" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="550" y="490" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="action3" value="✅ QRコード導入で効率化・トレーサビリティ確保" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="550" y="525" width="350" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-title" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="950" y="420" width="60" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="legend1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="950" y="450" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend1-text" value="通常工程" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="975" y="450" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="950" y="475" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend2-text" value="課題あり" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="975" y="475" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend3" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="950" y="500" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend3-text" value="改善余地" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="975" y="500" width="80" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="2. 理想フロー（QRコード導入後）" id="iqc-ideal">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title2" value="受入検査フロー（理想：QRコード導入後）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="350" y="30" width="450" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Subtitle -->
+        <mxCell id="subtitle2" value="QRコードスキャンで時間計測・トレーサビリティを自動化" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="350" y="75" width="450" height="25" as="geometry" />
+        </mxCell>
+
+        <!-- Process Flow with QR -->
+        <!-- 1. 部品入荷 + QR発行 -->
+        <mxCell id="q1" value="1. 部品入荷&#xa;+ QRコード発行" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q1-qr" value="📱 QR発行&#xa;ロット番号採番" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="80" y="185" width="140" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- 2. 作業場所への移動 -->
+        <mxCell id="q2" value="2. 作業場所への移動" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="260" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 3. 検査段取り -->
+        <mxCell id="q3" value="3. 検査段取り&#xa;（場所・人員確保）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 4. 開梱作業 -->
+        <mxCell id="q4" value="4. 開梱作業" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="620" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 5. 梱包変更作業 + QRスキャン -->
+        <mxCell id="q5" value="5. 梱包変更作業&#xa;（小分け・袋詰め等）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="800" y="130" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q5-qr" value="📱 スキャン&#xa;員数更新・時間計測" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="800" y="185" width="140" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- 6. 員数確認 -->
+        <mxCell id="q6" value="6. 員数確認" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="80" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 7. 外観検査 -->
+        <mxCell id="q7" value="7. 外観検査" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="260" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 8. 測定 -->
+        <mxCell id="q8" value="8. 測定&#xa;（ノギス等）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="440" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 9. 検査完了 + QRスキャン -->
+        <mxCell id="q9" value="9. 検査完了&#xa;+ 結果記録" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="620" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q9-qr" value="📱 スキャン&#xa;合格/不合格記録" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="620" y="335" width="140" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- 10. 入庫のための梱包作業 -->
+        <mxCell id="q10" value="10. 入庫のための&#xa;梱包作業" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12" vertex="1" parent="1">
+          <mxGeometry x="800" y="280" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 11. 入庫 + QRスキャン -->
+        <mxCell id="q11" value="11. 入庫&#xa;+ 棚番記録" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="980" y="280" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="q11-qr" value="📱 スキャン&#xa;棚番紐付け" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="980" y="335" width="100" height="35" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows Row 1 -->
+        <mxCell id="qa1" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="q1" target="q2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qa2" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="q2" target="q3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qa3" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="q3" target="q4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qa4" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="q4" target="q5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow down to Row 2 -->
+        <mxCell id="qa5" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="q5" target="q6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="240" />
+              <mxPoint x="220" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Arrows Row 2 -->
+        <mxCell id="qa6" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="q6" target="q7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qa7" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="q7" target="q8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qa8" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="q8" target="q9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qa9" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="q9" target="q10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qa10" value="" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="q10" target="q11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- QRスキャンポイントまとめ -->
+        <mxCell id="qr-title" value="QRコードスキャンポイント（4箇所）" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="420" width="300" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="qr1" value="📱 入荷時: QRコード発行・貼付（ロット番号採番）" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="455" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="qr2" value="📱 梱包変更時: スキャン＋員数更新（時間自動計測）" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="490" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="qr3" value="📱 検査完了時: スキャン＋検査結果記録（合格/不合格）" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="525" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="qr4" value="📱 入庫時: スキャン＋棚番記録（どの棚に格納したか）" style="text;html=1;strokeColor=#82b366;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="80" y="560" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- 改善効果 -->
+        <mxCell id="effect-title" value="期待される効果" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="550" y="420" width="200" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="effect1" value="✅ トレーサビリティ確保 → 不良発生時にロット・サプライヤー即特定" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="550" y="455" width="450" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="effect2" value="✅ 隠れコスト可視化 → 梱包変更作業の時間が自動計測される" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="550" y="490" width="450" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="effect3" value="✅ データ蓄積 → Excelではなくシステムに記録、分析可能に" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="550" y="525" width="450" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="effect4" value="✅ 入出庫管理連携 → 棚番とロットが紐付き、在庫位置が把握可能" style="text;html=1;strokeColor=#6c8ebf;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="550" y="560" width="450" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend2-title" value="凡例" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="950" y="620" width="60" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="legend2-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="950" y="650" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend2-1-text" value="通常工程" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="975" y="650" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend2-2" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="950" y="675" width="20" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend2-2-text" value="QRスキャン" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="975" y="675" width="80" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
