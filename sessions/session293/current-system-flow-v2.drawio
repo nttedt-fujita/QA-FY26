@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="現状の3システム構成（修正版）" id="system-flow-v2">
-        <mxGraphModel dx="1055" dy="995" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+        <mxGraphModel dx="1251" dy="924" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -47,7 +47,7 @@
                 <mxCell id="arrow-gen-tsuruta-label" value="部材情報" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
                     <mxGeometry x="190" y="320" width="60" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" style="edgeStyle=none;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#66FF66;strokeWidth=4;" edge="1" parent="1" source="iqc-box" target="gen-box">
+                <mxCell id="14" style="edgeStyle=none;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeColor=#66FF66;strokeWidth=4;" parent="1" source="iqc-box" target="gen-box" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="60" y="698"/>
@@ -67,7 +67,7 @@
                 <mxCell id="factory-note" value="部品を預かり&#xa;組み立て" style="text;html=1;strokeColor=none;fillColor=#E8E8E8;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#666666;" parent="1" vertex="1">
                     <mxGeometry x="870" y="290" width="100" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="arrow-gen-factory" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" edge="1" target="factory-box" source="gen-box">
+                <mxCell id="arrow-gen-factory" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#666666;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="gen-box" target="factory-box" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="420" y="160" as="sourcePoint"/>
                         <mxPoint x="830" y="240" as="targetPoint"/>
@@ -80,7 +80,7 @@
                 <mxCell id="arrow-gen-factory-label" value="出庫（部品）&#xa;+ 組立委託" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
                     <mxGeometry x="310" y="30" width="70" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="arrow-factory-gen" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#0066CC;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" parent="1" edge="1" target="gen-box" source="factory-box">
+                <mxCell id="arrow-factory-gen" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#0066CC;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" parent="1" source="factory-box" target="gen-box" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="830" y="290" as="sourcePoint"/>
                         <mxPoint x="420" y="240" as="targetPoint"/>
@@ -128,7 +128,7 @@
                 <mxCell id="arrow-iqc-kintone-label" value="入庫カウント&lt;br&gt;（バッテリー&lt;br&gt;チャージャー&lt;br&gt;散布装置）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#336600;fontStyle=1" parent="1" vertex="1">
                     <mxGeometry x="70" y="80" width="110" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="2" value="" style="group" vertex="1" connectable="0" parent="1">
+                <mxCell id="2" value="" style="group" parent="1" vertex="1" connectable="0">
                     <mxGeometry x="535" y="580" width="220" height="170" as="geometry"/>
                 </mxCell>
                 <mxCell id="arrow-factory-tsuruta-label" value="仕損情報&#xa;（月末のみ）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="2" vertex="1">
@@ -149,7 +149,7 @@
                 <mxCell id="psi-pain" value="⚠ 掛川さんが毎週日曜に&#xa;手動集計（週2時間）" style="text;html=1;strokeColor=none;fillColor=#FFCCCC;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#990000;" parent="2" vertex="1">
                     <mxGeometry x="20" y="125" width="180" height="35" as="geometry"/>
                 </mxCell>
-                <mxCell id="3" value="" style="group" vertex="1" connectable="0" parent="1">
+                <mxCell id="3" value="" style="group" parent="1" vertex="1" connectable="0">
                     <mxGeometry x="810" y="590" width="220" height="150" as="geometry"/>
                 </mxCell>
                 <mxCell id="issue-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEEEE;strokeColor=#CC0000;strokeWidth=2;" parent="3" vertex="1">
@@ -161,7 +161,7 @@
                 <mxCell id="issue-list" value="1. GEN/kintone二重管理&#xa;2. システム間連携が手動&#xa;3. 実在庫が月末まで不明&#xa;4. PSI集計に週2時間&#xa;5. 受入検査の記録が不完全" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;" parent="3" vertex="1">
                     <mxGeometry x="15" y="40" width="190" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="7" value="" style="group" vertex="1" connectable="0" parent="1">
+                <mxCell id="7" value="" style="group" parent="1" vertex="1" connectable="0">
                     <mxGeometry x="200" y="600" width="220" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="iqc-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;" parent="7" vertex="1">
@@ -176,7 +176,7 @@
                 <mxCell id="iqc-items" value="対象: 部品、バッテリー、&#xa;チャージャー、散布装置" style="text;html=1;strokeColor=none;fillColor=#E8E8E8;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#666666;" parent="7" vertex="1">
                     <mxGeometry x="30" y="70" width="160" height="45" as="geometry"/>
                 </mxCell>
-                <mxCell id="8" value="" style="group" vertex="1" connectable="0" parent="1">
+                <mxCell id="8" value="" style="group" parent="1" vertex="1" connectable="0">
                     <mxGeometry x="150" y="440" width="210" height="120" as="geometry"/>
                 </mxCell>
                 <mxCell id="tsuruta-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" parent="8" vertex="1">
@@ -191,7 +191,7 @@
                 <mxCell id="tsuruta-list" value="• 発注タイミング計算&#xa;• 在庫欠品予測&#xa;• 色分け表示" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;" parent="8" vertex="1">
                     <mxGeometry x="19.09090909090909" y="55" width="171.8181818181818" height="55" as="geometry"/>
                 </mxCell>
-                <mxCell id="17" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#66FF66;strokeWidth=4;" edge="1" parent="1" source="iqc-box" target="kintone-box">
+                <mxCell id="17" style="edgeStyle=none;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;strokeColor=#66FF66;strokeWidth=4;" parent="1" source="iqc-box" target="kintone-box" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="210" y="708" as="sourcePoint"/>
                         <mxPoint x="210" y="160" as="targetPoint"/>
@@ -202,10 +202,10 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="19" value="入庫カウント&lt;br&gt;（バッテリー&lt;br&gt;チャージャー&lt;br&gt;散布装置）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#336600;fontStyle=1" vertex="1" parent="1">
+                <mxCell id="19" value="入庫カウント&lt;br&gt;（バッテリー&lt;br&gt;チャージャー&lt;br&gt;散布装置）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#336600;fontStyle=1" parent="1" vertex="1">
                     <mxGeometry x="460" y="410" width="110" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="21" value="" style="group" vertex="1" connectable="0" parent="1">
+                <mxCell id="21" value="" style="group" parent="1" vertex="1" connectable="0">
                     <mxGeometry x="1080" y="200" width="160" height="130" as="geometry"/>
                 </mxCell>
                 <mxCell id="gunma-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;dashed=1;" parent="21" vertex="1">
@@ -220,10 +220,10 @@
                 <mxCell id="gunma-note" value="組み上がり機体を&#xa;在庫として管理" style="text;html=1;strokeColor=none;fillColor=#E8E8E8;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#666666;" parent="21" vertex="1">
                     <mxGeometry x="15" y="85" width="110" height="35" as="geometry"/>
                 </mxCell>
-                <mxCell id="23" value="仕損情報&lt;br&gt;（月末のみ）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" vertex="1" parent="1">
+                <mxCell id="23" value="仕損情報&lt;br&gt;（月末のみ）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;" parent="1" vertex="1">
                     <mxGeometry x="370" y="460" width="70" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="24" style="edgeStyle=none;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeWidth=2;" edge="1" parent="1" source="iqc-box" target="gen-box">
+                <mxCell id="24" style="edgeStyle=none;html=1;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;strokeWidth=2;" parent="1" source="iqc-box" target="gen-box" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="120" y="633"/>

@@ -129,3 +129,40 @@
 **詳細**: [session294/session-summary.md](../session294/session-summary.md)
 
 ---
+
+## Session 295 (2026-03-24)
+
+**概要**: FY26在庫管理DXロードマップ作成 — 理想像・マイルストーン・AI連携ビジョン
+
+**重要な成果**:
+- 理想像（To-Be）の図作成 — 統合在庫管理システム（調達→組立→出荷の一貫管理）
+- FY26ロードマップ作成 — Phase 1-3の段階的アプローチ
+- AI連携ビジョンの整理 — 欠品リスクアラートがFY26着手候補
+- ミッションバランスの整理 — M3/M4はDX施策に統合、M2は状況を見て判断
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session295/ideal-system-flow.drawio](../session295/ideal-system-flow.drawio) | 理想のシステム構成図 |
+| [session295/fy26-roadmap.md](../session295/fy26-roadmap.md) | FY26在庫管理DXロードマップ |
+| [session295/kintone-meeting-extract.md](../session295/kintone-meeting-extract.md) | kintone打ち合わせPDF抽出 |
+| [session295/session-summary.md](../session295/session-summary.md) | セッションサマリー |
+
+**重要な判断**:
+- M3/M4はDX施策（在庫管理統合システム）に統合
+- Phase 1（PSI自動化）はM1 GNSSと並行で4-6月
+- AI連携は土台ができた上でPhase 3で検討
+- M2は開発側との連携待ち、状況を見て判断
+
+**FY26ロードマップ概要**:
+
+| Phase | 期間 | 内容 | 受益者 |
+|-------|------|------|--------|
+| 1 | 4-6月 | PSI自動化 | 掛川さん |
+| 2 | 7-12月 | 製造委託先可視化 | 小笠原さん |
+| 3 | 1-3月 | 統合ダッシュボード + AI連携検討 | SCM全体 |
+
+**詳細**: [session295/session-summary.md](../session295/session-summary.md)
+
+---
