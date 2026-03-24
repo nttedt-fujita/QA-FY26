@@ -49,3 +49,16 @@
 **詳細**: [session302/session-summary.md](../session302/session-summary.md)
 
 ---
+
+## Session 303 (2026-03-24)
+
+**概要**: スライドの最終調整・kintoneスライド追加
+
+**重要な成果**:
+- kintone契約方式のスライド2ページ追加（NTT東日本承認の話）
+- Phase 2スライドを2ページに分割
+- タイトル・画像サイズの調整
+
+**詳細**: [session303/session-summary.md](../session303/session-summary.md)
+
+---
