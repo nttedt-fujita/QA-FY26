@@ -62,3 +62,19 @@
 **詳細**: [session303/session-summary.md](../session303/session-summary.md)
 
 ---
+
+## Session 304 (2026-03-25)
+
+**概要**: スライドの修正（石川さんからの指摘対応）
+
+**重要な成果**:
+- 個人名を削除（掛川さん、小笠原さん、田原さん → SCM担当等）
+- 「サービス残業」表現を削除
+- 「毎週日曜日」→「毎週末」に変更
+
+**未完了**:
+- 画像差し替え・プレビュー確認 → Session 305で実施予定
+
+**詳細**: [session304/session-summary.md](../session304/session-summary.md)
+
+---
