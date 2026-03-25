@@ -214,3 +214,27 @@
 **詳細**: [session309/session-summary.md](../session309/session-summary.md)
 
 ---
+
+## Session 310 (2026-03-25)
+
+**概要**: 宇枝さんスライドの用意（Windows PC作業）
+
+**重要な成果**:
+- 宇枝さんの部門スライド（SCM・品証部門 2026年度取り組み）をスクショ
+- session310/ueda-slide/ に画像4枚を配置
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| ueda-slide/ueda-slide1.png | SCM部門 2025年度振り返り① |
+| ueda-slide/ueda-slide2.png | 2025年度振り返り② |
+| ueda-slide/ueda-slide3.png | SCM・品証部門 2026年度取り組み① |
+| ueda-slide/ueda-slide4.png | 2026年度取り組み② |
+
+**次セッションへの引き継ぎ**:
+- 小笠原さんアドバイス: v6スライドの冒頭に「部門の目的」と「今回の報告範囲」を追加すべき
+
+**詳細**: [session310/session-summary.md](../session310/session-summary.md)
+
+---
