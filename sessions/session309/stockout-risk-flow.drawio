@@ -1,100 +1,76 @@
-<mxfile host="app.diagrams.net" modified="2026-03-25T00:00:00.000Z" agent="Claude" version="24.0.0">
-  <diagram name="欠品リスクフロー" id="stockout-risk">
-    <mxGraphModel dx="1200" dy="600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="600" math="0" shadow="0">
-      <root>
-        <mxCell id="0" />
-        <mxCell id="1" parent="0" />
-
-        <!-- タイトル -->
-        <mxCell id="title" value="委託先在庫の可視化不足による欠品リスク" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
-          <mxGeometry x="350" y="30" width="450" height="40" as="geometry" />
-        </mxCell>
-
-        <!-- メインフロー -->
-        <!-- Step 1: 現状 -->
-        <mxCell id="step1" value="委託先の実在庫が&#xa;見えない" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="80" y="150" width="140" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="step1-sub" value="月末の棚卸報告まで&#xa;把握できない" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#666666;" parent="1" vertex="1">
-          <mxGeometry x="80" y="235" width="140" height="40" as="geometry" />
-        </mxCell>
-
-        <!-- 矢印1 -->
-        <mxCell id="arrow1" value="" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#d6b656;endSize=10;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="230" y="190" as="sourcePoint" />
-            <mxPoint x="300" y="190" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-
-        <!-- Step 2: 欠品発生 -->
-        <mxCell id="step2" value="欠品発生" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="310" y="150" width="140" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="step2-sub" value="発注しようとしたら&#xa;部品がない" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#666666;" parent="1" vertex="1">
-          <mxGeometry x="310" y="235" width="140" height="40" as="geometry" />
-        </mxCell>
-
-        <!-- 矢印2 -->
-        <mxCell id="arrow2" value="" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#d79b00;endSize=10;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="460" y="190" as="sourcePoint" />
-            <mxPoint x="530" y="190" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-
-        <!-- Step 3: 製造停止 -->
-        <mxCell id="step3" value="製造ライン停止" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="540" y="150" width="140" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="step3-sub" value="部品待ちで&#xa;組立作業が止まる" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#666666;" parent="1" vertex="1">
-          <mxGeometry x="540" y="235" width="140" height="40" as="geometry" />
-        </mxCell>
-
-        <!-- 矢印3 -->
-        <mxCell id="arrow3" value="" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#b85450;endSize=10;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="690" y="190" as="sourcePoint" />
-            <mxPoint x="760" y="190" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-
-        <!-- Step 4: 納期遅延 -->
-        <mxCell id="step4" value="納期遅延&#xa;顧客影響" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e51400;strokeColor=#990000;strokeWidth=3;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;fontColor=#FFFFFF;" parent="1" vertex="1">
-          <mxGeometry x="770" y="150" width="140" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="step4-sub" value="顧客への納品遅れ&#xa;信頼低下" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#666666;" parent="1" vertex="1">
-          <mxGeometry x="770" y="235" width="140" height="40" as="geometry" />
-        </mxCell>
-
-        <!-- 時間軸 -->
-        <mxCell id="timeline" value="" style="endArrow=classic;html=1;strokeWidth=1;strokeColor=#999999;dashed=1;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="80" y="320" as="sourcePoint" />
-            <mxPoint x="920" y="320" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="timeline-label" value="発見が遅れるほど影響が拡大" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#999999;fontStyle=2;" parent="1" vertex="1">
-          <mxGeometry x="400" y="325" width="200" height="20" as="geometry" />
-        </mxCell>
-
-        <!-- 対策の方向性（下部） -->
-        <mxCell id="solution-box" value="リアルタイム在庫可視化により&#xa;早期発見・早期対処が可能に" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;dashed=1;" parent="1" vertex="1">
-          <mxGeometry x="310" y="380" width="380" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="solution-arrow" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#82b366;dashed=1;" parent="1" edge="1">
-          <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="500" y="370" as="sourcePoint" />
-            <mxPoint x="500" y="340" as="targetPoint" />
-          </mxGeometry>
-        </mxCell>
-
-        <!-- 強調ライン -->
-        <mxCell id="risk-indicator" value="経営リスク" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#e51400;fontStyle=3;" parent="1" vertex="1">
-          <mxGeometry x="920" y="180" width="60" height="20" as="geometry" />
-        </mxCell>
-
-      </root>
-    </mxGraphModel>
-  </diagram>
+<mxfile host="65bd71144e">
+    <diagram name="欠品リスクフロー" id="stockout-risk">
+        <mxGraphModel dx="1388" dy="973" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="600" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="委託先在庫の可視化不足による欠品リスク" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="275" y="30" width="450" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="step1" value="委託先の実在庫が&#xa;見えない" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=23;fontStyle=1;align=center;verticalAlign=middle;" parent="1" vertex="1">
+                    <mxGeometry x="45" y="150" width="210" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="step1-sub" value="月末の棚卸報告まで&#xa;把握できない" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=16;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="235" width="170" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow1" value="" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#d6b656;endSize=10;fontSize=23;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1" target="step2" source="step1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="230" y="190" as="sourcePoint"/>
+                        <mxPoint x="300" y="190" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="step2" value="欠品発生" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=23;fontStyle=1;align=center;verticalAlign=middle;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="150" width="140" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="step2-sub" value="発注しようとしたら&#xa;部品がない" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=16;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="310" y="235" width="170" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow2" value="" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#d79b00;endSize=10;fontSize=23;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1" target="step3" source="step2">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="460" y="190" as="sourcePoint"/>
+                        <mxPoint x="530" y="190" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="step3" value="製造ライン停止" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;fontSize=23;fontStyle=1;align=center;verticalAlign=middle;" parent="1" vertex="1">
+                    <mxGeometry x="540" y="150" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="step3-sub" value="部品待ちで&#xa;組立作業が止まる" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=16;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="555" y="235" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="arrow3" value="" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#b85450;endSize=10;fontSize=23;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" edge="1" target="step4" source="step3">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="690" y="190" as="sourcePoint"/>
+                        <mxPoint x="760" y="190" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="step4" value="納期遅延&#xa;顧客影響" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e51400;strokeColor=#990000;strokeWidth=3;fontSize=23;fontStyle=1;align=center;verticalAlign=middle;fontColor=#FFFFFF;" parent="1" vertex="1">
+                    <mxGeometry x="770" y="150" width="140" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="step4-sub" value="顧客への納品遅れ&#xa;信頼低下" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=16;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="770" y="235" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="timeline" value="" style="endArrow=classic;html=1;strokeWidth=7;strokeColor=#999999;dashed=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="80" y="320" as="sourcePoint"/>
+                        <mxPoint x="920" y="320" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="timeline-label" value="発見が遅れるほど影響が拡大" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=23;fontColor=#999999;fontStyle=2;" parent="1" vertex="1">
+                    <mxGeometry x="335" y="330" width="330" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="solution-box" value="リアルタイム在庫可視化により&#xa;早期発見・早期対処が可能に" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=20;fontStyle=1;align=center;verticalAlign=middle;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="310" y="410" width="380" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="solution-arrow" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#82b366;dashed=1;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="500" y="400" as="sourcePoint"/>
+                        <mxPoint x="500" y="370" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="risk-indicator" value="経営リスク" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontColor=#e51400;fontStyle=3;" parent="1" vertex="1">
+                    <mxGeometry x="920" y="180" width="110" height="20" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
 </mxfile>
