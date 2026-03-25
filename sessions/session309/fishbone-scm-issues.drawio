@@ -1,0 +1,116 @@
+<mxfile host="app.diagrams.net" modified="2026-03-25T00:00:00.000Z" agent="Claude" version="24.0.0">
+  <diagram name="特性要因図" id="fishbone-scm">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- メイン背骨（横線） -->
+        <mxCell id="main-spine" value="" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#333333;endSize=12;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="80" y="400" as="sourcePoint" />
+            <mxPoint x="1080" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 特性（結果）ボックス -->
+        <mxCell id="effect-box" value="SCM業務における&#xa;情報の分断と&#xa;可視化不足" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;" parent="1" vertex="1">
+          <mxGeometry x="920" y="350" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- 上側の骨（システム・方法） -->
+        <!-- システム骨 -->
+        <mxCell id="bone-system" value="" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#2196F3;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="200" as="sourcePoint" />
+            <mxPoint x="400" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-system" value="システム" style="text;html=1;strokeColor=none;fillColor=#2196F3;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;fontStyle=1;fontColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="200" y="140" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cause-system-1" value="GEN/kintone&#xa;二重管理" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#2196F3;fontSize=11;align=center;" parent="1" vertex="1">
+          <mxGeometry x="170" y="200" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cause-system-2" value="3システムが&#xa;虫食い状態" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#2196F3;fontSize=11;align=center;" parent="1" vertex="1">
+          <mxGeometry x="290" y="260" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 方法骨 -->
+        <mxCell id="bone-method" value="" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#4CAF50;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="200" as="sourcePoint" />
+            <mxPoint x="640" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-method" value="方法" style="text;html=1;strokeColor=none;fillColor=#4CAF50;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;fontStyle=1;fontColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="460" y="140" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cause-method-1" value="PSI集計の&#xa;手動転記" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#4CAF50;fontSize=11;align=center;" parent="1" vertex="1">
+          <mxGeometry x="430" y="200" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cause-method-2" value="手書き・&#xa;二重入力" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#4CAF50;fontSize=11;align=center;" parent="1" vertex="1">
+          <mxGeometry x="550" y="260" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 下側の骨（情報・管理） -->
+        <!-- 情報骨 -->
+        <mxCell id="bone-info" value="" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#FF9800;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="600" as="sourcePoint" />
+            <mxPoint x="400" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-info" value="情報" style="text;html=1;strokeColor=none;fillColor=#FF9800;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;fontStyle=1;fontColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="200" y="620" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cause-info-1" value="委託先の実在庫が&#xa;月末まで見えない" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontSize=11;align=center;" parent="1" vertex="1">
+          <mxGeometry x="160" y="530" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cause-info-2" value="リアルタイム&#xa;情報共有なし" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#FF9800;fontSize=11;align=center;" parent="1" vertex="1">
+          <mxGeometry x="300" y="480" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- 管理骨 -->
+        <mxCell id="bone-mgmt" value="" style="endArrow=none;html=1;strokeWidth=2;strokeColor=#9C27B0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="600" as="sourcePoint" />
+            <mxPoint x="640" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-mgmt" value="管理" style="text;html=1;strokeColor=none;fillColor=#9C27B0;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=14;fontStyle=1;fontColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="460" y="620" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="cause-mgmt-1" value="梱包ルール&#xa;不統一" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#9C27B0;fontSize=11;align=center;" parent="1" vertex="1">
+          <mxGeometry x="430" y="530" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cause-mgmt-2" value="作業フロー全体が&#xa;把握されていない" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#9C27B0;fontSize=11;align=center;" parent="1" vertex="1">
+          <mxGeometry x="550" y="480" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- タイトル -->
+        <mxCell id="title" value="SCM業務の課題構造（特性要因図）" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="400" y="40" width="400" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- 凡例 -->
+        <mxCell id="legend-title" value="カテゴリ" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="900" y="500" width="80" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-system" value="システム" style="text;html=1;strokeColor=none;fillColor=#2196F3;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="900" y="525" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-method" value="方法" style="text;html=1;strokeColor=none;fillColor=#4CAF50;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="970" y="525" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-info" value="情報" style="text;html=1;strokeColor=none;fillColor=#FF9800;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="900" y="550" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-mgmt" value="管理" style="text;html=1;strokeColor=none;fillColor=#9C27B0;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#FFFFFF;" parent="1" vertex="1">
+          <mxGeometry x="970" y="550" width="60" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

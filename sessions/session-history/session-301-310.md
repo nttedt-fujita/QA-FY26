@@ -185,3 +185,32 @@
 **詳細**: [session308/session-summary.md](../session308/session-summary.md)
 
 ---
+
+## Session 309 (2026-03-25)
+
+**概要**: スライドv6の作成（特性要因図・欠品リスクフロー図含む）
+
+**重要な成果**:
+- 調査期間を6月末までに決定
+- 特性要因図のdrawio作成（4カテゴリで課題を構造化）
+- 欠品リスクフロー図のdrawio作成
+- スライドv6作成（v5ベースで特性要因図・結論を追加）
+
+**重要な決定**:
+- 調査期間: 6月末まで（受入検査は部品点数が多いため）
+- 課題は2つに絞らず、特性要因図で全体像を見せる
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| session309/fishbone-scm-issues.drawio | 特性要因図 |
+| session309/stockout-risk-flow.drawio | 欠品リスクフロー図 |
+| session309/ceo-presentation-v6.md | スライドv6 |
+
+**未完了**:
+- drawioのスクショ撮影・配置
+
+**詳細**: [session309/session-summary.md](../session309/session-summary.md)
+
+---
