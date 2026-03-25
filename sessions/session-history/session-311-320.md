@@ -48,3 +48,17 @@
 **詳細**: [session312/session-summary.md](../session312/session-summary.md)
 
 ---
+
+## Session 313 (2026-03-25)
+
+**概要**: 業務フロー全体像把握、ERP調査、PSIプロトタイプ構想整理
+
+**重要な成果**:
+- 関係者リスト作成（docs/stakeholders.md）
+- ERP全体像・統合vs疎結合の判断基準フレームワーク整理
+- データフロー図（As-Is）作成
+- PSIプロトタイプ構想: kintone CSV → 小さなDB → 自動集計（小笠原さん・掛川さん合意済み）
+
+**詳細**: [session313/session-summary.md](../session313/session-summary.md)
+
+---
