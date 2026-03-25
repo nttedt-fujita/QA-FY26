@@ -102,3 +102,27 @@
 **詳細**: [session305/session-summary.md](../session305/session-summary.md)
 
 ---
+
+## Session 306 (2026-03-25)
+
+**概要**: GEN・kintone制約を踏まえたスライドv4作成
+
+**重要な成果**:
+- スライドv4作成（14枚 → 6枚に削減）
+- 起承転結で構成、フローチャートのみ
+- 抽象的な内容に変更（具体策は書かない）
+
+**重要な決定**:
+- 担当者責任を避ける前提で制約の伝え方を整理
+- kintoneはスライドに入れない（和田さん・宮崎さん担当）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| session306/ceo-presentation-v4.md | スライドv4 |
+| session306/images/ | 関連画像 |
+
+**詳細**: [session306/session-summary.md](../session306/session-summary.md)
+
+---
