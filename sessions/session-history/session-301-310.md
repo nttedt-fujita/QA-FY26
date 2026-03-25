@@ -127,3 +127,31 @@
 **詳細**: [session306/session-summary.md](../session306/session-summary.md)
 
 ---
+
+## Session 307 (2026-03-25)
+
+**概要**: 状況把握・整理、スライドv5作成
+
+**重要な成果**:
+- Linear状況確認（9 issues）
+- M1 GNSS状況確認（Session 228以降放置、実装ほぼ完成）
+- スライドv5作成（AI化検討の記述を修正）
+
+**スライドv5変更点**:
+- AI化検討: 「和田さんが検討継続中」→「品質基準書を作成し、作業効率化を検討中。メーカー2社に和田さんから問い合わせ中」
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| session307/ceo-presentation-v5.md | スライドv5 |
+| session307/status-investigation.md | 調査結果（途中） |
+| session307/files-reviewed.md | 確認したファイル一覧 |
+
+**未完了**:
+- M1 GNSSのLinear issue化
+- DX施策の線引き整理
+
+**詳細**: [session307/session-summary.md](../session307/session-summary.md)
+
+---
