@@ -156,7 +156,9 @@
 | [session317/domain-model-as-is.md](../session317/domain-model-as-is.md) | As-Isドメインモデル（確度付き） |
 | [session317/domain-model-as-is.drawio](../session317/domain-model-as-is.drawio) | ドメインモデル図 |
 | [session317/hearing-preparation.md](../session317/hearing-preparation.md) | ヒアリング準備 |
-| [session317/requirements-analysis.md](../session317/requirements-analysis.md) | 要求分析（MECE+EARS+マトリクス） |
+| [session317/issues-analysis.md](../session317/issues-analysis.md) | 課題分析（MECE+ロジックツリー） |
+| [session317/needs-hypotheses.md](../session317/needs-hypotheses.md) | 要求仮説（EARS） |
+| [session317/priority-assessment.md](../session317/priority-assessment.md) | 優先順位評価（マトリクス+ピラミッド） |
 | [session317/technical-constraints.md](../session317/technical-constraints.md) | 技術的制約の整理 |
 | [session317/diagrams/01-mece-process-map.drawio](../session317/diagrams/01-mece-process-map.drawio) | MECE課題マップ |
 | [session317/diagrams/02-logic-tree.drawio](../session317/diagrams/02-logic-tree.drawio) | ロジックツリー |
@@ -164,5 +166,33 @@
 | [session317/diagrams/04-pyramid-structure.drawio](../session317/diagrams/04-pyramid-structure.drawio) | ピラミッド構造 |
 
 **詳細**: [session317/session-summary.md](../session317/session-summary.md)
+
+---
+
+## Session 318 (2026-03-26)
+
+**概要**: S317資料の修正・分割 + PSIデータフロー突合分析6件 + 掛川さんミーティング準備
+
+**重要な成果**:
+- S317の`requirements-analysis.md`を`issues-analysis.md`/`needs-hypotheses.md`/`priority-assessment.md`に分割（責務分離）
+- サプライヤ情報の誤り修正（「情報なし」→「表記揺れ」、excel-review.mdで確認）
+- PSIデータフロー突合分析6件実施:
+  - kintone普及支援/受注管理 ↔ Agri: 2月以降一致[A]
+  - 発送製品(09) ↔ PSI出庫: 粒剤のみ完全一致[A]
+  - 群馬通商Excel ↔ PSI在庫: BB102/粒剤/バッテリ完全一致[A]
+  - 機体マスタ(71) ↔ PSI在庫: BB102@群馬19/SL福島10一致[A]
+  - オプションマスタ(72) ↔ PSI在庫: 一致せず
+  - 群馬通商月別出庫 ↔ PSI出庫: 一致せず（別概念）
+- kintone普及支援/受注管理は**2026年2月から運用開始**確定[A]
+- 受入検査は品質保証管轄のはずだがSCMが実施（組織的経緯不明）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session318/kakegawa-questions.md](../session318/kakegawa-questions.md) | 掛川さんへの確認事項（背景・根拠・突合結果付き） |
+| [session318/psi-dataflow-understanding.drawio](../session318/psi-dataflow-understanding.drawio) | PSIデータフロー図（確認済み/未確認色分け） |
+
+**詳細**: [session318/session-summary.md](../session318/session-summary.md)
 
 ---

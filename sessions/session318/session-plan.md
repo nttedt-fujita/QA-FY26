@@ -22,7 +22,9 @@
 |------|------|
 | [session317/domain-model-as-is.md](../session317/domain-model-as-is.md) | ドメインモデル（確度付き） |
 | [session317/hearing-preparation.md](../session317/hearing-preparation.md) | ヒアリング準備 |
-| [session317/requirements-analysis.md](../session317/requirements-analysis.md) | 要求分析 |
+| [session317/issues-analysis.md](../session317/issues-analysis.md) | 課題分析 |
+| [session317/needs-hypotheses.md](../session317/needs-hypotheses.md) | 要求仮説 |
+| [session317/priority-assessment.md](../session317/priority-assessment.md) | 優先順位評価 |
 | [session317/technical-constraints.md](../session317/technical-constraints.md) | 技術的制約 |
 | [session314/psi-cross-reference-analysis.md](../session314/psi-cross-reference-analysis.md) | PSI突合分析 |
 
