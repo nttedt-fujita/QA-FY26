@@ -30,3 +30,6 @@ logs/
 __pycache__/
 *.pyc
 .env
+
+# kintone CSV（機密データ。突合分析完了後に削除予定）
+sessions/session316/csv/**/*.csv

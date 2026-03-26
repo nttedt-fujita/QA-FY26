@@ -103,3 +103,30 @@
 **詳細**: [session315/session-summary.md](../session315/session-summary.md)
 
 ---
+
+## Session 316 (2026-03-26)
+
+**概要**: kintoneマニュアル分析（7冊）・CSV収集（7アプリ）・ER図/リレーション図作成
+
+**重要な成果**:
+- PPTXからテキスト抽出し、kintone全体構造を把握（部署別管理範囲、業務フロー、システム間連携）
+- CSV 7アプリ取得（農業問合せ、発送、発送製品、機体マスタ、オプションマスタ、普及支援/受注管理、請求明細）
+- 確度更新: kintone用途(C→A)、GEN役割(C→A)、CSV出力方法(D→A)
+- ER図・リレーション図作成（全7テーブル + GEN）
+- 農業問合せの原因分類は「市場不具合」でありM4「工程不良」ではないことが判明
+
+**残課題**: R1〜R5（ER図/リレーション図の矢印追加、参照キー表更新等）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session316/kintone-system-analysis.md](../session316/kintone-system-analysis.md) | マニュアル7冊統合分析 |
+| [session316/csv-analysis-summary.md](../session316/csv-analysis-summary.md) | CSV 1次分析結果 |
+| [session316/confidence-update.md](../session316/confidence-update.md) | 確度更新 |
+| [session316/diagrams/kintone-app-relations.drawio](../session316/diagrams/kintone-app-relations.drawio) | リレーション図 |
+| [session316/diagrams/kintone-er-diagram.drawio](../session316/diagrams/kintone-er-diagram.drawio) | ER図 |
+
+**詳細**: [session316/session-summary.md](../session316/session-summary.md)
+
+---

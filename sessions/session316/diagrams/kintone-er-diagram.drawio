@@ -1,0 +1,103 @@
+<mxfile host="65bd71144e">
+    <diagram id="er" name="kintone ER図">
+        <mxGraphModel dx="959" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="kintone ER図（CSV分析によるリバースエンジニアリング）" style="text;fontSize=16;fontStyle=1;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="10" width="600" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle" value="PK=主キー  FK=外部キー  太字=重要カラム  灰色=CSV取得不可のため推定" style="text;fontSize=10;align=left;fillColor=none;strokeColor=none;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="35" width="600" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_hassou_header" value="08.発送（176行）" style="rounded=0;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="80" width="260" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_hassou_body" value="PK  レコード番号&#xa;──────────────&#xa;    発送状況&#xa;    発送担当チーム&#xa;    発送日 / 着指定日&#xa;    伝票番号 / 箱数&#xa;    運送会社&#xa;    発送先名 / 発送先担当者&#xa;    郵便番号 / 都道府県 / 市区群&#xa;    自社発送依頼担当者&#xa;    出庫ステップ（記入→入力→&#xa;      ピッキング→検品→ドライバー）&#xa;    出庫日&#xa;    仕損品決裁No. / 仕損品フラグ&#xa;    保険金額&#xa;FK  商談レコード番号（普及）&#xa;FK  商談レコード番号（SoL）&#xa;FK  販売レコード番号（農業/産業）&#xa;FK  普及支援/受注管理レコード番号&#xa;FK  CS番号&#xa;FK  農業問合せレコード番号&#xa;FK  修理点検依頼管理レコード番号&#xa;FK  レンタル（農業）レコード番号&#xa;FK  販売番号(NSALES-XXXXX)&#xa;FK  案件管理レコード番号" style="rounded=0;whiteSpace=wrap;fontSize=9;fillColor=#FFFFFF;strokeColor=#6C8EBF;align=left;spacingLeft=6;verticalAlign=top;spacingTop=4;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="105" width="260" height="400" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_seihin_header" value="09.発送製品（506行）" style="rounded=0;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="80" width="260" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_seihin_body" value="PK  レコード番号&#xa;──────────────&#xa;    品目コード&#xa;    数量&#xa;    商品名 / 商品種類&#xa;    払出目的&#xa;    ロケーションコード&#xa;    最終保管先&#xa;    シリアル引当対象&#xa;    シリアル割当済フラグ&#xa;    箱番&#xa;    返却期限&#xa;    仕損品フラグ&#xa;    社有製品フラグ&#xa;    出庫登録対象/対象外&#xa;    発送状況&#xa;    発送完了処理日&#xa;FK  発送レコード番号 → 08.発送&#xa;FK  農業機体シリアル&#xa;FK  農業オプションシリアル&#xa;FK  産業機体シリアル&#xa;FK  農業機体マスタレコード番号 → 71&#xa;FK  農業オプションマスタレコード番号 → 72&#xa;FK  商談レコード番号（普及/SoL）&#xa;FK  販売レコード番号（農業/産業）&#xa;FK  GEN受注番号 → GEN&#xa;FK  CS番号 → 19.農業問合せ&#xa;FK  農業問合せレコード番号 → 19&#xa;FK  販売番号(NSALES-XXXXX)&#xa;FK  修理点検依頼管理レコード番号&#xa;FK  普及支援/受注管理レコード番号" style="rounded=0;whiteSpace=wrap;fontSize=9;fillColor=#FFFFFF;strokeColor=#6C8EBF;align=left;spacingLeft=6;verticalAlign=top;spacingTop=4;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="105" width="260" height="480" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_cs_header" value="19.農業問合せ(CS)管理（527行）" style="rounded=0;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="80" width="280" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_cs_body" value="PK  レコード番号&#xa;PK  CS番号&#xa;──────────────&#xa;    問合せカテゴリー&#xa;    問合せステータス / 対応ステータス&#xa;    受付日 / クローズ日&#xa;    受付者 / 業推担当者&#xa;    代理店名 / 代理店ご担当者&#xa;  ★製品種別①〜③（各製品に以下）:&#xa;      製品シリアル（×5）&#xa;      利用機体シリアル&#xa;      発生日 / 発生時間&#xa;      発生事象について&#xa;      エンドユーザー情報&#xa;      代替製品希望有無&#xa;    方針種別 / 対応方針決定日&#xa;    対応内容 / 対応状況&#xa;    解析備考欄 / 結論&#xa;  ★原因分類（22種チェックボックス）:&#xa;      ユーザー運用ミス&#xa;      製造ミス（組立工程）&#xa;      検査漏れ（受入検査/飛行検査後）&#xa;      設計不良（タンク/カウル/基板）&#xa;      バグ（ソフトウェア）&#xa;      製品不良（6種）&#xa;      機体仕様/粒剤仕様/環境要因 等&#xa;    最終方針種別 / 回答内容&#xa;    仕損品提供有無&#xa;    不良品回収有無&#xa;FK  農業機体S/N → 71.機体マスタ&#xa;FK  農業オプションS/N → 72.オプション" style="rounded=0;whiteSpace=wrap;fontSize=9;fillColor=#FFFFFF;strokeColor=#D6B656;align=left;spacingLeft=6;verticalAlign=top;spacingTop=4;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="105" width="280" height="510" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_kitai_header" value="71.農業機体マスタ（1,188行）" style="rounded=0;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#D5E8D4;strokeColor=#82B366;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="560" width="260" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_kitai_body" value="PK  レコード番号&#xa;PK  S/N&#xa;──────────────&#xa;    機体名 / 機種名&#xa;    資産区分 / 種別&#xa;    ロケーション&#xa;    梱包済フラグ&#xa;    製造年月日 / 登録記号&#xa;    品目コード / 商品名&#xa;  ★部品構成:&#xa;      フライトコントローラ&#xa;      プロポ / 受信機&#xa;      PDB_Assy / PCM_Assy / MC_Assy&#xa;      Sig-HUB / LTE基板_Assy&#xa;    FWバージョン / AMCバージョン&#xa;    一次代理店名 / 二次代理店名&#xa;    E/U名称&#xa;    発送日 / 委託日&#xa;    群馬通商入庫予定日&#xa;    群通ロケ出庫ステータス&#xa;    仕損品チェックボックス&#xa;    固定資産番号 / 廃棄理由&#xa;    検収担当者&#xa;FK  発送製品レコード番号 → 09&#xa;FK  発送レコード番号 → 08&#xa;FK  商談レコード番号（普及/SoL）&#xa;FK  販売レコード番号（農業）&#xa;FK  普及支援/受注管理レコード番号&#xa;FK  飛行申請レコード番号&#xa;FK  製品交換レコード番号" style="rounded=0;whiteSpace=wrap;fontSize=9;fillColor=#FFFFFF;strokeColor=#82B366;align=left;spacingLeft=6;verticalAlign=top;spacingTop=4;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="585" width="260" height="490" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_option_header" value="72.農業オプションマスタ（4,527行）" style="rounded=0;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#D5E8D4;strokeColor=#82B366;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="690" width="260" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_option_body" value="PK  レコード番号&#xa;PK  S/N&#xa;──────────────&#xa;    オプション名&#xa;    資産区分 / 種別&#xa;    ロケーション&#xa;    箱番 / 移動日&#xa;    品目コード / 商品名 / 商品種類&#xa;    次回充放電作業予定日&#xa;    一次代理店名 / 二次代理店名&#xa;    E/U名称&#xa;    発送日 / 委託日&#xa;    群馬通商入庫予定日&#xa;    群通出庫ステータス&#xa;    削除フラグ&#xa;    検収担当者&#xa;FK  農業機体S/N → 71.機体マスタ&#xa;FK  発送製品レコード番号 → 09&#xa;FK  発送レコード番号 → 08&#xa;FK  商談レコード番号（普及/SoL）&#xa;FK  販売レコード番号（農業）&#xa;FK  普及支援/受注管理レコード番号" style="rounded=0;whiteSpace=wrap;fontSize=9;fillColor=#FFFFFF;strokeColor=#82B366;align=left;spacingLeft=6;verticalAlign=top;spacingTop=4;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="715" width="260" height="380" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_juchu_header" value="XX.普及支援/受注管理（3,845行）" style="rounded=0;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#F8CECC;strokeColor=#B85450;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="80" width="280" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_juchu_body" value="PK  レコード番号&#xa;──────────────&#xa;    営業担当者&#xa;    商談名 / 商談カテゴリ&#xa;    機種カテゴリ&#xa;    ステータス / 受注報告フラグ&#xa;    受注日&#xa;    商流種別 / I系種別&#xa;    取引先情報（法人/個人）&#xa;    E/U名・住所・担当者&#xa;    合計金額（税抜）&#xa;  ★商品明細:&#xa;      品目コード / 商品名&#xa;      単価 / 数量 / 単位 / 金額&#xa;      商品カテゴリー / 商品種類&#xa;    発送先名 / 発送先担当者 / 住所&#xa;    業務委託先 / 検収担当者&#xa;    ダブルチェック項目（多数）&#xa;FK  案件管理レコード番号&#xa;FK  商談（普及）レコード番号&#xa;FK  取引先レコード番号&#xa;FK  E/U取引先レコード番号" style="rounded=0;whiteSpace=wrap;fontSize=9;fillColor=#FFFFFF;strokeColor=#B85450;align=left;spacingLeft=6;verticalAlign=top;spacingTop=4;" vertex="1" parent="1">
+                    <mxGeometry x="1060" y="105" width="280" height="370" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_seikyu_header" value="11.請求明細（3,311行）" style="rounded=0;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#F8CECC;strokeColor=#B85450;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="1060" y="510" width="280" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_seikyu_body" value="PK  レコード番号&#xa;──────────────&#xa;    請求書番号 / 請求先名&#xa;    請求締日 / 請求書発行日 / 請求日&#xa;    納品日&#xa;    品目コード / 商品名&#xa;    単価 / 数量 / 単位&#xa;    請求額（税抜） / 消費税額 / 請求額（税込）&#xa;    受注種別 / 受注種別（詳細）&#xa;    支払種別&#xa;    営業担当者&#xa;    納品書兼受領書番号&#xa;    出庫登録対象/対象外&#xa;FK  請求レコード番号&#xa;FK  商談レコード番号（普及/SoL/業推）&#xa;FK  普及支援/受注管理レコード番号&#xa;FK  案件管理レコード番号&#xa;FK  納品登録レコード番号&#xa;FK  取引先レコード番号" style="rounded=0;whiteSpace=wrap;fontSize=9;fillColor=#FFFFFF;strokeColor=#B85450;align=left;spacingLeft=6;verticalAlign=top;spacingTop=4;" parent="1" vertex="1">
+                    <mxGeometry x="1060" y="535" width="280" height="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_gen_header" value="GEN（外部システム）" style="rounded=0;whiteSpace=wrap;fontSize=10;fontStyle=1;fillColor=#E1D5E7;strokeColor=#9673A6;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="1060" y="900" width="200" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="t_gen_body" value="PK  GEN受注番号&#xa;──────────────&#xa;    在庫管理&#xa;    資産管理&#xa;    発注管理&#xa;    製造登録" style="rounded=0;whiteSpace=wrap;fontSize=9;fillColor=#FFFFFF;strokeColor=#9673A6;align=left;spacingLeft=6;verticalAlign=top;spacingTop=4;" parent="1" vertex="1">
+                    <mxGeometry x="1060" y="925" width="200" height="110" as="geometry"/>
+                </mxCell>
+                <mxCell id="er1" style="endArrow=ERmany;startArrow=ERone;strokeColor=#333333;" parent="1" source="t_hassou_body" target="t_seihin_body" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="er2" style="endArrow=ERone;startArrow=ERmany;strokeColor=#82B366;" parent="1" source="t_seihin_body" target="t_kitai_body" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="er3" style="endArrow=ERone;startArrow=ERmany;strokeColor=#82B366;" parent="1" source="t_seihin_body" target="t_option_body" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="er4" style="endArrow=ERone;startArrow=ERmany;strokeColor=#82B366;dashed=1;" parent="1" source="t_option_body" target="t_kitai_body" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="er5" style="endArrow=ERone;startArrow=ERzeroToMany;strokeColor=#D6B656;" parent="1" source="t_cs_body" target="t_hassou_body" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="700" y="60"/>
+                            <mxPoint x="150" y="60"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="er6" style="endArrow=ERone;startArrow=ERzeroToMany;strokeColor=#D6B656;dashed=1;" parent="1" source="t_cs_body" target="t_kitai_body" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="690" y="700"/>
+                            <mxPoint x="280" y="700"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="er7" style="endArrow=ERone;startArrow=ERmany;strokeColor=#CCCCCC;dashed=1;" parent="1" source="t_hassou_body" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="150" y="70"/>
+                            <mxPoint x="1160" y="70"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="er8" style="endArrow=ERone;startArrow=ERzeroToMany;strokeColor=#9673A6;dashed=1;" parent="1" source="t_seihin_body" target="t_gen_body" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
