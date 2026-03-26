@@ -1,0 +1,142 @@
+<mxfile host="65bd71144e">
+    <diagram id="matrix" name="優先順位マトリクス（効果×工数）">
+        <mxGraphModel dx="1078" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="優先順位マトリクス — 効果 × 工数" style="text;fontSize=16;fontStyle=1;align=left;fillColor=none;strokeColor=none;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="10" width="500" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle" value="Session 317 — 「最小工数で効果の出せるところ」を特定する" style="text;fontSize=10;align=left;fillColor=none;strokeColor=none;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="35" width="500" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="y_label" value="効果（ｽﾃｰｸﾎﾙﾀﾞｰへのインパクト）" style="text;fontSize=11;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#222222;rotation=-90;" parent="1" vertex="1">
+                    <mxGeometry x="35" y="400" width="250" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="y_high" value="高" style="text;fontSize=10;fontStyle=1;align=center;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="100" width="30" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="y_low" value="低" style="text;fontSize=10;fontStyle=1;align=center;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="540" width="30" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="x_label" value="工数（藤田さんの投入コスト）" style="text;fontSize=11;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="760" width="300" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="x_low" value="低" style="text;fontSize=10;fontStyle=1;align=center;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="270" y="740" width="30" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="x_high" value="高" style="text;fontSize=10;fontStyle=1;align=center;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="740" width="30" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="axis_y" style="endArrow=block;endFill=1;strokeColor=#222222;strokeWidth=2;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="140" y="720" as="sourcePoint"/>
+                        <mxPoint x="140" y="80" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="axis_x" style="endArrow=block;endFill=1;strokeColor=#222222;strokeWidth=2;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="140" y="720" as="sourcePoint"/>
+                        <mxPoint x="1100" y="720" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="q1_bg" value="" style="rounded=0;fillColor=#D5E8D4;strokeColor=none;opacity=30;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="80" width="480" height="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="q1_label" value="★ 最優先" style="text;fontSize=14;fontStyle=1;align=left;fillColor=none;strokeColor=none;fontColor=#82B366;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="85" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="q1_sub" value="低工数 × 高効果" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;fontColor=#82B366;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="105" width="120" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="q2_bg" value="" style="rounded=0;fillColor=#FFF2CC;strokeColor=none;opacity=30;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="80" width="480" height="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="q2_label" value="慎重に判断" style="text;fontSize=14;fontStyle=1;align=left;fillColor=none;strokeColor=none;fontColor=#D6B656;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="85" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="q2_sub" value="高工数 × 高効果" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;fontColor=#D6B656;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="105" width="120" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="q3_bg" value="" style="rounded=0;fillColor=#DAE8FC;strokeColor=none;opacity=30;" parent="1" vertex="1">
+                    <mxGeometry x="140" y="400" width="480" height="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="q3_label" value="やっておく" style="text;fontSize=14;fontStyle=1;align=left;fillColor=none;strokeColor=none;fontColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="405" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="q3_sub" value="低工数 × 低効果" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;fontColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="425" width="120" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="q4_bg" value="" style="rounded=0;fillColor=#F8CECC;strokeColor=none;opacity=20;" parent="1" vertex="1">
+                    <mxGeometry x="620" y="400" width="480" height="320" as="geometry"/>
+                </mxCell>
+                <mxCell id="q4_label" value="見送り（将来移管時）" style="text;fontSize=14;fontStyle=1;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="405" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="q4_sub" value="高工数 × 低効果" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="425" width="120" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="item1" value="課題抽出・整理&#xa;（ヒアリング）" style="rounded=1;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#D5E8D4;strokeColor=#82B366;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="140" width="150" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="item1n" value="全ての判断の基盤&#xa;今すぐやるべき" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#82B366;" parent="1" vertex="1">
+                    <mxGeometry x="200" y="190" width="150" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="item2" value="N-04 PSI自動化" style="rounded=1;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#D5E8D4;strokeColor=#82B366;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="170" width="150" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="item2n" value="年104h削減 [B]&#xa;データソース揃ってきた" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#82B366;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="215" width="160" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="item3" value="R-09〜R-13&#xa;分析・可視化" style="rounded=1;whiteSpace=wrap;fontSize=10;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="460" width="130" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="item3n" value="既存ツールで対応可能" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="505" width="140" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="item4" value="N-05 移管対応設計" style="rounded=1;whiteSpace=wrap;fontSize=10;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="500" width="140" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="item4n" value="設計方針のみ。工数は小さい" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="540" width="180" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="item5" value="R-01〜R-05&#xa;データ記録の構造化" style="rounded=1;whiteSpace=wrap;fontSize=10;fillColor=#FFF2CC;strokeColor=#D6B656;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="180" width="160" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="item5n" value="新規システム構築が必要&#xa;ヒアリング結果を見てから判断" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#D6B656;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="225" width="200" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="item6" value="N-01 kintone紐づけ" style="rounded=1;whiteSpace=wrap;fontSize=10;fillColor=#FFF2CC;strokeColor=#D6B656;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="250" width="150" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="item6n" value="kintone実態確認後" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#D6B656;" parent="1" vertex="1">
+                    <mxGeometry x="860" y="290" width="150" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="item7" value="N-03 CS↔工程紐づけ" style="rounded=1;whiteSpace=wrap;fontSize=10;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="480" width="160" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="item7n" value="工程記録が先に必要" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="520" width="140" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="item8" value="N-02 工程内不良記録" style="rounded=1;whiteSpace=wrap;fontSize=10;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="530" width="160" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="item8n" value="品質協定書が前提&#xa;記録方法の確認が先" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="570" width="160" height="24" as="geometry"/>
+                </mxCell>
+                <mxCell id="mid_h" style="endArrow=none;strokeColor=#AAAAAA;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="140" y="400" as="sourcePoint"/>
+                        <mxPoint x="1100" y="400" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="mid_v" style="endArrow=none;strokeColor=#AAAAAA;dashed=1;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="620" y="80" as="sourcePoint"/>
+                        <mxPoint x="620" y="720" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

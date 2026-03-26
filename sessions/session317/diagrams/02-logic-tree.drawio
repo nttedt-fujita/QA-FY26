@@ -1,0 +1,218 @@
+<mxfile host="65bd71144e">
+    <diagram id="tree" name="ロジックツリー（課題の階層分解）">
+        <mxGraphModel dx="1388" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1600" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="ロジックツリー（Whatツリー）: 品質管理プロセスの課題" style="text;fontSize=16;fontStyle=1;align=left;fillColor=none;strokeColor=none;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="10" width="600" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle" value="Session 317 — 確度付き。主要工程（IQC/PQC/横断）を展開" style="text;fontSize=10;align=left;fillColor=none;strokeColor=none;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="35" width="500" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="root" value="品質管理&#xa;プロセスの課題" style="rounded=1;whiteSpace=wrap;fontSize=12;fontStyle=1;fillColor=#E1D5E7;strokeColor=#9673A6;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="380" width="130" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="iqc" value="2. IQC: 受入検査（M3）" style="rounded=1;whiteSpace=wrap;fontSize=10;fontStyle=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="110" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="r_iqc" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="root" target="iqc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="iqc_record" value="記録の不完全性" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="50" width="130" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="iqc_struct" value="データ構造の問題" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="90" width="130" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="iqc_concept" value="概念の欠落" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="130" width="130" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="iqc_disconnect" value="他システムとの断絶" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="170" width="130" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="ri1" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="iqc" target="iqc_record" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ri2" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="iqc" target="iqc_struct" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ri3" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="iqc" target="iqc_concept" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ri4" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="iqc" target="iqc_disconnect" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ir1" value="杉山分のみデジタル [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="40" width="160" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="ir2" value="入荷日欠損34件 [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="56" width="160" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="ir3" value="工数未記入80件 [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="72" width="160" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="is1" value="品名表記揺れ220種 [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="88" width="160" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="is2" value="検査結果/備考が1列混在 [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="104" width="180" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="ic1" value="ロットなし [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="128" width="120" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="ic2" value="サプライヤIDなし [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="144" width="140" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="ic3" value="検査基準(AQL)なし [C]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="160" width="140" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="id1" value="kintoneと共通キーなし [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="178" width="180" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="id2" value="M3→M4因果追跡不可 [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="194" width="180" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="rir1" style="endArrow=none;strokeColor=#AAAAAA;" parent="1" source="iqc_record" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="605" y="58" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ris1" style="endArrow=none;strokeColor=#AAAAAA;" parent="1" source="iqc_struct" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="605" y="98" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ric1" style="endArrow=none;strokeColor=#AAAAAA;" parent="1" source="iqc_concept" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="605" y="142" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="rid1" style="endArrow=none;strokeColor=#AAAAAA;" parent="1" source="iqc_disconnect" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="605" y="185" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="pqc" value="4. PQC: 工程内検査（M4）" style="rounded=1;whiteSpace=wrap;fontSize=10;fontStyle=1;fillColor=#F8CECC;strokeColor=#B85450;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="310" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="r_pqc" style="endArrow=block;endFill=1;strokeColor=#B85450;" parent="1" source="root" target="pqc" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="pqc_digital" value="デジタル管理なし [A]" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="260" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="pqc_method" value="記録方法が不明 [D]" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="300" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="pqc_class" value="不良の定義/分類不明 [D]" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="340" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="pqc_link" value="M3/CSとの紐づきなし [A]" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="380" width="160" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="rp1" style="endArrow=block;endFill=1;strokeColor=#B85450;" parent="1" source="pqc" target="pqc_digital" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rp2" style="endArrow=block;endFill=1;strokeColor=#B85450;" parent="1" source="pqc" target="pqc_method" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rp3" style="endArrow=block;endFill=1;strokeColor=#B85450;" parent="1" source="pqc" target="pqc_class" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rp4" style="endArrow=block;endFill=1;strokeColor=#B85450;" parent="1" source="pqc" target="pqc_link" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="pm1" value="紙？口頭？写真？ [D]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="640" y="298" width="140" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="pm2" value="記録者が不明 [D]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="640" y="314" width="120" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="pm3" value="記録頻度が不明 [D]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="640" y="330" width="120" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="rpm1" style="endArrow=none;strokeColor=#AAAAAA;" parent="1" source="pqc_method" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="635" y="315" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="r_others" style="endArrow=block;endFill=1;strokeColor=#AAAAAA;dashed=1;" parent="1" source="root" target="others_frame" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="cross" value="8. 横断: データ連携・集計" style="rounded=1;whiteSpace=wrap;fontSize=10;fontStyle=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="482" width="180" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="r_cross" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="root" target="cross" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_gen" value="kintone↔GEN連携" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="442" width="130" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_psi" value="PSI手動集計" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="482" width="130" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_excel" value="受入検査Excelの孤立" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#F8CECC;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="522" width="150" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="c_gunma" value="群馬通商↔kintone" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#DAE8FC;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="562" width="130" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="rc1" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="cross" target="c_gen" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rc2" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="cross" target="c_psi" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rc3" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="cross" target="c_excel" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rc4" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="cross" target="c_gunma" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="cg1" value="CSVエクスポート→インポート [A] 一部マスタのみ" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="440" width="300" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="cg2" value="実態が不透明 [A(M)]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#D6B656;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="456" width="200" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="cp1" value="全て手動統合 [A] / 掛川さん年104h [B]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="480" width="280" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="cp2" value="データソースの全リスト未確認 [B]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="496" width="250" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="ce1" value="kintoneと共通キーなし [A] / GENとも断絶 [A]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="526" width="300" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="cgu1" value="同期方法/タイミング不明 [B]" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="610" y="566" width="200" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="" style="group" vertex="1" connectable="0" parent="1">
+                    <mxGeometry x="20" y="120" width="150" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="others_frame" value="" style="rounded=1;fillColor=none;strokeColor=#AAAAAA;dashed=1;" parent="2" vertex="1">
+                    <mxGeometry width="150" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="o1" value="1. サプライヤ管理" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="2" vertex="1">
+                    <mxGeometry x="8.333333333333334" y="5" width="133.33333333333334" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="o3" value="3. 製造工程管理" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;fontColor=#B85450;" parent="2" vertex="1">
+                    <mxGeometry x="8.333333333333334" y="25" width="133.33333333333334" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="o5" value="5. FQC: 最終検査 [D]" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;fontColor=#D6B656;" parent="2" vertex="1">
+                    <mxGeometry x="8.333333333333334" y="45" width="133.33333333333334" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="o6" value="6. OQC: 出荷検査 [D]" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;fontColor=#D6B656;" parent="2" vertex="1">
+                    <mxGeometry x="8.333333333333334" y="65" width="133.33333333333334" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="o7" value="7. 市場品質（kintone CS）" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;fontColor=#82B366;" parent="2" vertex="1">
+                    <mxGeometry x="8.333333333333334" y="85" width="133.33333333333334" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="others_note" value="（詳細はMECEマップ参照）" style="text;fontSize=8;align=left;fillColor=none;strokeColor=none;fontColor=#AAAAAA;" parent="2" vertex="1">
+                    <mxGeometry x="8.333333333333334" y="120" width="133.33333333333334" height="14" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -130,3 +130,39 @@
 **詳細**: [session316/session-summary.md](../session316/session-summary.md)
 
 ---
+
+## Session 317 (2026-03-26)
+
+**概要**: 要求立ち返り整理・ドメインモデリング（確度付き）・フレームワーク精査・ヒアリング準備・kintone CSV突合（途中）
+
+**重要な成果**:
+- As-Isドメインモデル作成（qa-design-reviewスキル準拠、確度A/A(M)/B/C/D付き）
+- 確度A(M)を新設: マニュアル記載は実態と異なる可能性あり
+- MECE+ロジックツリー+EARS+マトリクスで課題を体系的に分析
+- ヒアリング叩き台（3周構造: 現状確認→要求引き出し→突き合わせ深掘り）
+- 技術的制約の整理（5カテゴリ）
+- kintone「普及支援/受注管理」は**2026年2月以降のレコードのみ**（運用開始が最近）
+- GEN↔kintone連携の方向修正（kintone→GENが正）
+
+**方針決定**:
+- 課題抽出は網羅的に / 対処は最小工数で / 将来のシステム移管も見据える
+- 分析結果は実務者の回答の裏取りに使う（押し付けない）
+- ギリギリ求められるハードルを超えるレベルの業務量想定
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session317/domain-model-as-is.md](../session317/domain-model-as-is.md) | As-Isドメインモデル（確度付き） |
+| [session317/domain-model-as-is.drawio](../session317/domain-model-as-is.drawio) | ドメインモデル図 |
+| [session317/hearing-preparation.md](../session317/hearing-preparation.md) | ヒアリング準備 |
+| [session317/requirements-analysis.md](../session317/requirements-analysis.md) | 要求分析（MECE+EARS+マトリクス） |
+| [session317/technical-constraints.md](../session317/technical-constraints.md) | 技術的制約の整理 |
+| [session317/diagrams/01-mece-process-map.drawio](../session317/diagrams/01-mece-process-map.drawio) | MECE課題マップ |
+| [session317/diagrams/02-logic-tree.drawio](../session317/diagrams/02-logic-tree.drawio) | ロジックツリー |
+| [session317/diagrams/03-priority-matrix.drawio](../session317/diagrams/03-priority-matrix.drawio) | 優先順位マトリクス |
+| [session317/diagrams/04-pyramid-structure.drawio](../session317/diagrams/04-pyramid-structure.drawio) | ピラミッド構造 |
+
+**詳細**: [session317/session-summary.md](../session317/session-summary.md)
+
+---

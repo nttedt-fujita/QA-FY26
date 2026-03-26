@@ -1,0 +1,154 @@
+<mxfile host="65bd71144e">
+    <diagram id="pyramid" name="ピラミッド構造（ヒアリングの目的と根拠）">
+        <mxGraphModel dx="1078" dy="722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1200" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="title" value="ピラミッド構造 — ヒアリングの目的と根拠" style="text;fontSize=16;fontStyle=1;align=left;fillColor=none;strokeColor=none;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="10" width="500" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle" value="Session 317 — So What? / Why So? で構造化" style="text;fontSize=10;align=left;fillColor=none;strokeColor=none;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="35" width="400" height="16" as="geometry"/>
+                </mxCell>
+                <mxCell id="top" value="結論: 課題を網羅的に抽出した上で&#xa;最小工数で効果が出るターゲットを合意する" style="rounded=1;whiteSpace=wrap;fontSize=12;fontStyle=1;fillColor=#E1D5E7;strokeColor=#9673A6;strokeWidth=2;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="310" y="80" width="380" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="sowhat" value="So What?&#xa;↑" style="text;fontSize=9;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#9673A6;" parent="1" vertex="1">
+                    <mxGeometry x="460" y="140" width="80" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1" value="根拠1:&#xa;課題は網羅的に&#xa;把握すべき" style="rounded=1;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#D5E8D4;strokeColor=#82B366;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="190" width="180" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2" value="根拠2:&#xa;全部は対処できない&#xa;（M1〜M4の工数バランス）" style="rounded=1;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="190" width="210" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="r3" value="根拠3:&#xa;将来のシステム移管を&#xa;見据える" style="rounded=1;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="730" y="190" width="180" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="tr1" style="endArrow=block;endFill=1;strokeColor=#82B366;" parent="1" source="top" target="r1" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="tr2" style="endArrow=block;endFill=1;strokeColor=#D6B656;" parent="1" source="top" target="r2" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="tr3" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="top" target="r3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="whyso" value="↓&#xa;Why So?" style="text;fontSize=9;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#9673A6;" parent="1" vertex="1">
+                    <mxGeometry x="460" y="255" width="80" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1a" value="せっかく関わるので&#xa;課題の全体像はきちんと把握" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#D5E8D4;strokeColor=#82B366;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="310" width="170" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1b" value="雑にやると的外れな所に&#xa;工数をかけるリスク" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#D5E8D4;strokeColor=#82B366;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="210" y="310" width="170" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="r1c" value="S260教訓: 現場の隠れコストは&#xa;ヒアリングしないと見えない" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#D5E8D4;strokeColor=#82B366;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="360" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="rr1a" style="endArrow=block;endFill=1;strokeColor=#82B366;" parent="1" source="r1" target="r1a" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rr1b" style="endArrow=block;endFill=1;strokeColor=#82B366;" parent="1" source="r1" target="r1b" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rr1c" style="endArrow=block;endFill=1;strokeColor=#82B366;" parent="1" source="r1" target="r1c" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2a" value="M1-B(GNSS) 4月再開&#xa;ツール完成4/30" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#FFF2CC;strokeColor=#D6B656;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="310" width="140" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2b" value="社長「仕損2-3%で&#xa;システム入れる意味あるか」" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#FFF2CC;strokeColor=#D6B656;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="550" y="310" width="170" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="r2c" value="ギリギリ求められる&#xa;ハードルを超える想定で" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#FFF2CC;strokeColor=#D6B656;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="360" width="170" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="rr2a" style="endArrow=block;endFill=1;strokeColor=#D6B656;" parent="1" source="r2" target="r2a" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rr2b" style="endArrow=block;endFill=1;strokeColor=#D6B656;" parent="1" source="r2" target="r2b" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rr2c" style="endArrow=block;endFill=1;strokeColor=#D6B656;" parent="1" source="r2" target="r2c" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="r3a" value="今回作るものは&#xa;「完成形」ではない" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#DAE8FC;strokeColor=#6C8EBF;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="730" y="310" width="150" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="r3b" value="将来のkintone刷新/ERP導入を&#xa;妨げない設計にする" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#DAE8FC;strokeColor=#6C8EBF;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="310" width="150" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="r3c" value="標準形式で出力・移行可能&#xa;（EARS N-05）" style="rounded=1;whiteSpace=wrap;fontSize=9;fillColor=#DAE8FC;strokeColor=#6C8EBF;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="780" y="360" width="180" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="rr3a" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="r3" target="r3a" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rr3b" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="r3" target="r3b" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="rr3c" style="endArrow=block;endFill=1;strokeColor=#6C8EBF;" parent="1" source="r3" target="r3c" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="action_label" value="→ この結論から導かれるアクション" style="text;fontSize=11;fontStyle=5;align=left;fillColor=none;strokeColor=none;fontColor=#222222;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="440" width="350" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="act_frame" value="" style="rounded=1;fillColor=none;strokeColor=#9673A6;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="470" width="920" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="stage1" value="第1段階: 課題抽出（広く）" style="rounded=1;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#D5E8D4;strokeColor=#82B366;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="490" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1a" value="ヒアリング（3周構造）" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="540" width="160" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1b" value="分析結果で実務者の回答を裏取り" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="558" width="210" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1c" value="EARS形式で要求を構造化" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="576" width="180" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="s1d" value="技術的制約の整理" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="594" width="160" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="sa1" style="endArrow=block;endFill=1;strokeColor=#222222;strokeWidth=2;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="270" y="510" as="sourcePoint"/>
+                        <mxPoint x="370" y="510" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="stage2" value="第2段階: 優先順位付け（絞る）" style="rounded=1;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#FFF2CC;strokeColor=#D6B656;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="380" y="490" width="220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2a" value="効果×工数マトリクスで評価" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="540" width="200" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2b" value="「今回やらないこと」の合意" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="558" width="200" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="s2c" value="ステークホルダーとの合意形成" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="400" y="576" width="210" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="sa2" style="endArrow=block;endFill=1;strokeColor=#222222;strokeWidth=2;" parent="1" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="610" y="510" as="sourcePoint"/>
+                        <mxPoint x="710" y="510" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="stage3" value="第3段階: 対処（最小工数）" style="rounded=1;whiteSpace=wrap;fontSize=11;fontStyle=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="490" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3a" value="PSI自動化プロトタイプ" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="540" width="160" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3b" value="分析ダッシュボード" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="558" width="140" height="14" as="geometry"/>
+                </mxCell>
+                <mxCell id="s3c" value="将来移管を見据えた設計" style="text;fontSize=9;align=left;fillColor=none;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="576" width="180" height="14" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
