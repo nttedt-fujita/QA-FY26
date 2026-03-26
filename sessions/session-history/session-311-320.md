@@ -196,3 +196,22 @@
 **詳細**: [session318/session-summary.md](../session318/session-summary.md)
 
 ---
+
+## Session 319 (2026-03-26)
+
+**概要**: 掛川さんミーティング前の資料修正 + ミーティング実施
+
+**重要な成果**:
+- drawio/kakegawa-questions.mdの構成修正:「誰が書いてる？」→「突合で特定できた/できなかったソース」ベースに変更
+- **掛川さんミーティング実施**: GENは使っていない、PSIの元データはkintoneからの情報のみ（重要な発見）
+- 細かくヒアリングできた（詳細はS320で整理予定）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session319/session-summary.md](../session319/session-summary.md) | セッションサマリー |
+
+**詳細**: [session319/session-summary.md](../session319/session-summary.md)
+
+---
