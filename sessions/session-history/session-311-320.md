@@ -88,3 +88,18 @@
 **詳細**: [session314/session-summary.md](../session314/session-summary.md)
 
 ---
+
+## Session 315 (2026-03-26)
+
+**概要**: kintone現状把握の共有・次セッション方針決定
+
+**重要な成果**:
+- kintoneにログイン・閲覧が可能になった
+- 思ったより複雑なシステムであることが判明
+- CSVの出力方法を把握
+- アクセス制約: Windows PC（社給PC）からのみアクセスすべき
+- 次セッションはWindows PCでkintoneスクショ共有・CSV収集方針決定
+
+**詳細**: [session315/session-summary.md](../session315/session-summary.md)
+
+---
