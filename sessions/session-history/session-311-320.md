@@ -215,3 +215,25 @@
 **詳細**: [session319/session-summary.md](../session319/session-summary.md)
 
 ---
+
+## Session 320 (2026-03-27)
+
+**概要**: 掛川さんヒアリング結果整理 + PSI自動化の実現可能性再評価
+
+**重要な成果**:
+- ヒアリング結果を資料化。P-2(出荷)→A、P-4(生産)→B、P-5(在庫)→B+に確度更新
+- P-6（発注情報）の矛盾発見: GEN不使用[A] vs マニュアル「GEN=発注管理」[A(M)]
+- **PSI自動化は実現可能、Phase 1（受注+出荷）から着手可能**と判断
+- kintone APIはNTT東基盤の制約あり（S298）、当面CSV手動DL
+- Linear issue 4件作成（QA-19~22: GEN調査、長屋/宮崎/宇枝さん確認）
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|----------|------|
+| [session320/hearing-results-kakegawa.md](../session320/hearing-results-kakegawa.md) | ヒアリング結果（確度更新+P-6矛盾） |
+| [session320/psi-automation-feasibility.md](../session320/psi-automation-feasibility.md) | PSI自動化の実現可能性再評価 |
+
+**詳細**: [session320/session-summary.md](../session320/session-summary.md)
+
+---
