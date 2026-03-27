@@ -22,3 +22,16 @@
 **詳細**: [session321/session-summary.md](../session321/session-summary.md)
 
 ---
+
+## Session 322 (2026-03-27)
+
+**概要**: GEN生産管理2次調査（製造実績データ確認）+ 棚卸し作業参加・現場観察
+
+**重要な成果**:
+- GEN製造実績登録に35件のデータ実在確認（ナカヨ・渡辺・SL福島のロケーション一致）
+- P-4「生産関連Excel」とGEN製造実績の関係 → P-6と同じパターンの可能性（要確認）
+- 棚卸し現場観察: QRコード導入前に現状フロー把握が先という気づき
+
+**詳細**: [session322/session-summary.md](../session322/session-summary.md)
+
+---
