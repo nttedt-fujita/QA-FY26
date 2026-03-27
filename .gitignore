@@ -33,3 +33,6 @@ __pycache__/
 
 # kintone CSV（機密データ。突合分析完了後に削除予定）
 sessions/session316/csv/**/*.csv
+
+# GEN CSVエクスポート（機密データ。分析完了後に削除予定）
+sessions/session321/screenshots/07-master/**/*.csv
