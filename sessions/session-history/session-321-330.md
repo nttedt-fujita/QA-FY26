@@ -35,3 +35,15 @@
 **詳細**: [session322/session-summary.md](../session322/session-summary.md)
 
 ---
+
+## Session 323 (2026-03-27)
+
+**概要**: DX効果分析のアプローチ方針決定（知識集約→事例調査→効果分析→PSI設計の順）
+
+**重要な成果**:
+- SCM/QC知識集約・事例調査をPSIプロトタイプ設計より先にやる方針で合意
+- タイムボックス案: 事例調査1-2セッション → 知識整理1-2セッション → 効果分析1セッション
+
+**詳細**: [session323/session-summary.md](../session323/session-summary.md)
+
+---
