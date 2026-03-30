@@ -60,3 +60,22 @@
 **詳細**: [session324/session-summary.md](../session324/session-summary.md)
 
 ---
+
+## Session 324b (2026-03-27) — Win側セッション
+
+**概要**: kintone出庫CSV分析 + DX効果分析タスクのLinear化
+
+**重要な成果**:
+- kintone→GENの出庫データフロー確定（週次手動CSVインポート、掛川さん操作）
+- バッテリー仕損品が出庫の24%（78件中19件）— 品質管理の示唆
+- DX効果分析をQA-23〜QA-27としてLinearに登録
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|---------|------|
+| [session324b/kintone-shipment-analysis.md](../session324b/kintone-shipment-analysis.md) | kintone出庫データ分析 |
+
+**詳細**: [session324b/session-summary.md](../session324b/session-summary.md)
+
+---

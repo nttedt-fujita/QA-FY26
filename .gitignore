@@ -31,9 +31,5 @@ __pycache__/
 *.pyc
 .env
 
-# kintone CSV（機密データ。突合分析完了後に削除予定）
-sessions/session316/csv/**/*.csv
-
-# GEN CSVエクスポート（機密データ。分析完了後に削除予定）
-sessions/session321/screenshots/07-master/**/*.csv
-sessions/session322/csv/
+# CSV（社内業務データ。分析結果はmdに書き出し済みなのでgit管理外）
+*.csv
