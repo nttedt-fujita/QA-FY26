@@ -1,6 +1,6 @@
 # ミッション進捗
 
-**最終更新**: Session 315 (2026-03-26)
+**最終更新**: Session 331 (2026-03-30)
 
 ---
 
@@ -53,10 +53,11 @@
 
 | 項目 | 内容 |
 |------|------|
-| 状態 | **進行中（ドメインモデリング・要求分析完了、CSV突合途中）** |
+| 状態 | **進行中（調査・効果分析完了 → プロト設計着手へ）** |
 | Linear | [M3/M4-PSI] PSI自動化（4/1〜6/30） |
-| 最新セッション | [Session 317](../sessions/session317/session-summary.md) |
-| 次のアクション | kintone CSV再取得（全期間）、Agriシート突合完了、PSIプロトタイプアプローチ整理 |
+| 正式資料 | [docs/missions/psi-automation/](missions/psi-automation/README.md) |
+| 最新セッション | [Session 331](../sessions/session331/session-summary.md) |
+| 次のアクション | QA-25: Phase 1（受注+出荷）の設計・プロトタイプ作成 |
 
 ---
 
@@ -75,9 +76,9 @@
 
 | 項目 | 内容 |
 |------|------|
-| Linear In Progress | QA-12: PSI集計自動化の設計 |
-| 直近の完了 | 2026-03-26 ドメインモデリング・要求分析・ヒアリング準備（S317）、kintone CSV収集（S316） |
-| 次のアクション | kintone CSV再取得（全期間）、Agri突合、PSIプロトタイプ設計、ヒアリング実施 |
+| Linear In Progress | QA-7: 梱包変更作業・隠れコストの定量調査 |
+| 直近の完了 | QA-24(DX効果分析), QA-26(SCM/QC知識整理), QA-27(DX事例調査), QA-12(PSI設計), QA-19(GEN画面調査) |
+| 次のアクション | QA-25: PSIプロトタイプ設計・実装（Phase 1: 受注+出荷の自動集計） |
 
 ---
 
