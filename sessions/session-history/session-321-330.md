@@ -134,3 +134,27 @@
 | [session327/investigation-plan.md](../session327/investigation-plan.md) | DX効果分析 次4-6セッション計画 |
 
 **詳細**: [session327/session-summary.md](../session327/session-summary.md)
+
+---
+
+## Session 328 (2026-03-30)
+
+**概要**: QA-26 SCM/QC一般知識の整理。PSI管理・在庫管理指標・品質コスト（CoQ）をWeb調査で文書化。
+
+**重要な成果**:
+- PSI管理フレームワーク整理（P/S/I各役割・KPI・差異管理サイクル）
+- 在庫管理指標（在庫回転率: 製造業平均11回/年、安全在庫計算式）
+- CoQ PAF法（予防/評価/内部失敗/外部失敗）。目安CoQ率5%以下が優秀
+- 自社課題（仕損24%・在庫タイムラグ・手動転記）をCoQ分類で整理 → QA-24効果分析の基盤
+- QA-26完了、docs/qa-knowledge/ に正式配置
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|---------|------|
+| [session328/scm-knowledge.md](../session328/scm-knowledge.md) | PSI管理・在庫管理指標 |
+| [session328/coq-knowledge.md](../session328/coq-knowledge.md) | 品質コスト（CoQ）PAF法 |
+| [docs/qa-knowledge/scm-knowledge.md](../../docs/qa-knowledge/scm-knowledge.md) | 正式配置版 |
+| [docs/qa-knowledge/coq-knowledge.md](../../docs/qa-knowledge/coq-knowledge.md) | 正式配置版 |
+
+**詳細**: [session328/session-summary.md](../session328/session-summary.md)
