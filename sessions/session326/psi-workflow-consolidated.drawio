@@ -1,0 +1,314 @@
+<mxfile host="draw.io">
+    <diagram name="PSI集計 作業フロー（集約版）" id="consolidated">
+        <mxGraphModel dx="1600" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1300" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+
+                <!-- タイトル -->
+                <mxCell id="title" value="PSI集計 作業フロー（集約版）— S326時点" style="text;html=1;fontSize=20;fontStyle=1;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="10" width="500" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="subtitle" value="出典: S314仮説 + S319-320掛川さんヒアリング + S321-322 GEN分析　|　緑=確認済み[A]　黄=一部確認[B/B+]　赤=未確認[D]　灰=不使用" style="text;html=1;fontSize=10;align=center;fontColor=#666;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="40" width="900" height="20" as="geometry"/>
+                </mxCell>
+
+                <!-- ========== 左列: kintone群 ========== -->
+                <mxCell id="kt_header" value="kintone" style="text;html=1;fontSize=14;fontStyle=5;align=center;fontColor=#333;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="80" width="250" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="kt_hassou" value="&lt;b&gt;発送依頼通知&lt;/b&gt;&#xa;発送先名 / 発送日 / レコード番号" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="120" width="250" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="kt_09" value="&lt;b&gt;09-発送製品CSV&lt;/b&gt;&#xa;掛川さん用カスタムビュー（1週間分）&#xa;仕損フラグあり[A] / EC=GEN受注番号[B]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="175" width="250" height="50" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="kt_juchu" value="&lt;b&gt;普及支援/受注管理&lt;/b&gt;&#xa;2026年2月〜運用開始[A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="240" width="250" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="kt_71" value="&lt;b&gt;機体マスタ(71)&lt;/b&gt;&#xa;ロケーション列で拠点別在庫[A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="295" width="250" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="kt_72" value="&lt;b&gt;オプションマスタ(72)&lt;/b&gt;&#xa;ロケーション列[B+] ※PSI在庫とは不一致" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="30" y="350" width="250" height="40" as="geometry"/>
+                </mxCell>
+
+                <!-- ========== 中央上: 群馬通商Excelハブ ========== -->
+                <mxCell id="gunma_hub_bg" value="" style="rounded=1;fillColor=#EBF5FB;strokeColor=#42A5F5;dashed=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="80" width="360" height="230" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="gunma_hub_title" value="群馬通商Excelを経由するフロー（出荷）" style="text;html=1;fontSize=12;fontStyle=1;fontColor=#42A5F5;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="380" y="85" width="340" height="20" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="gunma_excel" value="&lt;b&gt;群馬通商Excel&lt;/b&gt;&#xa;在庫管理 / フラグ管理 / 日程絞り込み機能&#xa;★なぜ経由が必要？ ★他に誰が見ている？" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="155" width="260" height="60" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="step_kt_to_gunma" value="① kintone発送依頼通知から取得した情報を&#xa;　 群馬通商Excelにも転記 [A]&#xa;　 （レコード番号は住所欄=特殊配置）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#82b366;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="110" width="320" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="step_gunma_to_psi" value="② 週末に群馬通商Excelの日程絞り込みで&#xa;　 1週間分を抽出 → PSIに出荷実績を転記 [A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#82b366;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="225" width="320" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="step_gunma_stock" value="③ 群馬通商Excel「入庫保管中」→ PSI在庫 [A]&#xa;　 BB102/粒剤/バッテリ 3品目完全一致確認済み" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#82b366;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="275" width="320" height="35" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="step_gunma_flag" value="④ kintoneから情報を引っ張ってフラグを立てる [A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#82b366;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="320" width="320" height="25" as="geometry"/>
+                </mxCell>
+
+                <!-- ========== 中央下: 群馬通商Excelを経由しないフロー ========== -->
+                <mxCell id="direct_bg" value="" style="rounded=1;fillColor=#FFF8E1;strokeColor=#FFB300;dashed=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="370" width="360" height="310" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="direct_title" value="群馬通商Excelを経由しないフロー" style="text;html=1;fontSize=12;fontStyle=1;fontColor=#F57F17;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="380" y="375" width="340" height="20" as="geometry"/>
+                </mxCell>
+
+                <!-- 受注 -->
+                <mxCell id="step_order" value="&lt;b&gt;受注&lt;/b&gt;: kintone受注管理 → Agriシート経由? → PSI [A]&#xa;粒剤12ヶ月完全一致。直接集計でAgri不要の可能性" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#82b366;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="400" width="320" height="40" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="q_order" value="★Agri更新者は？（長屋さん?）&#xa;★2月以前の受注データ(321件)はどこ？" style="text;html=1;fontSize=8;fontColor=#CC0000;fontStyle=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="395" y="442" width="240" height="25" as="geometry"/>
+                </mxCell>
+
+                <!-- 機体拠点別在庫 -->
+                <mxCell id="step_stock_kitai" value="&lt;b&gt;機体拠点別在庫&lt;/b&gt;: kintone機体マスタ(71) → PSI [A]&#xa;BB102@群馬通商19台 / SL福島10台 完全一致" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#82b366;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="475" width="320" height="35" as="geometry"/>
+                </mxCell>
+
+                <!-- 朝霞在庫 -->
+                <mxCell id="step_stock_asaka" value="&lt;b&gt;★朝霞/志木の在庫&lt;/b&gt;: ソース不明 [D]&#xa;kintone 72マスタが有力[B+]だがPSIとは不一致" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="520" width="320" height="35" as="geometry"/>
+                </mxCell>
+
+                <!-- 生産 -->
+                <mxCell id="step_prod" value="&lt;b&gt;生産数&lt;/b&gt;: 生産関連Excel → PSI [B]&#xa;前月には固まる / 月1更新でOK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="565" width="320" height="35" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="q_prod" value="★管理者は誰？ 中身は？&#xa;★GEN製造実績(35件)との関係は？&#xa;★発注情報(P-6)もここに含まれる？" style="text;html=1;fontSize=8;fontColor=#CC0000;fontStyle=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="395" y="602" width="240" height="35" as="geometry"/>
+                </mxCell>
+
+                <!-- 発注 -->
+                <mxCell id="step_hatchu" value="&lt;b&gt;★P-6: バッテリ発注情報&lt;/b&gt;（3月200pcs等）&#xa;ソース不明 — GEN不使用[A] + kintoneに発注機能なし[A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="645" width="320" height="35" as="geometry"/>
+                </mxCell>
+
+                <!-- ========== 長屋さん担当 ========== -->
+                <mxCell id="nagaya_bg" value="" style="rounded=1;fillColor=#F3E5F5;strokeColor=#AB47BC;dashed=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="370" y="700" width="360" height="80" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="nagaya_title" value="長屋さん担当（掛川さんではない）" style="text;html=1;fontSize=12;fontStyle=1;fontColor=#7B1FA2;align=center;" parent="1" vertex="1">
+                    <mxGeometry x="380" y="705" width="340" height="20" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="step_forecast" value="&lt;b&gt;出荷予測&lt;/b&gt;: 長屋さんがPSI予測シートに入力 [C]&#xa;おそらくkintoneから情報取得（掛川さん推測）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="730" width="320" height="35" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="q_forecast" value="★データソース？ 更新頻度？ どの品目？ 他に担当部分は？" style="text;html=1;fontSize=8;fontColor=#CC0000;fontStyle=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="395" y="767" width="310" height="15" as="geometry"/>
+                </mxCell>
+
+                <!-- ========== 右列: PSI Excel ========== -->
+                <mxCell id="psi_header" value="PSI Excel（製販会議資料・週1）" style="text;html=1;fontSize=14;fontStyle=5;align=center;fontColor=#333;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="80" width="280" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#999;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="110" width="280" height="490" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_ship" value="出荷実績（週次・品目別×週別）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="125" width="240" height="30" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_breakdown" value="出荷内訳（機体紐付/ECサイト/仕損）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="165" width="240" height="30" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_order" value="受注数（品目別×月別）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="205" width="240" height="30" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_comment" value="セルコメント（顧客名282件）手入力[B]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="245" width="240" height="30" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_stock_gunma" value="在庫（群馬通商）[A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="285" width="240" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_stock_kitai" value="在庫（機体拠点別）[A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="315" width="240" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_stock_asaka" value="在庫（朝霞/志木）★ソース不明[D]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="345" width="240" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_prod" value="生産数（ナカヨ/渡辺 月別）[B]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="380" width="240" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_hatchu" value="発注・発送予定（バッテリ）★ソース不明" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="415" width="240" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_forecast" value="出荷予測（長屋さん入力）[C]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="450" width="240" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_calc" value="在庫（受注/納品/予測ベース残）= Excel自動算出[A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0E0E0;strokeColor=#999;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="485" width="240" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_ueda" value="★宇枝さん追加シート — 内容・用途不明" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="520" width="240" height="30" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="psi_ueda_note" value="宇枝さん着任前からPSI Excel自体は存在&#xa;宇枝さんがシートを追加して独自拡張" style="text;html=1;fontSize=8;fontColor=#666;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="855" y="555" width="230" height="25" as="geometry"/>
+                </mxCell>
+
+                <!-- ========== 右端: 参照者 ========== -->
+                <mxCell id="ref_header" value="参照者" style="text;html=1;fontSize=14;fontStyle=5;align=center;fontColor=#333;" parent="1" vertex="1">
+                    <mxGeometry x="1180" y="80" width="150" height="25" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="seihan" value="&lt;b&gt;製販会議（週1）&lt;/b&gt;&#xa;当面は週1継続&#xa;（宇枝さん判断）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#42A5F5;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="1180" y="120" width="170" height="50" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="ueda" value="&lt;b&gt;宇枝さん&lt;/b&gt;&#xa;★どこを見ている？&#xa;★何の判断に使う？" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="1180" y="185" width="170" height="50" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="nagaya" value="&lt;b&gt;長屋さん&lt;/b&gt;&#xa;予測シート入力[C]&#xa;★他の担当部分は？" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="1180" y="250" width="170" height="50" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="other_ref" value="★他に参照者いるか不明[D]" style="text;html=1;fontSize=9;fontColor=#CC0000;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1180" y="310" width="170" height="20" as="geometry"/>
+                </mxCell>
+
+                <!-- ========== 別業務（右下） ========== -->
+                <mxCell id="gen_header" value="別業務フロー（PSI転記とは別）" style="text;html=1;fontSize=11;fontStyle=5;fontColor=#999;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="620" width="280" height="20" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="gen_import" value="kintone 09-CSV → GEN出庫登録（週次手動）&#xa;掛川さん操作 / 二重登録リスクあり[A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#ccc;fontColor=#999;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="645" width="280" height="35" as="geometry"/>
+                </mxCell>
+
+                <mxCell id="gen_box" value="GEN（在庫・発注管理）&#xa;PSI転記では不使用[A]" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#ccc;fontColor=#999;fontSize=9;" parent="1" vertex="1">
+                    <mxGeometry x="830" y="690" width="280" height="30" as="geometry"/>
+                </mxCell>
+
+                <!-- ========== 凡例 ========== -->
+                <mxCell id="legend_bg" value="" style="rounded=1;fillColor=#FAFAFA;strokeColor=#DDD;" parent="1" vertex="1">
+                    <mxGeometry x="1180" y="370" width="180" height="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_title" value="凡例" style="text;html=1;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="1190" y="375" width="50" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_a" value="" style="rounded=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="1190" y="398" width="16" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_a_t" value="確認済み [A]" style="text;html=1;fontSize=9;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="1212" y="395" width="100" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_b" value="" style="rounded=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="1190" y="418" width="16" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_b_t" value="一部確認 [B/B+/C]" style="text;html=1;fontSize=9;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="1212" y="415" width="130" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_d" value="" style="rounded=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+                    <mxGeometry x="1190" y="438" width="16" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_d_t" value="未確認 [D] / 矛盾あり" style="text;html=1;fontSize=9;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="1212" y="435" width="140" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_gray" value="" style="rounded=1;fillColor=#f5f5f5;strokeColor=#ccc;" parent="1" vertex="1">
+                    <mxGeometry x="1190" y="458" width="16" height="12" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_gray_t" value="不使用 / 別フロー" style="text;html=1;fontSize=9;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="1212" y="455" width="120" height="18" as="geometry"/>
+                </mxCell>
+                <mxCell id="leg_star" value="★ = 要質問" style="text;html=1;fontSize=9;fontColor=#CC0000;fontStyle=1;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="1190" y="475" width="100" height="18" as="geometry"/>
+                </mxCell>
+
+                <!-- ========== 矢印 ========== -->
+                <!-- kintone発送 → 群馬通商Excel（経由フロー①） -->
+                <mxCell id="a_kt_gunma" style="endArrow=block;endFill=1;strokeColor=#42A5F5;strokeWidth=2;" parent="1" source="kt_hassou" target="step_kt_to_gunma" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- 群馬通商Excel → PSI出荷（経由フロー②） -->
+                <mxCell id="a_gunma_psi_ship" style="endArrow=block;endFill=1;strokeColor=#42A5F5;strokeWidth=2;" parent="1" source="step_gunma_to_psi" target="psi_ship" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- 群馬通商Excel → PSI在庫（③） -->
+                <mxCell id="a_gunma_psi_stock" style="endArrow=block;endFill=1;strokeColor=#82b366;strokeWidth=1;" parent="1" source="step_gunma_stock" target="psi_stock_gunma" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- kintone受注 → PSI受注（直接フロー） -->
+                <mxCell id="a_juchu" style="endArrow=block;endFill=1;strokeColor=#82b366;strokeWidth=1;" parent="1" source="kt_juchu" target="step_order" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_order_psi" style="endArrow=block;endFill=1;strokeColor=#82b366;strokeWidth=1;" parent="1" source="step_order" target="psi_order" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- kintone71 → PSI在庫（直接フロー） -->
+                <mxCell id="a_71" style="endArrow=block;endFill=1;strokeColor=#82b366;strokeWidth=1;" parent="1" source="kt_71" target="step_stock_kitai" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="a_71_psi" style="endArrow=block;endFill=1;strokeColor=#82b366;strokeWidth=1;" parent="1" source="step_stock_kitai" target="psi_stock_kitai" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- 生産Excel → PSI -->
+                <mxCell id="a_prod_psi" style="endArrow=block;endFill=1;strokeColor=#d6b656;strokeWidth=1;" parent="1" source="step_prod" target="psi_prod" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- 予測 → PSI -->
+                <mxCell id="a_forecast_psi" style="endArrow=block;endFill=1;strokeColor=#d6b656;strokeWidth=1;" parent="1" source="step_forecast" target="psi_forecast" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- PSI → 製販会議 -->
+                <mxCell id="a_psi_seihan" style="endArrow=block;endFill=1;strokeColor=#42A5F5;strokeWidth=2;" parent="1" source="psi_box" target="seihan" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+                <!-- kintone09 → GEN（別フロー） -->
+                <mxCell id="a_09_gen" style="endArrow=block;endFill=1;strokeColor=#CCC;dashed=1;" parent="1" source="kt_09" target="gen_import" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

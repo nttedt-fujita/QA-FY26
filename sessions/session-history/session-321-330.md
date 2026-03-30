@@ -92,3 +92,26 @@
 **詳細**: [session325/session-summary.md](../session325/session-summary.md)
 
 ---
+
+## Session 326 (2026-03-30)
+
+**概要**: 17時ミーティング準備 — PSI調査経緯の整理・作業フロー図集約・ヒアリング資料作成
+
+**重要な成果**:
+- S314/S318/S320の散在情報を1枚の作業フロー図（drawio）に集約
+- 群馬通商Excelが中継ハブになっている構造を可視化
+- 掛川さんへの追加確認事項6項目を整理（フラグ管理詳細、群馬通商Excel経由の理由等）
+- 製販会議は当面週1継続（宇枝さん判断）を確認
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|---------|------|
+| [session326/psi-investigation-timeline.md](../session326/psi-investigation-timeline.md) | PSI調査経緯まとめ |
+| [session326/psi-workflow-consolidated.drawio](../session326/psi-workflow-consolidated.drawio) | 作業フロー図（集約版） |
+| [session326/hearing-nagaya-ueda.md](../session326/hearing-nagaya-ueda.md) | ミーティング資料 |
+| [session326/kakegawa-questions.md](../session326/kakegawa-questions.md) | 掛川さんへの質問リスト |
+
+**詳細**: [session326/session-summary.md](../session326/session-summary.md)
+
+---
