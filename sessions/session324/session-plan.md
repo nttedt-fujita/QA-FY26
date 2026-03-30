@@ -1,27 +1,22 @@
 # Session 324 計画
 
-**前セッション**: [Session 323](../session323/session-summary.md)
+- 日付: 2026-03-30
+- 前セッション: 323（DX効果分析アプローチ方針決定）
 
----
+## このセッションの要求（What）
 
-## やること（優先順）
+1. 連休明けの状況整理
+2. 工数入力用の日付別作業一覧を作成
 
-| # | 作業 | 理由 |
-|---|------|------|
-| 1 | **掛川さんのCSV情報反映** | GEN→kintone連携の全体像補完（S323で返事待ちだった） |
-| 2 | **DX効果分析タスクをLinearに落とし込む** | S323で合意した方針（知識集約→事例調査→効果分析）をタスク化 |
-| 3 | **SCM/QC事例調査の開始** | 同業・類似企業のDX事例、一般的なSCM/QC知見の収集 |
+## やること
 
----
+| # | 作業 | 読むべきファイル | 参照コマンド |
+|---|------|-----------------|--------------|
+| 1 | 日付別作業一覧の作成 | session-history/*.md | - |
+| 2 | 状況整理 | session323/session-summary.md | - |
 
-## 参照資料
+## 前セッションからの引き継ぎ
 
-| 資料 | 内容 |
-|------|------|
-| [session323/dx-analysis-approach.md](../session323/dx-analysis-approach.md) | DX効果分析アプローチ方針 |
-| [session322/gen-production-analysis.md](../session322/gen-production-analysis.md) | GEN生産管理2次分析 |
-| [session321/gen-system-analysis.md](../session321/gen-system-analysis.md) | GEN 1次分析 |
-
----
-
-*作成: Session 323終了時 (2026-03-27)*
+- 掛川さんCSV情報: 返事待ち
+- DX効果分析: 知識集約→事例調査→効果分析→PSI設計の順で進める方針
+- Linear落とし込み: 未着手

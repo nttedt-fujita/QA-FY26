@@ -47,3 +47,16 @@
 **詳細**: [session323/session-summary.md](../session323/session-summary.md)
 
 ---
+
+## Session 324 (2026-03-30)
+
+**概要**: 連休明けの状況整理 + 工数入力用の日付別作業一覧作成
+
+**重要な成果**:
+- 全323セッション/17日間の日付別詳細一覧を作成
+- 工数カテゴリ定義: M1-GNSS / M3/DX(プロト) / M3/DX(施策)
+- 実勤務時間ベースのカテゴリ別按分サマリーを作成
+
+**詳細**: [session324/session-summary.md](../session324/session-summary.md)
+
+---
