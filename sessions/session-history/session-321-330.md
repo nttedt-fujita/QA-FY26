@@ -115,3 +115,22 @@
 **詳細**: [session326/session-summary.md](../session326/session-summary.md)
 
 ---
+
+---
+
+## Session 327 (2026-03-30)
+
+**概要**: 群馬通商Excel再分析（S320ヒアリング突合） + DX効果分析 調査計画立案
+
+**重要な成果**:
+- フラグの実態確定（A）: 連絡先（敬称略）列に 'EC'/'仕損' テキスト記載（バッテリ: EC=50件, 仕損系=69件）
+- kintoneレコード番号の場所確定（A）: 住所列に整数値（800, 801...）= S320「住所の所に書いている」が確認
+- DX効果分析 調査計画作成: S328(QA-26知識整理)→S329(QA-27事例調査+プロトタイピング)→S330(QA-24効果分析)→S331+(QA-25設計)
+
+**作成ファイル**:
+| ファイル | 内容 |
+|---------|------|
+| [session327/gunma-excel-reanalysis.md](../session327/gunma-excel-reanalysis.md) | 群馬通商Excel再分析（フラグ/レコード番号実態確認） |
+| [session327/investigation-plan.md](../session327/investigation-plan.md) | DX効果分析 次4-6セッション計画 |
+
+**詳細**: [session327/session-summary.md](../session327/session-summary.md)
