@@ -158,3 +158,20 @@
 | [docs/qa-knowledge/coq-knowledge.md](../../docs/qa-knowledge/coq-knowledge.md) | 正式配置版 |
 
 **詳細**: [session328/session-summary.md](../session328/session-summary.md)
+
+---
+
+## Session 329 (2026-03-30)
+
+**概要**: QA-27事例調査を試みたが、WebSearch/WebFetchの権限不足で未実施。設定追加のみ。
+
+**重要な成果**:
+- WebSearch/WebFetch権限を ~/.claude/settings.json に追加 → 次セッションから利用可能
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|---------|------|
+| [session329/session-summary.md](../session329/session-summary.md) | セッションサマリー |
+
+**詳細**: [session329/session-summary.md](../session329/session-summary.md)
