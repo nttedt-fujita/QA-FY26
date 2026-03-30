@@ -175,3 +175,25 @@
 | [session329/session-summary.md](../session329/session-summary.md) | セッションサマリー |
 
 **詳細**: [session329/session-summary.md](../session329/session-summary.md)
+
+---
+
+## Session 330 (2026-03-30)
+
+**概要**: QA-27 DX事例調査完了（WebSearch/WebFetch使用）— kintone連携・在庫リアルタイム化・品質管理DB・プロトタイピング方法論
+
+**重要な成果**:
+- kintone→基幹連携: 月20〜40時間削減の定量事例（中勢製氷冷蔵、クラウドBOT事例）
+- 在庫DX: ヤオコー発注85%削減・ダイキン在庫15%短縮・日清製粉計画67%短縮等
+- 品質DB: 不良率1年で半減（AI監視×製造ラインデータ分析）
+- プロトタイピング方法論: 自社の暗黙知発見パターンがヒアリング限界の実証 → Discovery+早期プロトタイプ型が適切
+
+**作成ファイル**:
+
+| ファイル | 内容 |
+|---------|------|
+| [session330/case-studies.md](../session330/case-studies.md) | DX事例調査結果（定量データ付き）|
+| [session330/prototyping-methodology.md](../session330/prototyping-methodology.md) | プロトタイピング方法論 |
+| [session330/session-summary.md](../session330/session-summary.md) | セッションサマリー |
+
+**詳細**: [session330/session-summary.md](../session330/session-summary.md)
