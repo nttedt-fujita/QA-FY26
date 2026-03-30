@@ -79,3 +79,16 @@
 **詳細**: [session324b/session-summary.md](../session324b/session-summary.md)
 
 ---
+
+## Session 325 (2026-03-30)
+
+**概要**: セッション番号かぶり解消 + CSV機密データのgit履歴完全除去 + 防止策導入
+
+**重要な成果**:
+- git filter-repoで全履歴からCSV 338ファイルを完全除去（.gitサイズ 1.6GB→38MB）
+- 機密データ防止hook（sensitive-data-check.sh）を導入
+- Win側PCは再クローン必須
+
+**詳細**: [session325/session-summary.md](../session325/session-summary.md)
+
+---
