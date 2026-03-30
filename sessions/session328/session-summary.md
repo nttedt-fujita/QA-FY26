@@ -71,11 +71,34 @@ Claude Desktop（各自のClaudeアカウント）
 - **手離れよく**: 藤田さんが居なくても他のClaude契約者が使えること
 - **追加開発なし**: 分析ロジックをアプリに実装しない
 
+### 確定した構成
+
+**サーバー**: ラズパイ4（社内常時起動）+ USB SSD（SDカードはDB書き込みで劣化するため）
+
+```
+ラズパイ4（社内常時起動）
+├── PSIシステム（Go API）
+│   ├── /api/...    ← 通常のWeb機能（Next.jsフロントと通信）
+│   └── /mcp        ← MCPエンドポイント（Go APIに同居）
+├── DB（PostgreSQL or SQLite）
+└── SSD（USB接続）
+
+各自のPC
+└── Claude Desktop
+    └── claude_desktop_config.json に1行追加
+        { "mcpServers": { "psi-system": { "url": "http://ラズパイIP/mcp" } } }
+```
+
+**各人のセットアップ手順**（ドキュメント化して属人化させない）:
+1. Claude Desktopをインストール
+2. `claude_desktop_config.json` に接続先URLを1行追加
+3. Claude Desktopを再起動 → 完了
+
 ### 後で精査する点
 
-1. MCPサーバーの設置場所（社内NW or クラウド）
-2. 接続認証の設計
-3. 公開するツール（get_inventory / get_defect_stats / get_psi_current 等）
+1. 接続認証の設計（社内NW限定なのでシンプルで良いかも）
+2. 公開するツール（get_inventory / get_defect_stats / get_psi_current 等）
+3. ラズパイのバックアップ方法（SSD障害時の対応）
 
 ---
 
