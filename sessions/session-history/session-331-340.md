@@ -9,14 +9,10 @@
 - PSI代替システムとして1つに統合して試算（施策4分解は不適切と判明）
 - 直接削減効果: 143〜156h/年（43〜47万円）、ROI 47〜98%、回収1.0〜2.1年
 - 出力形式はプロト先行型で進める方針（先に作って見せながら議論）
-- QA-24完了、QA-26も完了更新（S328完了分の漏れ）
+- Linear issue棚卸し: QA-9(Canceled), QA-11/12/13/19(Done), QA-25(PSI自動化プロジェクト追加)
+- PSI関連資料を docs/missions/psi-automation/ に正式配置（13セッション分を集約）
 
-**作成ファイル**:
-
-| ファイル | 内容 |
-|---------|------|
-| [session331/dx-effect-analysis.md](../session331/dx-effect-analysis.md) | DX効果試算（CoQ・ROI） |
-| [session331/priority-matrix.md](../session331/priority-matrix.md) | フェーズ別優先順位・進め方 |
+**正式配置ドキュメント**: [docs/missions/psi-automation/README.md](../../docs/missions/psi-automation/README.md)
 
 **詳細**: [session331/session-summary.md](../session331/session-summary.md)
 
